@@ -4,35 +4,53 @@
     Author     : damien
 --%>
 <%@ include file = "header.jsp" %>
-<form method="post" action="connected.htm">
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <input type="submit" value="Se connecter" class="btn btn-primary" />
+
+<div class="container valign-wrapper" style="height:100vh;">
+  <div class="row">
+    <form method="post" action="connected.htm">
+      <div class="col s6">
+        <input type="submit" value="Se connecter" class="btn blue" />
       </div>
-      <div class="col">
-        <div class="form-group row"> 
-          <label for="account" class="col-5 col-form-label" placeholder="Identifiant">
-            Identifiant
-          </label>
-          <div class="col">
-            <input type="text" class="form-control" name="account" id="account" placehodler="Identifiant">
-          </div>
-        </div>
-        <div class="form-group row"> 
-          <label for="psswd" class="col-5 col-form-label">
-            Mot de passe
-          </label>
-          <div class="col">
-            <input type="passwrd" class="form-control" name="password" id="password" placeholder="Mot de passe">
-          </div>
-        </div>
-        <select class="form-control" name="password" id="accountType">
-          <option value="0">Particulier</option>
-          <option value="1">Professionnel</option>
-        </select>
+          <div class="col s6">
+            <div class="row">
+              <div class="col s12">
+                <div class="input-field inline"> 
+                  <label for="account">
+                    Identifiant
+                  </label>
+                  <input type="text" class="validate" name="account" id="account">
+                </div>
+              </div>    
+            </div>
+            <div class="row">
+              <div class="col s12">
+                <div class="input-field inline"> 
+                  <label for="psswd">
+                    Mot de passe
+                  </label>
+                  <input type="password" class="validate" name="password" id="password">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                  <select id="accountType">
+                    <option value="0">Particulier</option>
+                    <option value="1">Professionnel</option>
+                  </select>
+              </div>    
+            </div>
       </div>
-    </div>
+  </form>
   </div>
-</form>
+</div>
+        
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+  $(document).ready(function(){
+    $('select').formSelect();
+  });
+</script>
+    
 <%@ include file = "footer.jsp" %>
