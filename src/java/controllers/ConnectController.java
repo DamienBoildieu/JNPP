@@ -45,8 +45,16 @@ public class ConnectController {
       session = request.getSession(true);
       session.setAttribute("firstName", user.getFirstName());
       session.setAttribute("lastName", user.getLastName());
-      ModelAndView resume = new ConnectedModelAndView("resume", new ConnectedInfo(user.getFirstName(), user.getLastName()));
-      resume.addObject("firstName", user.getFirstName());
+      ModelAndView resume = new ConnectedModelAndView("index", new ConnectedInfo(user.getFirstName(), user.getLastName()));
+      return resume;
+    } else if (session.getAttribute("firstName") == null) {
+      String id = request.getParameter("account");
+      String password = request.getParameter("password");
+      UserEntity user =  connectService.connect(id, password);
+      session = request.getSession(true);
+      session.setAttribute("firstName", user.getFirstName());
+      session.setAttribute("lastName", user.getLastName());
+      ModelAndView resume = new ConnectedModelAndView("index", new ConnectedInfo(user.getFirstName(), user.getLastName()));
       return resume;
     }
     return new ConnectedModelAndView("index", new ConnectedInfo((String)session.getAttribute("firstName"), (String)session.getAttribute("lastName")));
@@ -57,9 +65,10 @@ public class ConnectController {
           HttpServletRequest request,
           HttpServletResponse response) throws Exception {
     HttpSession session=request.getSession(false);
-    if (session == null) {
+    if (session == null)
       return new UnconnectedModelAndView("connect", new UnconnectedInfo());
-    }
+    else if (session.getAttribute("firstName")==null)
+      return new UnconnectedModelAndView("connect", new UnconnectedInfo());
     return new ConnectedModelAndView("index", new ConnectedInfo((String)session.getAttribute("firstName"), (String)session.getAttribute("lastName")));
   }
 }

@@ -3,7 +3,6 @@
     Created on : 28 sept. 2018, 19:44:31
     Author     : damien
 --%>
-
 <div class="navbar-fixed">
   <nav>
     <div class="nav-wrapper blue">

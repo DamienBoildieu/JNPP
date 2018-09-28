@@ -5,7 +5,6 @@
  */
 package controllers;
 
-
 import common.ConnectedInfo;
 import common.ConnectedModelAndView;
 import common.UnconnectedInfo;
@@ -23,19 +22,17 @@ import org.springframework.web.servlet.ModelAndView;
  * @author damien
  */
 @Controller
-public class SignUpController {
-  public SignUpController() {
-  }
+public class IndexController {
   
-  @RequestMapping(value="signup", method = RequestMethod.GET)
-  protected ModelAndView linkToConnect(
+  @RequestMapping(value="index", method = RequestMethod.GET)
+  protected ModelAndView connect(
           HttpServletRequest request,
           HttpServletResponse response) throws Exception {
     HttpSession session=request.getSession(false);
     if (session == null)
-      return new UnconnectedModelAndView("signup", new UnconnectedInfo());
+      return new UnconnectedModelAndView("index", new UnconnectedInfo());
     else if (session.getAttribute("firstName")==null)
-      return new UnconnectedModelAndView("signup", new UnconnectedInfo());
+      return new UnconnectedModelAndView("index", new UnconnectedInfo());
     return new ConnectedModelAndView("index", new ConnectedInfo((String)session.getAttribute("firstName"), (String)session.getAttribute("lastName")));
-  }
+    }
 }

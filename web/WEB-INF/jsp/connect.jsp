@@ -7,7 +7,7 @@
 
 <div class="container valign-wrapper" style="height:75vh;">
   <div class="row">
-    <form method="post" action="resume.htm">
+    <form method="POST" action="connect.htm">
       <div class="col s12">
         <div class="row">
           <div class="col s12">
