@@ -17,15 +17,14 @@ import org.springframework.web.servlet.ModelAndView;
  * @author damien
  */
 @Controller
-public class ConnectController {
-  
-  public ConnectController() {
+public class SignUpController {
+  public SignUpController() {
   }
   
-  @RequestMapping(value="connect", method = RequestMethod.GET)
+  @RequestMapping(value="signup", method = RequestMethod.GET)
   protected ModelAndView linkToConnect(
           HttpServletRequest request,
           HttpServletResponse response) throws Exception {
-    return new ModelAndView("connect");
+    return new ModelAndView("signup");
   }
 }
