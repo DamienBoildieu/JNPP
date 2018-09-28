@@ -42,10 +42,10 @@
         p:viewName="index" />
   
   <!--Prise en charge des annotations -->
-<context:annotation-config/>
-<!--Scan des annotations dans les classes du package controller-->
-<context:component-scan base-package="controllers"/>
-<!--On laisse Spring interpréter les annotations pour faire le mapping -->
-<mvc:annotation-driven />
-
+  <context:annotation-config/>
+  <!--Scan des annotations dans les classes du package controller-->
+  <context:component-scan base-package="controllers"/>
+  <!--On laisse Spring interpréter les annotations pour faire le mapping -->
+  <mvc:annotation-driven />
+  <context:component-scan base-package="services" />
 </beans>

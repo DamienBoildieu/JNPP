@@ -5,6 +5,9 @@
  */
 package controllers;
 
+
+import common.UnconnectedInfo;
+import common.UnconnectedModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
@@ -25,6 +28,6 @@ public class SignUpController {
   protected ModelAndView linkToConnect(
           HttpServletRequest request,
           HttpServletResponse response) throws Exception {
-    return new ModelAndView("signup");
+    return new UnconnectedModelAndView("signup", new UnconnectedInfo());
   }
 }

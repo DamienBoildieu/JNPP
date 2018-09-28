@@ -20,30 +20,14 @@
   </head>
   <body>
   <header>
-    <div class="navbar-fixed">
-      <nav>
-        <div class="nav-wrapper blue">
-          <a href="<c:url value='/index.htm' />" class="brand-logo center">JNPP</a>
-          <a href="#" data-trigger="side" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-          <ul class="right hide-on-med-and-down">
-            <li>
-              <a href="<c:url value='/connect.htm' />">Connexion</a>
-            </li>
-            <li>
-              <a href="<c:url value='/signup.htm' />">S'inscrire</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </div>
-    <ul class="sidenav" id="side">
-      <li>
-        <a href="<c:url value='/connect.htm' />">Connexion</a>
-      </li>
-      <li>
-        <a href="<c:url value='/signup.htm' />">S'inscrire</a>
-      </li>
-    </ul>
+    <c:choose>
+      <c:when test="${isConnected}">
+        <%@ include file = "connectedbanner.jsp" %>
+      </c:when>
+      <c:otherwise>
+        <%@ include file = "unconnectedbanner.jsp" %>
+      </c:otherwise>
+    </c:choose>
   </header>
   <main>
     
