@@ -13,6 +13,7 @@ import jnpp.common.ConnectedInfo;
 import jnpp.common.ConnectedModelAndView;
 import jnpp.common.UnconnectedInfo;
 import jnpp.common.UnconnectedModelAndView;
+import jnpp.stubs.AdvisorStub;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -54,6 +55,19 @@ public class CLink {
         CSession session = CSession.getInstance();
         if (!session.hasSession())
             return new UnconnectedModelAndView("personalsignup", new UnconnectedInfo());
+        return new ModelAndView("redirect:/index.htm");
+    }
+    
+    @RequestMapping(value = "advisor", method = RequestMethod.GET)
+    protected ModelAndView linkToAdvisor(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        CSession session = CSession.getInstance();
+        if (session.hasSession()) {
+            ModelAndView view =  new ConnectedModelAndView("advisor", new ConnectedInfo(session.getFirstName(), session.getLastName()));
+            AdvisorStub advisor = new AdvisorStub("Toto", "Tata", "jnpp", "05499878464");
+            view.addObject("advisor", advisor);
+            return view;
+        }
         return new ModelAndView("redirect:/index.htm");
     }
 }

@@ -4,20 +4,26 @@
     Author     : damien
 --%>
 <div class="navbar-fixed">
-	<nav>
-		<div class="nav-wrapper blue">
-			<a href="<c:url value='/index.htm' />" class="brand-logo center">JNPP</a>
-			<a href="#" data-target="side" class="sidenav-trigger"><i
-				class="material-icons">menu</i></a>
-			<ul class="right hide-on-med-and-down">
-				<li><a href="<c:url value='/disconnect.htm' />">Déconnexion</a>
-				</li>
-				<li>${firstName}${lastName}</li>
-			</ul>
-		</div>
-	</nav>
+    <nav>
+        <div class="nav-wrapper blue">
+
+            <div class='container'>
+                <a href="<c:url value='/index.htm' />" class="brand-logo center">JNPP</a>
+                <a href="#" data-target="side" class="sidenav-trigger"><i
+                        class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="<c:url value='/resume.htm' />">Mes comptes</a></li>
+                    <li><a href="<c:url value='/advisor.htm' />">Mon conseiller</a></li>
+                    <li><a href="<c:url value='/disconnect.htm' />">Déconnexion</a></li>
+                </ul>
+                ${firstName} ${lastName}
+            </div>
+        </div>
+    </nav>
+</div>
 </div>
 <ul class="sidenav" id="side">
-	<li><a href="<c:url value='/disconnect.htm' />">Déconnexion</a></li>
-	<li>${firstName}${lastName}</li>
+    <li><a href="<c:url value='/resume.htm' />">Mes comptes</a></li>
+    <li><a href="<c:url value='/advisor.htm' />">Mon conseiller</a></li>
+    <li><a href="<c:url value='/disconnect.htm' />">Déconnexion</a></li>
 </ul>
