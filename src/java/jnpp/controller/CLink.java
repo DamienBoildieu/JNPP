@@ -5,6 +5,7 @@
  */
 package jnpp.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,7 @@ import jnpp.common.ConnectedInfo;
 import jnpp.common.ConnectedModelAndView;
 import jnpp.common.UnconnectedInfo;
 import jnpp.common.UnconnectedModelAndView;
+import jnpp.stubs.AccountStub;
 import jnpp.stubs.AdvisorStub;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -77,5 +79,15 @@ public class CLink {
             return view;
         }
         return new ModelAndView("redirect:/index.htm");
+    }
+    
+    @RequestMapping(value = "home", method = RequestMethod.GET)
+    protected ModelAndView linktoResume(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        CSession session = CSession.getInstance();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (!session.hasSession())
+            return new ModelAndView("redirect:/index.htm");
+        ModelAndView view = new ConnectedModelAndView("home", new ConnectedInfo(session.getFirstName(), session.getLastName(), alerts));
+        return view;
     }
 }

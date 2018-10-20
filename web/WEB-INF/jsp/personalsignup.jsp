@@ -4,7 +4,9 @@
     <div class="row">
         <div class='card-panel white col s6 offset-s3 center-align'>
             <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
-                <p class="flow-text blue-text">Inscrivez-vous</p>
+                <div class="card blue s12">
+                    <p class="flow-text white-text">Inscrivez-vous</p>
+                </div>
                 <form method="POST" action="personalsignup.htm">
                     <div class="row">
                         <div class="col s12">

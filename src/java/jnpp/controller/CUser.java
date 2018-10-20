@@ -45,7 +45,7 @@ public class CUser {
                     rm.addFlashAttribute("alerts", alerts);
                 }
                 
-                return new ModelAndView("redirect:/resume.htm");
+                return new ModelAndView("redirect:/home.htm");
             } else {
                 AlertMessage error = new AlertMessage(AlertEnum.ERROR, "Nom d'utilisateur ou mot de passe incorrect");
                 if (alerts != null) {

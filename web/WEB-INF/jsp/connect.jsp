@@ -9,7 +9,9 @@
     <div class="row">
         <div class='card-panel white col s6 offset-s3 center-align'>
             <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
-                <p class="blue-text flow-text">Connectez-vous</p>
+                <div class="card blue s12">
+                    <p class="white-text flow-text">Connectez-vous</p>
+                </div>
                 <form method="POST" action="connect.htm">
                     <div class="row">
                         <div class="col s12">
