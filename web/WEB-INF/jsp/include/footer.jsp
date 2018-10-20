@@ -13,19 +13,34 @@
 </main>
 <footer>
 </footer>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script>
-    	$(document).ready(function(){
-			$('.sidenav').sidenav();
-		});
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.sidenav').sidenav();
+        });
     </script>
-<script>
-    	$(document).ready(function(){
-        $('.tabs').tabs();
-      });
+    <script>
+        $(document).ready(function(){
+            $('.tabs').tabs();
+        });
+    </script>   
+    <script>
+        $( document ).ready(function(){
+            $('#errorMessage').fadeIn('slow', function(){
+               $('#errorMessage').delay(5000).fadeOut(); 
+            });
+        });
     </script>
+    <script>
+        $( document ).ready(function(){
+            $('#successMessage').fadeIn('slow', function(){
+               $('#successMessage').delay(5000).fadeOut(); 
+            });
+        });
+    </script>
+        
 </body>
 </html>

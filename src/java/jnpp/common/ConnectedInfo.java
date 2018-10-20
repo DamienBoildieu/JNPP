@@ -5,6 +5,8 @@
  */
 package jnpp.common;
 
+import java.util.List;
+
 /**
  *
  * @author damien
@@ -19,7 +21,19 @@ public class ConnectedInfo extends ViewInfo {
 	firstName = fName;
 	lastName = lName;
     }
+    
+    public ConnectedInfo(String fName, String lName, AlertMessage alert) {
+	super(true, alert);
+	firstName = fName;
+	lastName = lName;
+    }
 
+    public ConnectedInfo(String fName, String lName, List<AlertMessage> alerts) {
+	super(true, alerts);
+	firstName = fName;
+	lastName = lName;
+    }
+    
     public String getFirstName() {
 	return firstName;
     }

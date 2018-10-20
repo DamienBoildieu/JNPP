@@ -5,7 +5,6 @@
         <div class='card-panel white col s6 offset-s3 center-align'>
             <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
                 <h3>Inscrivez-vous !</h3>
-                <!--<div class='card-panel red lighten-1 white-text left-align' style="font-size: 20px;">Mot de passe erroné <i class="material-icons right">warning</i></div>-->
                 <form method="POST" action="personalsignup.htm">
                     <div class="row">
                         <div class="col s12">

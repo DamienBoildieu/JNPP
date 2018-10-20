@@ -13,11 +13,11 @@ import org.springframework.web.servlet.ModelAndView;
  */
 public class JNPPModelAndView extends ModelAndView {
     private final ViewInfo info;
-
+    
     public JNPPModelAndView(String viewName, ViewInfo viewInfo) {
 	super(viewName);
-	info = viewInfo;
-	this.addObject("isConnected", info.isConnected());
+	this.info = viewInfo;
+	this.addObject("isConnected", this.info.isConnected());
+        this.addObject("alerts", this.info.getAlerts());
     }
-
 }

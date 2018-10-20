@@ -5,6 +5,8 @@
  */
 package jnpp.common;
 
+import java.util.List;
+
 /**
  *
  * @author damien
@@ -14,5 +16,12 @@ public class UnconnectedInfo extends ViewInfo {
     public UnconnectedInfo() {
 	super(false);
     }
-
+    
+    public UnconnectedInfo(AlertMessage alert) {
+	super(false, alert);
+    }
+    
+    public UnconnectedInfo(List<AlertMessage> alerts) {
+        super(false, alerts);
+    }
 }

@@ -5,7 +5,7 @@
  */
 package jnpp.common;
 
-import exception.NullSessionException;
+import jnpp.exception.NullSessionException;
 import javax.servlet.http.HttpSession;
 
 /**
