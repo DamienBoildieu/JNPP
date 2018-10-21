@@ -28,16 +28,26 @@
         });
     </script>   
     <script>
+        $(document).ready(function(){
+            $('.carousel').carousel();
+        });
+    </script>
+    <script>       
+        $('.carousel.carousel-slider').carousel({
+            fullWidth: true
+        });
+    </script>
+    <script>
         $( document ).ready(function(){
             $('#errorMessage').fadeIn('slow', function(){
-               $('#errorMessage').delay(5000).fadeOut(); 
+               $('#errorMessage').delay(300).fadeOut(); 
             });
         });
     </script>
     <script>
         $( document ).ready(function(){
             $('#successMessage').fadeIn('slow', function(){
-               $('#successMessage').delay(5000).fadeOut(); 
+               $('#successMessage').delay(3000).fadeOut(); 
             });
         });
     </script>
