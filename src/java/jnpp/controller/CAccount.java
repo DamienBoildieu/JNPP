@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import jnpp.common.AlertMessage;
 import jnpp.common.CSession;
 import jnpp.stubs.AccountStub;
@@ -26,27 +27,27 @@ public class CAccount {
 
     @RequestMapping(value = "resume", method = RequestMethod.GET)
     protected ModelAndView linktoResume(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        CSession session = CSession.getInstance();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!session.hasSession())
+        HttpSession session = request.getSession();
+        if (!CSession.hasSession(session))
             return new ModelAndView("redirect:/index.htm");
 	//resumeService.resumeAccounts("");
         List<AccountStub> listAc = new ArrayList<AccountStub>();
         listAc.add(new AccountStub("56132", "compte courant", -20));
         listAc.add(new AccountStub("5946513", "Livret A", 500));
-        ModelAndView view = new ConnectedModelAndView("resume", new ConnectedInfo(session.getFirstName(), session.getLastName(), alerts));
+        ModelAndView view = new ConnectedModelAndView("resume", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
         view.addObject("listAccounts", listAc);
         return view;
     }
     
     @RequestMapping(value = "account", method = RequestMethod.GET)
     protected ModelAndView linktoAccount(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        CSession session = CSession.getInstance();
+        HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!session.hasSession())
+        if (!CSession.hasSession(session))
             return new ModelAndView("redirect:/index.htm");
 	//resumeService.resumeAccounts("");
-        return new ConnectedModelAndView("account", new ConnectedInfo(session.getFirstName(), session.getLastName(), alerts));
+        return new ConnectedModelAndView("account", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
     }
     
 }

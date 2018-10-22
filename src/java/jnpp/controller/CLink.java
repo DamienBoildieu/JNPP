@@ -32,27 +32,27 @@ import org.springframework.web.servlet.ModelAndView;
 public class CLink {
     @RequestMapping(value = "index", method = RequestMethod.GET)
     protected ModelAndView linkToIndex(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        CSession session = CSession.getInstance();
+        HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!session.hasSession())
+        if (!CSession.hasSession(session))
             return new UnconnectedModelAndView("index", new UnconnectedInfo(alerts));
-        return new ConnectedModelAndView("index", new ConnectedInfo(session.getFirstName(), session.getLastName(), alerts));
+        return new ConnectedModelAndView("index", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
     }
     
     @RequestMapping(value = "connect", method = RequestMethod.GET)
     protected ModelAndView linkToConnect(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        CSession session = CSession.getInstance();
+        HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!session.hasSession())
+        if (!CSession.hasSession(session))
             return new UnconnectedModelAndView("connect", new UnconnectedInfo(alerts));
         return new ModelAndView("redirect:/index.htm");
     }
     
     @RequestMapping(value = "signup", method = RequestMethod.GET)
     protected ModelAndView linkToSignUp(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        CSession session = CSession.getInstance();
+        HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!session.hasSession())
+        if (!CSession.hasSession(session))
             return new UnconnectedModelAndView("signup", new UnconnectedInfo(alerts));
         return new ModelAndView("redirect:/index.htm");
     }
@@ -60,9 +60,9 @@ public class CLink {
     @RequestMapping(value = "personalsignup", method = RequestMethod.GET)
     protected ModelAndView linkToPersonalSignUp(Model model, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-        CSession session = CSession.getInstance();
+        HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!session.hasSession())
+        if (!CSession.hasSession(session))
             return new UnconnectedModelAndView("personalsignup", new UnconnectedInfo(alerts));
         return new ModelAndView("redirect:/index.htm");
     }
@@ -70,10 +70,10 @@ public class CLink {
     @RequestMapping(value = "advisor", method = RequestMethod.GET)
     protected ModelAndView linkToAdvisor(Model model, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-        CSession session = CSession.getInstance();
+        HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session.hasSession()) {
-            ModelAndView view =  new ConnectedModelAndView("advisor", new ConnectedInfo(session.getFirstName(), session.getLastName(), alerts));
+        if (CSession.hasSession(session)) {
+            ModelAndView view =  new ConnectedModelAndView("advisor", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
             AdvisorStub advisor = new AdvisorStub("Toto", "Tata", "jnpp", "05499878464");
             view.addObject("advisor", advisor);
             return view;
@@ -83,11 +83,11 @@ public class CLink {
     
     @RequestMapping(value = "home", method = RequestMethod.GET)
     protected ModelAndView linktoResume(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        CSession session = CSession.getInstance();
+        HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!session.hasSession())
+        if (!CSession.hasSession(session))
             return new ModelAndView("redirect:/index.htm");
-        ModelAndView view = new ConnectedModelAndView("home", new ConnectedInfo(session.getFirstName(), session.getLastName(), alerts));
+        ModelAndView view = new ConnectedModelAndView("home", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
         return view;
     }
 }

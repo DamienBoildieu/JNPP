@@ -28,15 +28,15 @@ public class CUser {
 
     @RequestMapping(value = "connect", method = RequestMethod.POST)
     protected ModelAndView connect(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
-        CSession session = CSession.getInstance();
+        HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!session.hasSession()) {
+        if (!CSession.hasSession(session)) {
             String id = request.getParameter("account");
             String password = request.getParameter("password");
             if (this.userService.signIn(id, password)) {
-                session.setSession(request.getSession(true));
-                session.setFirstName("user");
-                session.setLastName("dom");
+                session = request.getSession(true);
+                CSession.setFirstName(session, "user");
+                CSession.setLastName(session, "dom");
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Connexion réussie"));
                 } else {
@@ -61,11 +61,11 @@ public class CUser {
 
     @RequestMapping(value = "disconnect", method = RequestMethod.GET)
     ModelAndView disconnect(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
-        CSession session = CSession.getInstance();
+        HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session.hasSession()) {
+        if (CSession.hasSession(session)) {
             if (this.userService.signOut("")) {
-                session.clearSession();
+                CSession.clearSession(session);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Déconnexion réussie"));
                 } else {
@@ -89,9 +89,9 @@ public class CUser {
     @RequestMapping(value = "personalsignup", method = RequestMethod.POST)
     protected ModelAndView validatePersonalSignUp(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
             throws Exception {
-        CSession session = CSession.getInstance();
+        HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!session.hasSession()) {
+        if (!CSession.hasSession(session)) {
             String id = request.getParameter("account");
             String password = request.getParameter("password");
             if (!userService.signUp(id, password)) {

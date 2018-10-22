@@ -13,50 +13,38 @@ import javax.servlet.http.HttpSession;
  * @author damien
  */
 public class CSession {  
-    private HttpSession session = null;
     private CSession() {}
-    private static class CSessionHolder {
-        private final static CSession INSTANCE = new CSession();
-    }
- 
-    public static CSession getInstance() {
-        return CSessionHolder.INSTANCE;
+    
+    public static void clearSession(HttpSession session) {
+        session.removeAttribute("firstName");
+        session.removeAttribute("lastName");
     }
     
-    public void setSession(HttpSession session) {
-        this.session = session;
-    }
-    
-    public void clearSession() {
-        this.session.removeAttribute("firstName");
-        this.session.removeAttribute("lastName");
-    }
-    
-    public void setFirstName(String firstName) {
-        if (this.session == null)
+    public static void setFirstName(HttpSession session, String firstName) {
+        if (session == null)
             throw new NullSessionException();
-        this.session.setAttribute("firstName", firstName);
+        session.setAttribute("firstName", firstName);
     }
     
-    public void setLastName(String lastName) {
-        if (this.session == null)
+    public static void setLastName(HttpSession session, String lastName) {
+        if (session == null)
             throw new NullSessionException();
-        this.session.setAttribute("lastName", lastName);
+        session.setAttribute("lastName", lastName);
     }
     
-    public String getFirstName() {
-        if (this.session == null)
+    public static String getFirstName(HttpSession session) {
+        if (session == null)
             throw new NullSessionException();
-        return (String)this.session.getAttribute("firstName");
+        return (String)session.getAttribute("firstName");
     }
     
-    public String getLastName() {
-        if (this.session == null)
+    public static String getLastName(HttpSession session) {
+        if (session == null)
             throw new NullSessionException();
-        return (String)this.session.getAttribute("lastName");
+        return (String)session.getAttribute("lastName");
     }
     
-    public boolean hasSession() {
-        return (this.session != null) && (this.session.getAttribute("firstName") != null);
+    public static boolean hasSession(HttpSession session) {
+        return (session != null) && (session.getAttribute("firstName") != null);
     }
 }
