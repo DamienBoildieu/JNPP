@@ -1,4 +1,4 @@
-package jnpp.dao;
+package jnpp.dao.old;
 
 import java.io.Serializable;
 import javax.persistence.Column;

@@ -8,8 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -29,6 +27,8 @@ public abstract class Client implements Serializable {
         
         public static final String PRIVATE = "PRIVATE";
         public static final String PROFESSIONAL = "PROFESSIONAL";
+        
+        private Type() {}
         
     }
     
@@ -135,11 +135,6 @@ public abstract class Client implements Serializable {
         Client other = (Client) object;
         return !((this.login == null && other.login != null) 
                 || (this.login != null && !this.login.equals(other.login)));
-    }
-
-    @Override
-    public String toString() {
-        return "jnpp.dao.entities.EClient[ id=" + login + " ]";
     }
     
 }

@@ -2,7 +2,6 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="JNPPPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>jnpp.dao.EUser</class>
     <class>jnpp.service.SUser</class>
     <class>jnpp.dao.entities.accounts.CurrentAccount</class>
     <class>jnpp.dao.entities.accounts.SavingAccount</class>
@@ -14,6 +13,19 @@
     <class>jnpp.dao.entities.clients.Advisor</class>
     <class>jnpp.dao.entities.clients.Private</class>
     <class>jnpp.dao.entities.clients.Client</class>
+    <class>jnpp.dao.entities.transactions.Transaction</class>
+    <class>jnpp.dao.entities.transactions.MoneyTransaction</class>
+    <class>jnpp.dao.entities.transactions.Debit</class>
+    <class>jnpp.dao.entities.transactions.ShareTransaction</class>
+    <class>jnpp.dao.entities.transactions.Transfert</class>
+    <class>jnpp.dao.entities.transactions.Sale</class>
+    <class>jnpp.dao.entities.transactions.Purchase</class>
+    <class>jnpp.dao.entities.accounts.DebitAuthorization</class>
+    <class>jnpp.dao.old.EUser</class>
+    <class>jnpp.dao.entities.Message</class>
+    <class>jnpp.dao.entities.BankCard</class>
+    <class>jnpp.dao.entities.Check</class>
+    <class>jnpp.dao.entities.Appointment</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/JNPPDB"/>

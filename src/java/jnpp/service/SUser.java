@@ -4,8 +4,8 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import jnpp.dao.EUser;
-import jnpp.dao.IDUser;
+import jnpp.dao.old.EUser;
+import jnpp.dao.old.IDUser;
 
 @Service
 public class SUser implements ISUser {

@@ -25,6 +25,8 @@ public abstract class Account implements Serializable {
         public static final String SAVING = "SAVING";
         public static final String SHARE = "SHARE";
         
+        private Type() {}
+        
     }
     
     private static final long serialVersionUID = 1L;
@@ -65,11 +67,6 @@ public abstract class Account implements Serializable {
         }
         Account other = (Account) object;
         return !((this.rib == null && other.rib != null) || (this.rib != null && !this.rib.equals(other.rib)));
-    }
-
-    @Override
-    public String toString() {
-        return "jnpp.dao.entities.Account[ id=" + rib + " ]";
     }
     
 }
