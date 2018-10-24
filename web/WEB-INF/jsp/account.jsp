@@ -1,7 +1,18 @@
-<%@ include file="include/header.jsp"%>
-
-<p>
-    Welcome
-</p>
-
-<%@ include file="include/footer.jsp"%>
+<%@ include file="include/jsptags.jsp"%>
+<html>
+    <head>
+        <%@ include file="include/head.jsp"%>
+    </head>
+    <body>
+        <header>
+            <%@ include file="include/banner.jsp"%>
+        </header>
+        <main>
+            <%@ include file="include/notif.jsp"%>
+        </main>
+        <footer>
+        </footer>
+        <%@ include file="include/javascript.jsp"%>
+        <%@ include file="include/commonscripts.jsp"%>
+    </body>
+</html>
