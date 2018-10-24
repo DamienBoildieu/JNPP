@@ -21,7 +21,7 @@ public class EUser implements Serializable {
     private String password;
     
     public EUser() {
-        this("", "");
+        this(null, null);
     }
     
     public EUser(String login, String password) {

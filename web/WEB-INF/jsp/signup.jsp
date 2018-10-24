@@ -1,19 +1,27 @@
-<%-- 
-    Document   : signup
-    Created on : 27 sept. 2018, 17:35:46
-    Author     : damien
---%>
-
-<%@ include file="include/header.jsp"%>
-<div class="container valign-wrapper" style="height: 75vh;">
-	<div class="row">
-		<div class="col s6">
-			<a href="<c:url value='/personalsignup.htm' />"
-				class="btn-large blue">Particulier</a>
-		</div>
-		<div class="col s6">
-			<a href="<c:url value='/company.htm' />" class="btn-large blue">Entreprise</a>
-		</div>
-	</div>
-
-	<%@ include file="include/footer.jsp"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Connexion</title>
+    </head>
+    <body>
+        <h1>Je m'inscris !</h1>
+        <form method="POST" action="signup.htm">
+            <label for="login">Identifiant</label>
+            <input type="text" name="login" id="login">
+            <label for="password">Mot de passe</label>
+            <input type="password" name="password" id="password">
+            <input type="submit" value="Valider">
+        </form>
+        <br>
+        <h1>Je me connecte !</h1>
+        <form method="POST" action="signin.htm">
+            <label for="login">Identifiant</label>
+            <input type="text" name="login" id="login">
+            <label for="password">Mot de passe</label>
+            <input type="password" name="password" id="password">
+            <input type="submit" value="Connexion">
+        </form>
+    </body>
+</html>

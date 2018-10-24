@@ -20,8 +20,8 @@
         <property name="driverClassName" 
             value="org.apache.derby.jdbc.ClientDriver" />
         <property name="url" value="jdbc:derby://localhost:1527/JNPPDB" />
-        <property name="username" value="admin" />
-        <property name="password" value="admin" />
+        <property name="username" value="website" />
+        <property name="password" value="website" />
     </bean>
     
     <bean id="entityManagerFactory"
