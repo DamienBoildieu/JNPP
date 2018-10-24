@@ -4,6 +4,16 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>jnpp.dao.EUser</class>
     <class>jnpp.service.SUser</class>
+    <class>jnpp.dao.entities.accounts.CurrentAccount</class>
+    <class>jnpp.dao.entities.accounts.SavingAccount</class>
+    <class>jnpp.dao.entities.accounts.Account</class>
+    <class>jnpp.dao.entities.accounts.ShareAccount</class>
+    <class>jnpp.dao.entities.accounts.Share</class>
+    <class>jnpp.dao.entities.accounts.ShareTitle</class>
+    <class>jnpp.dao.entities.accounts.SavingBook</class>
+    <class>jnpp.dao.entities.clients.Advisor</class>
+    <class>jnpp.dao.entities.clients.Private</class>
+    <class>jnpp.dao.entities.clients.Client</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/JNPPDB"/>

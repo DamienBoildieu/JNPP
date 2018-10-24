@@ -8,6 +8,7 @@
             <%@ include file="include/banner.jsp"%>
         </header>
         <main>
+            <%@ include file="include/alerts.jsp"%>
             <%@ include file="include/notif.jsp"%>
         </main>
         <footer>

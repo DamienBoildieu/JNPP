@@ -8,6 +8,7 @@
             <%@ include file="include/banner.jsp"%>
         </header>
         <main>
+            <%@ include file="include/alerts.jsp"%>
             <div class="container" style="margin-top: 10%">
                 <div class="row">
                     <div class='card-panel blue col s8 offset-s2'>

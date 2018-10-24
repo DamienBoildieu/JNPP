@@ -8,6 +8,7 @@
             <%@ include file="include/banner.jsp"%>
         </header>
         <main>
+            <%@ include file="include/alerts.jsp"%>
             <div class="container">
                 <div class="row">
                     <div class='col s10 offset-s1 center-align'>
