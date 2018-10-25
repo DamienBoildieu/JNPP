@@ -26,6 +26,8 @@
     <class>jnpp.dao.entities.BankCard</class>
     <class>jnpp.dao.entities.Check</class>
     <class>jnpp.dao.entities.Appointment</class>
+    <class>jnpp.dao.entities.accounts.JointAccount</class>
+    <class>jnpp.dao.entities.PaymentObject</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/JNPPDB"/>

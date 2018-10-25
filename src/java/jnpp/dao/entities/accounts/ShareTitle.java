@@ -30,6 +30,8 @@ public class ShareTitle implements Serializable {
     @JoinColumn(name = "shareaccount_fk")
     private ShareAccount shareAccount;
     
+    public ShareTitle() {}
+    
     public Long getId() {
         return id;
     }
@@ -60,9 +62,7 @@ public class ShareTitle implements Serializable {
 
     public void setShareAccount(ShareAccount shareAccount) {
         this.shareAccount = shareAccount;
-    }
-
-    
+    }    
     
     @Override
     public int hashCode() {

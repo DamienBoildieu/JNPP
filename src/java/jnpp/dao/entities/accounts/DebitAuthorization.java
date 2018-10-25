@@ -25,6 +25,8 @@ public class DebitAuthorization implements Serializable {
     @JoinColumn(name="to_account_fk")
     private Account to;
     
+    public DebitAuthorization() {}
+    
     public Long getId() {
         return id;
     }
@@ -32,7 +34,6 @@ public class DebitAuthorization implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
 
     public Account getFrom() {
         return from;

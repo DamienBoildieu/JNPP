@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
 @Entity
-@DiscriminatorValue(value = Account.Type.SHARE)
+@DiscriminatorValue(value = Account.Type.Values.SHARE)
 public class ShareAccount extends Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -17,6 +17,13 @@ public class ShareAccount extends Account implements Serializable {
     @OneToMany(mappedBy = "shareAccount")
     private List<ShareTitle> shareTitles = new ArrayList<ShareTitle>();
 
+    public ShareAccount() {}
+    
+    @Override
+    public Type getType() {
+        return Account.Type.SHARE;
+    }
+    
     public List<ShareTitle> getShareTitles() {
         return shareTitles;
     }

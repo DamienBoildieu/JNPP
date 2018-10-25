@@ -10,7 +10,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@DiscriminatorValue(value = Client.Type.PRIVATE)
+@DiscriminatorValue(value = Client.Type.Values.PRIVATE)
 public class Private extends Client implements Serializable {
     
     private static final long serialVersionUID = 1L;
@@ -23,6 +23,11 @@ public class Private extends Client implements Serializable {
     
     public Private() {}
 
+    @Override
+    public Type getType() {
+        return Client.Type.PRIVATE;
+    }
+    
     public Identity getIdentity() {
         return identity;
     }

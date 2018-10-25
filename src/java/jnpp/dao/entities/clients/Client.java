@@ -12,9 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import jnpp.dao.entities.accounts.Account;
 
@@ -23,13 +22,20 @@ import jnpp.dao.entities.accounts.Account;
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Client implements Serializable {
 
-    public static class Type {
+    public static enum Type {
+    
+        PRIVATE,
+        PROFESIONAL;
         
-        public static final String PRIVATE = "PRIVATE";
-        public static final String PROFESSIONAL = "PROFESSIONAL";
-        
-        private Type() {}
-        
+        public static class Values {
+
+            public static final String PRIVATE = "PRIVATE";
+            public static final String PROFESSIONAL = "PROFESSIONAL";
+
+            private Values() {}
+
+        }
+    
     }
     
     private static final long serialVersionUID = 1L;
@@ -50,15 +56,11 @@ public abstract class Client implements Serializable {
     @JoinColumn(name="advisor_fk")
     private Advisor advisor;    
     
-    @JoinTable(
-        name = "Client_Account",
-        joinColumns = @JoinColumn(name = "login_client"),
-        inverseJoinColumns = @JoinColumn(name = "rib_account"))
-    @ManyToMany
+    @OneToMany(mappedBy = "client")
     private List<Account> accounts = new ArrayList<Account>();
     
-    public Client() {}
-
+    public abstract Type getType();
+    
     public String getLogin() {
         return login;
     }

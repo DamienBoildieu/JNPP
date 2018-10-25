@@ -1,8 +1,6 @@
 package jnpp.dao.entities.accounts;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -10,7 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import jnpp.dao.entities.clients.Client;
 
@@ -19,14 +18,24 @@ import jnpp.dao.entities.clients.Client;
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Account implements Serializable {
 
-    public static class Type {
+    public static enum Type {
+    
+        CURRENT,
+        JOINT,
+        SAVING,
+        SHARE;
         
-        public static final String CURRENT = "CURRENT";
-        public static final String SAVING = "SAVING";
-        public static final String SHARE = "SHARE";
-        
-        private Type() {}
-        
+        public static class Values {
+
+            public static final String CURRENT = "CURRENT";
+            public static final String JOINT = "JOINT";
+            public static final String SAVING = "SAVING";
+            public static final String SHARE = "SHARE";
+
+            private Values() {}
+
+        }
+    
     }
     
     private static final long serialVersionUID = 1L;
@@ -34,8 +43,11 @@ public abstract class Account implements Serializable {
     @Id
     private String rib;
 
-    @ManyToMany(mappedBy = "accounts")
-    private List<Client> clients = new ArrayList<Client>();
+    @ManyToOne
+    @JoinColumn(name="client_fk")
+    private Client client;
+    
+    public abstract Type getType();    
     
     public String getRib() {
         return rib;
@@ -45,12 +57,12 @@ public abstract class Account implements Serializable {
         this.rib = rib;
     }
 
-    public List<Client> getClients() {
-        return clients;
+    public Client getClient() {
+        return client;
     }
 
-    public void setClients(List<Client> clients) {
-        this.clients = clients;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     @Override

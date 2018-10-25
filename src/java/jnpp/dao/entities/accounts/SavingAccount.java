@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-@DiscriminatorValue(value = Account.Type.SAVING)
+@DiscriminatorValue(value = Account.Type.Values.SAVING)
 public class SavingAccount extends Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -21,6 +21,11 @@ public class SavingAccount extends Account implements Serializable {
     private SavingBook savingBook;   
     
     public SavingAccount() {}
+    
+    @Override
+    public Type getType() {
+        return Account.Type.SAVING;
+    }
     
     public Double getMoney() {
         return money;

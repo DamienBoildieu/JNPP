@@ -27,9 +27,11 @@ public class Message implements Serializable {
     @ManyToOne
     @JoinColumn(name="advisor_fk")
     private Advisor advisor;
-    private Boolean direction;
+    private Boolean clientToAdvisor;
     
     private String content;
+    
+    public Message() {}
     
     public Long getId() {
         return id;
@@ -55,12 +57,12 @@ public class Message implements Serializable {
         this.advisor = advisor;
     }
 
-    public Boolean getDirection() {
-        return direction;
+    public Boolean getClientToAdvisor() {
+        return clientToAdvisor;
     }
 
-    public void setDirection(Boolean direction) {
-        this.direction = direction;
+    public void setClientToAdvisor(Boolean clientToAdvisor) {
+        this.clientToAdvisor = clientToAdvisor;
     }
 
     public String getContent() {

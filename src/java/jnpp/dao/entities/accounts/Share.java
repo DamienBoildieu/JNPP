@@ -28,6 +28,8 @@ public class Share implements Serializable {
     @OneToMany(mappedBy = "share")
     private List<ShareTitle> shareTitles = new ArrayList<ShareTitle>();
     
+    public Share() {}
+    
     public Long getId() {
         return id;
     }

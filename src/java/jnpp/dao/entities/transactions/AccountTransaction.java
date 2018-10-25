@@ -2,6 +2,7 @@ package jnpp.dao.entities.transactions;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -10,44 +11,47 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import jnpp.dao.entities.accounts.Account;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
-public class AccountTransaction implements Serializable {
+public abstract class AccountTransaction implements Serializable {
 
-    public static class Type {
+    public static enum Type {
+    
+        TRANSFERT,
+        BEBIT,
+        PURCHASE,
+        SALE;
         
-        public static final String TRANSFERT = "TRANSFERT";
-        public static final String BEBIT = "BEBIT";
-        public static final String PURCHASE = "PURCHASE";
-        public static final String SALE = "SALE";
-        
-        private Type() {}
-        
+        public static class Values {
+
+            public static final String TRANSFERT = "TRANSFERT";
+            public static final String BEBIT = "BEBIT";
+            public static final String PURCHASE = "PURCHASE";
+            public static final String SALE = "SALE";
+
+            private Values() {}
+
+        }
+    
     }
     
     private static final long serialVersionUID = 1L;
     
-    @Temporal(TemporalType.DATE)
-    private Date date;
-    
-    @ManyToOne
-    @JoinColumn(name="from_account_fk")
-    private Account from;
-    @ManyToOne
-    @JoinColumn(name="to_account_fk")
-    private Account to;
-    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    @Temporal(TemporalType.DATE)
+    private Date date;
+    
+    private String ribFrom;
+    private String ribTo;
+    
+    public abstract Type getType();
 
     public Long getId() {
         return id;
@@ -65,20 +69,20 @@ public class AccountTransaction implements Serializable {
         this.date = date;
     }
 
-    public Account getFrom() {
-        return from;
+    public String getRibFrom() {
+        return ribFrom;
     }
 
-    public void setFrom(Account from) {
-        this.from = from;
+    public void setRibFrom(String ribFrom) {
+        this.ribFrom = ribFrom;
     }
 
-    public Account getTo() {
-        return to;
+    public String getRibTo() {
+        return ribTo;
     }
 
-    public void setTo(Account to) {
-        this.to = to;
+    public void setRibTo(String ribTo) {
+        this.ribTo = ribTo;
     }
     
     @Override

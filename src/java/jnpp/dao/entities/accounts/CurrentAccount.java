@@ -6,7 +6,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue(value = Account.Type.CURRENT)
+@DiscriminatorValue(value = Account.Type.Values.CURRENT)
 public class CurrentAccount extends Account implements Serializable {
 
     private static final long serialVersionUID = 1L;    
@@ -16,6 +16,11 @@ public class CurrentAccount extends Account implements Serializable {
     private Double limit;
     
     public CurrentAccount() {}
+    
+    @Override
+    public Type getType() {
+        return Account.Type.CURRENT;
+    }
     
     public Double getMoney() {
         return money;

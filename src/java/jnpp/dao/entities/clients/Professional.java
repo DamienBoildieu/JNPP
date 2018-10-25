@@ -7,7 +7,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue(value = Client.Type.PROFESSIONAL)
+@DiscriminatorValue(value = Client.Type.Values.PROFESSIONAL)
 public class Professional extends Client implements Serializable {
     
     private static final long serialVersionUID = 1L;
@@ -18,6 +18,11 @@ public class Professional extends Client implements Serializable {
     private Identity owner;
     
     public Professional() {}
+    
+    @Override
+    public Type getType() {
+        return Client.Type.PROFESIONAL;
+    }
     
     public String getName() {
         return name;
