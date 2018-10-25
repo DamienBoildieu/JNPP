@@ -12,7 +12,7 @@ public class Transfert extends MoneyTransaction implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public Transfert() {}
-    
+
     @Override
     public Type getType() {
         return AccountTransaction.Type.TRANSFERT;

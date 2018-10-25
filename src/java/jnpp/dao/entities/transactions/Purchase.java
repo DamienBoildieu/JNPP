@@ -13,6 +13,7 @@ public class Purchase extends ShareTransaction implements Serializable {
 
     public Purchase() {}
     
+    @Override
     public Type getType() {
         return AccountTransaction.Type.PURCHASE;
     }
