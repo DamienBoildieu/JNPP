@@ -3,6 +3,8 @@ package jnpp.dao.entities;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +17,13 @@ import jnpp.dao.entities.clients.Client;
 @Entity
 public class Message implements Serializable {
 
+    public static enum Direction {
+        
+        CLIENT_TO_ADVISOR,
+        ADVISOR_TO_CLIENT;
+        
+    }
+    
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -27,7 +36,8 @@ public class Message implements Serializable {
     @ManyToOne
     @JoinColumn(name="advisor_fk")
     private Advisor advisor;
-    private Boolean clientToAdvisor;
+    @Enumerated(EnumType.STRING)
+    private Direction direction;
     
     private String content;
     
@@ -57,12 +67,12 @@ public class Message implements Serializable {
         this.advisor = advisor;
     }
 
-    public Boolean getClientToAdvisor() {
-        return clientToAdvisor;
+    public Direction getDirection() {
+        return direction;
     }
 
-    public void setClientToAdvisor(Boolean clientToAdvisor) {
-        this.clientToAdvisor = clientToAdvisor;
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     public String getContent() {

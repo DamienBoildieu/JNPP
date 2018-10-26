@@ -6,8 +6,8 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue(value = AccountTransaction.Type.Values.TRANSFERT)
-public class Transfert extends MoneyTransaction implements Serializable {
+@DiscriminatorValue(value = Movement.Type.Values.TRANSFERT)
+public class Transfert extends MoneyTrade implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -15,7 +15,7 @@ public class Transfert extends MoneyTransaction implements Serializable {
 
     @Override
     public Type getType() {
-        return AccountTransaction.Type.TRANSFERT;
+        return Movement.Type.TRANSFERT;
     }
     
     @Override

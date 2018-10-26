@@ -17,14 +17,15 @@ import javax.persistence.TemporalType;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
-public abstract class AccountTransaction implements Serializable {
+public abstract class Movement implements Serializable {
 
     public static enum Type {
     
         TRANSFERT,
         BEBIT,
         PURCHASE,
-        SALE;
+        SALE,
+        WITHDRAW;
         
         public static class Values {
 
@@ -32,7 +33,8 @@ public abstract class AccountTransaction implements Serializable {
             public static final String BEBIT = "BEBIT";
             public static final String PURCHASE = "PURCHASE";
             public static final String SALE = "SALE";
-
+            public static final String WITHDRAW = "WITHDRAW";
+            
             private Values() {}
 
         }
@@ -49,7 +51,6 @@ public abstract class AccountTransaction implements Serializable {
     private Date date;
     
     private String ribFrom;
-    private String ribTo;
     
     public abstract Type getType();
 
@@ -76,14 +77,6 @@ public abstract class AccountTransaction implements Serializable {
     public void setRibFrom(String ribFrom) {
         this.ribFrom = ribFrom;
     }
-
-    public String getRibTo() {
-        return ribTo;
-    }
-
-    public void setRibTo(String ribTo) {
-        this.ribTo = ribTo;
-    }
     
     @Override
     public int hashCode() {
@@ -94,10 +87,10 @@ public abstract class AccountTransaction implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof AccountTransaction)) {
+        if (!(object instanceof Movement)) {
             return false;
         }
-        AccountTransaction other = (AccountTransaction) object;
+        Movement other = (Movement) object;
         return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
     

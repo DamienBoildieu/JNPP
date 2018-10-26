@@ -6,8 +6,8 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue(value = AccountTransaction.Type.Values.PURCHASE)
-public class Purchase extends ShareTransaction implements Serializable {
+@DiscriminatorValue(value = Movement.Type.Values.PURCHASE)
+public class Purchase extends ShareTrade implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -15,7 +15,7 @@ public class Purchase extends ShareTransaction implements Serializable {
     
     @Override
     public Type getType() {
-        return AccountTransaction.Type.PURCHASE;
+        return Movement.Type.PURCHASE;
     }
     
     @Override

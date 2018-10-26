@@ -13,8 +13,7 @@ import jnpp.dao.entities.accounts.Currency;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
-public abstract class MoneyTransaction extends AccountTransaction 
-        implements Serializable {
+public abstract class MoneyTrade extends Trade implements Serializable {
 
     private static final long serialVersionUID = 1L;
     

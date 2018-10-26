@@ -15,8 +15,7 @@ import jnpp.dao.entities.accounts.Share;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
-public abstract class ShareTransaction extends AccountTransaction 
-        implements Serializable {
+public abstract class ShareTrade extends Trade implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

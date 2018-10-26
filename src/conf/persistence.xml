@@ -14,9 +14,7 @@
     <class>jnpp.dao.entities.clients.Private</class>
     <class>jnpp.dao.entities.clients.Client</class>
     <class>jnpp.dao.entities.transactions.Transaction</class>
-    <class>jnpp.dao.entities.transactions.MoneyTransaction</class>
     <class>jnpp.dao.entities.transactions.Debit</class>
-    <class>jnpp.dao.entities.transactions.ShareTransaction</class>
     <class>jnpp.dao.entities.transactions.Transfert</class>
     <class>jnpp.dao.entities.transactions.Sale</class>
     <class>jnpp.dao.entities.transactions.Purchase</class>
@@ -28,6 +26,10 @@
     <class>jnpp.dao.entities.Appointment</class>
     <class>jnpp.dao.entities.accounts.JointAccount</class>
     <class>jnpp.dao.entities.PaymentObject</class>
+    <class>jnpp.dao.entities.transactions.Trade</class>
+    <class>jnpp.dao.entities.transactions.ShareTrade</class>
+    <class>jnpp.dao.entities.transactions.MoneyTrade</class>
+    <class>jnpp.dao.entities.transactions.Withdraw</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/JNPPDB"/>
