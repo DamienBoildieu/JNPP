@@ -14,10 +14,6 @@
     <class>jnpp.dao.entities.clients.Private</class>
     <class>jnpp.dao.entities.clients.Client</class>
     <class>jnpp.dao.entities.transactions.Transaction</class>
-    <class>jnpp.dao.entities.transactions.Debit</class>
-    <class>jnpp.dao.entities.transactions.Transfert</class>
-    <class>jnpp.dao.entities.transactions.Sale</class>
-    <class>jnpp.dao.entities.transactions.Purchase</class>
     <class>jnpp.dao.entities.accounts.DebitAuthorization</class>
     <class>jnpp.dao.old.EUser</class>
     <class>jnpp.dao.entities.Message</class>
@@ -25,11 +21,21 @@
     <class>jnpp.dao.entities.Check</class>
     <class>jnpp.dao.entities.Appointment</class>
     <class>jnpp.dao.entities.accounts.JointAccount</class>
-    <class>jnpp.dao.entities.PaymentObject</class>
-    <class>jnpp.dao.entities.transactions.Trade</class>
-    <class>jnpp.dao.entities.transactions.ShareTrade</class>
-    <class>jnpp.dao.entities.transactions.MoneyTrade</class>
-    <class>jnpp.dao.entities.transactions.Withdraw</class>
+    <class>jnpp.dao.entities.notifications.Notification</class>
+    <class>jnpp.dao.entities.notifications.AppointmentNotification</class>
+    <class>jnpp.dao.entities.notifications.MessageNotification</class>
+    <class>jnpp.dao.entities.notifications.MovementNotification</class>
+    <class>jnpp.dao.entities.movements.Purchase</class>
+    <class>jnpp.dao.entities.movements.Transfert</class>
+    <class>jnpp.dao.entities.movements.Sale</class>
+    <class>jnpp.dao.entities.movements.Debit</class>
+    <class>jnpp.dao.entities.movements.Trade</class>
+    <class>jnpp.dao.entities.movements.Withdraw</class>
+    <class>jnpp.dao.entities.movements.ShareTrade</class>
+    <class>jnpp.dao.entities.movements.MoneyTrade</class>
+    <class>jnpp.dao.entities.notifications.OverdraftNotification</class>
+    <class>jnpp.dao.entities.PaymentMean</class>
+    <class>jnpp.dao.entities.notifications.PaymentMeanNotification</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/JNPPDB"/>

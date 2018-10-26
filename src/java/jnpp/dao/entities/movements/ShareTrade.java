@@ -1,4 +1,4 @@
-package jnpp.dao.entities.transactions;
+package jnpp.dao.entities.movements;
 
 import java.io.Serializable;
 import javax.persistence.DiscriminatorColumn;

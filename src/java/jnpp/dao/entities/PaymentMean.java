@@ -19,7 +19,7 @@ import jnpp.dao.entities.clients.Client;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
-public abstract class PaymentObject implements Serializable {
+public abstract class PaymentMean implements Serializable {
 
     public static enum Type {
         
@@ -104,10 +104,10 @@ public abstract class PaymentObject implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof PaymentObject)) {
+        if (!(object instanceof PaymentMean)) {
             return false;
         }
-        PaymentObject other = (PaymentObject) object;
+        PaymentMean other = (PaymentMean) object;
         return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
