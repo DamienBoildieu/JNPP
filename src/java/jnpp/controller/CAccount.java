@@ -35,7 +35,7 @@ public class CAccount {
         List<AccountStub> listAc = new ArrayList<AccountStub>();
         listAc.add(new AccountStub("56132", "compte courant", -20));
         listAc.add(new AccountStub("5946513", "Livret A", 500));
-        ModelAndView view = new ConnectedModelAndView("resume", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+        ModelAndView view = new ConnectedModelAndView("accounts/resume", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
         view.addObject("listAccounts", listAc);
         return view;
     }
@@ -47,7 +47,7 @@ public class CAccount {
         if (!CSession.hasSession(session))
             return new ModelAndView("redirect:/index.htm");
 	//resumeService.resumeAccounts("");
-        return new ConnectedModelAndView("account", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+        return new ConnectedModelAndView("accounts/account", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
     }
     
 }
