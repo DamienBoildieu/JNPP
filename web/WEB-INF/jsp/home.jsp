@@ -15,7 +15,7 @@
                         <div class="col s12 m4">
                             <div class="card medium blue" style="cursor: pointer;" onclick="window.location='<c:url value="/resume.htm" />';">
                                 <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
-                                <img src="${pageContext.request.contextPath}/pictures/wallet.png" style="margin-top: 10px;" alt='"http://www.freepik.com" Designed by Macrovector / Freepik'>
+                                <img src="${pageContext.request.contextPath}/pictures/wallet.png" alt='"http://www.freepik.com" Designed by Macrovector / Freepik'>
                                     <div class="card-content white-text">
                                         <span class="card-title center-align">Mes comptes</span>
                                         <div class="row">
