@@ -1,17 +1,20 @@
-<%-- 
-    Document   : edituser
-    Created on : 26 oct. 2018, 19:22:25
-    Author     : damien
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ include file="../include/jsptags.jsp"%>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <%@ include file="../include/head.jsp"%>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <header>
+            <%@ include file="../include/banner.jsp"%>
+        </header>
+        <main>
+            <%@ include file="../include/alerts.jsp"%>
+            <%@ include file="../include/notif.jsp"%>
+            
+        </main>
+        <footer>
+        </footer>
+        <%@ include file="../include/javascript.jsp"%>
+        <%@ include file="../include/commonscripts.jsp"%>
     </body>
 </html>

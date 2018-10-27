@@ -40,6 +40,11 @@
                                     </div>
                                 </div>
                             </form>
+                            <div class="row">
+                                <div class="col s12">
+                                    <a href="<c:url value='/password.htm' />">Mot de passe oublié</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
