@@ -17,14 +17,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * Classe de contrôleur des requêtes sur des comptes
+ */
 @Controller
 public class CAccount {
     /*@Autowired
     private ISUer resumeService;*/
 
-    public CAccount() {
-    }
-
+    /**
+     * Requête sur la vue de la liste des comptes
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @return Une vue sur la liste des comptes de l'utilisateur si il est connecté, redirection vers l'index sinon
+     * @throws Exception 
+     */
     @RequestMapping(value = "resume", method = RequestMethod.GET)
     protected ModelAndView linktoResume(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
@@ -39,7 +47,14 @@ public class CAccount {
         view.addObject("listAccounts", listAc);
         return view;
     }
-    
+    /**
+     * Requête sur la vue d'un compte
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @return Une vue sur un compte de l'utilisateur si il est connecté, redirection vers l'index sinon
+     * @throws Exception 
+     */
     @RequestMapping(value = "account", method = RequestMethod.GET)
     protected ModelAndView linktoAccount(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();

@@ -1,19 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package jnpp.common;
 
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- *
- * @author damien
+ * Classe de ModelAndView de l'application
  */
 public class JNPPModelAndView extends ModelAndView {
+    /**
+     * les informations de la vue
+     */
     private final ViewInfo info;
-    
+    /**
+     * Constructeur
+     * @param viewName le nom de la vue
+     * @param viewInfo les informations de la vue
+     */
     public JNPPModelAndView(String viewName, ViewInfo viewInfo) {
 	super(viewName);
 	this.info = viewInfo;

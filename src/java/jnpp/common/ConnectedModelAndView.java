@@ -1,16 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package jnpp.common;
 
 /**
- *
- * @author damien
+ * Classe de ModelAndView pour un utilisateur connecté
  */
 public class ConnectedModelAndView extends JNPPModelAndView {
-
+    /**
+     * Constructeur
+     * @param viewName le nom de la vue
+     * @param viewInfo les informations de la vue
+     */
     public ConnectedModelAndView(String viewName, ConnectedInfo viewInfo) {
 	super(viewName, viewInfo);
 	this.addObject("firstName", viewInfo.getFirstName());
