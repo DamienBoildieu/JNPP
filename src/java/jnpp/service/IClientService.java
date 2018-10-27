@@ -6,11 +6,11 @@ import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.clients.Gender;
 import jnpp.dao.entities.clients.Private;
 import jnpp.dao.entities.clients.Professional;
-import jnpp.service.exceptions.clientService.BeOfAgeException;
-import jnpp.service.exceptions.clientService.ClosureException;
-import jnpp.service.exceptions.clientService.DuplicatedClientException;
-import jnpp.service.exceptions.clientService.InvalidInformationException;
-import jnpp.service.exceptions.clientService.InvalidUpdateException;
+import jnpp.service.exceptions.clients.BeOfAgeException;
+import jnpp.service.exceptions.clients.ClosureException;
+import jnpp.service.exceptions.clients.DuplicatedClientException;
+import jnpp.service.exceptions.clients.InvalidInformationException;
+import jnpp.service.exceptions.clients.InvalidUpdateException;
 
 /** Service gerant la connexion, la deconnexion, l'inscripion, la mise a jour 
  * des informations et la fermeture d'un compte client.

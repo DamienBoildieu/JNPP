@@ -1,4 +1,4 @@
-package jnpp.service.exceptions.clientService;
+package jnpp.service.exceptions.clients;
 
 import jnpp.service.exceptions.ServiceException;
 

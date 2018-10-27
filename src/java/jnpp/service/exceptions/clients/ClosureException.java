@@ -1,4 +1,4 @@
-package jnpp.service.exceptions.clientService;
+package jnpp.service.exceptions.clients;
 
 public class ClosureException extends ClientServiceException {
 
