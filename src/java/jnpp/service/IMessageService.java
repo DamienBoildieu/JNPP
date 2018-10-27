@@ -9,6 +9,9 @@ import jnpp.dao.entities.clients.Client;
 import jnpp.service.exceptions.entities.UnknownAdvisorException;
 import jnpp.service.exceptions.entities.UnknownClientException;
 
+/** Service de messagerie permettant l'envoi et la reception de messages.
+ * @author Pierre Bourquat
+ * @author Damien Boildieu */
 public interface IMessageService {
     
     /** Envoie un message d'un client a un conseiller.
@@ -40,7 +43,7 @@ public interface IMessageService {
      * @return Liste des messages du client.
      * @throws UnknownClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public List<Message> getMessages(Client client)
+    public List<Message> receiveMessages(Client client)
             throws UnknownClientException;
     
     /** Retourne une liste des n dernier messages recus et envoyes d'un client.
@@ -49,7 +52,7 @@ public interface IMessageService {
      * @return Liste des n dernier message.
      * @throws UnknownClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public List<Message> getLastMessages(Client client, int n)
+    public List<Message> receiveLastMessages(Client client, int n)
             throws UnknownClientException;
     
     /** Retourne une liste des messages recus et envoyes d'un client 
@@ -59,7 +62,7 @@ public interface IMessageService {
      * @return Liste des messages recus et envoyes apres la date specifiee.
      * @throws UnknownClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public List<Message> getLastMessages(Client client, Date date)
+    public List<Message> receiveLastMessages(Client client, Date date)
             throws UnknownClientException;
     
     /** Retourne une liste des messages recus et envoyes d'un Conseiller.
@@ -67,7 +70,7 @@ public interface IMessageService {
      * @return Liste des messages du client.
      * @throws UnknownAdvisorException Exception levee si l'entite advisor ne 
      * fait pas reference a un conseiller existant. */
-    public List<Message> getMessages(Advisor advisor)
+    public List<Message> receiveMessages(Advisor advisor)
             throws UnknownAdvisorException;
         
     /** Retourne une liste des n dernier messages recus et envoyes d'un client.
@@ -76,7 +79,7 @@ public interface IMessageService {
      * @return Liste des n dernier message.
      * @throws UnknownAdvisorException Exception levee si l'entite advisor ne 
      * fait pas reference a un conseiller existant. */
-    public List<Message> getLastMessages(Advisor advisor, int n)
+    public List<Message> receiveLastMessages(Advisor advisor, int n)
             throws UnknownAdvisorException;
         
     /** Retourne une liste des messages recus et envoyes d'un client 
@@ -86,7 +89,7 @@ public interface IMessageService {
      * @return Liste des messages recus et envoyes apres la date specifiee.
      * @throws UnknownAdvisorException Exception levee si l'entite advisor ne 
      * fait pas reference a un conseiller existant. */
-    public List<Message> getLastMessages(Advisor advisor, Date date)
+    public List<Message> receiveLastMessages(Advisor advisor, Date date)
             throws UnknownAdvisorException;
     
 }
