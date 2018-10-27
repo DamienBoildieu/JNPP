@@ -7,7 +7,6 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import jnpp.dao.interfaces.IClientDAO;
 
 @Repository
 public class ClientDAO implements IClientDAO {

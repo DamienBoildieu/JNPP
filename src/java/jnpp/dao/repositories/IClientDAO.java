@@ -1,4 +1,4 @@
-package jnpp.dao.interfaces;
+package jnpp.dao.repositories;
 
 import jnpp.dao.entities.clients.Client;
 
