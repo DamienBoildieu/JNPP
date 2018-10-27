@@ -44,7 +44,7 @@ public class CLink {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (!CSession.hasSession(session))
-            return new UnconnectedModelAndView("connect", new UnconnectedInfo(alerts));
+            return new UnconnectedModelAndView("manageuser/connect", new UnconnectedInfo(alerts));
         return new ModelAndView("redirect:/index.htm");
     }
     
@@ -53,7 +53,7 @@ public class CLink {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (!CSession.hasSession(session))
-            return new UnconnectedModelAndView("signup", new UnconnectedInfo(alerts));
+            return new UnconnectedModelAndView("signup/signup", new UnconnectedInfo(alerts));
         return new ModelAndView("redirect:/index.htm");
     }
     
@@ -63,7 +63,17 @@ public class CLink {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (!CSession.hasSession(session))
-            return new UnconnectedModelAndView("personalsignup", new UnconnectedInfo(alerts));
+            return new UnconnectedModelAndView("signup/personalsignup", new UnconnectedInfo(alerts));
+        return new ModelAndView("redirect:/index.htm");
+    }
+    
+    @RequestMapping(value = "professionalsignup", method = RequestMethod.GET)
+    protected ModelAndView linkToProfessionalSignUp(Model model, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (!CSession.hasSession(session))
+            return new UnconnectedModelAndView("signup/professionalsignup", new UnconnectedInfo(alerts));
         return new ModelAndView("redirect:/index.htm");
     }
     
@@ -73,7 +83,7 @@ public class CLink {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (CSession.hasSession(session)) {
-            ModelAndView view =  new ConnectedModelAndView("advisor", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+            ModelAndView view =  new ConnectedModelAndView("manageuser/advisor", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
             AdvisorStub advisor = new AdvisorStub("Toto", "Tata", "jnpp", "05499878464");
             view.addObject("advisor", advisor);
             return view;
@@ -87,7 +97,16 @@ public class CLink {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (!CSession.hasSession(session))
             return new ModelAndView("redirect:/index.htm");
-        ModelAndView view = new ConnectedModelAndView("home", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+        ModelAndView view = new ConnectedModelAndView("manageuser/home", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
         return view;
+    }
+    
+    @RequestMapping(value = "password", method = RequestMethod.GET)
+    protected ModelAndView linktoPassword(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (!CSession.hasSession(session))
+            return new UnconnectedModelAndView("manageuser/password", new UnconnectedInfo(alerts));
+        return new ModelAndView("redirect:/index.htm");
     }
 }

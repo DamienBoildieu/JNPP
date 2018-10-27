@@ -50,9 +50,9 @@ public class CUser {
                 AlertMessage error = new AlertMessage(AlertEnum.ERROR, "Nom d'utilisateur ou mot de passe incorrect");
                 if (alerts != null) {
                     alerts.add(error);
-                    return new UnconnectedModelAndView("connect", new UnconnectedInfo(alerts));
+                    return new UnconnectedModelAndView("manageuser/connect", new UnconnectedInfo(alerts));
                 } else {
-                    return new UnconnectedModelAndView("connect", new UnconnectedInfo(error));
+                    return new UnconnectedModelAndView("manageuser/connect", new UnconnectedInfo(error));
                 } 
             }
         }
@@ -98,9 +98,39 @@ public class CUser {
                 AlertMessage error = new AlertMessage(AlertEnum.ERROR, "Identifiant indisponible");
                 if (alerts != null)  {
                     alerts.add(error);
-                    return new UnconnectedModelAndView("personalsignup", new UnconnectedInfo(alerts));
+                    return new UnconnectedModelAndView("signup/personalsignup", new UnconnectedInfo(alerts));
                 } else {
-                    return new UnconnectedModelAndView("personalsignup", new UnconnectedInfo(error));
+                    return new UnconnectedModelAndView("signup/personalsignup", new UnconnectedInfo(error));
+                }
+            } else {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Inscription réussie"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Inscription réussie"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new ModelAndView("redirect:/index.htm");
+            }
+        }
+        return new ModelAndView("redirect:/index.htm");
+    }
+    
+    @RequestMapping(value = "professionalsignup", method = RequestMethod.POST)
+    protected ModelAndView validateProfessionalSignUp(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+            throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (!CSession.hasSession(session)) {
+            String id = request.getParameter("account");
+            String password = request.getParameter("password");
+            if (!userService.signUp(id, password)) {
+                AlertMessage error = new AlertMessage(AlertEnum.ERROR, "Identifiant indisponible");
+                if (alerts != null)  {
+                    alerts.add(error);
+                    return new UnconnectedModelAndView("signup/professionalsignup", new UnconnectedInfo(alerts));
+                } else {
+                    return new UnconnectedModelAndView("signup/professionalsignup", new UnconnectedInfo(error));
                 }
             } else {
                 if (alerts != null) {
