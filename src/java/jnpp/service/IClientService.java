@@ -6,6 +6,7 @@ import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.clients.Gender;
 import jnpp.dao.entities.clients.Private;
 import jnpp.dao.entities.clients.Professional;
+import jnpp.service.exceptions.entities.UnknownClientException;
 import jnpp.service.exceptions.clients.BeOfAgeException;
 import jnpp.service.exceptions.clients.ClosureException;
 import jnpp.service.exceptions.clients.DuplicatedClientException;
@@ -27,8 +28,10 @@ public interface IClientService {
     
     /** Deconnecte un client.
      * @param client Client se deconnectant.
-     */
-    public void signOut(Client client);
+     * @throws UnknownClientException Exception levee si l'entite client ne 
+     * fait pas reference a un client existant. */
+    public void signOut(Client client)
+            throws UnknownClientException;
     
     /** Inscrit un particulier.
      * Le particulier recoit par defaut des notifications.
@@ -86,16 +89,21 @@ public interface IClientService {
      * @throws InvalidInformationException Exception levee si une des nouvelles 
      * informations du client n'est pas valide.
      * @throws InvalidUpdateException Exception levee si la mise a jour d'un 
-     * champ n'est pas autorisee. */
+     * champ n'est pas autorisee.
+     * @throws UnknownClientException Exception levee si l'entite client ne 
+     * fait pas reference a un client existant. */
     public Client update(Client client, Client information)
             throws DuplicatedClientException, InvalidInformationException,
-            InvalidUpdateException;
+            InvalidUpdateException, UnknownClientException;
     
     /** Ferme un compte client.
      * Le compte d'un client ayant de l'argent ou des actions ne peut ferme.
      * @param client Client dont le compte est ferme.
      * @throws ClosureException Exception levee si le compte ne peut pas etre
-     * ferme. */
-    public void close(Client client) throws ClosureException;
+     * ferme.
+     * @throws UnknownClientException Exception levee si l'entite client ne 
+     * fait pas reference a un client existant. */
+    public void close(Client client) 
+            throws ClosureException, UnknownClientException;
     
 }
