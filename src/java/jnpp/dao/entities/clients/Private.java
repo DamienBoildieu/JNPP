@@ -46,7 +46,7 @@ public class Private extends Client implements Serializable {
 
     @Override
     public String toString() {
-        return "jnpp.dao.entities.EPrivate[ id=" + getLogin() + " ]";
+        return "jnpp.dao.entities.EPrivate[ id=" + getId() + " ]";
     }
     
 }

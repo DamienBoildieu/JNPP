@@ -9,6 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -23,7 +27,12 @@ public class Advisor implements Serializable {
     @Embedded
     private Identity identity;
     
-    @OneToMany(mappedBy = "advisor")
+    @JoinTable(
+            name = "Advisor_Client",
+            joinColumns = @JoinColumn(name = "id_advisor"),
+            inverseJoinColumns = @JoinColumn(name = "id_client")
+    )
+    @OneToMany
     private List<Client> clients = new ArrayList<Client>();
     
     public Advisor() {}

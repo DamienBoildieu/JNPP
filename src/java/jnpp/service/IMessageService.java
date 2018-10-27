@@ -9,7 +9,8 @@ import jnpp.dao.entities.clients.Client;
 import jnpp.service.exceptions.entities.UnknownAdvisorException;
 import jnpp.service.exceptions.entities.UnknownClientException;
 
-/** Service de messagerie permettant l'envoi et la reception de messages.
+/** Service de gestion de la messagerie permettant l'envoi et la reception de 
+ * messages.
  * @author Pierre Bourquat
  * @author Damien Boildieu */
 public interface IMessageService {

@@ -7,7 +7,7 @@ import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.notifications.Notification;
 import jnpp.service.exceptions.entities.UnknownClientException;
 
-/** Service de notification permettant la reception de notifications.
+/** Service de gestion des notifications.
  * @author Pierre Bourquat
  * @author Damien Boildieu */
 public interface INotificationService {
