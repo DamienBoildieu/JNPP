@@ -31,10 +31,10 @@ public class Message implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="client_fk")
+    @JoinColumn(name = "client_fk")
     private Client client;
     @ManyToOne
-    @JoinColumn(name="advisor_fk")
+    @JoinColumn(name = "advisor_fk")
     private Advisor advisor;
     @Enumerated(EnumType.STRING)
     private Direction direction;

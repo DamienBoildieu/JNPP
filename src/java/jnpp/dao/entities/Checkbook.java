@@ -6,8 +6,8 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue(value = PaymentObject.Type.Values.CHECKBOOK)
-public class Checkbook extends PaymentObject implements Serializable {
+@DiscriminatorValue(value = PaymentMean.Type.Values.CHECKBOOK)
+public class Checkbook extends PaymentMean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -15,7 +15,7 @@ public class Checkbook extends PaymentObject implements Serializable {
     
     @Override
     public Type getType() {
-        return PaymentObject.Type.CHECKBOOK;
+        return PaymentMean.Type.CHECKBOOK;
     }
     
     @Override
