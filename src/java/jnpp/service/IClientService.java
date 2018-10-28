@@ -75,23 +75,43 @@ public interface IClientService {
             String address, String phone) 
             throws DuplicatedClientException, InvalidInformationException;
     
-    /** Mes a jour les informations du client.
-     * @param client L'entite du client mis à jour.
-     * @param information Une entite de client contenant les informations a 
-     * modifier. Si cette entite ne contient que des champs null, le client ne 
-     * sera pas modifie. Pour modifier uniquement la date de naissance par 
-     * exemple, il faut que l'entite information n'ait que des champs null sauf 
-     * le champ correspondant a la date de naissance.
-     * @return L'entite du client mis a jour.
+    /** Mes a jour les informations d'un particulier.
+     * @param client L'entite du particulier mis à jour.
+     * @param information Une entite de particulier contenant les informations a 
+     * modifier. Si cette entite ne contient que des champs null, le 
+     * particulier ne sera pas modifie. Pour modifier uniquement la date de 
+     * naissance par exemple, il faut que l'entite information n'ait que des 
+     * champs null sauf le champ correspondant a la date de naissance.
+     * @return L'entite du particulier mis a jour.
      * @throws DuplicatedClientException Exception levee si une mise a jour de 
      * l'identite du client declanche une duplication de client.
      * @throws InvalidInformationException Exception levee si une des nouvelles 
-     * informations du client n'est pas valide.
+     * informations du particulier n'est pas valide.
      * @throws InvalidUpdateException Exception levee si la mise a jour d'un 
      * champ n'est pas autorisee.
-     * @throws UnknownClientException Exception levee si l'entite client ne 
+     * @throws UnknownClientException Exception levee si l'entite particulier ne 
      * fait pas reference a un client existant. */
-    public Client update(Client client, Client information)
+    public Private update(Private client, Private information)
+            throws DuplicatedClientException, InvalidInformationException,
+            InvalidUpdateException, UnknownClientException; 
+    
+    /** Mes a jour les informations d'un professionel.
+     * @param client L'entite du professionel mis à jour.
+     * @param information Une entite de professionel contenant les informations 
+     * a modifier. Si cette entite ne contient que des champs null, le 
+     * professionel ne sera pas modifie. Pour modifier uniquement le nom du 
+     * gerant , il faut que l'entite information n'ait que des champs null sauf 
+     * le champ correspondant au nom du gerant.
+     * @return L'entite du particulier mis a jour.
+     * @throws DuplicatedClientException Exception levee si une mise a jour de 
+     * l'identite du client declanche une duplication de client.
+     * @throws InvalidInformationException Exception levee si une des nouvelles 
+     * informations du particulier n'est pas valide.
+     * @throws InvalidUpdateException Exception levee si la mise a jour d'un 
+     * champ n'est pas autorisee.
+     * @throws UnknownClientException Exception levee si l'entite professionel 
+     * ne fait pas reference a un client existant. */
+    public Professional update(Professional client, Professional information)
             throws DuplicatedClientException, InvalidInformationException,
             InvalidUpdateException, UnknownClientException;    
     
