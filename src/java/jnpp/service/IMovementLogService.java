@@ -12,14 +12,14 @@ import jnpp.service.exceptions.entities.FakeClientException;
 /** Service de gestion d'historique de transactions.
  * @author Pierre Bourquat
  * @author Damien Boildieu */
-public interface IMovementLogService {
+public interface IMovementLogService extends IService {
     
     /** Retourne toutes les transactions d'un client.
      * @param client Client concerne.
      * @return Liste de transactions.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public List<Movement> getMovements(Client client)
+    List<Movement> getMovements(Client client)
             throws FakeClientException;
     
     /** Retourne les n dernieres transactions d'un client.
@@ -28,7 +28,7 @@ public interface IMovementLogService {
      * @return Liste de transactions.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public List<Movement> getMovements(Client client, int n)
+    List<Movement> getMovements(Client client, int n)
             throws FakeClientException;
     
     /** Retourne les transactions posterieurs a une data d'un client.
@@ -37,7 +37,7 @@ public interface IMovementLogService {
      * @return Liste de transactions.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public List<Movement> getMovements(Client client, Date date)
+    List<Movement> getMovements(Client client, Date date)
             throws FakeClientException;
     
     /** Retourne toutes les transactions d'un compte bancaire.
@@ -45,7 +45,7 @@ public interface IMovementLogService {
      * @return Liste de transactions.
      * @throws FakeAccountException Exception levee si l'entite account ne 
      * fait pas reference a un compte bancaire existant. */
-    public List<Movement> getMovements(Account account)
+    List<Movement> getMovements(Account account)
             throws FakeAccountException;
     
     /** Retourne les n dernieres transactions d'un compte bancaire.
@@ -54,7 +54,7 @@ public interface IMovementLogService {
      * @return Liste de transactions.
      * @throws FakeAccountException Exception levee si l'entite account ne 
      * fait pas reference a un compte bancaire existant. */
-    public List<Movement> getMovements(Account account, int n)
+    List<Movement> getMovements(Account account, int n)
             throws FakeAccountException;
     
     /** Retourne les transactions posterieurs a une data d'un compte bancaire.
@@ -63,7 +63,7 @@ public interface IMovementLogService {
      * @return Liste de transactions.
      * @throws FakeAccountException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public List<Movement> getMovements(Account account, Date date)
+    List<Movement> getMovements(Account account, Date date)
             throws FakeAccountException;
     
 }

@@ -13,7 +13,7 @@ import jnpp.service.exceptions.entities.FakeClientException;
  * messages.
  * @author Pierre Bourquat
  * @author Damien Boildieu */
-public interface IMessageService {
+public interface IMessageService extends IService {
     
     /** Envoie un message d'un client a un conseiller.
      * @param client Client envoyant le message.
@@ -24,7 +24,7 @@ public interface IMessageService {
      * fait pas reference a un client existant. 
      * @throws FakeAdvisorException Exception levee si l'entite advisor ne 
      * fait pas reference a un conseillier existant. */
-    public Message sendMessage(Client client, Advisor advisor, String message)
+    Message sendMessage(Client client, Advisor advisor, String message)
             throws FakeClientException, FakeAdvisorException;
     
     /** Envoie un message d'un conseiller a un client.
@@ -36,7 +36,7 @@ public interface IMessageService {
      * fait pas reference a un client existant. 
      * @throws FakeAdvisorException Exception levee si l'entite advisor ne 
      * fait pas reference a un conseillier existant. */
-    public Message sendMessage(Advisor advisor, Client client, String message)
+    Message sendMessage(Advisor advisor, Client client, String message)
             throws FakeClientException, FakeAdvisorException;
     
     /** Retourne une liste des messages recus et envoyes d'un client.
@@ -44,7 +44,7 @@ public interface IMessageService {
      * @return Liste des messages du client.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public List<Message> receiveMessages(Client client)
+    List<Message> receiveMessages(Client client)
             throws FakeClientException;
     
     /** Retourne une liste des n dernier messages recus et envoyes d'un client.
@@ -53,7 +53,7 @@ public interface IMessageService {
      * @return Liste des n dernier message.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public List<Message> receiveLastMessages(Client client, int n)
+    List<Message> receiveLastMessages(Client client, int n)
             throws FakeClientException;
     
     /** Retourne une liste des messages recus et envoyes d'un client 
@@ -63,7 +63,7 @@ public interface IMessageService {
      * @return Liste des messages recus et envoyes apres la date specifiee.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public List<Message> receiveLastMessages(Client client, Date date)
+    List<Message> receiveLastMessages(Client client, Date date)
             throws FakeClientException;
     
     /** Retourne une liste des messages recus et envoyes d'un Conseiller.
@@ -71,7 +71,7 @@ public interface IMessageService {
      * @return Liste des messages du client.
      * @throws FakeAdvisorException Exception levee si l'entite advisor ne 
      * fait pas reference a un conseiller existant. */
-    public List<Message> receiveMessages(Advisor advisor)
+    List<Message> receiveMessages(Advisor advisor)
             throws FakeAdvisorException;
         
     /** Retourne une liste des n dernier messages recus et envoyes d'un client.
@@ -80,7 +80,7 @@ public interface IMessageService {
      * @return Liste des n dernier message.
      * @throws FakeAdvisorException Exception levee si l'entite advisor ne 
      * fait pas reference a un conseiller existant. */
-    public List<Message> receiveLastMessages(Advisor advisor, int n)
+    List<Message> receiveLastMessages(Advisor advisor, int n)
             throws FakeAdvisorException;
         
     /** Retourne une liste des messages recus et envoyes d'un client 
@@ -90,7 +90,7 @@ public interface IMessageService {
      * @return Liste des messages recus et envoyes apres la date specifiee.
      * @throws FakeAdvisorException Exception levee si l'entite advisor ne 
      * fait pas reference a un conseiller existant. */
-    public List<Message> receiveLastMessages(Advisor advisor, Date date)
+    List<Message> receiveLastMessages(Advisor advisor, Date date)
             throws FakeAdvisorException;
     
 }
