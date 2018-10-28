@@ -1,21 +1,16 @@
 package jnpp.dao.entities.clients;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
-import jnpp.dao.entities.accounts.Account;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -41,40 +36,24 @@ public abstract class Client implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
-    private String login;
-    @Column(nullable = false)
-    private String password;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     
     @Column(nullable = false)
     private String email;
     private String address;
     private String phone;
     
-    private Boolean notify;    
-    
-    @ManyToOne
-    @JoinColumn(name="advisor_fk")
-    private Advisor advisor;    
-    
-    @OneToMany(mappedBy = "client")
-    private List<Account> accounts = new ArrayList<Account>();
+    private Boolean notify;
     
     public abstract Type getType();
     
-    public String getLogin() {
-        return login;
+    public Long getId() {
+        return id;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -108,26 +87,10 @@ public abstract class Client implements Serializable {
     public void setNotify(Boolean notify) {
         this.notify = notify;
     }
-
-    public Advisor getAdvisor() {
-        return advisor;
-    }
-    
-    public void setAdvisor(Advisor advisor) {
-        this.advisor = advisor;
-    }
-
-    public List<Account> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(List<Account> accounts) {
-        this.accounts = accounts;
-    }
     
     @Override
     public int hashCode() {
-        return login != null ? login.hashCode() : 0;
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override
@@ -135,8 +98,8 @@ public abstract class Client implements Serializable {
         if (!(object instanceof Client))
             return false;
         Client other = (Client) object;
-        return !((this.login == null && other.login != null) 
-                || (this.login != null && !this.login.equals(other.login)));
+        return !((this.id == null && other.id != null) 
+                || (this.id != null && !this.id.equals(other.id)));
     }
     
 }

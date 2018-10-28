@@ -24,7 +24,8 @@ public class Appointment implements Serializable {
         
         DEMAND,
         ACCEPTED,
-        DENIED;
+        DENIED,
+        CANCEL;
         
     }
     

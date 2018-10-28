@@ -1,19 +1,19 @@
 package jnpp.service;
 
 import java.util.Date;
-
+  
 import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.clients.Gender;
 import jnpp.dao.entities.clients.Private;
 import jnpp.dao.entities.clients.Professional;
+import jnpp.service.exceptions.entities.UnknownClientException;
 import jnpp.service.exceptions.clients.BeOfAgeException;
 import jnpp.service.exceptions.clients.ClosureException;
 import jnpp.service.exceptions.clients.DuplicatedClientException;
 import jnpp.service.exceptions.clients.InvalidInformationException;
 import jnpp.service.exceptions.clients.InvalidUpdateException;
 
-/** Service gerant la connexion, la deconnexion, l'inscripion, la mise a jour 
- * des informations et la fermeture d'un compte client.
+/** Service de gestion des clients.
  * @author Pierre Bourquat
  * @author Damien Boildieu */
 public interface IClientService {
@@ -27,8 +27,10 @@ public interface IClientService {
     
     /** Deconnecte un client.
      * @param client Client se deconnectant.
-     */
-    public void signOut(Client client);
+     * @throws UnknownClientException Exception levee si l'entite client ne 
+     * fait pas reference a un client existant. */
+    public void signOut(Client client)
+            throws UnknownClientException;
     
     /** Inscrit un particulier.
      * Le particulier recoit par defaut des notifications.
@@ -73,29 +75,96 @@ public interface IClientService {
             String address, String phone) 
             throws DuplicatedClientException, InvalidInformationException;
     
-    /** Mes a jour les informations du client.
-     * @param client L'entite du client mis à jour.
-     * @param information Une entite de client contenant les informations a 
-     * modifier. Si cette entite ne contient que des champs null, le client ne 
-     * sera pas modifie. Pour modifier uniquement la date de naissance par 
-     * exemple, il faut que l'entite information n'ait que des champs null sauf 
-     * le champ correspondant a la date de naissance.
-     * @return L'entite du client mis a jour.
+    /** Mes a jour les informations d'un particulier.
+     * @param client L'entite du particulier mis à jour.
+     * @param information Une entite de particulier contenant les informations a 
+     * modifier. Si cette entite ne contient que des champs null, le 
+     * particulier ne sera pas modifie. Pour modifier uniquement la date de 
+     * naissance par exemple, il faut que l'entite information n'ait que des 
+     * champs null sauf le champ correspondant a la date de naissance.
+     * @return L'entite du particulier mis a jour.
      * @throws DuplicatedClientException Exception levee si une mise a jour de 
      * l'identite du client declanche une duplication de client.
      * @throws InvalidInformationException Exception levee si une des nouvelles 
-     * informations du client n'est pas valide.
+     * informations du particulier n'est pas valide.
      * @throws InvalidUpdateException Exception levee si la mise a jour d'un 
-     * champ n'est pas autorisee. */
-    public Client update(Client client, Client information)
+     * champ n'est pas autorisee.
+     * @throws UnknownClientException Exception levee si l'entite particulier ne 
+     * fait pas reference a un client existant. */
+    public Private update(Private client, Private information)
             throws DuplicatedClientException, InvalidInformationException,
-            InvalidUpdateException;
+            InvalidUpdateException, UnknownClientException; 
+    
+    /** Mes a jour les informations d'un professionel.
+     * @param client L'entite du professionel mis à jour.
+     * @param information Une entite de professionel contenant les informations 
+     * a modifier. Si cette entite ne contient que des champs null, le 
+     * professionel ne sera pas modifie. Pour modifier uniquement le nom du 
+     * gerant , il faut que l'entite information n'ait que des champs null sauf 
+     * le champ correspondant au nom du gerant.
+     * @return L'entite du particulier mis a jour.
+     * @throws DuplicatedClientException Exception levee si une mise a jour de 
+     * l'identite du client declanche une duplication de client.
+     * @throws InvalidInformationException Exception levee si une des nouvelles 
+     * informations du particulier n'est pas valide.
+     * @throws InvalidUpdateException Exception levee si la mise a jour d'un 
+     * champ n'est pas autorisee.
+     * @throws UnknownClientException Exception levee si l'entite professionel 
+     * ne fait pas reference a un client existant. */
+    public Professional update(Professional client, Professional information)
+            throws DuplicatedClientException, InvalidInformationException,
+            InvalidUpdateException, UnknownClientException;    
     
     /** Ferme un compte client.
      * Le compte d'un client ayant de l'argent ou des actions ne peut ferme.
      * @param client Client dont le compte est ferme.
      * @throws ClosureException Exception levee si le compte ne peut pas etre
-     * ferme. */
-    public void close(Client client) throws ClosureException;
+     * ferme.
+     * @throws UnknownClientException Exception levee si l'entite client ne 
+     * fait pas reference a un client existant. */
+    public void close(Client client) 
+            throws ClosureException, UnknownClientException;
+    
+    /** Retourne l'identifiant d'un client.
+     * @param client Client concerne.
+     * @return Identifiant du client.
+     * @throws UnknownClientException Exception levee si l'entite client ne 
+     * fait pas reference a un client existant. */
+    public String getLogin(Client client) throws UnknownClientException;
+    
+    /** Modifie le mot de passe d'un client.
+     * @param client Client concerne.
+     * @param oldPassword Ancien mot de passe.
+     * @param newPassword Nouveau mot de passe.
+     * @return True si l'ancien mot de passe est correcte, false sinon.
+     * @throws UnknownClientException Exception levee si l'entite client ne 
+     * fait pas reference a un client existant. */
+    public boolean updatePassword(Client client, String oldPassword, 
+            String newPassword) throws UnknownClientException;
+    
+    /** Genere un nouveau mot de passe pour un particulier identifie par son 
+     * nom et son adresse mail.
+     * @param login Idendifiant du particulier.
+     * @param firstname Prenom du particulier.
+     * @param lastname Nom de famille du particulier.
+     * @param email Adresse mail du particulier.
+     * @return False si les informations du particulier ne font pas reference a 
+     * un particulier existant. True si les informations sont bonnes et que le 
+     * mot de passe a ete reinitialise. */
+    public boolean resetPassword(String login, String firstname, 
+            String lastname, String email);
+    
+    /** Genere un nouveau mot de passe pour un professionel identifie par son 
+     * nom, le nom de son gerant et son email.
+     * @param login Identifiant du professionel.
+     * @param name Nom du professionel.
+     * @param ownerFirstname Prenom du gerant du professionel.
+     * @param ownerLastname Nom de famille du gerant du professionel.
+     * @param email Adresse mail du professionel.
+     * @return False si les informations du professionel ne font pas reference 
+     * a un professionel existant. True si les informations sont bonnes et que 
+     * le mot de passe a ete reinitialise. */
+    public boolean resetPassword(String login, String name, 
+            String ownerFirstname, String ownerLastname, String email);
     
 }

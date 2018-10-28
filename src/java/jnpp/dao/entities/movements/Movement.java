@@ -25,7 +25,8 @@ public abstract class Movement implements Serializable {
         BEBIT,
         PURCHASE,
         SALE,
-        WITHDRAW;
+        WITHDRAW,
+        PAYMENT;
         
         public static class Values {
 
@@ -34,6 +35,7 @@ public abstract class Movement implements Serializable {
             public static final String PURCHASE = "PURCHASE";
             public static final String SALE = "SALE";
             public static final String WITHDRAW = "WITHDRAW";
+            public static final String PAYMENT = "PAYMENT";
             
             private Values() {}
 

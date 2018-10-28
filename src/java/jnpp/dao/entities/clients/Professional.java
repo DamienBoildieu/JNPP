@@ -42,7 +42,7 @@ public class Professional extends Client implements Serializable {
     
     @Override
     public String toString() {
-        return "jnpp.dao.entities.EProfessional[ id=" + getLogin() + " ]";
+        return "jnpp.dao.entities.EProfessional[ id=" + getId() + " ]";
     }
     
 }
