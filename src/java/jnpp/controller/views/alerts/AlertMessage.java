@@ -1,7 +1,4 @@
 package jnpp.controller.views.alerts;
-
-import jnpp.controller.views.alerts.AlertEnum;
-
 /**
  * Classe de message d'alerte qui peuvent être affichées sur le site web
  */

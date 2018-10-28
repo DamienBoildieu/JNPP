@@ -8,11 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.alerts.AlertMessage;
-import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.Translator;
-import jnpp.controller.views.info.UnconnectedInfo;
-import jnpp.dao.entities.clients.Gender;
-import jnpp.service.IClientService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
