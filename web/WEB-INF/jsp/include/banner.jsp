@@ -1,5 +1,5 @@
 <c:choose>
-	<c:when test="${isConnected}">
+	<c:when test="${info.connected}">
 		<%@ include file="connectedbanner.jsp"%>
 	</c:when>
 	<c:otherwise>

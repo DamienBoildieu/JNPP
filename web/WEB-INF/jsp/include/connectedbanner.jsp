@@ -16,7 +16,7 @@
                     <li><a href="<c:url value='/advisor.htm' />">Mon conseiller</a></li>
                     <li><a href="<c:url value='/disconnect.htm' />">Déconnexion</a></li>
                 </ul>
-                ${firstName} ${lastName}
+                ${info.firstName} ${info.lastName}
             </div>
         </div>
     </nav>

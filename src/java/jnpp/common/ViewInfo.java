@@ -10,11 +10,11 @@ public class ViewInfo {
     /**
      * Indique si l'utilisateur est connecté
      */
-    private final boolean connected;
+    private boolean connected;
     /**
      * La liste des alertes à afficher
      */
-    private final List<AlertMessage> alerts;
+    private List<AlertMessage> alerts;
     /**
      * Constructeur
      * @param isConnected indique si l'utilisateur est connecté
@@ -60,4 +60,20 @@ public class ViewInfo {
     public List<AlertMessage> getAlerts() {
         return alerts;
     }
+    /**
+     * Mutateur sur l'indicateur de connexion
+     * @param connected le nouvel indicateur
+     */
+    public void setConnected(boolean connected) {
+        this.connected = connected;
+    }
+    /**
+     * Mutateur sur la liste d'alertes
+     * @param alerts la nouvelle liste
+     */
+    public void setAlerts(List<AlertMessage> alerts) {
+        this.alerts = alerts;
+    }
+    
+    
 }

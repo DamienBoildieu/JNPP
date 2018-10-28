@@ -18,7 +18,6 @@ public class JNPPModelAndView extends ModelAndView {
     public JNPPModelAndView(String viewName, ViewInfo viewInfo) {
 	super(viewName);
 	this.info = viewInfo;
-	this.addObject("isConnected", this.info.isConnected());
-        this.addObject("alerts", this.info.getAlerts());
+	this.addObject("info", this.info);
     }
 }

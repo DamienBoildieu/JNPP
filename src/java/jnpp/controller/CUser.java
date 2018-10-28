@@ -5,13 +5,14 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import jnpp.common.AlertEnum;
 import jnpp.common.AlertMessage;
 import jnpp.common.CSession;
-
+import jnpp.common.JNPPModelAndView;
 import jnpp.common.UnconnectedInfo;
-import jnpp.common.UnconnectedModelAndView;
 import jnpp.service.ISUser;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,9 +65,9 @@ public class CUser {
                 AlertMessage error = new AlertMessage(AlertEnum.ERROR, "Nom d'utilisateur ou mot de passe incorrect");
                 if (alerts != null) {
                     alerts.add(error);
-                    return new UnconnectedModelAndView("manageuser/connect", new UnconnectedInfo(alerts));
+                    return new JNPPModelAndView("manageuser/connect", new UnconnectedInfo(alerts));
                 } else {
-                    return new UnconnectedModelAndView("manageuser/connect", new UnconnectedInfo(error));
+                    return new JNPPModelAndView("manageuser/connect", new UnconnectedInfo(error));
                 } 
             }
         }
@@ -129,9 +130,9 @@ public class CUser {
                 AlertMessage error = new AlertMessage(AlertEnum.ERROR, "Identifiant indisponible");
                 if (alerts != null)  {
                     alerts.add(error);
-                    return new UnconnectedModelAndView("signup/personalsignup", new UnconnectedInfo(alerts));
+                    return new JNPPModelAndView("signup/personalsignup", new UnconnectedInfo(alerts));
                 } else {
-                    return new UnconnectedModelAndView("signup/personalsignup", new UnconnectedInfo(error));
+                    return new JNPPModelAndView("signup/personalsignup", new UnconnectedInfo(error));
                 }
             } else {
                 if (alerts != null) {
@@ -168,9 +169,9 @@ public class CUser {
                 AlertMessage error = new AlertMessage(AlertEnum.ERROR, "Identifiant indisponible");
                 if (alerts != null)  {
                     alerts.add(error);
-                    return new UnconnectedModelAndView("signup/professionalsignup", new UnconnectedInfo(alerts));
+                    return new JNPPModelAndView("signup/professionalsignup", new UnconnectedInfo(alerts));
                 } else {
-                    return new UnconnectedModelAndView("signup/professionalsignup", new UnconnectedInfo(error));
+                    return new JNPPModelAndView("signup/professionalsignup", new UnconnectedInfo(error));
                 }
             } else {
                 if (alerts != null) {

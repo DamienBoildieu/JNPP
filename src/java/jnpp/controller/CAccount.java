@@ -5,11 +5,13 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import jnpp.common.AlertMessage;
 import jnpp.common.CSession;
-import jnpp.stubs.AccountStub;
 import jnpp.common.ConnectedInfo;
-import jnpp.common.ConnectedModelAndView;
+import jnpp.common.JNPPModelAndView;
+import jnpp.stubs.AccountStub;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,7 +45,7 @@ public class CAccount {
         List<AccountStub> listAc = new ArrayList<AccountStub>();
         listAc.add(new AccountStub("56132", "compte courant", -20));
         listAc.add(new AccountStub("5946513", "Livret A", 500));
-        ModelAndView view = new ConnectedModelAndView("accounts/resume", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+        ModelAndView view = new JNPPModelAndView("accounts/resume", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts, false));
         view.addObject("listAccounts", listAc);
         return view;
     }
@@ -62,7 +64,7 @@ public class CAccount {
         if (!CSession.hasSession(session))
             return new ModelAndView("redirect:/index.htm");
 	//resumeService.resumeAccounts("");
-        return new ConnectedModelAndView("accounts/account", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+        return new JNPPModelAndView("accounts/account", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts, false));
     }
     
 }
