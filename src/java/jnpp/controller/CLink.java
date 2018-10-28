@@ -161,4 +161,20 @@ public class CLink {
             return new JNPPModelAndView("manageuser/password", new UnconnectedInfo(alerts));
         return new ModelAndView("redirect:/index.htm");
     }
+    /**
+     * Requête sur la vue des notifications
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @return Une vue sur la liste des notifications si l'utilisateur est connecté, redirection vers l'index sinon
+     * @throws Exception 
+     */
+    @RequestMapping(value = "notifs", method = RequestMethod.GET)
+    protected ModelAndView linktoNotifs(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (CSession.hasSession(session))
+            return new JNPPModelAndView("manageuser/notifs", new UnconnectedInfo(alerts));
+        return new ModelAndView("redirect:/index.htm");
+    }
 }
