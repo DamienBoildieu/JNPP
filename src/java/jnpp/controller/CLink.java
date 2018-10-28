@@ -1,18 +1,28 @@
 package jnpp.controller;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import jnpp.common.AlertMessage;
-import jnpp.common.CSession;
-import jnpp.common.ConnectedInfo;
-import jnpp.common.JNPPModelAndView;
-import jnpp.common.UnconnectedInfo;
-import jnpp.stubs.AccountStub;
-import jnpp.stubs.AdvisorStub;
+import jnpp.controller.views.alerts.AlertMessage;
+import jnpp.controller.views.info.ConnectedInfo;
+import jnpp.controller.views.JNPPModelAndView;
+import jnpp.controller.views.NotifView;
+import jnpp.controller.views.Translator;
+import jnpp.controller.views.info.UnconnectedInfo;
+import jnpp.dao.entities.Message;
+import jnpp.dao.entities.clients.Advisor;
+import jnpp.dao.entities.clients.Gender;
+import jnpp.dao.entities.clients.Identity;
+import jnpp.dao.entities.notifications.MessageNotification;
+import jnpp.dao.entities.notifications.Notification;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,8 +47,13 @@ public class CLink {
     protected ModelAndView linkToIndex(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!CSession.hasSession(session))
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session)) {
             return new JNPPModelAndView("index", new UnconnectedInfo(alerts));
+        }
         return new JNPPModelAndView("index", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
     }
     /**
@@ -53,7 +68,11 @@ public class CLink {
     protected ModelAndView linkToConnect(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!CSession.hasSession(session))
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session))
             return new JNPPModelAndView("manageuser/connect", new UnconnectedInfo(alerts));
         return new ModelAndView("redirect:/index.htm");
     }
@@ -69,7 +88,11 @@ public class CLink {
     protected ModelAndView linkToSignUp(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!CSession.hasSession(session))
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session))
             return new JNPPModelAndView("signup/signup", new UnconnectedInfo(alerts));
         return new ModelAndView("redirect:/index.htm");
     }
@@ -86,8 +109,17 @@ public class CLink {
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!CSession.hasSession(session))
-            return new JNPPModelAndView("signup/personalsignup", new UnconnectedInfo(alerts));
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session)) {
+            ModelAndView view = new JNPPModelAndView("signup/personalsignup", new UnconnectedInfo(alerts));
+            view.addObject("genders", Gender.values());
+            view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
+            return view;
+        }
+        
         return new ModelAndView("redirect:/index.htm");
     }
     /**
@@ -103,8 +135,16 @@ public class CLink {
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!CSession.hasSession(session))
-            return new JNPPModelAndView("signup/professionalsignup", new UnconnectedInfo(alerts));
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session)) {
+            ModelAndView view = new JNPPModelAndView("signup/professionalsignup", new UnconnectedInfo(alerts));
+            view.addObject("genders", Gender.values());
+            view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
+            return view;
+        }
         return new ModelAndView("redirect:/index.htm");
     }
     /**
@@ -120,9 +160,18 @@ public class CLink {
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (CSession.hasSession(session)) {
-            ModelAndView view =  new JNPPModelAndView("manageuser/advisor", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
-            AdvisorStub advisor = new AdvisorStub("Toto", "Tata", "jnpp", "05499878464");
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (CSession.isConnected(session)) {
+            ModelAndView view =  new JNPPModelAndView("advisor/advisor", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+            Advisor advisor = new Advisor();
+            Identity advisorIdentity = new Identity();
+            advisorIdentity.setFirstname("toto");
+            advisorIdentity.setLastname("tate");
+            advisorIdentity.setGender(Gender.MALE);
+            advisor.setIdentity(advisorIdentity);
             view.addObject("advisor", advisor);
             return view;
         }
@@ -137,10 +186,14 @@ public class CLink {
      * @throws Exception 
      */
     @RequestMapping(value = "home", method = RequestMethod.GET)
-    protected ModelAndView linktoResume(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    protected ModelAndView linkToResume(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!CSession.hasSession(session))
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session))
             return new ModelAndView("redirect:/index.htm");
         ModelAndView view = new JNPPModelAndView("manageuser/home", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
         return view;
@@ -154,10 +207,14 @@ public class CLink {
      * @throws Exception 
      */
     @RequestMapping(value = "password", method = RequestMethod.GET)
-    protected ModelAndView linktoPassword(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    protected ModelAndView linkToPassword(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!CSession.hasSession(session))
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session))
             return new JNPPModelAndView("manageuser/password", new UnconnectedInfo(alerts));
         return new ModelAndView("redirect:/index.htm");
     }
@@ -170,11 +227,46 @@ public class CLink {
      * @throws Exception 
      */
     @RequestMapping(value = "notifs", method = RequestMethod.GET)
-    protected ModelAndView linktoNotifs(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    protected ModelAndView linkToNotifs(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (CSession.hasSession(session))
-            return new JNPPModelAndView("manageuser/notifs", new UnconnectedInfo(alerts));
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (CSession.isConnected(session)) {
+            MessageNotification mes = new MessageNotification();
+            mes.setDate(new GregorianCalendar(2018, Calendar.OCTOBER, 20).getTime());
+            Message text = new Message();
+            text.setContent("totot");
+            mes.setMessage(text);
+            List<NotifView> notifs = new ArrayList<NotifView>();
+            notifs.add(new NotifView(mes));
+            ModelAndView view = new JNPPModelAndView("manageuser/notifs", new UnconnectedInfo(alerts));
+            view.addObject("notifs", notifs);
+            return view;
+        }
         return new ModelAndView("redirect:/index.htm");
+    }
+    /**
+     * Requête sur la vue des informations de l'utilisateur
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @return Une vue sur les informations de l'utilisateur si il est connecté, redirection vers l'index sinon
+     * @throws Exception 
+     */
+    @RequestMapping(value = "userinfo", method = RequestMethod.GET)
+    protected ModelAndView linkToUserInfo(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session))
+            return new ModelAndView("redirect:/index.htm");
+        ModelAndView view = new JNPPModelAndView("manageuser/userinfo", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+        return view;
     }
 }

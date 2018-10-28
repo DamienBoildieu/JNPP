@@ -6,11 +6,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import jnpp.common.AlertMessage;
-import jnpp.common.CSession;
-import jnpp.common.ConnectedInfo;
-import jnpp.common.JNPPModelAndView;
-import jnpp.stubs.AccountStub;
+import jnpp.controller.views.alerts.AlertMessage;
+import jnpp.controller.views.info.ConnectedInfo;
+import jnpp.controller.views.JNPPModelAndView;
+import jnpp.controller.views.Translator;
+import jnpp.dao.entities.accounts.Account;
+import jnpp.dao.entities.accounts.CurrentAccount;
+import jnpp.dao.entities.accounts.SavingAccount;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,14 +41,25 @@ public class CAccount {
     protected ModelAndView linktoResume(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         HttpSession session = request.getSession();
-        if (!CSession.hasSession(session))
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session))
             return new ModelAndView("redirect:/index.htm");
 	//resumeService.resumeAccounts("");
-        List<AccountStub> listAc = new ArrayList<AccountStub>();
-        listAc.add(new AccountStub("56132", "compte courant", -20));
-        listAc.add(new AccountStub("5946513", "Livret A", 500));
+        List<Account> listAc = new ArrayList<Account>();
+        CurrentAccount current = new CurrentAccount();
+        current.setMoney(-20.d);
+        current.setRib("134824");
+        listAc.add(current);
+        SavingAccount saving = new SavingAccount();
+        saving.setMoney(500.d);
+        saving.setRib("5946513");
+        listAc.add(saving);
         ModelAndView view = new JNPPModelAndView("accounts/resume", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts, false));
         view.addObject("listAccounts", listAc);
+        view.addObject("accountsMap", Translator.getInstance().translateAccounts(CSession.getLanguage(session)));
         return view;
     }
     /**
@@ -61,7 +74,11 @@ public class CAccount {
     protected ModelAndView linktoAccount(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!CSession.hasSession(session))
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session))
             return new ModelAndView("redirect:/index.htm");
 	//resumeService.resumeAccounts("");
         return new JNPPModelAndView("accounts/account", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts, false));

@@ -16,22 +16,22 @@
                             <div class="col s12 m4">
                                 <div class="card blue">
                                     <div class="card-content white-text">
-                                        <span class="card-title center-align">${element.ref}</span>
+                                        <span class="card-title center-align">${element.rib}</span>
                                         <div class="row">
                                             <div class="col s12">
-                                                <p>${element.type}</p>
+                                                <p>${accountsMap[element.type]}</p>
                                             </div>
                                         </div>
                                         <div class="card white s12">
                                             <c:choose>
-                                                <c:when test="${element.amount>0}">
+                                                <c:when test="${element.money>0}">
                                                     <h4 class="green-text">
                                                 </c:when>
                                                 <c:otherwise>
                                                     <h4 class="red-text">
                                                 </c:otherwise>
                                             </c:choose>
-                                            ${element.amount}$</h4>
+                                            ${element.money}$</h4>
                                         </div>
                                         <div class="row">
                                             <div class="col s12">

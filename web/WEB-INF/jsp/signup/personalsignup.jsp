@@ -1,3 +1,6 @@
+<%@page import="jnpp.dao.entities.clients.Gender"%>
+<%@page import="jnpp.controller.views.info.ViewInfo"%>
+<%@page import="jnpp.controller.views.Translator"%>
 <%@ include file="../include/jsptags.jsp"%>
 <html>
     <head>
@@ -35,9 +38,10 @@
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <select name="genre">
-                                            <option value="1">Homme</option>
-                                            <option value="2">Femme</option>
+                                        <select name="gender">
+                                            <c:forEach items="${genders}" var="gender">
+                                                <option value="${gender}">${gendersMap[gender]}</option>   
+                                            </c:forEach>
                                         </select>
                                         <label>Sexe</label>
                                     </div>
