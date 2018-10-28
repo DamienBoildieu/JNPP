@@ -25,7 +25,7 @@
                                             <span class="blue-text">
                                     </c:otherwise>
                                 </c:choose>
-                                                ${element.message}
+                                               ${element.day}/${element.month}/${element.year} : ${element.message}
                                             </span>
                                         </div>
                                 <c:set var="count" value="${count + 1}" scope="page"/>

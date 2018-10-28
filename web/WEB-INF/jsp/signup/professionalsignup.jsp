@@ -45,7 +45,7 @@
                                     <div class="input-field col s12">
                                         <select name="genre">
                                             <c:forEach items="${genders}" var="gender">
-                                                <option value="${gender}">${gender.french}</option>        
+                                                <option value="${gender}">${gendersMap[gender]}</option>        
                                             </c:forEach>
                                         </select>
                                         <label>Sexe</label>

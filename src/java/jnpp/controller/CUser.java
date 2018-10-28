@@ -6,11 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import jnpp.common.AlertEnum;
-import jnpp.common.AlertMessage;
-import jnpp.common.CSession;
-import jnpp.common.JNPPModelAndView;
-import jnpp.common.UnconnectedInfo;
+import jnpp.controller.views.alerts.AlertEnum;
+import jnpp.controller.views.alerts.AlertMessage;
+import jnpp.controller.views.JNPPModelAndView;
+import jnpp.controller.views.Translator;
+import jnpp.controller.views.info.UnconnectedInfo;
 import jnpp.dao.entities.clients.Gender;
 import jnpp.service.IClientService;
 
@@ -46,7 +46,11 @@ public class CUser {
     protected ModelAndView connect(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!CSession.hasSession(session)) {
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session)) {
             String id = request.getParameter("account");
             String password = request.getParameter("password");
            /* if (this.userService.signIn(id, password)!=null) {
@@ -91,9 +95,13 @@ public class CUser {
     ModelAndView disconnect(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
         //this.userService.signOut(null);
         boolean disconnect = true;
-        if (CSession.hasSession(session)) {
+        if (CSession.isConnected(session)) {
             if (disconnect) {
                 CSession.clearSession(session);
                 if (alerts != null) {
@@ -130,7 +138,11 @@ public class CUser {
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!CSession.hasSession(session)) {
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session)) {
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
             String birthday = request.getParameter("birthday");
@@ -170,7 +182,11 @@ public class CUser {
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!CSession.hasSession(session)) {
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session)) {
             String id = request.getParameter("account");
             String password = request.getParameter("password");
             /*if (userService.signUp(null, null, null, null,null,null,null)==null) {
