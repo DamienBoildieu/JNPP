@@ -14,7 +14,7 @@ import jnpp.service.exceptions.entities.FakeClientException;
 /** Service de gestion des moyens de paiements.
  * @author Pierre Bourquat
  * @author Damien Boildieu */
-public interface IPaymentMeanService {
+public interface IPaymentMeanService extends IService {
     
     /** Commande une carte bancaire pour un compte bancaire.
      * @param client Client proprietaire du compte bancaire.
@@ -26,7 +26,7 @@ public interface IPaymentMeanService {
      * fait pas reference a un compte bancaire existant.
      * @throws WrongAccountException Exception levee si le compte bancaire ne 
      * peut pas etre associe a une carte bancaire. */
-    public BankCard commandBankCard(Client client, Account account)
+    BankCard commandBankCard(Client client, Account account)
             throws FakeClientException, FakeAccountException,
             WrongAccountException;
     
@@ -40,7 +40,7 @@ public interface IPaymentMeanService {
      * fait pas reference a un compte bancaire existant.
      * @throws WrongAccountException Exception levee si le compte bancaire ne 
      * peut pas etre associe a un chequier. */
-    public Checkbook commandCheckbook(Client client, Account account)
+    Checkbook commandCheckbook(Client client, Account account)
             throws FakeClientException, FakeAccountException,
             WrongAccountException;
     
@@ -53,7 +53,7 @@ public interface IPaymentMeanService {
      * specifie.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public List<BankCard> getBankCards(Client client, Status status)
+    List<BankCard> getBankCards(Client client, Status status)
             throws FakeClientException;
     
     /** Retourne les cartes bancaires associees a un compte bancaire.
@@ -61,7 +61,7 @@ public interface IPaymentMeanService {
      * @return Liste des cartes bancaires.
      * @throws FakeAccountException Exception levee si l'entite account ne 
      * fait pas reference a un compte bancaire existant. */
-    public List<BankCard> getBankCards(Account account)
+    List<BankCard> getBankCards(Account account)
             throws FakeAccountException;
     
     /** Retourne une liste des chequiers d'un statut specifique d'un client. Si 
@@ -71,7 +71,7 @@ public interface IPaymentMeanService {
      * @return Liste des chequiers dont le statut correspond au statut specifie.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public List<Checkbook> getCheckBooks(Client client, Status status)
+    List<Checkbook> getCheckBooks(Client client, Status status)
             throws FakeClientException;
     
     /** Retourne les chequiers associees a un compte bancaire.
@@ -79,7 +79,7 @@ public interface IPaymentMeanService {
      * @return Liste des chequiers.
      * @throws FakeAccountException Exception levee si l'entite account ne 
      * fait pas reference a un compte bancaire existant. */
-    public List<Checkbook> getCheckBooks(Account account)
+    List<Checkbook> getCheckBooks(Account account)
             throws FakeAccountException;
     
 }

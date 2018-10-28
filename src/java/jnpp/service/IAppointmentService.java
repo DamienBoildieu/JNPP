@@ -15,7 +15,7 @@ import jnpp.service.exceptions.entities.FakeClientException;
 /** Service de gestion des rendez-vous.
  * @author Pierre Bourquat
  * @author Damien Boildieu */
-public interface IAppointmentService {
+public interface IAppointmentService extends IService {
     
     /** Retourne les rendez-vous d'un statut specifique d'un client.
      * Si le statut est null, retourne tous les rendez-vous.
@@ -24,7 +24,7 @@ public interface IAppointmentService {
      * @return Liste de rendez-vous.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public List<Appointment> getAppointments(Client client, Status status)
+    List<Appointment> getAppointments(Client client, Status status)
             throws FakeClientException;
     
     /** Retourne les n derniers rendez-vous d'un statut specifique d'un client.
@@ -35,8 +35,8 @@ public interface IAppointmentService {
      * @return Liste de rendez-vous.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public List<Appointment> getLastAppointments(Client client, Status status, 
-            int n) throws FakeClientException;
+    List<Appointment> getLastAppointments(Client client, Status status, int n) 
+            throws FakeClientException;
     
     /** Retourne les derniers rendez-vous d'un statut specifique posterieurs a 
      * une date d'un client.
@@ -46,7 +46,7 @@ public interface IAppointmentService {
      * @return Liste de rendez-vous.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public List<Appointment> getLastAppointments(Client client, Status status, 
+    List<Appointment> getLastAppointments(Client client, Status status, 
             Date date) throws FakeClientException;
     
     /** Effectue une demande de rendez-vous entre un client et un conseiller. 
@@ -60,22 +60,22 @@ public interface IAppointmentService {
      * fait pas reference a un conseillier existant.
      * @throws WrongAdvisorException Exception levee si le client n'a pas pour 
      * conseiller le conseiller specifie. */
-    public Appointment makeAppointment(Client client, Advisor advisor, 
-            Date date) throws FakeClientException, FakeAdvisorException,
+    Appointment makeAppointment(Client client, Advisor advisor, Date date) 
+            throws FakeClientException, FakeAdvisorException,
             WrongAdvisorException;
     
     /** Annule un rendez-vous.
      * @param appointment Rendez-vous annule.
      * @throws FakeAppointmentException Exception levee si le rendez-vous ne
      * fait pas reference a un rendez-vous existant. */
-    public void cancelAppointment(Appointment appointment)
+    void cancelAppointment(Appointment appointment)
             throws FakeAppointmentException;
     
     /** Annule tous les rendez-vous d'un client. 
      * @param client Client concerne.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public void cancelAllAppointment(Client client)
+    void cancelAllAppointment(Client client)
             throws FakeClientException;
     
 }

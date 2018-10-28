@@ -1,6 +1,6 @@
-package jnpp.service.exceptions.clients;
+package jnpp.service.exceptions;
 
-public class ClosureException extends ClientServiceException {
+public class ClosureException extends ServiceException {
 
     public ClosureException() {}
 

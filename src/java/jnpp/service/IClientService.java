@@ -8,7 +8,7 @@ import jnpp.dao.entities.clients.Private;
 import jnpp.dao.entities.clients.Professional;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.clients.BeOfAgeException;
-import jnpp.service.exceptions.clients.ClosureException;
+import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.clients.DuplicatedClientException;
 import jnpp.service.exceptions.clients.InvalidInformationException;
 import jnpp.service.exceptions.clients.InvalidUpdateException;
@@ -16,20 +16,20 @@ import jnpp.service.exceptions.clients.InvalidUpdateException;
 /** Service de gestion des clients.
  * @author Pierre Bourquat
  * @author Damien Boildieu */
-public interface IClientService {
+public interface IClientService extends IService {
     
     /** Connecte un client.
      * @param login Identifiant du client.
      * @param password Mot de passe du client.
      * @return L'entite du client si l'identifiant et le mot de passe sont 
      * correctes, null sinon. */
-    public Client signIn(String login, String password);
+    Client signIn(String login, String password);
     
     /** Deconnecte un client.
      * @param client Client se deconnectant.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public void signOut(Client client)
+    void signOut(Client client)
             throws FakeClientException;
     
     /** Inscrit un particulier.
@@ -49,7 +49,7 @@ public interface IClientService {
      * @throws BeOfAgeException Exception levee si le particulier est mineur.
      * @throws InvalidInformationException Exception levee si une des 
      * informations specifiees n'est pas valide. */
-    public Private signUp(Gender gender, String firstname, String lastname,
+    Private signUp(Gender gender, String firstname, String lastname,
             Date birthday, String email, String address, String phone) 
             throws DuplicatedClientException, BeOfAgeException,
             InvalidInformationException;
@@ -70,7 +70,7 @@ public interface IClientService {
      * meme nom est deja inscrite.
      * @throws InvalidInformationException Exception levee si une des 
      * informations specifiees n'est pas valide. */
-    public Professional singUp(String name, Gender ownerGender, 
+    Professional singUp(String name, Gender ownerGender, 
             String ownerFirstname, String ownerLastname, String email, 
             String address, String phone) 
             throws DuplicatedClientException, InvalidInformationException;
@@ -91,7 +91,7 @@ public interface IClientService {
      * champ n'est pas autorisee.
      * @throws FakeClientException Exception levee si l'entite particulier ne 
      * fait pas reference a un client existant. */
-    public Private update(Private client, Private information)
+    Private update(Private client, Private information)
             throws DuplicatedClientException, InvalidInformationException,
             InvalidUpdateException, FakeClientException; 
     
@@ -111,7 +111,7 @@ public interface IClientService {
      * champ n'est pas autorisee.
      * @throws FakeClientException Exception levee si l'entite professionel 
      * ne fait pas reference a un client existant. */
-    public Professional update(Professional client, Professional information)
+    Professional update(Professional client, Professional information)
             throws DuplicatedClientException, InvalidInformationException,
             InvalidUpdateException, FakeClientException;    
     
@@ -122,7 +122,7 @@ public interface IClientService {
      * ferme.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public void close(Client client) 
+    void close(Client client) 
             throws ClosureException, FakeClientException;
     
     /** Retourne l'identifiant d'un client.
@@ -130,7 +130,7 @@ public interface IClientService {
      * @return Identifiant du client.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public String getLogin(Client client) throws FakeClientException;
+    String getLogin(Client client) throws FakeClientException;
     
     /** Modifie le mot de passe d'un client.
      * @param client Client concerne.
@@ -139,7 +139,7 @@ public interface IClientService {
      * @return True si l'ancien mot de passe est correcte, false sinon.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public boolean updatePassword(Client client, String oldPassword, 
+    boolean updatePassword(Client client, String oldPassword, 
             String newPassword) throws FakeClientException;
     
     /** Genere un nouveau mot de passe pour un particulier identifie par son 
@@ -151,7 +151,7 @@ public interface IClientService {
      * @return False si les informations du particulier ne font pas reference a 
      * un particulier existant. True si les informations sont bonnes et que le 
      * mot de passe a ete reinitialise. */
-    public boolean resetPassword(String login, String firstname, 
+    boolean resetPassword(String login, String firstname, 
             String lastname, String email);
     
     /** Genere un nouveau mot de passe pour un professionel identifie par son 
@@ -164,7 +164,7 @@ public interface IClientService {
      * @return False si les informations du professionel ne font pas reference 
      * a un professionel existant. True si les informations sont bonnes et que 
      * le mot de passe a ete reinitialise. */
-    public boolean resetPassword(String login, String name, 
+    boolean resetPassword(String login, String name, 
             String ownerFirstname, String ownerLastname, String email);
     
 }
