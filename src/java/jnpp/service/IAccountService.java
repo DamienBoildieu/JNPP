@@ -4,6 +4,7 @@ import java.util.List;
 
 import jnpp.dao.entities.accounts.Account;
 import jnpp.dao.entities.accounts.CurrentAccount;
+import jnpp.dao.entities.accounts.DebitAuthorization;
 import jnpp.dao.entities.accounts.JointAccount;
 import jnpp.dao.entities.accounts.SavingAccount;
 import jnpp.dao.entities.accounts.SavingBook;

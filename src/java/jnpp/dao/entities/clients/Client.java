@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -41,7 +42,8 @@ public abstract class Client implements Serializable {
     
     @Column(nullable = false)
     private String email;
-    private String address;
+    @Embedded
+    private Address address;
     private String phone;
     
     private Boolean notify;
@@ -64,11 +66,11 @@ public abstract class Client implements Serializable {
         this.email = email;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
