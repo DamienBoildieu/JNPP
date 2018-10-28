@@ -37,6 +37,7 @@
     <class>jnpp.dao.entities.PaymentMean</class>
     <class>jnpp.dao.entities.notifications.PaymentMeanNotification</class>
     <class>jnpp.dao.entities.clients.Identifier</class>
+    <class>jnpp.dao.entities.movements.Paiement</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/JNPPDB"/>
