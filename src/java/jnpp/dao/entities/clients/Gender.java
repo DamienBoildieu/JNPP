@@ -2,7 +2,16 @@ package jnpp.dao.entities.clients;
 
 public enum Gender {
     
-    MALE,
-    FEMALE;
+    MALE("Homme"),
+    FEMALE("Femme");
     
+    private final String french;
+    
+    Gender(String french) {
+        this.french = french;
+    }
+
+    public String getFrench() {
+        return french;
+    }
 }

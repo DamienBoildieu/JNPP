@@ -11,7 +11,8 @@ import jnpp.common.AlertMessage;
 import jnpp.common.CSession;
 import jnpp.common.JNPPModelAndView;
 import jnpp.common.UnconnectedInfo;
-import jnpp.service.ISUser;
+import jnpp.dao.entities.clients.Gender;
+import jnpp.service.IClientService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,8 +30,8 @@ public class CUser {
     /**
      * Le service des utilisateurs
      */
-    @Autowired
-    ISUser userService;
+  /*  @Autowired
+    IClientService userService;*/
     /**
      * Requête du formulaire de connexion, essaie de connecter l'utilisateur
      * @param model le model contient les alertes si il y a eu un redirect
@@ -48,7 +49,7 @@ public class CUser {
         if (!CSession.hasSession(session)) {
             String id = request.getParameter("account");
             String password = request.getParameter("password");
-            if (this.userService.signIn(id, password)) {
+           /* if (this.userService.signIn(id, password)!=null) {
                 session = request.getSession(true);
                 CSession.setFirstName(session, "user");
                 CSession.setLastName(session, "dom");
@@ -69,7 +70,11 @@ public class CUser {
                 } else {
                     return new JNPPModelAndView("manageuser/connect", new UnconnectedInfo(error));
                 } 
-            }
+            }*/
+            session = request.getSession(true);
+            CSession.setFirstName(session, "user");
+            CSession.setLastName(session, "dom");
+            return new ModelAndView("redirect:/home.htm");
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas pouvoir arriver
     }
@@ -86,8 +91,10 @@ public class CUser {
     ModelAndView disconnect(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        //this.userService.signOut(null);
+        boolean disconnect = true;
         if (CSession.hasSession(session)) {
-            if (this.userService.signOut("")) {
+            if (disconnect) {
                 CSession.clearSession(session);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Déconnexion réussie"));
@@ -124,9 +131,10 @@ public class CUser {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (!CSession.hasSession(session)) {
-            String id = request.getParameter("account");
-            String password = request.getParameter("password");
-            if (!userService.signUp(id, password)) {
+            String firstName = request.getParameter("firstName");
+            String lastName = request.getParameter("lastName");
+            String birthday = request.getParameter("birthday");
+            /*if (userService.signUp(null, null, null, null,null,null,null)==null) {
                 AlertMessage error = new AlertMessage(AlertEnum.ERROR, "Identifiant indisponible");
                 if (alerts != null)  {
                     alerts.add(error);
@@ -143,7 +151,7 @@ public class CUser {
                     rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new ModelAndView("redirect:/index.htm");
-            }
+            }*/
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }
@@ -165,7 +173,7 @@ public class CUser {
         if (!CSession.hasSession(session)) {
             String id = request.getParameter("account");
             String password = request.getParameter("password");
-            if (!userService.signUp(id, password)) {
+            /*if (userService.signUp(null, null, null, null,null,null,null)==null) {
                 AlertMessage error = new AlertMessage(AlertEnum.ERROR, "Identifiant indisponible");
                 if (alerts != null)  {
                     alerts.add(error);
@@ -182,7 +190,7 @@ public class CUser {
                     rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new ModelAndView("redirect:/index.htm");
-            }
+            }*/
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }

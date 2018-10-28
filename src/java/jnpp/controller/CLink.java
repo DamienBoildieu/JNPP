@@ -11,6 +11,7 @@ import jnpp.common.CSession;
 import jnpp.common.ConnectedInfo;
 import jnpp.common.JNPPModelAndView;
 import jnpp.common.UnconnectedInfo;
+import jnpp.dao.entities.clients.Gender;
 import jnpp.stubs.AccountStub;
 import jnpp.stubs.AdvisorStub;
 
@@ -37,8 +38,9 @@ public class CLink {
     protected ModelAndView linkToIndex(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!CSession.hasSession(session))
+        if (!CSession.hasSession(session)) {
             return new JNPPModelAndView("index", new UnconnectedInfo(alerts));
+        }
         return new JNPPModelAndView("index", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
     }
     /**
@@ -86,8 +88,12 @@ public class CLink {
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!CSession.hasSession(session))
-            return new JNPPModelAndView("signup/personalsignup", new UnconnectedInfo(alerts));
+        if (!CSession.hasSession(session)) {
+            ModelAndView view = new JNPPModelAndView("signup/personalsignup", new UnconnectedInfo(alerts));
+            view.addObject("genders", Gender.values());
+            return view;
+        }
+        
         return new ModelAndView("redirect:/index.htm");
     }
     /**
@@ -103,8 +109,11 @@ public class CLink {
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (!CSession.hasSession(session))
-            return new JNPPModelAndView("signup/professionalsignup", new UnconnectedInfo(alerts));
+        if (!CSession.hasSession(session)) {
+            ModelAndView view = new JNPPModelAndView("signup/professionalsignup", new UnconnectedInfo(alerts));
+            view.addObject("genders", Gender.values());
+            return view;
+        }
         return new ModelAndView("redirect:/index.htm");
     }
     /**

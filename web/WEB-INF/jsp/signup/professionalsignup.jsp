@@ -44,8 +44,9 @@
                                 <div class="row">
                                     <div class="input-field col s12">
                                         <select name="genre">
-                                            <option value="1">Homme</option>
-                                            <option value="2">Femme</option>
+                                            <c:forEach items="${genders}" var="gender">
+                                                <option value="${gender}">${gender.french}</option>        
+                                            </c:forEach>
                                         </select>
                                         <label>Sexe</label>
                                     </div>
