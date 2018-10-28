@@ -16,7 +16,15 @@
                             <div class="card blue s12">
                                 <p class="flow-text white-text">Changez votre mot de passe</p>
                             </div>
-                            <form method="POST" action="personalsignup.htm">
+                            <form method="POST" action="password.htm">
+                                <div class="row">
+                                    <div class="col s12">
+                                        <div class="input-field">
+                                            <label for="id">Votre identifiant</label> <input type="text"
+                                                                                              class="validate" name="id" id="id" required>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col s12">
                                         <div class="input-field">

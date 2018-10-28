@@ -1,4 +1,4 @@
-<c:forEach items="${alerts}" var="element">
+<c:forEach items="${info.alerts}" var="element">
     <c:choose>
         <c:when test="${element.alertType == 'ERROR'}">
             <div id="errorMessage" class='card-panel red lighten-1 white-text left-align' style="font-size: 20px;">

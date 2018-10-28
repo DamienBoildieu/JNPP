@@ -25,12 +25,13 @@
                                         <div class="card white s12">
                                             <c:choose>
                                                 <c:when test="${element.amount>0}">
-                                                    <h4 class="green-text">${element.amount}$</h4>
+                                                    <h4 class="green-text">
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <h4 class="red-text">${element.amount}$</h4>
+                                                    <h4 class="red-text">
                                                 </c:otherwise>
                                             </c:choose>
+                                            ${element.amount}$</h4>
                                         </div>
                                         <div class="row">
                                             <div class="col s12">

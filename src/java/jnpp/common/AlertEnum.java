@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package jnpp.common;
 
 /**
- *
- * @author Damien
+ * Enum utilisé pour les alertes affichées sur le bandeau des vues quand certaines actions ont réussies
  */
 public enum AlertEnum {
     SUCCESS,
