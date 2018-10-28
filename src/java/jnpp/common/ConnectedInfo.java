@@ -9,15 +9,15 @@ public class ConnectedInfo extends ViewInfo {
     /**
      * Le prénom de l'utilisateur connecté
      */
-    private String firstName;
+    private final String firstName;
     /**
      * Le nom de famille de l'utilisateur connecté
      */
-    private String lastName;
+    private final String lastName;
     /**
      * Indique si l'utilisateur a de nouvelles notifications
      */
-    private boolean hasNotif;
+    private final boolean hasNotif;
     /**
      * Constructeur
      * @param fName le prénom
@@ -86,27 +86,5 @@ public class ConnectedInfo extends ViewInfo {
      */
     public boolean isHasNotif() {
         return hasNotif;
-    }
-    /**
-     * Mutateur sur le prénom
-     * @param firstName le nouveau prénom
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    /**
-     * Mutateur sur le nom de famille
-     * @param lastName le nouveau nom de famille
-     */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    /**
-     * Mutateur sur les notifcations
-     * @param hasNotif l'indicateur
-     */
-    public void setHasNotif(boolean hasNotif) {
-        this.hasNotif = hasNotif;
-    }
-    
+    }    
 }

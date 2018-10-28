@@ -30,12 +30,27 @@
                         <div class="col s12 m4">
                             <div class="card medium blue" style="cursor: pointer;" onclick="window.location='<c:url value="/advisor.htm" />';">
                                 <div class='container' style="margin-bottom: 20px; margin-top: 40px;">
-                                <img src="${pageContext.request.contextPath}/pictures/person.png" alt='"https://www.freepik.com/free-vector/collection-of-people-avatar-in-flat-design_867151.htm">Designed by Freepik</a>'>
+                                <img src="${pageContext.request.contextPath}/pictures/advisor.png" alt='advisor'>
                                     <div class="card-content white-text">
                                         <span class="card-title center-align">Mon conseiller</span>
                                         <div class="row">
                                             <div class="col s12">
                                                 <p class="text-flow">Contactez votre conseiller</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12 m4">
+                            <div class="card medium blue" style="cursor: pointer;" onclick="window.location='<c:url value="/userinfo.htm" />';">
+                                <div class='container' style="margin-bottom: 20px; margin-top: 40px;">
+                                <img src="${pageContext.request.contextPath}/pictures/client.png" alt='"https://www.freepik.com/free-vector/collection-of-people-avatar-in-flat-design_867151.htm">Designed by Freepik</a>'>
+                                    <div class="card-content white-text">
+                                        <span class="card-title center-align">Mes infos</span>
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <p class="text-flow">Vos informations personnelles</p>
                                             </div>
                                         </div>
                                     </div>

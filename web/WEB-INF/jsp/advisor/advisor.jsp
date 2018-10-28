@@ -29,7 +29,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col s12">
-                                            <a class="white-text hoverable" href="<c:url value='/account.htm' />"><b>Envoyez un message </b><i class="material-icons">message</i></a>
+                                            <a class="white-text hoverable" href="<c:url value='/message.htm' />"><b>Envoyez un message </b><i class="material-icons">message</i></a>
                                         </div>
                                     </div>
                                 </div>

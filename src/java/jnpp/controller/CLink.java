@@ -1,5 +1,6 @@
 package jnpp.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import jnpp.common.UnconnectedInfo;
 import jnpp.dao.entities.clients.Gender;
 import jnpp.stubs.AccountStub;
 import jnpp.stubs.AdvisorStub;
+import jnpp.stubs.NotifStub;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -130,7 +132,7 @@ public class CLink {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (CSession.hasSession(session)) {
-            ModelAndView view =  new JNPPModelAndView("manageuser/advisor", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+            ModelAndView view =  new JNPPModelAndView("advisor/advisor", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
             AdvisorStub advisor = new AdvisorStub("Toto", "Tata", "jnpp", "05499878464");
             view.addObject("advisor", advisor);
             return view;
@@ -182,8 +184,31 @@ public class CLink {
     protected ModelAndView linktoNotifs(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (CSession.hasSession(session))
-            return new JNPPModelAndView("manageuser/notifs", new UnconnectedInfo(alerts));
+        if (CSession.hasSession(session)) {
+            List<NotifStub> notifs = new ArrayList<NotifStub>();
+            notifs.add(new NotifStub("premiere notif"));
+            notifs.add(new NotifStub("seconde notif"));
+            ModelAndView view = new JNPPModelAndView("manageuser/notifs", new UnconnectedInfo(alerts));
+            view.addObject("notifs", notifs);
+            return view;
+        }
         return new ModelAndView("redirect:/index.htm");
+    }
+    /**
+     * Requête sur la vue des informations de l'utilisateur
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @return Une vue sur les informations de l'utilisateur si il est connecté, redirection vers l'index sinon
+     * @throws Exception 
+     */
+    @RequestMapping(value = "userinfo", method = RequestMethod.GET)
+    protected ModelAndView linktoUserInfo(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (!CSession.hasSession(session))
+            return new ModelAndView("redirect:/index.htm");
+        ModelAndView view = new JNPPModelAndView("manageuser/userinfo", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+        return view;
     }
 }
