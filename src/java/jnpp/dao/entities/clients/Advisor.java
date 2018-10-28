@@ -11,8 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -26,6 +24,10 @@ public class Advisor implements Serializable {
     
     @Embedded
     private Identity identity;
+    
+    private String email;
+    private String phone;
+    private String officeAdress;
     
     @JoinTable(
             name = "Advisor_Client",
@@ -60,7 +62,31 @@ public class Advisor implements Serializable {
     public void setIdentity(Identity identity) {
         this.identity = identity;
     }
-    
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getOfficeAdress() {
+        return officeAdress;
+    }
+
+    public void setOfficeAdress(String officeAdress) {
+        this.officeAdress = officeAdress;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

@@ -6,7 +6,7 @@ import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.clients.Gender;
 import jnpp.dao.entities.clients.Private;
 import jnpp.dao.entities.clients.Professional;
-import jnpp.service.exceptions.entities.UnknownClientException;
+import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.clients.BeOfAgeException;
 import jnpp.service.exceptions.clients.ClosureException;
 import jnpp.service.exceptions.clients.DuplicatedClientException;
@@ -27,10 +27,10 @@ public interface IClientService {
     
     /** Deconnecte un client.
      * @param client Client se deconnectant.
-     * @throws UnknownClientException Exception levee si l'entite client ne 
+     * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
     public void signOut(Client client)
-            throws UnknownClientException;
+            throws FakeClientException;
     
     /** Inscrit un particulier.
      * Le particulier recoit par defaut des notifications.
@@ -89,11 +89,11 @@ public interface IClientService {
      * informations du particulier n'est pas valide.
      * @throws InvalidUpdateException Exception levee si la mise a jour d'un 
      * champ n'est pas autorisee.
-     * @throws UnknownClientException Exception levee si l'entite particulier ne 
+     * @throws FakeClientException Exception levee si l'entite particulier ne 
      * fait pas reference a un client existant. */
     public Private update(Private client, Private information)
             throws DuplicatedClientException, InvalidInformationException,
-            InvalidUpdateException, UnknownClientException; 
+            InvalidUpdateException, FakeClientException; 
     
     /** Mes a jour les informations d'un professionel.
      * @param client L'entite du professionel mis à jour.
@@ -109,38 +109,38 @@ public interface IClientService {
      * informations du particulier n'est pas valide.
      * @throws InvalidUpdateException Exception levee si la mise a jour d'un 
      * champ n'est pas autorisee.
-     * @throws UnknownClientException Exception levee si l'entite professionel 
+     * @throws FakeClientException Exception levee si l'entite professionel 
      * ne fait pas reference a un client existant. */
     public Professional update(Professional client, Professional information)
             throws DuplicatedClientException, InvalidInformationException,
-            InvalidUpdateException, UnknownClientException;    
+            InvalidUpdateException, FakeClientException;    
     
     /** Ferme un compte client.
      * Le compte d'un client ayant de l'argent ou des actions ne peut ferme.
      * @param client Client dont le compte est ferme.
      * @throws ClosureException Exception levee si le compte ne peut pas etre
      * ferme.
-     * @throws UnknownClientException Exception levee si l'entite client ne 
+     * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
     public void close(Client client) 
-            throws ClosureException, UnknownClientException;
+            throws ClosureException, FakeClientException;
     
     /** Retourne l'identifiant d'un client.
      * @param client Client concerne.
      * @return Identifiant du client.
-     * @throws UnknownClientException Exception levee si l'entite client ne 
+     * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    public String getLogin(Client client) throws UnknownClientException;
+    public String getLogin(Client client) throws FakeClientException;
     
     /** Modifie le mot de passe d'un client.
      * @param client Client concerne.
      * @param oldPassword Ancien mot de passe.
      * @param newPassword Nouveau mot de passe.
      * @return True si l'ancien mot de passe est correcte, false sinon.
-     * @throws UnknownClientException Exception levee si l'entite client ne 
+     * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
     public boolean updatePassword(Client client, String oldPassword, 
-            String newPassword) throws UnknownClientException;
+            String newPassword) throws FakeClientException;
     
     /** Genere un nouveau mot de passe pour un particulier identifie par son 
      * nom et son adresse mail.
