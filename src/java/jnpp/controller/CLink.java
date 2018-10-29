@@ -1,9 +1,7 @@
 package jnpp.controller;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -19,10 +17,11 @@ import jnpp.controller.views.Translator;
 import jnpp.controller.views.info.UnconnectedInfo;
 import jnpp.dao.entities.Message;
 import jnpp.dao.entities.clients.Advisor;
+import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.clients.Gender;
 import jnpp.dao.entities.clients.Identity;
+import jnpp.dao.entities.clients.Private;
 import jnpp.dao.entities.notifications.MessageNotification;
-import jnpp.dao.entities.notifications.Notification;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -266,7 +265,29 @@ public class CLink {
             CSession.setLanguage(session,Translator.Language.FR);
         if (!CSession.isConnected(session))
             return new ModelAndView("redirect:/index.htm");
-        ModelAndView view = new JNPPModelAndView("manageuser/userinfo", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+        Private client = new Private();
+        Identity identity = new Identity();
+        identity.setFirstname("to");
+        identity.setLastname("ta");
+        identity.setGender(Gender.MALE);
+        client.setIdentity(identity);
+        client.setAddress("26 rue toto");
+        client.setEmail("bala@to.fr");
+        client.setBirthday(new GregorianCalendar(2018, Calendar.OCTOBER, 20).getTime());
+        client.setPhone("0549908657");
+        ModelAndView view = null;
+        switch (client.getType()) {
+            case PRIVATE:
+                view = new JNPPModelAndView("manageuser/personalinfo", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+                break;
+            case PROFESIONAL:
+                view = new JNPPModelAndView("manageuser/professionalinfo", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+                break;
+            default:
+                throw new AssertionError(client.getType().name());     
+        }
+        view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
+        view.addObject("client", client);
         return view;
     }
 }

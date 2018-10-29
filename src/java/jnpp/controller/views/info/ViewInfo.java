@@ -1,9 +1,7 @@
 package jnpp.controller.views.info;
 
-import jnpp.controller.views.alerts.AlertMessage;
 import java.util.ArrayList;
 import java.util.List;
-import jnpp.controller.views.Translator;
 import jnpp.controller.views.alerts.AlertMessage;
 
 /**
