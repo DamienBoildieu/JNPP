@@ -1,6 +1,7 @@
 package jnpp.service;
 
 import java.util.Date;
+import jnpp.dao.entities.clients.Address;
   
 import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.clients.Gender;
@@ -41,7 +42,10 @@ public interface IClientService extends IService {
      * @param lastname Nom de famille du particulier.
      * @param birthday Date de naissance.
      * @param email Adresse mail du particulier.
-     * @param address Adresse physique du particulier.
+     * @param number Numero de l'adresse du particulier.
+     * @param street Rue de l'adresse du particulier.
+     * @param city Ville de l'adresse du particulier.
+     * @param state Pays de l'adresse du particulier.
      * @param phone Numero de telephone du particulier.
      * @return L'entite du particulier inscrit.
      * @throws DuplicatedClientException Exception levee si un particulier 
@@ -50,7 +54,8 @@ public interface IClientService extends IService {
      * @throws InvalidInformationException Exception levee si une des 
      * informations specifiees n'est pas valide. */
     Private signUp(Gender gender, String firstname, String lastname,
-            Date birthday, String email, String address, String phone) 
+            Date birthday, String email, Integer number, String street, 
+            String city, String state, String phone) 
             throws DuplicatedClientException, BeOfAgeException,
             InvalidInformationException;
     
@@ -63,7 +68,10 @@ public interface IClientService extends IService {
      * @param ownerFirstname Prenom du gerant de l'entreprise.
      * @param ownerLastname Nom de famille du gerant de l'entreprise.
      * @param email Adresse mail de l'entreprise.
-     * @param address Adresse physique de l'entreprise.
+     * @param number Numero de l'adresse de l'entreprise.
+     * @param street Rue de l'adresse de l'entreprise.
+     * @param city Ville de l'adresse de l'entreprise.
+     * @param state Pays de l'adresse de l'entreprise.
      * @param phone Numero de telephone de l'entreprise.
      * @return L'entite de l'entreprise inscrite.
      * @throws DuplicatedClientException Exception levee si une entreprise du 
@@ -72,7 +80,8 @@ public interface IClientService extends IService {
      * informations specifiees n'est pas valide. */
     Professional singUp(String name, Gender ownerGender, 
             String ownerFirstname, String ownerLastname, String email, 
-            String address, String phone) 
+            Integer number, String street, String city, String state, 
+            String phone) 
             throws DuplicatedClientException, InvalidInformationException;
     
     /** Mes a jour les informations d'un particulier.

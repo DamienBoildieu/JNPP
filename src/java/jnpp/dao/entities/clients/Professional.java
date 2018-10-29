@@ -17,6 +17,15 @@ public class Professional extends Client implements Serializable {
     @Embedded
     private Identity owner;
     
+    public Professional(String name, Gender ownerGender, 
+            String ownerFirstname, String ownerLastname, String email, 
+            Integer number, String street, String city, String state, 
+            String phone) {
+        super(email, number, street, city, state, phone, true);
+        this.name = name;
+        owner = new Identity(ownerGender, ownerFirstname, ownerLastname);
+    }
+    
     public Professional() {}
     
     @Override

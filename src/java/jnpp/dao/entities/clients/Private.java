@@ -21,6 +21,14 @@ public class Private extends Client implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date birthday;
     
+    public Private(Gender gender, String firstname, String lastname,
+            Date birthday, String email, Integer number, String street, 
+            String city, String state, String phone, Boolean notify) {
+        super(email, number, street, city, state, phone, notify);
+        identity = new Identity(gender, firstname, lastname);
+        this.birthday = birthday;
+    }
+    
     public Private() {}
 
     @Override

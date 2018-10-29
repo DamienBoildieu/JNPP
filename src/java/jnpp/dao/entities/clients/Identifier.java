@@ -22,6 +22,13 @@ public class Identifier implements Serializable {
     @JoinColumn(name = "client_fk")
     private Client client;
     
+    public Identifier(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
+    
+    public Identifier() {}
+    
     public String getLogin() {
         return login;
     }
