@@ -21,9 +21,7 @@ public class DebitAuthorization implements Serializable {
     @ManyToOne
     @JoinColumn(name="from_account_fk")
     private Account from;
-    @ManyToOne
-    @JoinColumn(name="to_account_fk")
-    private Account to;
+    private String ribTo;
     
     public DebitAuthorization() {}
     
@@ -43,12 +41,12 @@ public class DebitAuthorization implements Serializable {
         this.from = from;
     }
 
-    public Account getTo() {
-        return to;
+    public String getTo() {
+        return ribTo;
     }
 
-    public void setTo(Account to) {
-        this.to = to;
+    public void setTo(String ribTo) {
+        this.ribTo = ribTo;
     }
     
     @Override

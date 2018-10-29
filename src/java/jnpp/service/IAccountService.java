@@ -1,9 +1,11 @@
 package jnpp.service;
 
+import java.util.Date;
 import java.util.List;
 
 import jnpp.dao.entities.accounts.Account;
 import jnpp.dao.entities.accounts.CurrentAccount;
+import jnpp.dao.entities.accounts.DebitAuthorization;
 import jnpp.dao.entities.accounts.JointAccount;
 import jnpp.dao.entities.accounts.SavingAccount;
 import jnpp.dao.entities.accounts.SavingBook;
@@ -12,14 +14,17 @@ import jnpp.dao.entities.accounts.ShareAccount;
 import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.clients.Identity;
 import jnpp.dao.entities.clients.Private;
+import jnpp.dao.entities.movements.Movement;
 import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.accounts.ClosureRequestException;
 import jnpp.service.exceptions.accounts.DuplicatedAccountException;
+import jnpp.service.exceptions.accounts.DuplicatedAuthorizationException;
 import jnpp.service.exceptions.accounts.OwnerException;
 import jnpp.service.exceptions.accounts.UnknownIdentityException;
 import jnpp.service.exceptions.entities.FakeAccountException;
 import jnpp.service.exceptions.entities.FakeBookException;
 import jnpp.service.exceptions.entities.FakeClientException;
+import jnpp.service.exceptions.entities.FakeDebitAuthorizationException;
 
 /** Service gerant les comptes bancaires.
  * @author Pierre Bourquat
@@ -152,5 +157,57 @@ public interface IAccountService extends IService {
     void closeShareAccount(Client client, ShareAccount account)
             throws FakeClientException, FakeAccountException, ClosureException, 
             OwnerException;
+    
+    /** Retourne toutes les transactions d'un client.
+     * @param client Client concerne.
+     * @return Liste de transactions.
+     * @throws FakeClientException Exception levee si l'entite client ne 
+     * fait pas reference a un client existant. */
+    List<Movement> getMovements(Client client)
+            throws FakeClientException;
+    
+    /** Retourne les n dernieres transactions d'un client.
+     * @param client Client concerne.
+     * @param n Nombre de transaction.
+     * @return Liste de transactions.
+     * @throws FakeClientException Exception levee si l'entite client ne 
+     * fait pas reference a un client existant. */
+    List<Movement> getMovements(Client client, int n)
+            throws FakeClientException;
+    
+    /** Retourne les transactions posterieurs a une data d'un client.
+     * @param client Client concerne.
+     * @param date Date
+     * @return Liste de transactions.
+     * @throws FakeClientException Exception levee si l'entite client ne 
+     * fait pas reference a un client existant. */
+    List<Movement> getMovements(Client client, Date date)
+            throws FakeClientException;
+    
+    /** Retourne toutes les transactions d'un compte bancaire.
+     * @param account Compte bancaire concerne.
+     * @return Liste de transactions.
+     * @throws FakeAccountException Exception levee si l'entite account ne 
+     * fait pas reference a un compte bancaire existant. */
+    List<Movement> getMovements(Account account)
+            throws FakeAccountException;
+    
+    /** Retourne les n dernieres transactions d'un compte bancaire.
+     * @param account Compte bancaire concerne.
+     * @param n Nombre de transaction.
+     * @return Liste de transactions.
+     * @throws FakeAccountException Exception levee si l'entite account ne 
+     * fait pas reference a un compte bancaire existant. */
+    List<Movement> getMovements(Account account, int n)
+            throws FakeAccountException;
+    
+    /** Retourne les transactions posterieurs a une data d'un compte bancaire.
+     * @param account Compte bancaire concerne.
+     * @param date Date
+     * @return Liste de transactions.
+     * @throws FakeAccountException Exception levee si l'entite client ne 
+     * fait pas reference a un client existant. */
+    List<Movement> getMovements(Account account, Date date)
+            throws FakeAccountException;
     
 }

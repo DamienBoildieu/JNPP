@@ -27,7 +27,8 @@ public class Advisor implements Serializable {
     
     private String email;
     private String phone;
-    private String officeAdress;
+    @Embedded
+    private Address officeAdress;
     
     @JoinTable(
             name = "Advisor_Client",
@@ -79,11 +80,11 @@ public class Advisor implements Serializable {
         this.phone = phone;
     }
 
-    public String getOfficeAdress() {
+    public Address getOfficeAdress() {
         return officeAdress;
     }
 
-    public void setOfficeAdress(String officeAdress) {
+    public void setOfficeAdress(Address officeAdress) {
         this.officeAdress = officeAdress;
     }
 
