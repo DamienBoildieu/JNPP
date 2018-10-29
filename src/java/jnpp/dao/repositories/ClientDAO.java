@@ -1,14 +1,14 @@
 package jnpp.dao.repositories;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
-import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.clients.Gender;
+import jnpp.dao.entities.clients.Identity;
+import jnpp.dao.entities.clients.Private;
+import jnpp.dao.entities.clients.Professional;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,6 +75,33 @@ public class ClientDAO implements IClientDAO {
         q.setParameter("name", name);
         Long count = (Long) q.getSingleResult();
         return count > 0;
+    }
+    
+    @Transactional(readOnly = true)
+    @Override
+    public boolean isPrivateFake(Private client) {
+        Query q = em.createNamedQuery("is_private_fake", Long.class);
+        q.setParameter("id", client.getId());
+        Identity identity = client.getIdentity();
+        q.setParameter("gender", identity.getGender());
+        q.setParameter("firstname", identity.getFirstname());
+        q.setParameter("lastname", identity.getLastname());
+        Long count = (Long) q.getSingleResult();
+        return count != 0;
+    }
+    
+    @Transactional(readOnly = true)
+    @Override
+    public boolean isProfessionalFake(Professional client) {
+        Query q = em.createNamedQuery("is_professional_fake", Long.class);
+        q.setParameter("id", client.getId());
+        Identity owner = client.getOwner();
+        q.setParameter("name", client.getName());
+        q.setParameter("gender", owner.getGender());
+        q.setParameter("firstname", owner.getFirstname());
+        q.setParameter("lastname", owner.getLastname());
+        Long count = (Long) q.getSingleResult();
+        return count != 0;
     }
     
 }

@@ -21,7 +21,6 @@ import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.clients.BeOfAgeException;
 import jnpp.service.exceptions.clients.DuplicatedClientException;
 import jnpp.service.exceptions.clients.InvalidInformationException;
-import jnpp.service.exceptions.clients.InvalidUpdateException;
 import jnpp.service.exceptions.entities.FakeClientException;
 
 import org.springframework.stereotype.Service;
@@ -68,10 +67,10 @@ public class ClientService implements IClientService {
                 birthday == null || email == null || number == null || 
                 street == null || city == null || state == null ||
                 phone == null) throw new IllegalArgumentException();
-        if (computeAge(birthday) < 18) throw new BeOfAgeException();
-        if (!(validEmail(email) && 
-                validAddress(new Address(number, street, city, state)) && 
-                validPhone(phone))) throw new InvalidInformationException();
+        if (computeAge(birthday) < 18) throw new BeOfAgeException();      
+        validEmail(email);
+        validAddress(new Address(number, street, city, state));
+        validPhone(phone);
         if (clientDAO.privateExist(gender, firstname, lastname)) 
             throw new DuplicatedClientException();
         Private client = new Private(gender, firstname, lastname, birthday, 
@@ -93,9 +92,9 @@ public class ClientService implements IClientService {
                 ownerLastname == null || email == null || number == null ||
                 street == null || city == null || state == null || 
                 phone == null) throw new IllegalArgumentException();      
-        if (!(validEmail(email) && 
-                validAddress(new Address(number, street, city, state)) && 
-                validPhone(phone))) throw new InvalidInformationException();    
+        validEmail(email);
+        validAddress(new Address(number, street, city, state));
+        validPhone(phone);    
         if (clientDAO.professionalExist(name)) 
             throw new DuplicatedClientException();  
         Professional client = new Professional(name, ownerGender, 
@@ -109,46 +108,66 @@ public class ClientService implements IClientService {
     }
 
     @Override
-    public Private update(Private client, Private information) 
-            throws DuplicatedClientException, InvalidInformationException, 
-            InvalidUpdateException, FakeClientException {
-        throw new UnsupportedOperationException();
+    public Client update(Client client, String email, 
+            Integer number, String street, String city, String state, 
+            String phone) 
+            throws InvalidInformationException, FakeClientException {
+        if (client == null) throw new IllegalArgumentException();
+        if (CHECK_FAKE_ENTITY)
+            switch (client.getType()) {
+            case PRIVATE:
+                if (clientDAO.isPrivateFake((Private) client))
+                    throw new FakeClientException();
+                break;
+            case PROFESIONAL:
+                if (clientDAO.isProfessionalFake((Professional) client))
+                    throw new FakeClientException();
+                break;
+            }
+        if (email == null && number == null && street == null && 
+                city == null && state == null && phone == null) return client;
+        if (email != null) validEmail(email);
+        Address newAddress = null;
+        if (number != null || street != null || city != null || state != null) {
+            Address oldAddress = client.getAddress();
+            newAddress = new Address(number, street, city, state);
+            if (number == null) newAddress.setNumber(oldAddress.getNumber());
+            if (street == null) newAddress.setStreet(oldAddress.getStreet());
+            if (city == null) newAddress.setCity(oldAddress.getCity());
+            if (state == null) newAddress.setState(oldAddress.getState());
+            validAddress(newAddress);
+        }
+        if (phone != null) validPhone(phone);    
+        if (email != null) client.setEmail(email);
+        if (newAddress != null) client.setAddress(newAddress);
+        if (phone != null) client.setPhone(phone);  
+        clientDAO.update(client);
+        return client;
     }
 
     @Override
-    public Professional update(Professional client, Professional information) 
-            throws DuplicatedClientException, InvalidInformationException, 
-            InvalidUpdateException, FakeClientException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void close(Client client) 
-            throws ClosureException, FakeClientException {
-        throw new UnsupportedOperationException();
+    public void close(Client client) throws ClosureException, FakeClientException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getLogin(Client client) throws FakeClientException {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean updatePassword(Client client, String oldPassword, 
-            String newPassword) throws FakeClientException {
-        throw new UnsupportedOperationException();
+    public boolean updatePassword(Client client, String oldPassword, String newPassword) throws FakeClientException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean resetPassword(String login, String firstname, 
-            String lastname, String email) {
-        throw new UnsupportedOperationException();
+    public boolean resetPassword(String login, String firstname, String lastname, String email) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean resetPassword(String login, String name, 
-            String ownerFirstname, String ownerLastname, String email) {
-        throw new UnsupportedOperationException();
+    public boolean resetPassword(String login, String name, String ownerFirstname, String ownerLastname, String email) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     private Identifier generateNewIdentifier() {
@@ -172,17 +191,14 @@ public class ClientService implements IClientService {
         return sb.toString();
     }
     
-    private static boolean validEmail(String email) {
-        return true;
-    }
+    private static void validEmail(String email) 
+            throws InvalidInformationException {}
     
-    private static boolean validAddress(Address address) {
-        return true;
-    }
+    private static void validAddress(Address address) 
+            throws InvalidInformationException {}
     
-    private static boolean validPhone(String phone) {
-        return true;
-    }
+    private static void validPhone(String phone) 
+            throws InvalidInformationException {}
     
     private static int computeAge(Date date) {
         return Period.between(date.toInstant().atZone(ZoneId.systemDefault()).

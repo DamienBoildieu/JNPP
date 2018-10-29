@@ -5,12 +5,21 @@ import java.io.Serializable;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 @Entity
 @DiscriminatorValue(value = Client.Type.Values.PROFESSIONAL)
-@NamedQuery(name = "find_professional_by_name",
-        query = "SELECT COUNT(p) FROM Professional p WHERE p.name = :name")
+@NamedQueries({
+    @NamedQuery(name = "find_professional_by_name",
+            query = "SELECT COUNT(p) FROM Professional p WHERE p.name = :name"),
+    @NamedQuery(name = "is_professional_fake",
+            query = "SELECT COUNT(p) FROM Professional p "
+                    + "WHERE p.id = :id "
+                    + "  AND p.name = :name "
+                    + "  AND p.owner.gender = :gender "
+                    + "  AND p.owner.firstname = :firstname "
+                    + "  AND p.owner.lastname = :lastname")})
 public class Professional extends Client implements Serializable {
     
     private static final long serialVersionUID = 1L;
