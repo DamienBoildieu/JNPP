@@ -78,7 +78,7 @@ public interface IClientService extends IService {
      * meme nom est deja inscrite.
      * @throws InvalidInformationException Exception levee si une des 
      * informations specifiees n'est pas valide. */
-    Professional singUp(String name, Gender ownerGender, 
+    Professional signUp(String name, Gender ownerGender, 
             String ownerFirstname, String ownerLastname, String email, 
             Integer number, String street, String city, String state, 
             String phone) 
