@@ -83,7 +83,7 @@ public class ClientService implements IClientService {
     }
 
     @Override
-    public Professional singUp(String name, Gender ownerGender, 
+    public Professional signUp(String name, Gender ownerGender, 
             String ownerFirstname, String ownerLastname, String email, 
             Integer number, String street, String city, String state, 
             String phone) 

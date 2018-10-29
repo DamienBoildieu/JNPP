@@ -39,7 +39,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="input-field col s12">
-                                                <select name="genre">
+                                                <select name="gender">
                                                     <c:forEach items="${genders}" var="gender">
                                                         <option value="${gender}">${gendersMap[gender]}</option>        
                                                     </c:forEach>
@@ -62,8 +62,8 @@
                                     <div class="col s6">
                                         <div class="row">
                                             <div class="input-field col s12">
-                                                <label for="numberAdr">Numéro de rue</label> <input type="text"
-                                                                                                    class="validate" name="numberAdr" id="numberAdr" 
+                                                <label for="streetNbr">Numéro de rue</label> <input type="text"
+                                                                                                    class="validate" name="streetNbr" id="streetNbr" 
                                                                                                     pattern="[1-9][0-9]*" required>
                                             </div>
                                         </div>
