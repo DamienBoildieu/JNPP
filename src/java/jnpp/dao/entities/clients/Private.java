@@ -6,11 +6,17 @@ import java.util.Date;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
 @DiscriminatorValue(value = Client.Type.Values.PRIVATE)
+@NamedQuery(name = "find_private_by_identity",
+        query = "SELECT COUNT(p) FROM Private p " 
+                + "WHERE p.identity.gender = :gender "
+                + "  AND p.identity.firstname = :firstname "
+                + "  AND p.identity.lastname = :lastname")
 public class Private extends Client implements Serializable {
     
     private static final long serialVersionUID = 1L;

@@ -6,9 +6,19 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(
+        name = "find_identifier",
+        query = "SELECT i FROM Identifier i "
+                + "WHERE i.login = :login AND i.password = :password "),
+    @NamedQuery(
+        name = "find_all_login",
+        query = "SELECT i.login FROM Identifier i")})
 public class Identifier implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -11,6 +11,7 @@ public interface IIdentifierDAO {
     void delete(Identifier identifier);
     Identifier find(String login);
     
+    Identifier find(String login, String password);    
     List<String> findAllLogin();
     
 }

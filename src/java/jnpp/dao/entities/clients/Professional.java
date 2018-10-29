@@ -5,9 +5,12 @@ import java.io.Serializable;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.NamedQuery;
 
 @Entity
 @DiscriminatorValue(value = Client.Type.Values.PROFESSIONAL)
+@NamedQuery(name = "find_professional_by_name",
+        query = "SELECT COUNT(p) FROM Professional p WHERE p.name = :name")
 public class Professional extends Client implements Serializable {
     
     private static final long serialVersionUID = 1L;

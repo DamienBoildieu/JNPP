@@ -53,13 +53,20 @@ public class IdentifierDAO implements IIdentifierDAO {
     public Identifier find(String login) {
         return em.find(Identifier.class, login);
     }
+
+    @Override
+    public Identifier find(String login, String password) {
+        Query q = em.createNamedQuery("find_identifier");
+        q.setParameter("login", login);
+        q.setParameter("password", password);
+        List<Identifier> l = q.getResultList();
+        return l.isEmpty() ? null : l.get(0);
+    }
     
     @Transactional(readOnly = true)
     @Override
     public List<String> findAllLogin() {
-        Query q = em.createQuery(""
-                + "SELECT i.login "
-                + "FROM Identifier i");
+        Query q = em.createNamedQuery("find_all_login");
         return q.getResultList();
     }
     

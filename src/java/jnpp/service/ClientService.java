@@ -44,7 +44,8 @@ public class ClientService implements IClientService {
     
     @Override
     public Client signIn(String login, String password) {
-        return clientDAO.find(login, password);
+        Identifier identifier = identifierDAO.find(login, password);
+        return identifier.getClient();
     }
 
     @Override
@@ -158,14 +159,16 @@ public class ClientService implements IClientService {
     }
     
     private String generateRandomLogin() {
-        return String.format(LOGIN_FORMAT, random.nextInt());
+        int i = random.nextInt();
+        if (i < 0) i = -i;
+        return String.format(LOGIN_FORMAT, i);
     }
     
     private String generateRandomPassword() {
         StringBuilder sb = new StringBuilder();
         while (sb.length() < PASSWORD_LENGTH)
             sb.append(PASSWORD_SALT.
-                    charAt((int) random.nextFloat() * PASSWORD_SALT.length()));
+                    charAt((int) (random.nextFloat() * PASSWORD_SALT.length())));
         return sb.toString();
     }
     
