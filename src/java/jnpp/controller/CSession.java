@@ -2,7 +2,9 @@ package jnpp.controller;
 
 import jnpp.controller.exceptions.NullSessionException;
 import javax.servlet.http.HttpSession;
+import jnpp.controller.exceptions.UnconnectedException;
 import jnpp.controller.views.Translator;
+import jnpp.dao.entities.clients.Client;
 
 /**
  * Classe permettant de gérer les HttpSession
@@ -16,9 +18,25 @@ public class CSession {
      * Supprime les attributs ajoutés par l'application
      * @param session la session que l'on veut supprimer
      */
-    public static void clearSession(HttpSession session) {
-        session.removeAttribute("firstName");
-        session.removeAttribute("lastName");
+    public static void clearSession(HttpSession session) throws UnconnectedException {
+        if (CSession.isConnected(session)) {
+            switch (CSession.getTypeClient(session)) {
+                case PRIVATE:
+                    session.removeAttribute("firstName");
+                    session.removeAttribute("lastName");
+                    break;
+                case PROFESIONAL:
+                    session.removeAttribute("companyName");
+                    break;
+                default:
+                    throw new AssertionError(CSession.getTypeClient(session).name()); 
+            }
+            session.removeAttribute("typeClient");
+            session.removeAttribute("hasNotif");
+        } else {
+            throw new UnconnectedException();
+        }
+
     }
     /**
      * Ajoute l'attribut firstName à la session
@@ -33,7 +51,7 @@ public class CSession {
     /**
      * Ajoute l'attribut lastName à la session
      * @param session la session à modifier
-     * @param firstName la valeur de lastName
+     * @param lastName la valeur de lastName
      */
     public static void setLastName(HttpSession session, String lastName) {
         if (session == null)
@@ -45,6 +63,24 @@ public class CSession {
         if (session == null)
             throw new NullSessionException();
         session.setAttribute("language", lang);
+    }
+    
+    public static void setCompanyName(HttpSession session, String companyName) {
+        if (session == null)
+            throw new NullSessionException();
+        session.setAttribute("companyName", companyName);
+    }
+    
+    public static void setTypeClient(HttpSession session, Client.Type typeClient) {
+        if (session == null)
+            throw new NullSessionException();
+        session.setAttribute("typeClient", typeClient);
+    }
+    
+    public static void setHasNotif(HttpSession session, boolean hasNotif) {
+        if (session == null)
+            throw new NullSessionException();
+        session.setAttribute("hasNotif", hasNotif);
     }
     /**
      * Récupère l'attribut firstName de la session
@@ -72,12 +108,30 @@ public class CSession {
             throw new NullSessionException();
         return (Translator.Language)session.getAttribute("language");
     }
+    
+    public static String getCompanyName(HttpSession session) {
+        if (session == null)
+            throw new NullSessionException();
+        return (String)session.getAttribute("companyName");
+    }
+    
+    public static Client.Type getTypeClient(HttpSession session) {
+        if (session == null)
+            throw new NullSessionException();
+        return (Client.Type)session.getAttribute("typeClient");
+    }
+    
+    public static Boolean getHasNotif(HttpSession session) {
+        if (session == null)
+            throw new NullSessionException();
+        return (Boolean)session.getAttribute("hasNotif");
+    }
     /**
      * Teste si l'utilisateur a une session d'ouverte
      * @param session le session a analysé
      * @return true si l'utilisateur a une session sur le site, false sinon
      */
     public static boolean isConnected(HttpSession session) {
-        return (session != null) && (session.getAttribute("firstName") != null);
+        return (session != null) && (session.getAttribute("typeClient") != null) && (session.getAttribute("hasNotif") != null);
     }
 }
