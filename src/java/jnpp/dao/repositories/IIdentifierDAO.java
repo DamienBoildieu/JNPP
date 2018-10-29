@@ -2,6 +2,7 @@ package jnpp.dao.repositories;
 
 import java.util.List;
 
+import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.clients.Identifier;
 
 public interface IIdentifierDAO {
@@ -11,7 +12,13 @@ public interface IIdentifierDAO {
     void delete(Identifier identifier);
     Identifier find(String login);
     
-    Identifier find(String login, String password);    
+    Client find(String login, String password);    
     List<String> findAllLogin();
+    String findLogin(Long clientId);
+    Identifier find(Long clientId);
     
+    Identifier findPrivate(String login, String firstname, String lastname, 
+            String email);
+    Identifier findProfessional(String login, String name, 
+            String ownerFirstname, String ownerLastname, String email);
 }

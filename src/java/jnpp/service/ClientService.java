@@ -4,8 +4,9 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -39,12 +40,11 @@ public class ClientService implements IClientService {
     @Resource
     IIdentifierDAO identifierDAO;
     
-    private Random random = new Random();
+    private final Random random = new Random();
     
     @Override
     public Client signIn(String login, String password) {
-        Identifier identifier = identifierDAO.find(login, password);
-        return identifier.getClient();
+        return identifierDAO.find(login, password);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class ClientService implements IClientService {
     }
 
     @Override
-    public Private signUp(Gender gender, String firstname, String lastname, 
+    public void signUp(Gender gender, String firstname, String lastname, 
             Date birthday, String email, Integer number, String street, 
             String city, String state, String phone) 
             throws DuplicatedClientException, BeOfAgeException, 
@@ -79,11 +79,10 @@ public class ClientService implements IClientService {
         Identifier identifier = generateNewIdentifier();
         identifier.setClient(client);
         identifierDAO.save(identifier);
-        return client;
     }
 
     @Override
-    public Professional signUp(String name, Gender ownerGender, 
+    public void signUp(String name, Gender ownerGender, 
             String ownerFirstname, String ownerLastname, String email, 
             Integer number, String street, String city, String state, 
             String phone) 
@@ -104,7 +103,6 @@ public class ClientService implements IClientService {
         Identifier identifier = generateNewIdentifier();
         identifier.setClient(client);
         identifierDAO.save(identifier);
-        return client;
     }
 
     @Override
@@ -113,17 +111,7 @@ public class ClientService implements IClientService {
             String phone) 
             throws InvalidInformationException, FakeClientException {
         if (client == null) throw new IllegalArgumentException();
-        if (CHECK_FAKE_ENTITY)
-            switch (client.getType()) {
-            case PRIVATE:
-                if (clientDAO.isPrivateFake((Private) client))
-                    throw new FakeClientException();
-                break;
-            case PROFESIONAL:
-                if (clientDAO.isProfessionalFake((Professional) client))
-                    throw new FakeClientException();
-                break;
-            }
+        checkFake(client);
         if (email == null && number == null && street == null && 
                 city == null && state == null && phone == null) return client;
         if (email != null) validEmail(email);
@@ -152,26 +140,47 @@ public class ClientService implements IClientService {
 
     @Override
     public String getLogin(Client client) throws FakeClientException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (client == null) throw new IllegalArgumentException();
+        checkFake(client);
+        return identifierDAO.findLogin(client.getId());
     }
 
     @Override
     public boolean updatePassword(Client client, String oldPassword, String newPassword) throws FakeClientException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        checkFake(client);
+        Identifier identifier = identifierDAO.find(client.getId());
+        if (!identifier.getPassword().equals(oldPassword)) return false;
+        identifier.setPassword(newPassword);
+        identifierDAO.save(identifier);
+        return true;
     }
 
     @Override
-    public boolean resetPassword(String login, String firstname, String lastname, String email) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean resetPassword(String login, String firstname, 
+            String lastname, String email) {
+        Identifier identifier = identifierDAO.findPrivate(login, 
+                firstname, lastname, email);
+        if (identifier == null) return false;
+        String password = generateRandomPassword();
+        identifier.setPassword(password);
+        identifierDAO.save(identifier);
+        return true;    
     }
 
     @Override
-    public boolean resetPassword(String login, String name, String ownerFirstname, String ownerLastname, String email) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean resetPassword(String login, String name, 
+            String ownerFirstname, String ownerLastname, String email) {
+        Identifier identifier = identifierDAO.findProfessional(login, name, 
+                ownerFirstname, ownerLastname, email);
+        if (identifier == null) return false;
+        String password = generateRandomPassword();
+        identifier.setPassword(password);
+        identifierDAO.save(identifier);
+        return true;
     }
     
     private Identifier generateNewIdentifier() {
-        List<String> logins = identifierDAO.findAllLogin();
+        Set<String> logins = new HashSet<String>(identifierDAO.findAllLogin());
         String login = generateRandomLogin();
         while (logins.contains(login)) login = generateRandomLogin();
         return new Identifier(login, generateRandomPassword());
@@ -189,6 +198,11 @@ public class ClientService implements IClientService {
             sb.append(PASSWORD_SALT.
                     charAt((int) (random.nextFloat() * PASSWORD_SALT.length())));
         return sb.toString();
+    }
+    
+    private void checkFake(Client client) throws FakeClientException {
+        if (CHECK_FAKE_ENTITY && clientDAO.isFake(client)) 
+            throw new FakeClientException();
     }
     
     private static void validEmail(String email) 

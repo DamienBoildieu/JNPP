@@ -14,17 +14,19 @@ import javax.persistence.TemporalType;
 @Entity
 @DiscriminatorValue(value = Client.Type.Values.PRIVATE)
 @NamedQueries({
-    @NamedQuery(name = "find_private_by_identity",
-            query = "SELECT COUNT(p) FROM Private p " 
-                    + "WHERE p.identity.gender = :gender "
-                    + "  AND p.identity.firstname = :firstname "
-                    + "  AND p.identity.lastname = :lastname"),
-    @NamedQuery(name = "is_private_fake",
-            query = "SELECT COUNT(p) FROM Private p "
-                    + "WHERE p.id = :id "
-                    + "  AND p.identity.gender = :gender "
-                    + "  AND p.identity.firstname = :firstname "
-                    + "  AND p.identity.lastname = :lastname")})
+    @NamedQuery(
+        name = "find_by_identity",
+        query = "SELECT COUNT(p) FROM Private p " 
+                + "WHERE p.identity.gender = :gender "
+                + "  AND p.identity.firstname = :firstname "
+                + "  AND p.identity.lastname = :lastname"),
+    @NamedQuery(
+        name = "is_private_fake",
+        query = "SELECT COUNT(p) FROM Private p "
+                + "WHERE p.id = :id "
+                + "  AND p.identity.gender = :gender "
+                + "  AND p.identity.firstname = :firstname "
+                + "  AND p.identity.lastname = :lastname")})
 public class Private extends Client implements Serializable {
     
     private static final long serialVersionUID = 1L;

@@ -1,11 +1,13 @@
 package jnpp.dao.repositories;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.clients.Gender;
+import jnpp.dao.entities.clients.Identifier;
 import jnpp.dao.entities.clients.Identity;
 import jnpp.dao.entities.clients.Private;
 import jnpp.dao.entities.clients.Professional;
@@ -60,7 +62,7 @@ public class ClientDAO implements IClientDAO {
     @Override
     public boolean privateExist(Gender gender, String firstname, 
             String lastname) {
-        Query q = em.createNamedQuery("find_private_by_identity", Long.class);
+        Query q = em.createNamedQuery("find_by_identity", Long.class);
         q.setParameter("gender", gender);
         q.setParameter("firstname", firstname);
         q.setParameter("lastname", lastname);
@@ -71,15 +73,14 @@ public class ClientDAO implements IClientDAO {
     @Transactional(readOnly = true)
     @Override
     public boolean professionalExist(String name) {
-        Query q = em.createNamedQuery("find_professional_by_name", Long.class);
+        Query q = em.createNamedQuery("find_by_name", Long.class);
         q.setParameter("name", name);
         Long count = (Long) q.getSingleResult();
         return count > 0;
     }
     
     @Transactional(readOnly = true)
-    @Override
-    public boolean isPrivateFake(Private client) {
+    private boolean isPrivateFake(Private client) {
         Query q = em.createNamedQuery("is_private_fake", Long.class);
         q.setParameter("id", client.getId());
         Identity identity = client.getIdentity();
@@ -91,8 +92,7 @@ public class ClientDAO implements IClientDAO {
     }
     
     @Transactional(readOnly = true)
-    @Override
-    public boolean isProfessionalFake(Professional client) {
+    private boolean isProfessionalFake(Professional client) {
         Query q = em.createNamedQuery("is_professional_fake", Long.class);
         q.setParameter("id", client.getId());
         Identity owner = client.getOwner();
@@ -102,6 +102,18 @@ public class ClientDAO implements IClientDAO {
         q.setParameter("lastname", owner.getLastname());
         Long count = (Long) q.getSingleResult();
         return count != 0;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean isFake(Client client) {
+        switch (client.getType()) {
+        case PRIVATE:
+            return isPrivateFake((Private) client);
+        case PROFESIONAL:
+            return isProfessionalFake((Professional) client);
+        }
+        return true;
     }
     
 }

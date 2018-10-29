@@ -45,13 +45,12 @@ public interface IClientService extends IService {
      * @param city Ville de l'adresse du particulier.
      * @param state Pays de l'adresse du particulier.
      * @param phone Numero de telephone du particulier.
-     * @return L'entite du particulier inscrit.
      * @throws DuplicatedClientException Exception levee si un particulier 
      * ayant la meme identite est deja inscrit. 
      * @throws BeOfAgeException Exception levee si le particulier est mineur.
      * @throws InvalidInformationException Exception levee si une des 
      * informations specifiees n'est pas valide. */
-    Private signUp(Gender gender, String firstname, String lastname,
+    void signUp(Gender gender, String firstname, String lastname,
             Date birthday, String email, Integer number, String street, 
             String city, String state, String phone) 
             throws DuplicatedClientException, BeOfAgeException,
@@ -71,12 +70,11 @@ public interface IClientService extends IService {
      * @param city Ville de l'adresse de l'entreprise.
      * @param state Pays de l'adresse de l'entreprise.
      * @param phone Numero de telephone de l'entreprise.
-     * @return L'entite de l'entreprise inscrite.
      * @throws DuplicatedClientException Exception levee si une entreprise du 
      * meme nom est deja inscrite.
      * @throws InvalidInformationException Exception levee si une des 
      * informations specifiees n'est pas valide. */
-    Professional signUp(String name, Gender ownerGender, 
+    void signUp(String name, Gender ownerGender, 
             String ownerFirstname, String ownerLastname, String email, 
             Integer number, String street, String city, String state, 
             String phone) 
