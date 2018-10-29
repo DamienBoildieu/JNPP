@@ -10,6 +10,7 @@ import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.controller.views.info.ConnectedInfo;
 import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.Translator;
+import jnpp.controller.views.info.ViewInfo;
 import jnpp.dao.entities.accounts.Account;
 import jnpp.dao.entities.accounts.CurrentAccount;
 import jnpp.dao.entities.accounts.SavingAccount;
@@ -57,7 +58,7 @@ public class CAccount {
         saving.setMoney(500.d);
         saving.setRib("5946513");
         listAc.add(saving);
-        ModelAndView view = new JNPPModelAndView("accounts/resume", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts, false));
+        ModelAndView view = new JNPPModelAndView("accounts/resume", ViewInfo.createInfo(session, alerts));
         view.addObject("listAccounts", listAc);
         view.addObject("accountsMap", Translator.getInstance().translateAccounts(CSession.getLanguage(session)));
         return view;
@@ -81,7 +82,7 @@ public class CAccount {
         if (!CSession.isConnected(session))
             return new ModelAndView("redirect:/index.htm");
 	//resumeService.resumeAccounts("");
-        return new JNPPModelAndView("accounts/account", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts, false));
+        return new JNPPModelAndView("accounts/account", ViewInfo.createInfo(session, alerts));
     }
     
 }

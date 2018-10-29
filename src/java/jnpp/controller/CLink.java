@@ -10,11 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import jnpp.controller.views.alerts.AlertMessage;
-import jnpp.controller.views.info.ConnectedInfo;
 import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.NotifView;
 import jnpp.controller.views.Translator;
-import jnpp.controller.views.info.UnconnectedInfo;
+import jnpp.controller.views.info.ViewInfo;
 import jnpp.dao.entities.Message;
 import jnpp.dao.entities.clients.Advisor;
 import jnpp.dao.entities.clients.Client;
@@ -50,10 +49,7 @@ public class CLink {
             session = request.getSession(true);
         if (CSession.getLanguage(session)!=Translator.Language.FR)
             CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session)) {
-            return new JNPPModelAndView("index", new UnconnectedInfo(alerts));
-        }
-        return new JNPPModelAndView("index", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+        return new JNPPModelAndView("index", ViewInfo.createInfo(session, alerts));
     }
     /**
      * Requête sur la vue de connexion
@@ -72,7 +68,7 @@ public class CLink {
         if (CSession.getLanguage(session)!=Translator.Language.FR)
             CSession.setLanguage(session,Translator.Language.FR);
         if (!CSession.isConnected(session))
-            return new JNPPModelAndView("manageuser/connect", new UnconnectedInfo(alerts));
+            return new JNPPModelAndView("manageuser/connect", ViewInfo.createInfo(session, alerts));
         return new ModelAndView("redirect:/index.htm");
     }
     /**
@@ -92,7 +88,7 @@ public class CLink {
         if (CSession.getLanguage(session)!=Translator.Language.FR)
             CSession.setLanguage(session,Translator.Language.FR);
         if (!CSession.isConnected(session))
-            return new JNPPModelAndView("signup/signup", new UnconnectedInfo(alerts));
+            return new JNPPModelAndView("signup/signup", ViewInfo.createInfo(session, alerts));
         return new ModelAndView("redirect:/index.htm");
     }
     /**
@@ -113,7 +109,7 @@ public class CLink {
         if (CSession.getLanguage(session)!=Translator.Language.FR)
             CSession.setLanguage(session,Translator.Language.FR);
         if (!CSession.isConnected(session)) {
-            ModelAndView view = new JNPPModelAndView("signup/personalsignup", new UnconnectedInfo(alerts));
+            ModelAndView view = new JNPPModelAndView("signup/personalsignup", ViewInfo.createInfo(session, alerts));
             view.addObject("genders", Gender.values());
             view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
             return view;
@@ -139,7 +135,7 @@ public class CLink {
         if (CSession.getLanguage(session)!=Translator.Language.FR)
             CSession.setLanguage(session,Translator.Language.FR);
         if (!CSession.isConnected(session)) {
-            ModelAndView view = new JNPPModelAndView("signup/professionalsignup", new UnconnectedInfo(alerts));
+            ModelAndView view = new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
             view.addObject("genders", Gender.values());
             view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
             return view;
@@ -164,7 +160,7 @@ public class CLink {
         if (CSession.getLanguage(session)!=Translator.Language.FR)
             CSession.setLanguage(session,Translator.Language.FR);
         if (CSession.isConnected(session)) {
-            ModelAndView view =  new JNPPModelAndView("advisor/advisor", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+            ModelAndView view =  new JNPPModelAndView("advisor/advisor", ViewInfo.createInfo(session, alerts));
             Advisor advisor = new Advisor();
             Identity advisorIdentity = new Identity();
             advisorIdentity.setFirstname("toto");
@@ -194,7 +190,7 @@ public class CLink {
             CSession.setLanguage(session,Translator.Language.FR);
         if (!CSession.isConnected(session))
             return new ModelAndView("redirect:/index.htm");
-        ModelAndView view = new JNPPModelAndView("manageuser/home", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+        ModelAndView view = new JNPPModelAndView("manageuser/home", ViewInfo.createInfo(session, alerts));
         return view;
     }
     /**
@@ -214,7 +210,7 @@ public class CLink {
         if (CSession.getLanguage(session)!=Translator.Language.FR)
             CSession.setLanguage(session,Translator.Language.FR);
         if (!CSession.isConnected(session))
-            return new JNPPModelAndView("manageuser/password", new UnconnectedInfo(alerts));
+            return new JNPPModelAndView("manageuser/password", ViewInfo.createInfo(session, alerts));
         return new ModelAndView("redirect:/index.htm");
     }
     /**
@@ -241,7 +237,7 @@ public class CLink {
             mes.setMessage(text);
             List<NotifView> notifs = new ArrayList<NotifView>();
             notifs.add(new NotifView(mes));
-            ModelAndView view = new JNPPModelAndView("manageuser/notifs", new UnconnectedInfo(alerts));
+            ModelAndView view = new JNPPModelAndView("manageuser/notifs", ViewInfo.createInfo(session, alerts));
             view.addObject("notifs", notifs);
             return view;
         }
@@ -277,10 +273,10 @@ public class CLink {
         ModelAndView view = null;
         switch (client.getType()) {
             case PRIVATE:
-                view = new JNPPModelAndView("manageuser/personalinfo", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+                view = new JNPPModelAndView("manageuser/personalinfo", ViewInfo.createInfo(session, alerts));
                 break;
             case PROFESIONAL:
-                view = new JNPPModelAndView("manageuser/professionalinfo", new ConnectedInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts));
+                view = new JNPPModelAndView("manageuser/professionalinfo", ViewInfo.createInfo(session, alerts));
                 break;
             default:
                 throw new AssertionError(client.getType().name());     

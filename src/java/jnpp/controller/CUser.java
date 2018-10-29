@@ -14,7 +14,10 @@ import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.controller.views.Translator;
 import jnpp.controller.views.info.UnconnectedInfo;
+import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.clients.Gender;
+import jnpp.dao.entities.clients.Private;
+import jnpp.dao.entities.clients.Professional;
 import jnpp.service.IClientService;
 import jnpp.service.exceptions.clients.BeOfAgeException;
 import jnpp.service.exceptions.clients.DuplicatedClientException;
@@ -59,10 +62,23 @@ public class CUser {
         if (!CSession.isConnected(session)) {
             String id = request.getParameter("account");
             String password = request.getParameter("password");
-           /* if (this.userService.signIn(id, password)!=null) {
-                session = request.getSession(true);
-                CSession.setFirstName(session, "user");
-                CSession.setLastName(session, "dom");
+            Client client = this.clientService.signIn(id, password);
+            if (client!=null) {
+                CSession.setTypeClient(session, client.getType());
+                CSession.setHasNotif(session, false);
+                switch (client.getType()) {
+                    case PRIVATE:
+                        Private privateClient = (Private)client;
+                        CSession.setFirstName(session, privateClient.getIdentity().getFirstname());
+                        CSession.setLastName(session, privateClient.getIdentity().getLastname());
+                        break;
+                    case PROFESIONAL:
+                        Professional pro = (Professional)client;
+                        CSession.setCompanyName(session, pro.getName());
+                        break;
+                    default:
+                        throw new AssertionError(client.getType().name());                
+                }
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Connexion réussie"));
                 } else {
@@ -80,11 +96,7 @@ public class CUser {
                 } else {
                     return new JNPPModelAndView("manageuser/connect", new UnconnectedInfo(error));
                 } 
-            }*/
-            session = request.getSession(true);
-            CSession.setFirstName(session, "user");
-            CSession.setLastName(session, "dom");
-            return new ModelAndView("redirect:/home.htm");
+            }
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas pouvoir arriver
     }
