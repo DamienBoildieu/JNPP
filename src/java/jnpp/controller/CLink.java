@@ -271,7 +271,6 @@ public class CLink {
         identity.setLastname("ta");
         identity.setGender(Gender.MALE);
         client.setIdentity(identity);
-        client.setAddress("26 rue toto");
         client.setEmail("bala@to.fr");
         client.setBirthday(new GregorianCalendar(2018, Calendar.OCTOBER, 20).getTime());
         client.setPhone("0549908657");
