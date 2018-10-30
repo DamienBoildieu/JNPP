@@ -59,6 +59,13 @@ public class ViewInfo {
         return new UnconnectedInfo();
     }
     
+    public static ViewInfo createInfo(HttpSession session, AlertMessage alert) {
+        if (CSession.isConnected(session)) {
+            return new ConnectedInfo(CSession.getUserName(session), alert, CSession.getHasNotif(session));
+        }
+        return new UnconnectedInfo(alert);
+    }
+    
     public static ViewInfo createInfo(HttpSession session, List<AlertMessage> alerts) {
         if (CSession.isConnected(session)) {
             return new ConnectedInfo(CSession.getUserName(session), alerts, CSession.getHasNotif(session));

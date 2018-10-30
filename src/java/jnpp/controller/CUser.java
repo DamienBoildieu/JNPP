@@ -13,7 +13,7 @@ import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.controller.views.Translator;
-import jnpp.controller.views.info.UnconnectedInfo;
+import jnpp.controller.views.info.ViewInfo;
 import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.clients.Gender;
 import jnpp.dao.entities.clients.Private;
@@ -90,9 +90,9 @@ public class CUser {
                 AlertMessage error = new AlertMessage(AlertEnum.ERROR, "Nom d'utilisateur ou mot de passe incorrect");
                 if (alerts != null) {
                     alerts.add(error);
-                    return new JNPPModelAndView("manageuser/connect", new UnconnectedInfo(alerts));
+                    return new JNPPModelAndView("manageuser/connect",ViewInfo.createInfo(session, alerts));
                 } else {
-                    return new JNPPModelAndView("manageuser/connect", new UnconnectedInfo(error));
+                    return new JNPPModelAndView("manageuser/connect", ViewInfo.createInfo(session, error));
                 } 
             }
         }
@@ -183,7 +183,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Sexe invalide"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/privatesignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date birthday = format.parse(birthdayStr);
@@ -208,7 +208,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce client est déjà enregistré"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/privatesignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
             } catch (BeOfAgeException age) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Un client ne peut pas être mineur"));
@@ -217,7 +217,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Un client ne peut pas être mineur"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/privatesignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
             } catch (InvalidInformationException invalidFormat) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
@@ -226,7 +226,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/privatesignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
             }
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
@@ -275,7 +275,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Sexe invalide"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/professionalsignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
             }
             Integer streetNbr = Integer.parseInt(streetNbrStr);
             //call service
@@ -298,7 +298,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce client est déjà enregistré"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/professionalsignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
             } catch (InvalidInformationException invalidFormat) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
@@ -307,9 +307,56 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/professionalsignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
             }
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
+    }
+    
+    /**
+     * Requête du formulaire de perte de mot de passe d'un particulier
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return Une redirection vers le menu utilisateur si la connexion a réussie, une redirection vers le formulaire de connexion si elle a échouée,
+     * une redireciton vers l'index si l'utilisateur était déjà connecté
+     * @throws Exception 
+     */
+    @RequestMapping(value = "privatepassword", method = RequestMethod.POST)
+    protected ModelAndView privateResetPassword(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session)) {
+            String id = request.getParameter("id");
+            String firstName = request.getParameter("firstName");
+            String lastName = request.getParameter("lastName");
+            String email = request.getParameter("email");
+            if (clientService.resetPassword(id, firstName, lastName, email)) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Demande de nouveau mot de passe accepté"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Demande de nouveau mot de passe accepté"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new ModelAndView("redirect:/passwordsuccess.htm");
+            } else {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Aucun compte associé à ces informations n'est enregistré chez nous"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Aucun compte associé à ces informations n'est enregistré chez nous"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new JNPPModelAndView("signup/privatepassword", ViewInfo.createInfo(session, alerts));
+            }
+
+        }
+        return new ModelAndView("redirect:/index.htm"); //ne devrait pas pouvoir arriver
     }
 }

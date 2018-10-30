@@ -114,7 +114,6 @@ public class CLink {
             view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
             return view;
         }
-        
         return new ModelAndView("redirect:/index.htm");
     }
     /**
@@ -140,6 +139,26 @@ public class CLink {
             view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
             return view;
         }
+        return new ModelAndView("redirect:/index.htm");
+    }
+        /**
+     * Requête sur la vue de validation d'inscription
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @return Une vue sur la validation d'inscription si l'utilisateur n'est pas connecté, redirection vers l'index sinon
+     * @throws Exception 
+     */
+    @RequestMapping(value = "signupsuccess", method = RequestMethod.GET)
+    protected ModelAndView linkToSignUpSuccess(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session))
+            return new JNPPModelAndView("signup/signupsuccess", ViewInfo.createInfo(session, alerts));
         return new ModelAndView("redirect:/index.htm");
     }
     /**
@@ -214,6 +233,46 @@ public class CLink {
         return new ModelAndView("redirect:/index.htm");
     }
     /**
+     * Requête sur la vue de perte de mot de passe pour les particuliers
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @return Une vue sur le formulaire de choix de mot passe si l'utilisateur n'est pas connecté, redirection vers l'index sinon
+     * @throws Exception 
+     */
+    @RequestMapping(value = "privatepassword", method = RequestMethod.GET)
+    protected ModelAndView linkToPrivatePassword(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session))
+            return new JNPPModelAndView("manageuser/privatepassword", ViewInfo.createInfo(session, alerts));
+        return new ModelAndView("redirect:/index.htm");
+    }
+    /**
+     * Requête sur la vue de validation de regénération de mot de passe
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @return La vue de validation de regénération de mot de passe si l'utilisateur n'est pas connecté, redirection vers l'index sinon
+     * @throws Exception 
+     */
+    @RequestMapping(value = "passwordsuccess", method = RequestMethod.GET)
+    protected ModelAndView linkToPasswordSuccess(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session))
+            return new JNPPModelAndView("manageuser/passwordsuccess", ViewInfo.createInfo(session, alerts));
+        return new ModelAndView("redirect:/index.htm");
+    }
+    /**
      * Requête sur la vue des notifications
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
@@ -284,26 +343,5 @@ public class CLink {
         view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
         view.addObject("client", client);
         return view;
-    }
-    
-    /**
-     * Requête sur la vue de validation d'inscription
-     * @param model le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param response la réponse
-     * @return Une vue sur la validation d'inscription si l'utilisateur n'est pas connecté, redirection vers l'index sinon
-     * @throws Exception 
-     */
-    @RequestMapping(value = "signupsuccess", method = RequestMethod.GET)
-    protected ModelAndView linkToSignUpSuccess(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
-            session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session))
-            return new JNPPModelAndView("signup/signupsuccess", ViewInfo.createInfo(session, alerts));
-        return new ModelAndView("redirect:/index.htm");
     }
 }

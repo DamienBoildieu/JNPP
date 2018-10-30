@@ -9,38 +9,38 @@
         </header>
         <main>
             <%@ include file="../include/alerts.jsp"%>
-            <div class="container" style="margin-top: 10%">
+            <div class="container" style="margin-top: 5%">
                 <div class="row">
                     <div class='card-panel white col s6 offset-s3 center-align'>
                         <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
                             <div class="card blue s12">
                                 <p class="flow-text white-text">Changez votre mot de passe</p>
                             </div>
-                            <form method="POST" action="password.htm">
+                            <form method="POST" action="privatepassword.htm">
                                 <div class="row">
-                                    <div class="col s12">
-                                        <div class="input-field">
-                                            <label for="id">Votre identifiant</label> <input type="text"
-                                                                                              class="validate" name="id" id="id" required>
-                                        </div>
+                                    <div class="input-field col s12">
+                                        <label for="id">Votre identifiant</label> <input type="text"
+                                                                                          class="validate" name="id" id="id" required>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col s12">
-                                        <div class="input-field">
-                                            <label for="password">Nouveau mot de passe</label> <input type="password"
-                                                                                              class="validate" name="password" id="password" required>
-                                        </div>
+                                    <div class="input-field col s12">
+                                        <label for="firstName">Votre prénom</label> <input type="text"
+                                                                                          class="validate" name="firstName" id="firstName" required>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col s12">
-                                        <div class="input-field">
-                                            <label for="confim">Confirmer le mot de passe</label> <input type="password"
-                                                                                             class="validate" name="confirm" id="confrim" required>
-                                        </div>
+                                    <div class="input-field col s12">
+                                        <label for="lastName">Votre nom de famille</label> <input type="text"
+                                                                                         class="validate" name="lastName" id="lastName" required>
                                     </div>
-                                </div>                   
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                            <label for="email">Votre adresse email</label> <input type="email"
+                                                                                    class="validate" name="email" id="email" required>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col s12">
                                         <input type="submit" value="Confirmer" class="btn blue" />
