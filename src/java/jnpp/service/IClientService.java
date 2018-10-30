@@ -1,7 +1,6 @@
 package jnpp.service;
 
 import java.util.Date;
-import jnpp.dao.entities.clients.Address;
   
 import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.clients.Gender;
@@ -12,7 +11,6 @@ import jnpp.service.exceptions.clients.BeOfAgeException;
 import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.clients.DuplicatedClientException;
 import jnpp.service.exceptions.clients.InvalidInformationException;
-import jnpp.service.exceptions.clients.InvalidUpdateException;
 
 /** Service de gestion des clients.
  * @author Pierre Bourquat
@@ -47,13 +45,12 @@ public interface IClientService extends IService {
      * @param city Ville de l'adresse du particulier.
      * @param state Pays de l'adresse du particulier.
      * @param phone Numero de telephone du particulier.
-     * @return L'entite du particulier inscrit.
      * @throws DuplicatedClientException Exception levee si un particulier 
      * ayant la meme identite est deja inscrit. 
      * @throws BeOfAgeException Exception levee si le particulier est mineur.
      * @throws InvalidInformationException Exception levee si une des 
      * informations specifiees n'est pas valide. */
-    Private signUp(Gender gender, String firstname, String lastname,
+    void signUp(Gender gender, String firstname, String lastname,
             Date birthday, String email, Integer number, String street, 
             String city, String state, String phone) 
             throws DuplicatedClientException, BeOfAgeException,
@@ -73,56 +70,34 @@ public interface IClientService extends IService {
      * @param city Ville de l'adresse de l'entreprise.
      * @param state Pays de l'adresse de l'entreprise.
      * @param phone Numero de telephone de l'entreprise.
-     * @return L'entite de l'entreprise inscrite.
      * @throws DuplicatedClientException Exception levee si une entreprise du 
      * meme nom est deja inscrite.
      * @throws InvalidInformationException Exception levee si une des 
      * informations specifiees n'est pas valide. */
-    Professional signUp(String name, Gender ownerGender, 
+    void signUp(String name, Gender ownerGender, 
             String ownerFirstname, String ownerLastname, String email, 
             Integer number, String street, String city, String state, 
             String phone) 
             throws DuplicatedClientException, InvalidInformationException;
     
-    /** Mes a jour les informations d'un particulier.
-     * @param client L'entite du particulier mis à jour.
-     * @param information Une entite de particulier contenant les informations a 
-     * modifier. Si cette entite ne contient que des champs null, le 
-     * particulier ne sera pas modifie. Pour modifier uniquement la date de 
-     * naissance par exemple, il faut que l'entite information n'ait que des 
-     * champs null sauf le champ correspondant a la date de naissance.
-     * @return L'entite du particulier mis a jour.
-     * @throws DuplicatedClientException Exception levee si une mise a jour de 
-     * l'identite du client declanche une duplication de client.
+    /** Mes a jour les informations d'un client. Les parametres non null sont 
+     * modifies.
+     * @param client L'entite du client mis à jour.
+     * @param email Nouvel adresse mail.
+     * @param number Nouveau numero de rue.
+     * @param street Nouveau nom de rue.
+     * @param city Nouveau nom de ville.
+     * @param state Nouveau nom de pays.
+     * @param phone Nouveau numero de telephone.
+     * @return L'entite du client mis a jour.
      * @throws InvalidInformationException Exception levee si une des nouvelles 
-     * informations du particulier n'est pas valide.
-     * @throws InvalidUpdateException Exception levee si la mise a jour d'un 
-     * champ n'est pas autorisee.
+     * informations du client n'est pas valide.
      * @throws FakeClientException Exception levee si l'entite particulier ne 
      * fait pas reference a un client existant. */
-    Private update(Private client, Private information)
-            throws DuplicatedClientException, InvalidInformationException,
-            InvalidUpdateException, FakeClientException; 
-    
-    /** Mes a jour les informations d'un professionel.
-     * @param client L'entite du professionel mis à jour.
-     * @param information Une entite de professionel contenant les informations 
-     * a modifier. Si cette entite ne contient que des champs null, le 
-     * professionel ne sera pas modifie. Pour modifier uniquement le nom du 
-     * gerant , il faut que l'entite information n'ait que des champs null sauf 
-     * le champ correspondant au nom du gerant.
-     * @return L'entite du particulier mis a jour.
-     * @throws DuplicatedClientException Exception levee si une mise a jour de 
-     * l'identite du client declanche une duplication de client.
-     * @throws InvalidInformationException Exception levee si une des nouvelles 
-     * informations du particulier n'est pas valide.
-     * @throws InvalidUpdateException Exception levee si la mise a jour d'un 
-     * champ n'est pas autorisee.
-     * @throws FakeClientException Exception levee si l'entite professionel 
-     * ne fait pas reference a un client existant. */
-    Professional update(Professional client, Professional information)
-            throws DuplicatedClientException, InvalidInformationException,
-            InvalidUpdateException, FakeClientException;    
+    Client update(Client client,  String email, 
+            Integer number, String street, String city, String state, 
+            String phone)
+            throws FakeClientException, InvalidInformationException; 
     
     /** Ferme un compte client.
      * Le compte d'un client ayant de l'argent ou des actions ne peut ferme.

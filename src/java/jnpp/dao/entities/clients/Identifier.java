@@ -6,9 +6,43 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(
+        name = "find_client_by_login_password",
+        query = "SELECT i.client FROM Identifier i "
+                + "WHERE i.login = :login AND i.password = :password "),
+    @NamedQuery(
+        name = "find_all_login",
+        query = "SELECT i.login FROM Identifier i"),
+    @NamedQuery(
+        name = "find_login_by_client_fk",
+        query = "SELECT i.login FROM Identifier i "
+                + "WHERE i.client.id = :client_id"),
+    @NamedQuery(
+        name = "find_by_client_fk",
+        query = "SELECT i FROM Identifier i WHERE i.client.id = :client_id"),
+    @NamedQuery(
+        name = "find_by_login_identity_email",
+        query = "SELECT i "
+                + "FROM Identifier i "
+                + "WHERE i.login = :login "
+                + "  AND TREAT(i.client AS Private).identity.firstname = :firstname "
+                + "  AND TREAT(i.client AS Private).identity.lastname = :lastname "
+                + "  AND i.client.email = :email"),
+    @NamedQuery(
+        name = "find_by_login_name_owner_email",
+        query = "SELECT i "
+                + "FROM Identifier i "
+                + "WHERE i.login = :login "
+                + "  AND TREAT(i.client AS Professional).name = :name "
+                + "  AND TREAT(i.client AS Professional).owner.firstname = :firstname "
+                + "  AND TREAT(i.client AS Professional).owner.lastname = :lastname "
+                + "  AND i.client.email = :email")})
 public class Identifier implements Serializable {
 
     private static final long serialVersionUID = 1L;
