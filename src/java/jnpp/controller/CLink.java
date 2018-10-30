@@ -237,7 +237,7 @@ public class CLink {
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
      * @param response la réponse
-     * @return Une vue sur le formulaire de choix de mot passe si l'utilisateur n'est pas connecté, redirection vers l'index sinon
+     * @return Une vue sur le formulaire de regénération de mot de passe pour les particuliers si l'utilisateur n'est pas connecté, redirection vers l'index sinon
      * @throws Exception 
      */
     @RequestMapping(value = "privatepassword", method = RequestMethod.GET)
@@ -250,6 +250,26 @@ public class CLink {
             CSession.setLanguage(session,Translator.Language.FR);
         if (!CSession.isConnected(session))
             return new JNPPModelAndView("manageuser/privatepassword", ViewInfo.createInfo(session, alerts));
+        return new ModelAndView("redirect:/index.htm");
+    }
+    /**
+     * Requête sur la vue de perte de mot de passe pour les professionnels
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @return Une vue sur le formulaire de regénération de mot de passe pour les particuliers si l'utilisateur n'est pas connecté, redirection vers l'index sinon
+     * @throws Exception 
+     */
+    @RequestMapping(value = "professionalpassword", method = RequestMethod.GET)
+    protected ModelAndView linkToProfessionalPassword(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session))
+            return new JNPPModelAndView("manageuser/professionalpassword", ViewInfo.createInfo(session, alerts));
         return new ModelAndView("redirect:/index.htm");
     }
     /**

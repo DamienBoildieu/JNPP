@@ -319,7 +319,7 @@ public class CUser {
      * @param request la requête
      * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
-     * @return Une redirection vers le menu utilisateur si la connexion a réussie, une redirection vers le formulaire de connexion si elle a échouée,
+     * @return Une redirection vers le menu utilisateur si la demande a réussie, une redirection vers le formulaire de mot de passe si elle a échouée,
      * une redireciton vers l'index si l'utilisateur était déjà connecté
      * @throws Exception 
      */
@@ -353,7 +353,54 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Aucun compte associé à ces informations n'est enregistré chez nous"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/privatepassword", ViewInfo.createInfo(session, alerts));
+                return new JNPPModelAndView("manageuser/privatepassword", ViewInfo.createInfo(session, alerts));
+            }
+
+        }
+        return new ModelAndView("redirect:/index.htm"); //ne devrait pas pouvoir arriver
+    }
+    /**
+     * Requête du formulaire de perte de mot de passe d'un professionnel
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return Une redirection vers le menu utilisateur si la demande a réussie, une redirection vers le formulaire de mot de passe si elle a échouée,
+     * une redireciton vers l'index si l'utilisateur était déjà connecté
+     * @throws Exception 
+     */
+    @RequestMapping(value = "professionalpassword", method = RequestMethod.POST)
+    protected ModelAndView professionalResetPassword(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session)) {
+            String id = request.getParameter("id");
+            String firstName = request.getParameter("firstName");
+            String lastName = request.getParameter("lastName");
+            String company = request.getParameter("company");
+            String email = request.getParameter("email");
+            if (clientService.resetPassword(id, company, firstName, lastName, email)) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Demande de nouveau mot de passe accepté"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Demande de nouveau mot de passe accepté"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new ModelAndView("redirect:/passwordsuccess.htm");
+            } else {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Aucun compte associé à ces informations n'est enregistré chez nous"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Aucun compte associé à ces informations n'est enregistré chez nous"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new JNPPModelAndView("manageuser/professionalpassword", ViewInfo.createInfo(session, alerts));
             }
 
         }

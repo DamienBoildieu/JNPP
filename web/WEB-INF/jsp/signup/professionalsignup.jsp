@@ -53,11 +53,6 @@
                                                                                                      class="validate" name="email" id="email" required>
                                             </div>
                                         </div>                                                                       
-                                        <div class="row">
-                                            <div class="col s12">
-                                                <input type="submit" value="S'isncrire" class="btn blue" />
-                                            </div>
-                                        </div>
                                     </div>
                                     <div class="col s6">
                                         <div class="row">
@@ -93,7 +88,12 @@
                                             </div>
                                         </div> 
                                     </div>
-                                </div>                                
+                                </div>
+                                <div class="row">
+                                    <div class="col s12">
+                                        <input type="submit" value="S'isncrire" class="btn blue" />
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
