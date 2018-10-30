@@ -2,7 +2,7 @@ package jnpp.service.exceptions.owners;
 
 import jnpp.service.exceptions.ServiceException;
 
-public class OwnerException extends ServiceException {
+public abstract class OwnerException extends ServiceException {
 
     public OwnerException() {}
 

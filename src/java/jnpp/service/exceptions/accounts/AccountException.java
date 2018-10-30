@@ -2,7 +2,7 @@ package jnpp.service.exceptions.accounts;
 
 import jnpp.service.exceptions.ServiceException;
 
-public class AccountException extends ServiceException {
+public abstract class AccountException extends ServiceException {
 
     public AccountException() {}
 

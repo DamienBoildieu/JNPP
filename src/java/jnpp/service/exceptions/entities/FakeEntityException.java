@@ -2,7 +2,7 @@ package jnpp.service.exceptions.entities;
 
 import jnpp.service.exceptions.ServiceException;
 
-public class FakeEntityException extends ServiceException {
+public abstract class FakeEntityException extends ServiceException {
 
     public FakeEntityException() {}
 

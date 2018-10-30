@@ -7,10 +7,10 @@ import jnpp.dao.entities.clients.Gender;
 import jnpp.dao.entities.clients.Private;
 import jnpp.dao.entities.clients.Professional;
 import jnpp.service.exceptions.entities.FakeClientException;
-import jnpp.service.exceptions.clients.BeOfAgeException;
+import jnpp.service.exceptions.clients.AgeException;
 import jnpp.service.exceptions.ClosureException;
-import jnpp.service.exceptions.clients.DuplicatedClientException;
-import jnpp.service.exceptions.clients.InvalidInformationException;
+import jnpp.service.exceptions.duplicates.DuplicateClientException;
+import jnpp.service.exceptions.clients.InformationException;
 
 /** Service de gestion des clients.
  * @author Pierre Bourquat
@@ -45,16 +45,16 @@ public interface IClientService extends IService {
      * @param city Ville de l'adresse du particulier.
      * @param state Pays de l'adresse du particulier.
      * @param phone Numero de telephone du particulier.
-     * @throws DuplicatedClientException Exception levee si un particulier 
+     * @throws DuplicateClientException Exception levee si un particulier 
      * ayant la meme identite est deja inscrit. 
-     * @throws BeOfAgeException Exception levee si le particulier est mineur.
-     * @throws InvalidInformationException Exception levee si une des 
+     * @throws AgeException Exception levee si le particulier est mineur.
+     * @throws InformationException Exception levee si une des 
      * informations specifiees n'est pas valide. */
     void signUp(Gender gender, String firstname, String lastname,
             Date birthday, String email, Integer number, String street, 
             String city, String state, String phone) 
-            throws DuplicatedClientException, BeOfAgeException,
-            InvalidInformationException;
+            throws DuplicateClientException, AgeException,
+            InformationException;
     
     /** Inscrit un professionel.
      * Le professionel recoit par defaut des notifications.
@@ -70,15 +70,15 @@ public interface IClientService extends IService {
      * @param city Ville de l'adresse de l'entreprise.
      * @param state Pays de l'adresse de l'entreprise.
      * @param phone Numero de telephone de l'entreprise.
-     * @throws DuplicatedClientException Exception levee si une entreprise du 
+     * @throws DuplicateClientException Exception levee si une entreprise du 
      * meme nom est deja inscrite.
-     * @throws InvalidInformationException Exception levee si une des 
+     * @throws InformationException Exception levee si une des 
      * informations specifiees n'est pas valide. */
     void signUp(String name, Gender ownerGender, 
             String ownerFirstname, String ownerLastname, String email, 
             Integer number, String street, String city, String state, 
             String phone) 
-            throws DuplicatedClientException, InvalidInformationException;
+            throws DuplicateClientException, InformationException;
     
     /** Mes a jour les informations d'un client. Les parametres non null sont 
      * modifies.
@@ -90,14 +90,14 @@ public interface IClientService extends IService {
      * @param state Nouveau nom de pays.
      * @param phone Nouveau numero de telephone.
      * @return L'entite du client mis a jour.
-     * @throws InvalidInformationException Exception levee si une des nouvelles 
+     * @throws InformationException Exception levee si une des nouvelles 
      * informations du client n'est pas valide.
      * @throws FakeClientException Exception levee si l'entite particulier ne 
      * fait pas reference a un client existant. */
     Client update(Client client,  String email, 
             Integer number, String street, String city, String state, 
             String phone)
-            throws FakeClientException, InvalidInformationException; 
+            throws FakeClientException, InformationException; 
     
     /** Ferme un compte client.
      * Le compte d'un client ayant de l'argent ou des actions ne peut ferme.

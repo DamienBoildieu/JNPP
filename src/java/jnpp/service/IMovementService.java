@@ -8,16 +8,16 @@ import jnpp.dao.entities.movements.Debit;
 import jnpp.dao.entities.movements.Purchase;
 import jnpp.dao.entities.movements.Sale;
 import jnpp.dao.entities.movements.Transfert;
-import jnpp.service.exceptions.accounts.CurrentAccountOwningException;
-import jnpp.service.exceptions.accounts.OwnerException;
-import jnpp.service.exceptions.accounts.ShareAccountOwningException;
+import jnpp.service.exceptions.accounts.NoCurrentAccountException;
+import jnpp.service.exceptions.owners.AccountOwnerException;
+import jnpp.service.exceptions.accounts.NoShareAccountException;
 import jnpp.service.exceptions.entities.FakeAccountException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeShareException;
 import jnpp.service.exceptions.entities.FakeShareTitleException;
 import jnpp.service.exceptions.movements.AmountException;
 import jnpp.service.exceptions.movements.DebitAuthorizationException;
-import jnpp.service.exceptions.movements.UnauthorizedException;
+import jnpp.service.exceptions.movements.AccountTypeException;
 
 /** Service de gestion des transactions.
  * @author Pierre Bourquat
@@ -34,16 +34,16 @@ public interface IMovementService extends IService {
      * fait pas reference a un client existant.
      * @throws FakeAccountException Exception levee si l'entite account ne 
      * fait pas reference a un compte existant.
-     * @throws OwnerException Exception levee si le client n'est pas le 
+     * @throws AccountOwnerException Exception levee si le client n'est pas le 
      * proprietaire du compte.
-     * @throws UnauthorizedException Exception levee si le transfert ne peut 
-     * etre fait.
+     * @throws AccountTypeException Exception levee si le type de compte 
+     * n'autorise pas cette transaction.
      * @throws AmountException Eception levee si la quantite d'argent a 
      * transferer n'est pas valide. */
     Transfert transfertMoney(Client client, Account account, String rib, 
             double amount)
-            throws FakeClientException, FakeAccountException, OwnerException, 
-            UnauthorizedException, AmountException;
+            throws FakeClientException, FakeAccountException, AccountOwnerException, 
+            AccountTypeException, AmountException;
     
     /** Debite de l'argent. 
      * @param client Client effectuant le debit.
@@ -55,17 +55,17 @@ public interface IMovementService extends IService {
      * fait pas reference a un client existant.
      * @throws FakeAccountException Exception levee si l'entite account ne 
      * fait pas reference a un compte existant.
-     * @throws OwnerException Exception levee si le client n'est pas le 
+     * @throws AccountOwnerException Exception levee si le client n'est pas le 
      * proprietaire du compte.
-     * @throws UnauthorizedException Exception levee si le transfert ne peut 
-     * etre fait.
+     * @throws AccountTypeException Exception levee si le type de compte 
+     * n'autorise pas cette transaction.
      * @throws DebitAuthorizationException Exception levee si le client n'est 
      * pas autorise a debiter le compte.
      * @throws AmountException Eception levee si la quantite d'argent a debiter
      * n'est pas valide. */
     Debit debitMoney(Client client, Account account, String rib, double amount)
-            throws FakeClientException, FakeAccountException, OwnerException, 
-            UnauthorizedException, DebitAuthorizationException, AmountException; 
+            throws FakeClientException, FakeAccountException, AccountOwnerException, 
+            AccountTypeException, DebitAuthorizationException, AmountException; 
     
     /** Achete des titres d'actions. On suppose qu'il existe suffisement de 
      * titre a acheter. L'argent de l'achat est preleve sur le compte courant.
@@ -75,9 +75,9 @@ public interface IMovementService extends IService {
      * @return L'entite de transation de l'achat.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant.
-     * @throws CurrentAccountOwningException Exception levee si le client ne 
+     * @throws NoCurrentAccountException Exception levee si le client ne 
      * possede pas de compte courant.
-     * @throws ShareAccountOwningException Exception levee si le client ne 
+     * @throws NoShareAccountException Exception levee si le client ne 
      * possede pas de compte d'actions.
      * @throws FakeShareException Exception levee si l'entite share ne fait pas
      * reference une action existante.
@@ -85,8 +85,8 @@ public interface IMovementService extends IService {
      * d'actions a vendre est invalide. */
     Purchase purchaseShareTitles(Client client, Share share, 
             double amount)
-            throws FakeClientException, CurrentAccountOwningException,
-            ShareAccountOwningException, FakeShareException, AmountException;
+            throws FakeClientException, NoCurrentAccountException,
+            NoShareAccountException, FakeShareException, AmountException;
     
     /** Vend des titres d'actions. On suppose l'existence d'une entite qui
      * receptionne toutes les ventes d'actions. L'argent de la vente est 
@@ -97,19 +97,19 @@ public interface IMovementService extends IService {
      * @return L'entite de transaction de la vente.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant.
-     * @throws CurrentAccountOwningException Exception levee si le client ne 
+     * @throws NoCurrentAccountException Exception levee si le client ne 
      * possede pas de compte courant.
-     * @throws ShareAccountOwningException Exception levee si le client ne 
+     * @throws NoShareAccountException Exception levee si le client ne 
      * possede pas de compte d'actions.
      * @throws FakeShareTitleException Exception levee si l'entite title ne 
      * fait pas reference a un titre d'action existant.
-     * @throws OwnerException Exception levee si le client n'est pas le 
+     * @throws AccountOwnerException Exception levee si le client n'est pas le 
      * proprietaire des titres d'actions.
      * @throws AmountException Exception levee si la quantite de titres 
      * d'actions a vendre est invalide. */
     Sale saleShareTitles(Client client, ShareTitle title, int amount)
-           throws FakeClientException, CurrentAccountOwningException, 
-           ShareAccountOwningException, FakeShareTitleException, 
-           OwnerException, AmountException;
+           throws FakeClientException, NoCurrentAccountException, 
+           NoShareAccountException, FakeShareTitleException, 
+           AccountOwnerException, AmountException;
     
 }

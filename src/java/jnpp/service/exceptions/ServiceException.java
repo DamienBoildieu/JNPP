@@ -1,6 +1,6 @@
 package jnpp.service.exceptions;
 
-public class ServiceException extends Exception {
+public abstract class ServiceException extends Exception {
 
     public ServiceException() {}
 
