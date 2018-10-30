@@ -54,30 +54,14 @@ public class ViewInfo {
     
     public static ViewInfo createInfo(HttpSession session) {
         if (CSession.isConnected(session)) {
-            Boolean hasNotif = CSession.getHasNotif(session);
-            switch (CSession.getTypeClient(session)) {
-                case PRIVATE:
-                    return new PrivateInfo(CSession.getFirstName(session), CSession.getLastName(session), hasNotif);
-                case PROFESIONAL:
-                    return new CompanyInfo(CSession.getCompanyName(session), hasNotif);
-                default:
-                    throw new AssertionError(CSession.getTypeClient(session).name());
-            }
+            return new ConnectedInfo(CSession.getUserName(session), CSession.getHasNotif(session));  
         }
         return new UnconnectedInfo();
     }
     
     public static ViewInfo createInfo(HttpSession session, List<AlertMessage> alerts) {
         if (CSession.isConnected(session)) {
-            Boolean hasNotif = CSession.getHasNotif(session);
-            switch (CSession.getTypeClient(session)) {
-                case PRIVATE:
-                    return new PrivateInfo(CSession.getFirstName(session), CSession.getLastName(session), alerts, hasNotif);
-                case PROFESIONAL:
-                    return new CompanyInfo(CSession.getCompanyName(session), alerts, hasNotif);
-                default:
-                    throw new AssertionError(CSession.getTypeClient(session).name());
-            }
+            return new ConnectedInfo(CSession.getUserName(session), alerts, CSession.getHasNotif(session));
         }
         return new UnconnectedInfo(alerts);
     }

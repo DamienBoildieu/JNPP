@@ -64,17 +64,15 @@ public class CUser {
             String password = request.getParameter("password");
             Client client = this.clientService.signIn(id, password);
             if (client!=null) {
-                CSession.setTypeClient(session, client.getType());
                 CSession.setHasNotif(session, false);
                 switch (client.getType()) {
                     case PRIVATE:
                         Private privateClient = (Private)client;
-                        CSession.setFirstName(session, privateClient.getIdentity().getFirstname());
-                        CSession.setLastName(session, privateClient.getIdentity().getLastname());
+                        CSession.setUserName(session, privateClient.getIdentity().getFirstname() + " " + privateClient.getIdentity().getLastname());
                         break;
                     case PROFESIONAL:
                         Professional pro = (Professional)client;
-                        CSession.setCompanyName(session, pro.getName());
+                        CSession.setUserName(session, pro.getName());
                         break;
                     default:
                         throw new AssertionError(client.getType().name());                
@@ -151,7 +149,7 @@ public class CUser {
      * reste sur la page d'inscription si elle a échouée,
      * @throws Exception 
      */
-    @RequestMapping(value = "personalsignup", method = RequestMethod.POST)
+    @RequestMapping(value = "privatesignup", method = RequestMethod.POST)
     protected ModelAndView validatePersonalSignUp(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
@@ -185,7 +183,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Sexe invalide"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/personalsignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/privatesignup", new UnconnectedInfo(alerts));
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date birthday = format.parse(birthdayStr);
@@ -201,7 +199,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Inscription réussie"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new ModelAndView("redirect:/index.htm");
+                return new ModelAndView("redirect:/signupsuccess.htm");
             } catch (DuplicatedClientException dupliactedClient) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce client est déjà enregistré"));
@@ -210,7 +208,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce client est déjà enregistré"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/personalsignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/privatesignup", new UnconnectedInfo(alerts));
             } catch (BeOfAgeException age) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Un client ne peut pas être mineur"));
@@ -219,7 +217,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Un client ne peut pas être mineur"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/personalsignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/privatesignup", new UnconnectedInfo(alerts));
             } catch (InvalidInformationException invalidFormat) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
@@ -228,7 +226,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/personalsignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/privatesignup", new UnconnectedInfo(alerts));
             }
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
@@ -291,7 +289,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Inscription réussie"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new ModelAndView("redirect:/index.htm");
+                return new ModelAndView("redirect:/signupsuccess.htm");
             } catch (DuplicatedClientException dupliactedClient) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce client est déjà enregistré"));

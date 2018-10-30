@@ -5,16 +5,7 @@
             <a href="#" data-target="side" class="sidenav-trigger"><i
                     class="material-icons">menu</i></a>
             <div class="right">
-                <c:choose>
-                    <c:when test="${info.typeClient=='PRIVATE'}">
-                        ${info.firstName} ${info.lastName}
-                    </c:when>
-                    <c:when test="${info.typeClient=='PROFESSIONAL'}">
-                        ${info.companyName}
-                    </c:when>
-                    <c:otherwise>
-                    </c:otherwise>
-                </c:choose>
+                ${info.userName}
             </div>
             <ul class="left hide-on-med-and-down">
                 <li><a href="<c:url value='/home.htm' />">Accueil</a></li>
