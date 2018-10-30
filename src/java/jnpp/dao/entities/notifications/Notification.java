@@ -49,7 +49,7 @@ public abstract class Notification implements Serializable {
     
     @Temporal(TemporalType.DATE)
     private Date date;
-    private Boolean send;
+    private Boolean seen;
     
     public abstract Type getType();
     
@@ -69,12 +69,12 @@ public abstract class Notification implements Serializable {
         this.date = date;
     }
 
-    public Boolean getSend() {
-        return send;
+    public Boolean getSeen() {
+        return seen;
     }
 
-    public void setSend(Boolean send) {
-        this.send = send;
+    public void setSeen(Boolean seen) {
+        this.seen = seen;
     }
 
     @Override
