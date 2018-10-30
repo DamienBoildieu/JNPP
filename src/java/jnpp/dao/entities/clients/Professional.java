@@ -34,8 +34,8 @@ public class Professional extends Client implements Serializable {
     public Professional(String name, Gender ownerGender, 
             String ownerFirstname, String ownerLastname, String email, 
             Integer number, String street, String city, String state, 
-            String phone) {
-        super(email, number, street, city, state, phone, true);
+            String phone, Boolean notify) {
+        super(email, number, street, city, state, phone, notify);
         this.name = name;
         owner = new Identity(ownerGender, ownerFirstname, ownerLastname);
     }

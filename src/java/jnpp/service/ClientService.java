@@ -29,9 +29,11 @@ import org.springframework.stereotype.Service;
 @Service("ClientService")
 public class ClientService implements IClientService {
 
-    private static final String LOGIN_FORMAT = "%08d";
+    public static final int LOGIN_LENGTH = 8;
+    private static final int LOGIN_MIN = (int) Math.pow(10, LOGIN_LENGTH - 1);
+    private static final int LOGIN_RANGE = 9 * LOGIN_MIN;
     
-    private static final int PASSWORD_LENGTH = 8;
+    public static final int PASSWORD_LENGTH = 8;
     private static final String PASSWORD_SALT = 
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
     
@@ -74,7 +76,7 @@ public class ClientService implements IClientService {
         if (clientDAO.privateExist(gender, firstname, lastname)) 
             throw new DuplicatedClientException();
         Private client = new Private(gender, firstname, lastname, birthday, 
-                email, number, street, city, state, phone, false);
+                email, number, street, city, state, phone, true);
         client = (Private) clientDAO.save(client);
         Identifier identifier = generateNewIdentifier();
         identifier.setClient(client);
@@ -98,7 +100,7 @@ public class ClientService implements IClientService {
             throw new DuplicatedClientException();  
         Professional client = new Professional(name, ownerGender, 
                 ownerFirstname, ownerLastname, email, number, street, city, 
-                state, phone);
+                state, phone, true);
         client = (Professional) clientDAO.save(client);
         Identifier identifier = generateNewIdentifier();
         identifier.setClient(client);
@@ -148,7 +150,7 @@ public class ClientService implements IClientService {
     @Override
     public boolean updatePassword(Client client, String oldPassword, String newPassword) throws FakeClientException {
         checkFake(client);
-        Identifier identifier = identifierDAO.find(client.getId());
+        Identifier identifier = identifierDAO.findByClientId(client.getId());
         if (!identifier.getPassword().equals(oldPassword)) return false;
         identifier.setPassword(newPassword);
         identifierDAO.save(identifier);
@@ -187,9 +189,7 @@ public class ClientService implements IClientService {
     }
     
     private String generateRandomLogin() {
-        int i = random.nextInt();
-        if (i < 0) i = -i;
-        return String.format(LOGIN_FORMAT, i);
+        return "" + (LOGIN_MIN + random.nextInt(LOGIN_RANGE));
     }
     
     private String generateRandomPassword() {

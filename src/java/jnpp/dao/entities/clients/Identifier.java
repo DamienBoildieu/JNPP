@@ -28,8 +28,7 @@ import javax.persistence.OneToOne;
         query = "SELECT i FROM Identifier i WHERE i.client.id = :client_id"),
     @NamedQuery(
         name = "find_by_login_identity_email",
-        query = ""
-                + "SELECT i "
+        query = "SELECT i "
                 + "FROM Identifier i "
                 + "WHERE i.login = :login "
                 + "  AND TREAT(i.client AS Private).identity.firstname = :firstname "
@@ -37,8 +36,7 @@ import javax.persistence.OneToOne;
                 + "  AND i.client.email = :email"),
     @NamedQuery(
         name = "find_by_login_name_owner_email",
-        query = ""
-                + "SELECT i "
+        query = "SELECT i "
                 + "FROM Identifier i "
                 + "WHERE i.login = :login "
                 + "  AND TREAT(i.client AS Professional).name = :name "
