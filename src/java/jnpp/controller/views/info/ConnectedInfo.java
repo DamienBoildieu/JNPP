@@ -2,6 +2,7 @@ package jnpp.controller.views.info;
 
 import java.util.List;
 import jnpp.controller.views.alerts.AlertMessage;
+import jnpp.dao.entities.clients.Client;
 
 /**
  * Classe contenant les informations dont a besoin la vue si un utilisateur est connecté
@@ -12,39 +13,46 @@ public class ConnectedInfo extends ViewInfo {
      */
     private final boolean hasNotif;
   
-    protected ConnectedInfo() {
+    private final String userName;
+    
+    public ConnectedInfo(String name) {
         super(true);
         hasNotif = false;
+        userName = name;
     }
     
-    protected ConnectedInfo(boolean notif) {
+    public ConnectedInfo(String name, boolean notif) {
         super(true);
         hasNotif = notif;
+        userName = name;
     }
     /**
      * Constructeur avec une alerte
      * @param alert une alerte
      */
-    protected ConnectedInfo(AlertMessage alert) {
+    public ConnectedInfo(String name, AlertMessage alert) {
 	super(true, alert);
         hasNotif = false;
+        userName = name;
     }
     /**
      * Constructeur avec une liste d'alertes
      * @param alerts les alertes
      */
-    protected ConnectedInfo(List<AlertMessage> alerts) {
+    public ConnectedInfo(String name, List<AlertMessage> alerts) {
 	super(true, alerts);
         hasNotif = false;
+        userName = name;
     }
     /**
      * Constructeur avec indicateur de notification
      * @param alerts les alertes
      * @param notif indique si il y a de nouvelles notifications
      */
-    protected ConnectedInfo(List<AlertMessage> alerts, boolean notif) {
+    public ConnectedInfo(String name, List<AlertMessage> alerts, boolean notif) {
         super(true, alerts);
         hasNotif = notif;
+        userName = name;
     }
     /**
      * Accesseur sur l'indicateur de notification
@@ -52,5 +60,9 @@ public class ConnectedInfo extends ViewInfo {
      */
     public boolean isHasNotif() {
         return hasNotif;
-    }    
+    }
+
+    public String getUserName() {
+        return userName;
+    }
 }

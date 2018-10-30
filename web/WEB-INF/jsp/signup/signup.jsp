@@ -15,7 +15,7 @@
                         <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
                             <div class="row">
                                 <div class="col s6">
-                                    <a href="<c:url value='/personalsignup.htm' />" class="btn-large blue">Particulier</a>
+                                    <a href="<c:url value='/privatesignup.htm' />" class="btn-large blue">Particulier</a>
                                 </div>
                                 <div class="col s6">
                                     <a href="<c:url value='/professionalsignup.htm' />" class="btn-large blue">Entreprise</a>
