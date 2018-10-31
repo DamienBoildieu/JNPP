@@ -288,8 +288,6 @@ public class CUser {
                     rm.addFlashAttribute("alerts", alerts);    
                 }
             } catch (InformationException invalidFormat) {
-                return new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
-                /* TODO
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
                 } else {
@@ -298,7 +296,6 @@ public class CUser {
                     rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
-                */
             }
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
