@@ -60,7 +60,7 @@ public class NotificationDAO extends GenericDAO<Notification> implements INotifi
     @Transactional(readOnly = true)
     @Override
     public void updateAllToSeen(Long clientId) {
-        Query q = getEm().createNamedQuery("find_all_client_recent_unseen_notification");
+        Query q = getEm().createNamedQuery("update_all_client_notification_seen");
         q.setParameter("client_id", clientId);
         q.executeUpdate();
     }

@@ -36,7 +36,7 @@ import jnpp.dao.entities.clients.Client;
         name = "find_all_client_unseen_notification",
         query = "SELECT n FROM Notification n "
                 + "WHERE n.client.id = :client_id "
-                + "  AND NOT n.seen "
+                + "  AND n.seen = false "
                 + "ORDER BY n.date DESC"),
     @NamedQuery(
         name = "find_all_client_recent_unseen_notification",
