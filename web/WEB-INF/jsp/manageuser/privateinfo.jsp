@@ -124,6 +124,15 @@
                                 </div>
                             </form>
                         </div>
+                        <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
+                            <form method="POST" action="closeuser.htm">
+                                <div class="row">
+                                    <div class="col s12">
+                                        <input type="submit" value="Supprimer votre compte" class="btn blue" />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
