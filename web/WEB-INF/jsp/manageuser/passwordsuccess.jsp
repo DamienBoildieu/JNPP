@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class='card-panel blue col s8 offset-s2'>
                         <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
-                            <p class=" flow-text white-text">Inscription réussie, vous allez recevoir un mail contenant votre identifiant et votre mot de passe</p>
+                            <p class=" flow-text white-text">Nous avons pris en compte votre demande. Un nouveau mot de passe va vous être envoyé par mail</p>
                         </div>
                     </div>
                 </div>

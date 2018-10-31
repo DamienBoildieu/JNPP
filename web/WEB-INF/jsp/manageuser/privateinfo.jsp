@@ -11,45 +11,118 @@
             <%@ include file="../include/alerts.jsp"%>
             <div class="container">
                 <div class="row">
-                    <div class='card-panel white col s6 offset-s3 center-align'>
+                    <div class='card-panel white col s5 offset-s1 center-align'>
                         <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
-                            <div class="card blue s12">
-                                <h5 class="white-text text">Identifiant : ${client.getId()}</h5>
-                                <h5 class="white-text text">Nom : ${client.getIdentity().getLastname()}</h5>
-                                <h5 class="white-text text">Prénom : ${client.getIdentity().getFirstname()}</h5>
-                                <h5 class="white-text text">Sexe : ${gendersMap[client.getIdentity().getGender()]}</h5>
-                            </div>
-                            
-                               
-                            
-                            <form method="POST" action="connect.htm">
+                            <form method="POST" action="editinfo.htm">
                                 <div class="row">
-                                    <div class="col s12">
-                                        <div class="input-field">
-                                            <label for="account"> Identifiant </label> <input type="text"
-                                                                                              class="validate" name="account" id="account">
+                                    <div class="col s6">
+                                        <div class="row">
+                                            <div class="input-field col s12">            
+                                                <label>Nom</label>
+                                                <input type="text" value="${client.getIdentity().getLastname()}" readonly>
+                                            </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">            
+                                                <label>Prénom</label>
+                                                <input type="text" value="${client.getIdentity().getFirstname()}" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <label>Sexe</label>
+                                                <input type="text" value="${gendersMap[client.getIdentity().getGender()]}" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12">     
+                                                <label>Date de naissance</label> <input type="text" value="${birthday}" readonly>
+                                            </div>
+                                        </div>                                
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <label for="email">Email</label> <input type="email" value="${client.email}"
+                                                                                            class="validate" name="email" id="email" required>
+                                            </div>
+                                        </div>                                                   
+                                    </div>
+                                    <div class="col s6">
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <label for="streetNbr">Numéro de rue</label> <input type="text" value="${client.getAddress().getNumber()}"
+                                                                                                    class="validate" name="streetNbr" id="streetNbr" 
+                                                                                                    pattern="[1-9][0-9]*" required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <label for="street">Rue</label> <input type="text" value="${client.getAddress().getStreet()}"
+                                                                                        class="validate" name="street" id="street" required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <label for="city">Ville</label> <input type="text" value="${client.getAddress().getCity()}"
+                                                                                        class="validate" name="city" id="city" required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <label for="country">Pays</label> <input type="text" value="${client.getAddress().getState()}"
+                                                                                        class="validate" name="country" id="country" required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <label for="phone">Téléphone</label> <input type="tel" value="${client.phone}"
+                                                                                            class="validate" name="phone" id="phone" 
+                                                                                            pattern="[0-9]{10}" required>
+                                            </div>
+                                        </div>   
                                     </div>
                                 </div>
+                                                  
                                 <div class="row">
                                     <div class="col s12">
-                                        <div class="input-field">
-                                            <label for="psswd"> Mot de passe </label> <input type="password"
-                                                                                             class="validate" name="password" id="password">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col s12">
-                                        <input type="submit" value="Se connecter" class="btn blue" />
+                                        <input type="submit" value="Changer mes informations" class="btn blue" />
                                     </div>
                                 </div>
                             </form>
-                            <div class="row">
-                                <div class="col s12">
-                                    <a href="<c:url value='/password.htm' />">Mot de passe oublié</a>
+                        </div>
+                    </div>
+                    <div class='card-panel white col s5 offset-s1 center-align' style="margin-top: 10%">
+                        <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
+                            <form method="POST" action="changeprivatepassword.htm">
+                                <div class="row">
+                                    <div class="col s12">
+                                        <div class="input-field">
+                                            <label for="oldpsswd"> Ancien mot de passe </label> <input type="password"
+                                                                                             class="validate" name="oldpsswd" id="oldpsswd">
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <div class="col s12">
+                                        <div class="input-field">
+                                            <label for="newpsswd"> Nouveau mot de passe </label> <input type="password"
+                                                                                             class="validate" name="newpsswd" id="newpsswd">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12">
+                                        <div class="input-field">
+                                            <label for="confirmpsswd"> Confirmer le nouveau mot de passe </label> <input type="password"
+                                                                                             class="validate" name="confirmpsswd" id="confirmpsswd">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12">
+                                        <input type="submit" value="Changer mon mot de passe" class="btn blue" />
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

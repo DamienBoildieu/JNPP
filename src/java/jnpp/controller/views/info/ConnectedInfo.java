@@ -53,6 +53,16 @@ public class ConnectedInfo extends ViewInfo {
         super(true, alerts);
         hasNotif = notif;
         userName = name;
+    }  
+    /**
+     * Constructeur avec indicateur de notification
+     * @param alerts les alertes
+     * @param notif indique si il y a de nouvelles notifications
+     */
+    public ConnectedInfo(String name, AlertMessage alert, boolean notif) {
+        super(true, alert);
+        hasNotif = notif;
+        userName = name;
     }
     /**
      * Accesseur sur l'indicateur de notification

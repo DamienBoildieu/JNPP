@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import jnpp.controller.views.alerts.AlertMessage;
-import jnpp.controller.views.info.ConnectedInfo;
 import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.Translator;
 import jnpp.controller.views.info.ViewInfo;
