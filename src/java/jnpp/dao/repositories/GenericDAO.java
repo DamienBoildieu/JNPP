@@ -31,9 +31,6 @@ public class GenericDAO<T extends Serializable> implements IGenericDAO<T> {
     @Transactional
     @Override
     public T save(T t) {
-        System.out.println();
-        System.out.println("SAVING " + t.toString());
-        System.out.println();
         t = em.merge(t);
         em.persist(t);
         return t;

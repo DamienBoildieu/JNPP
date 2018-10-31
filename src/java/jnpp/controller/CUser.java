@@ -22,6 +22,7 @@ import jnpp.service.IClientService;
 import jnpp.service.exceptions.clients.AgeException;
 import jnpp.service.exceptions.duplicates.DuplicateClientException;
 import jnpp.service.exceptions.clients.InformationException;
+import jnpp.service.exceptions.entities.FakeClientException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -288,6 +289,7 @@ public class CUser {
                 }
             } catch (InformationException invalidFormat) {
                 return new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
+                /* TODO
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
                 } else {
@@ -296,6 +298,7 @@ public class CUser {
                     rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
+                */
             }
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
@@ -498,7 +501,7 @@ public class CUser {
                     rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new ModelAndView("redirect:/userinfo.htm");
-            } catch (InvalidInformationException invalidFormat) {
+            } catch (InformationException invalidFormat) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
                 } else {
