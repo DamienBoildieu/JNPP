@@ -4,9 +4,17 @@ import java.io.Serializable;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import jnpp.dao.entities.clients.Client;
 
 @Entity
 @DiscriminatorValue(value = Account.Type.Values.CURRENT)
+@NamedQueries({
+    @NamedQuery(
+        name = "has_current_account",
+        query = "SELECT COUNT(a) FROM CurrentAccount a "
+                + "WHERE a.client.id = :client_id")})
 public class CurrentAccount extends Account implements Serializable {
 
     private static final long serialVersionUID = 1L;    
@@ -16,6 +24,13 @@ public class CurrentAccount extends Account implements Serializable {
     private Double limit;
     
     public CurrentAccount() {}
+    
+    public CurrentAccount(String rib, Client client, Double money, Currency currency, Double limit) {
+        super(rib, client);
+        this.money = money;
+        this.currency = currency;
+        this.limit = limit;
+    }
     
     @Override
     public Type getType() {

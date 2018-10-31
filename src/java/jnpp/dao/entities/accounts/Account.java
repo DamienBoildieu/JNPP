@@ -22,8 +22,10 @@ import jnpp.dao.entities.clients.Client;
     @NamedQuery(
         name = "has_account",
         query = "SELECT COUNT(a) FROM Account a "
-                + "WHERE a.client.id = :client_id")
-})
+                + "WHERE a.client.id = :client_id"),
+    @NamedQuery(
+        name = "find_all_rib",
+        query = "SELECT a.rib FROM Account a")})
 public abstract class Account implements Serializable {
 
     public static enum Type {
@@ -54,6 +56,13 @@ public abstract class Account implements Serializable {
     @ManyToOne
     @JoinColumn(name="client_fk")
     private Client client;
+    
+    public Account() {}
+    
+    public Account(String rib, Client client) {
+        this.rib = rib;
+        this.client = client;
+    }
     
     public abstract Type getType();    
     
