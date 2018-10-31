@@ -3,7 +3,6 @@ package jnpp.controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -15,6 +14,7 @@ import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.NotifView;
 import jnpp.controller.views.Translator;
+import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.info.ViewInfo;
 import jnpp.dao.entities.Message;
 import jnpp.dao.entities.clients.Advisor;
@@ -23,18 +23,25 @@ import jnpp.dao.entities.clients.Gender;
 import jnpp.dao.entities.clients.Identity;
 import jnpp.dao.entities.clients.Private;
 import jnpp.dao.entities.notifications.MessageNotification;
+import jnpp.dao.entities.notifications.Notification;
+import jnpp.service.INotificationService;
+import jnpp.service.exceptions.entities.FakeClientException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Classe contrôlant les différents liens qui ne requièrent pas de traitement particulier
  */
 @Controller
 public class CLink {
+    @Autowired
+    private INotificationService notifService;
     /**
      * Requête sur l'index
      * @param model le model contient les alertes si il y a eu un redirect
@@ -51,6 +58,22 @@ public class CLink {
             session = request.getSession(true);
         if (CSession.getLanguage(session)!=Translator.Language.FR)
             CSession.setLanguage(session,Translator.Language.FR);
+        if (CSession.isConnected(session)) {
+            Boolean hasNotif = CSession.getHasNotif(session);
+            if (!hasNotif) {  
+                try {
+                    hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session)).size()>0;
+                    CSession.setHasNotif(session, hasNotif);
+                } catch (FakeClientException invalidClient) {
+                    if (alerts != null) {
+                        alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    } else {
+                        alerts = new ArrayList<AlertMessage>(); 
+                        alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    }
+                }
+            }
+        }
         return new JNPPModelAndView("index", ViewInfo.createInfo(session, alerts));
     }
     /**
@@ -181,14 +204,21 @@ public class CLink {
         if (CSession.getLanguage(session)!=Translator.Language.FR)
             CSession.setLanguage(session,Translator.Language.FR);
         if (CSession.isConnected(session)) {
+            Boolean hasNotif = CSession.getHasNotif(session);
+            if (!hasNotif) {  
+                try {
+                    hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session)).size()>0;
+                    CSession.setHasNotif(session, hasNotif);
+                } catch (FakeClientException invalidClient) {
+                    if (alerts != null) {
+                        alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    } else {
+                        alerts = new ArrayList<AlertMessage>(); 
+                        alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    }
+                }
+            }
             ModelAndView view =  new JNPPModelAndView("advisor/advisor", ViewInfo.createInfo(session, alerts));
-            Advisor advisor = new Advisor();
-            Identity advisorIdentity = new Identity();
-            advisorIdentity.setFirstname("toto");
-            advisorIdentity.setLastname("tate");
-            advisorIdentity.setGender(Gender.MALE);
-            advisor.setIdentity(advisorIdentity);
-            view.addObject("advisor", advisor);
             return view;
         }
         return new ModelAndView("redirect:/index.htm");
@@ -211,6 +241,20 @@ public class CLink {
             CSession.setLanguage(session,Translator.Language.FR);
         if (!CSession.isConnected(session))
             return new ModelAndView("redirect:/index.htm");
+        Boolean hasNotif = CSession.getHasNotif(session);
+        if (!hasNotif) {  
+            try {
+                hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session)).size()>0;
+                CSession.setHasNotif(session, hasNotif);
+            } catch (FakeClientException invalidClient) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                }
+            }
+        }
         ModelAndView view = new JNPPModelAndView("manageuser/home", ViewInfo.createInfo(session, alerts));
         return view;
     }
@@ -303,7 +347,7 @@ public class CLink {
      * @throws Exception 
      */
     @RequestMapping(value = "notifs", method = RequestMethod.GET)
-    protected ModelAndView linkToNotifs(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    protected ModelAndView linkToNotifs(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
@@ -311,16 +355,27 @@ public class CLink {
         if (CSession.getLanguage(session)!=Translator.Language.FR)
             CSession.setLanguage(session,Translator.Language.FR);
         if (CSession.isConnected(session)) {
-            MessageNotification mes = new MessageNotification();
-            mes.setDate(new GregorianCalendar(2018, Calendar.OCTOBER, 20).getTime());
-            Message text = new Message();
-            text.setContent("totot");
-            mes.setMessage(text);
-            List<NotifView> notifs = new ArrayList<NotifView>();
-            notifs.add(new NotifView(mes));
-            ModelAndView view = new JNPPModelAndView("manageuser/notifs", ViewInfo.createInfo(session, alerts));
-            view.addObject("notifs", notifs);
-            return view;
+            try {
+                List<Notification> notifs = notifService.receiveNotifications(CSession.getClient(session));
+                List<NotifView> notifsView = new ArrayList<NotifView>();
+                for (Notification notif : notifs) {
+                    notifsView.add(new NotifView(notif));
+                }
+                ModelAndView view = new JNPPModelAndView("manageuser/notifs", ViewInfo.createInfo(session, alerts));
+                view.addObject("notifs", notifsView);
+                notifService.seeAllNotications(CSession.getClient(session));
+                CSession.setHasNotif(session, false);
+                return view;
+            } catch (FakeClientException invalidClient) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    rm.addFlashAttribute("alerts", alerts);   
+                }
+                return new ModelAndView("redirect:/index.htm");
+            }
         }
         return new ModelAndView("redirect:/index.htm");
     }
@@ -342,6 +397,20 @@ public class CLink {
             CSession.setLanguage(session,Translator.Language.FR);
         if (!CSession.isConnected(session))
             return new ModelAndView("redirect:/index.htm");
+        Boolean hasNotif = CSession.getHasNotif(session);
+        if (!hasNotif) {  
+            try {
+                hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session)).size()>0;
+                CSession.setHasNotif(session, hasNotif);
+            } catch (FakeClientException invalidClient) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                }
+            }
+        }
         Client client = CSession.getClient(session);
         ModelAndView view = null;
         switch (client.getType()) {
