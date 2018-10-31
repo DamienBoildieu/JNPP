@@ -2,7 +2,7 @@ package jnpp.service.exceptions.movements;
 
 import jnpp.service.exceptions.ServiceException;
 
-public class MovementException extends ServiceException {
+public abstract class MovementException extends ServiceException {
 
     public MovementException() {}
 

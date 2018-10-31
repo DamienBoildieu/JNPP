@@ -5,8 +5,8 @@ import java.util.List;
 import jnpp.dao.entities.accounts.Account;
 import jnpp.dao.entities.accounts.DebitAuthorization;
 import jnpp.dao.entities.clients.Client;
-import jnpp.service.exceptions.accounts.DuplicatedAuthorizationException;
-import jnpp.service.exceptions.accounts.OwnerException;
+import jnpp.service.exceptions.duplicates.DuplicateDebitAuthorizationException;
+import jnpp.service.exceptions.owners.AccountOwnerException;
 import jnpp.service.exceptions.entities.FakeAccountException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeDebitAuthorizationException;
@@ -26,14 +26,14 @@ public interface IDebitAuthorizationService extends IService {
      * fait pas reference a un client existant.
      * @throws FakeAccountException Exception levee si l'entite account ne 
      * fait pas reference a un compte existant.
-     * @throws OwnerException Exception levee si le client n'est pas le 
+     * @throws AccountOwnerException Exception levee si le client n'est pas le 
      * proprietaire du compte.
-     * @throws DuplicatedAuthorizationException Exception levee si une 
+     * @throws DuplicateDebitAuthorizationException Exception levee si une 
      * autorisation identique existe deja. */
     DebitAuthorization authorizeDebit(Client client, Account account, 
             String ribTo)
-            throws FakeClientException, FakeAccountException, OwnerException,
-            DuplicatedAuthorizationException;
+            throws FakeClientException, FakeAccountException, AccountOwnerException,
+            DuplicateDebitAuthorizationException;
     
     /** Supprime une autorisation de prelevement. 
      * @param client Client supprimant l'autorisation de prelevement sur son
@@ -43,11 +43,11 @@ public interface IDebitAuthorizationService extends IService {
      * fait pas reference a un client existant.
      * @throws FakeDebitAuthorizationException Exception levee si l'entite 
      * authorization ne fait pas reference a une autorisation existante.
-     * @throws OwnerException Exception levee si le client n'est pas le 
+     * @throws AccountOwnerException Exception levee si le client n'est pas le 
      * proprietaire du compte. */
     void deleteAuthorization(Client client, DebitAuthorization authorization)
             throws FakeClientException, FakeDebitAuthorizationException,
-            OwnerException;            
+            AccountOwnerException;            
     
     /** Retourne une liste des autorisations de prelevements sur les comptes 
      * d'un client. 
@@ -67,11 +67,11 @@ public interface IDebitAuthorizationService extends IService {
      * fait pas reference a un client existant.
      * @throws FakeAccountException Exception levee si l'entite account ne 
      * fait pas reference a un compte existant.
-     * @throws OwnerException Exception levee si le client n'est pas le 
+     * @throws AccountOwnerException Exception levee si le client n'est pas le 
      * proprietaire du compte. */
     List<DebitAuthorization> getDebitAuthorizations(Client client, 
             Account account)
-            throws FakeClientException, FakeAccountException, OwnerException;   
+            throws FakeClientException, FakeAccountException, AccountOwnerException;   
     
     /** Retourne une liste des ribs des comptes sur lesquels un client est 
      * autorise a effectuer des prelevements. 
@@ -79,7 +79,7 @@ public interface IDebitAuthorizationService extends IService {
      * @return Liste  de ribs.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant. */
-    List<String> getDebitAuthorizedRibs(Client client)
+    List<String> getAuthorizedAccountsToDebit(Client client)
             throws FakeClientException;
     
     /** Indique si un client est autorise a effectuer un prelevement sur un 

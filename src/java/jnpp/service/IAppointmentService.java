@@ -7,10 +7,11 @@ import jnpp.dao.entities.Appointment;
 import jnpp.dao.entities.Appointment.Status;
 import jnpp.dao.entities.clients.Advisor;
 import jnpp.dao.entities.clients.Client;
-import jnpp.service.exceptions.WrongAdvisorException;
+import jnpp.service.exceptions.owners.AdvisorOwnerException;
 import jnpp.service.exceptions.entities.FakeAdvisorException;
 import jnpp.service.exceptions.entities.FakeAppointmentException;
 import jnpp.service.exceptions.entities.FakeClientException;
+import jnpp.service.exceptions.owners.AppointmentOwnerException;
 
 /** Service de gestion des rendez-vous.
  * @author Pierre Bourquat
@@ -58,18 +59,24 @@ public interface IAppointmentService extends IService {
      * fait pas reference a un client existant.
      * @throws FakeAdvisorException Exception levee si l'entite advisor ne 
      * fait pas reference a un conseillier existant.
-     * @throws WrongAdvisorException Exception levee si le client n'a pas pour 
+     * @throws AdvisorOwnerException Exception levee si le client n'a pas pour 
      * conseiller le conseiller specifie. */
     Appointment makeAppointment(Client client, Advisor advisor, Date date) 
             throws FakeClientException, FakeAdvisorException,
-            WrongAdvisorException;
+            AdvisorOwnerException;
     
     /** Annule un rendez-vous.
+     * @param client Client proprietaire du rendez-vous.
      * @param appointment Rendez-vous annule.
+     * @throws FakeClientException Exception levee si l'entite client ne 
+     * fait pas reference a un client existant.
      * @throws FakeAppointmentException Exception levee si le rendez-vous ne
-     * fait pas reference a un rendez-vous existant. */
-    void cancelAppointment(Appointment appointment)
-            throws FakeAppointmentException;
+     * fait pas reference a un rendez-vous existant.
+     * @throws AppointmentOwnerException Exception levee si le client n'est 
+     * proprietaire du rendez-vous. */
+    void cancelAppointment(Client client, Appointment appointment)
+            throws FakeClientException, FakeAppointmentException, 
+            AppointmentOwnerException;
     
     /** Annule tous les rendez-vous d'un client. 
      * @param client Client concerne.

@@ -1,6 +1,8 @@
-package jnpp.service.exceptions.accounts;
+package jnpp.service.exceptions.owners;
 
-public class OwnerException extends AccountException {
+import jnpp.service.exceptions.ServiceException;
+
+public abstract class OwnerException extends ServiceException {
 
     public OwnerException() {}
 

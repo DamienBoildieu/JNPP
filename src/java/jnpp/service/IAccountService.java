@@ -17,14 +17,12 @@ import jnpp.dao.entities.clients.Private;
 import jnpp.dao.entities.movements.Movement;
 import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.accounts.ClosureRequestException;
-import jnpp.service.exceptions.accounts.DuplicatedAccountException;
-import jnpp.service.exceptions.accounts.DuplicatedAuthorizationException;
-import jnpp.service.exceptions.accounts.OwnerException;
+import jnpp.service.exceptions.duplicates.DuplicateAccountException;
+import jnpp.service.exceptions.owners.AccountOwnerException;
 import jnpp.service.exceptions.accounts.UnknownIdentityException;
 import jnpp.service.exceptions.entities.FakeAccountException;
 import jnpp.service.exceptions.entities.FakeBookException;
 import jnpp.service.exceptions.entities.FakeClientException;
-import jnpp.service.exceptions.entities.FakeDebitAuthorizationException;
 
 /** Service gerant les comptes bancaires.
  * @author Pierre Bourquat
@@ -52,10 +50,10 @@ public interface IAccountService extends IService {
      * @return L'entite du compte courant ouvert.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant.
-     * @throws DuplicatedAccountException Exception levee si le client possede
+     * @throws DuplicateAccountException Exception levee si le client possede
      * deja un compte courant. */
     CurrentAccount openCurrentAccount(Client client)
-            throws FakeClientException, DuplicatedAccountException;
+            throws FakeClientException, DuplicateAccountException;
     
     /** Clot un compte courant. Un compte courant non vide ne peut etre clos.
      * @param client Proprietaire du compte.
@@ -66,11 +64,11 @@ public interface IAccountService extends IService {
      * fait pas reference a un compte existant.
      * @throws ClosureException Exception levee si le compte ne peut pas etre
      * clos.
-     * @throws OwnerException Exception levee si le client n'est pas le 
+     * @throws AccountOwnerException Exception levee si le client n'est pas le 
      * proprietaire du compte. */
     void closeCurrentAccount(Client client, CurrentAccount account)
             throws FakeClientException, FakeAccountException, ClosureException,
-            OwnerException;
+            AccountOwnerException;
     
     /** Ouvre un compte joint. Un compte joint ne peut appartenir qu'a des
      * particuliers.
@@ -96,11 +94,11 @@ public interface IAccountService extends IService {
      * clos.
      * @throws ClosureRequestException Exception levee si tous les autres 
      * proprietaire n'ont pas demande la clos du compte joint.
-     * @throws OwnerException Exception levee si le client n'est pas le 
+     * @throws AccountOwnerException Exception levee si le client n'est pas le 
      * proprietaire du compte. */
     void closeJointAccount(Private client, JointAccount account)
             throws FakeClientException, FakeAccountException, ClosureException, 
-            ClosureRequestException, OwnerException;
+            ClosureRequestException, AccountOwnerException;
     
     /** Ouvre un compte livret. Seul les particuliers peuvent ouvrir un compte
      * livret.
@@ -111,11 +109,11 @@ public interface IAccountService extends IService {
      * fait pas reference a un client existant.
      * @throws FakeBookException Exception levee si l'entite book ne fait pas
      * reference a un livret existant.
-     * @throws DuplicatedAccountException Exception levee si le particulier 
+     * @throws DuplicateAccountException Exception levee si le particulier 
      * possede deja un compte livret de ce type. */
     SavingAccount openSavingAccount(Private client, SavingBook book)
             throws FakeClientException, FakeBookException, 
-            DuplicatedAccountException;
+            DuplicateAccountException;
     
     /** Clot un compte livret. Un compte livret non vide ne peut etre clos.
      * @param client Particulier proprietaire du compte livret.
@@ -126,21 +124,21 @@ public interface IAccountService extends IService {
      * fait pas reference a un compte existant.
      * @throws ClosureException Exception levee si le compte ne peut pas etre
      * clos.
-     * @throws OwnerException Exception levee si le client n'est pas le 
+     * @throws AccountOwnerException Exception levee si le client n'est pas le 
      * proprietaire du compte. */
     void closeSavingAccount(Private client, SavingAccount account)
             throws FakeClientException, FakeAccountException, ClosureException, 
-            OwnerException;
+            AccountOwnerException;
     
     /** Ouvre un compte d'actions. 
      * @param client Proprietaire du compte.
      * @return L'entite du compte action ouvert.
      * @throws FakeClientException Exception levee si l'entite client ne 
      * fait pas reference a un client existant.
-     * @throws DuplicatedAccountException Exception levee si le particulier 
+     * @throws DuplicateAccountException Exception levee si le particulier 
      * possede deja un compte d'actions. */
     ShareAccount openShareAccount(Client client)
-            throws FakeClientException, DuplicatedAccountException;
+            throws FakeClientException, DuplicateAccountException;
     
     /** Clot un compte d'actions. Un compte d'actions non vide ne peut etre 
      * clos.
@@ -152,11 +150,11 @@ public interface IAccountService extends IService {
      * fait pas reference a un compte existant.
      * @throws ClosureException Exception levee si le compte ne peut pas etre
      * clos.
-     * @throws OwnerException Exception levee si le client n'est pas le 
+     * @throws AccountOwnerException Exception levee si le client n'est pas le 
      * proprietaire du compte. */
     void closeShareAccount(Client client, ShareAccount account)
             throws FakeClientException, FakeAccountException, ClosureException, 
-            OwnerException;
+            AccountOwnerException;
     
     /** Retourne toutes les transactions d'un client.
      * @param client Client concerne.

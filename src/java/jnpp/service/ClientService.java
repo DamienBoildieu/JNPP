@@ -19,9 +19,9 @@ import jnpp.dao.entities.clients.Professional;
 import jnpp.dao.repositories.IClientDAO;
 import jnpp.dao.repositories.IIdentifierDAO;
 import jnpp.service.exceptions.ClosureException;
-import jnpp.service.exceptions.clients.BeOfAgeException;
-import jnpp.service.exceptions.clients.DuplicatedClientException;
-import jnpp.service.exceptions.clients.InvalidInformationException;
+import jnpp.service.exceptions.clients.AgeException;
+import jnpp.service.exceptions.duplicates.DuplicateClientException;
+import jnpp.service.exceptions.clients.InformationException;
 import jnpp.service.exceptions.entities.FakeClientException;
 
 import org.springframework.stereotype.Service;
@@ -63,18 +63,18 @@ public class ClientService implements IClientService {
     public void signUp(Gender gender, String firstname, String lastname, 
             Date birthday, String email, Integer number, String street, 
             String city, String state, String phone) 
-            throws DuplicatedClientException, BeOfAgeException, 
-            InvalidInformationException {
+            throws DuplicateClientException, AgeException, 
+            InformationException {
         if (gender == null || firstname == null || lastname == null ||
                 birthday == null || email == null || number == null || 
                 street == null || city == null || state == null ||
                 phone == null) throw new IllegalArgumentException();
-        if (computeAge(birthday) < 18) throw new BeOfAgeException();      
+        if (computeAge(birthday) < 18) throw new AgeException();      
         validEmail(email);
         validAddress(new Address(number, street, city, state));
         validPhone(phone);
         if (clientDAO.privateExist(gender, firstname, lastname)) 
-            throw new DuplicatedClientException();
+            throw new DuplicateClientException();
         Private client = new Private(gender, firstname, lastname, birthday, 
                 email, number, street, city, state, phone, true);
         client = (Private) clientDAO.save(client);
@@ -88,7 +88,7 @@ public class ClientService implements IClientService {
             String ownerFirstname, String ownerLastname, String email, 
             Integer number, String street, String city, String state, 
             String phone) 
-            throws DuplicatedClientException, InvalidInformationException {     
+            throws DuplicateClientException, InformationException {     
         if (name == null || ownerGender == null || ownerFirstname == null || 
                 ownerLastname == null || email == null || number == null ||
                 street == null || city == null || state == null || 
@@ -97,7 +97,7 @@ public class ClientService implements IClientService {
         validAddress(new Address(number, street, city, state));
         validPhone(phone);    
         if (clientDAO.professionalExist(name)) 
-            throw new DuplicatedClientException();  
+            throw new DuplicateClientException();  
         Professional client = new Professional(name, ownerGender, 
                 ownerFirstname, ownerLastname, email, number, street, city, 
                 state, phone, true);
@@ -111,7 +111,7 @@ public class ClientService implements IClientService {
     public Client update(Client client, String email, 
             Integer number, String street, String city, String state, 
             String phone) 
-            throws InvalidInformationException, FakeClientException {
+            throws InformationException, FakeClientException {
         if (client == null) throw new IllegalArgumentException();
         checkFake(client);
         if (email == null && number == null && street == null && 
@@ -206,13 +206,13 @@ public class ClientService implements IClientService {
     }
     
     private static void validEmail(String email) 
-            throws InvalidInformationException {}
+            throws InformationException {}
     
     private static void validAddress(Address address) 
-            throws InvalidInformationException {}
+            throws InformationException {}
     
     private static void validPhone(String phone) 
-            throws InvalidInformationException {}
+            throws InformationException {}
     
     private static int computeAge(Date date) {
         return Period.between(date.toInstant().atZone(ZoneId.systemDefault()).

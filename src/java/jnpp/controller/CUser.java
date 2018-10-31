@@ -19,10 +19,9 @@ import jnpp.dao.entities.clients.Gender;
 import jnpp.dao.entities.clients.Private;
 import jnpp.dao.entities.clients.Professional;
 import jnpp.service.IClientService;
-import jnpp.service.exceptions.clients.BeOfAgeException;
-import jnpp.service.exceptions.clients.DuplicatedClientException;
-import jnpp.service.exceptions.clients.InvalidInformationException;
-import jnpp.service.exceptions.entities.FakeClientException;
+import jnpp.service.exceptions.clients.AgeException;
+import jnpp.service.exceptions.duplicates.DuplicateClientException;
+import jnpp.service.exceptions.clients.InformationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -189,7 +188,7 @@ public class CUser {
                     rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new ModelAndView("redirect:/signupsuccess.htm");
-            } catch (DuplicatedClientException dupliactedClient) {
+            } catch (DuplicateClientException dupliactedClient) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce client est déjà enregistré"));
                 } else {
@@ -198,7 +197,7 @@ public class CUser {
                     rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
-            } catch (BeOfAgeException age) {
+            } catch (AgeException age) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Un client ne peut pas être mineur"));
                 } else {
@@ -207,7 +206,7 @@ public class CUser {
                     rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
-            } catch (InvalidInformationException invalidFormat) {
+            } catch (InformationException invalidFormat) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
                 } else {
@@ -279,7 +278,7 @@ public class CUser {
                     rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new ModelAndView("redirect:/signupsuccess.htm");
-            } catch (DuplicatedClientException dupliactedClient) {
+            } catch (DuplicateClientException dupliactedClient) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce client est déjà enregistré"));
                 } else {
@@ -287,8 +286,8 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce client est déjà enregistré"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
+            } catch (InformationException invalidFormat) {
                 return new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
-            } catch (InvalidInformationException invalidFormat) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
                 } else {
