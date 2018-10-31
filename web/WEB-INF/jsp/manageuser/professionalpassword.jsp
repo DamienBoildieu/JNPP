@@ -16,7 +16,7 @@
                             <div class="card blue s12">
                                 <p class="flow-text white-text">Changez votre mot de passe</p>
                             </div>
-                            <form method="POST" action="privatepassword.htm">
+                            <form method="POST" action="professionalpassword.htm">
                                 <div class="row">
                                     <div class="input-field col s12">
                                         <label for="id">Votre identifiant</label> <input type="text"
@@ -33,6 +33,12 @@
                                     <div class="input-field col s12">
                                         <label for="lastName">Votre nom de famille</label> <input type="text"
                                                                                          class="validate" name="lastName" id="lastName" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <label for="company">Votre entreprise</label> <input type="text"
+                                                                                         class="validate" name="company" id="company" required>
                                     </div>
                                 </div>
                                 <div class="row">

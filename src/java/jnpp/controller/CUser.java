@@ -13,7 +13,7 @@ import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.controller.views.Translator;
-import jnpp.controller.views.info.UnconnectedInfo;
+import jnpp.controller.views.info.ViewInfo;
 import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.clients.Gender;
 import jnpp.dao.entities.clients.Private;
@@ -22,6 +22,7 @@ import jnpp.service.IClientService;
 import jnpp.service.exceptions.clients.BeOfAgeException;
 import jnpp.service.exceptions.clients.DuplicatedClientException;
 import jnpp.service.exceptions.clients.InvalidInformationException;
+import jnpp.service.exceptions.entities.FakeClientException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -65,18 +66,7 @@ public class CUser {
             Client client = this.clientService.signIn(id, password);
             if (client!=null) {
                 CSession.setHasNotif(session, false);
-                switch (client.getType()) {
-                    case PRIVATE:
-                        Private privateClient = (Private)client;
-                        CSession.setUserName(session, privateClient.getIdentity().getFirstname() + " " + privateClient.getIdentity().getLastname());
-                        break;
-                    case PROFESIONAL:
-                        Professional pro = (Professional)client;
-                        CSession.setUserName(session, pro.getName());
-                        break;
-                    default:
-                        throw new AssertionError(client.getType().name());                
-                }
+                CSession.setClient(session, client);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Connexion réussie"));
                 } else {
@@ -90,9 +80,9 @@ public class CUser {
                 AlertMessage error = new AlertMessage(AlertEnum.ERROR, "Nom d'utilisateur ou mot de passe incorrect");
                 if (alerts != null) {
                     alerts.add(error);
-                    return new JNPPModelAndView("manageuser/connect", new UnconnectedInfo(alerts));
+                    return new JNPPModelAndView("manageuser/connect",ViewInfo.createInfo(session, alerts));
                 } else {
-                    return new JNPPModelAndView("manageuser/connect", new UnconnectedInfo(error));
+                    return new JNPPModelAndView("manageuser/connect", ViewInfo.createInfo(session, error));
                 } 
             }
         }
@@ -183,10 +173,9 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Sexe invalide"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/privatesignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
             }
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date birthday = format.parse(birthdayStr);
+            Date birthday = new SimpleDateFormat("yyyy-MM-dd").parse(birthdayStr);
             Integer streetNbr = Integer.parseInt(streetNbrStr);
             //Call service
             try {
@@ -208,7 +197,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce client est déjà enregistré"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/privatesignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
             } catch (BeOfAgeException age) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Un client ne peut pas être mineur"));
@@ -217,7 +206,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Un client ne peut pas être mineur"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/privatesignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
             } catch (InvalidInformationException invalidFormat) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
@@ -226,7 +215,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/privatesignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
             }
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
@@ -275,7 +264,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Sexe invalide"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/professionalsignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
             }
             Integer streetNbr = Integer.parseInt(streetNbrStr);
             //call service
@@ -298,7 +287,7 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce client est déjà enregistré"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/professionalsignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
             } catch (InvalidInformationException invalidFormat) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
@@ -307,9 +296,220 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new JNPPModelAndView("signup/professionalsignup", new UnconnectedInfo(alerts));
+                return new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
             }
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }
+    
+    /**
+     * Requête du formulaire de perte de mot de passe d'un particulier
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return Une redirection vers le menu utilisateur si la demande a réussie, une redirection vers le formulaire de mot de passe si elle a échouée,
+     * une redireciton vers l'index si l'utilisateur était déjà connecté
+     * @throws Exception 
+     */
+    @RequestMapping(value = "privatepassword", method = RequestMethod.POST)
+    protected ModelAndView privateResetPassword(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session)) {
+            String id = request.getParameter("id");
+            String firstName = request.getParameter("firstName");
+            String lastName = request.getParameter("lastName");
+            String email = request.getParameter("email");
+            if (clientService.resetPassword(id, firstName, lastName, email)) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Demande de nouveau mot de passe accepté"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Demande de nouveau mot de passe accepté"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new ModelAndView("redirect:/passwordsuccess.htm");
+            } else {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Aucun compte associé à ces informations n'est enregistré chez nous"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Aucun compte associé à ces informations n'est enregistré chez nous"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new JNPPModelAndView("manageuser/privatepassword", ViewInfo.createInfo(session, alerts));
+            }
+
+        }
+        return new ModelAndView("redirect:/index.htm"); //ne devrait pas pouvoir arriver
+    }
+    /**
+     * Requête du formulaire de perte de mot de passe d'un professionnel
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return Une redirection vers le menu utilisateur si la demande a réussie, une redirection vers le formulaire de mot de passe si elle a échouée,
+     * une redireciton vers l'index si l'utilisateur était déjà connecté
+     * @throws Exception 
+     */
+    @RequestMapping(value = "professionalpassword", method = RequestMethod.POST)
+    protected ModelAndView professionalResetPassword(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (!CSession.isConnected(session)) {
+            String id = request.getParameter("id");
+            String firstName = request.getParameter("firstName");
+            String lastName = request.getParameter("lastName");
+            String company = request.getParameter("company");
+            String email = request.getParameter("email");
+            if (clientService.resetPassword(id, company, firstName, lastName, email)) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Demande de nouveau mot de passe accepté"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Demande de nouveau mot de passe accepté"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new ModelAndView("redirect:/passwordsuccess.htm");
+            } else {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Aucun compte associé à ces informations n'est enregistré chez nous"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Aucun compte associé à ces informations n'est enregistré chez nous"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new JNPPModelAndView("manageuser/professionalpassword", ViewInfo.createInfo(session, alerts));
+            }
+
+        }
+        return new ModelAndView("redirect:/index.htm"); //ne devrait pas pouvoir arriver
+    }
+    /**
+     * Requête de changement de mot de passe
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return La vue d'information client
+     * @throws Exception 
+     */
+    @RequestMapping(value = "changepassword", method = RequestMethod.POST)
+    protected ModelAndView changePassword(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm, String view) throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (CSession.isConnected(session)) {
+            String old = request.getParameter("oldpsswd");
+            String newp = request.getParameter("newpsswd");
+            String confp = request.getParameter("confirmpsswd");
+            if (!newp.equals(confp)) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Les deux champs de nouveau mot de passe doivent correspondre"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Les deux champs de nouveau mot de passe doivent correspondre"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                
+                return new ModelAndView("redirect:/userinfo.htm");
+            }
+            try {
+                clientService.updatePassword(CSession.getClient(session), old, newp);
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Mise à jour réussie"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Mise à jour réussie"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new ModelAndView("redirect:/userinfo.htm");
+            } catch (FakeClientException invalidClient) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new ModelAndView("redirect:/userinfo.htm");
+            }
+        }
+        return new ModelAndView("redirect:/index.htm"); //ne devrait pas pouvoir arriver
+    }
+    /**
+     * Requête du formulaire de changement d'information d'un utilisateur
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return La vue d'information client
+     * @throws Exception 
+     */
+    @RequestMapping(value = "editinfo", method = RequestMethod.POST)
+    private ModelAndView validateInfo(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm, String view)
+            throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (CSession.isConnected(session)) {
+            //Get parameters
+            String email = request.getParameter("email");
+            String streetNbrStr = request.getParameter("streetNbr");
+            String street = request.getParameter("street");
+            String city = request.getParameter("city");
+            String country = request.getParameter("country");  
+            String phone = request.getParameter("phone");
+
+            Integer streetNbr = Integer.parseInt(streetNbrStr);
+            //Call service
+            try {
+                Client client = clientService.update(CSession.getClient(session), email, streetNbr, street, city, country, phone);
+                CSession.setClient(session, client);
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Mise à jour réussie"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Mise à jour réussie"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new ModelAndView("redirect:/userinfo.htm");
+            } catch (FakeClientException invalidClient) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new ModelAndView("redirect:/userinfo.htm");
+            } catch (InvalidInformationException invalidFormat) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new ModelAndView("redirect:/userinfo.htm");
+            }
+        }
+        return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
+    } 
 }

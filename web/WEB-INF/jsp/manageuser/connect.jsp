@@ -29,7 +29,7 @@
                                 <div class="row">
                                     <div class="col s12">
                                         <div class="input-field">
-                                            <label for="psswd"> Mot de passe </label> <input type="password"
+                                            <label for="password"> Mot de passe </label> <input type="password"
                                                                                              class="validate" name="password" id="password">
                                         </div>
                                     </div>
