@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.Query;
 
 import jnpp.dao.entities.accounts.Account;
+import jnpp.dao.entities.accounts.SavingBook;
 import jnpp.dao.entities.clients.Client;
 
 import org.springframework.stereotype.Repository;
@@ -36,5 +37,15 @@ public class AccountDAO extends GenericDAO<Account> implements IAccountDAO {
         Query q = getEm().createNamedQuery("find_all_rib");
         return q.getResultList();
     } 
+  
+    @Transactional(readOnly = true)
+    @Override
+    public boolean hasBookAccount(Client client, SavingBook book) {
+        Query q = getEm().createNamedQuery("has_saving_account",  Long.class);
+        q.setParameter("book_id", client.getId());
+        q.setParameter("client_id", client.getId());
+        Long count = (Long) q.getSingleResult();
+        return count != 0;
+    }
     
 }

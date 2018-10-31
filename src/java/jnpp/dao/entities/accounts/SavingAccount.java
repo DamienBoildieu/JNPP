@@ -6,9 +6,18 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import jnpp.dao.entities.clients.Client;
 
 @Entity
 @DiscriminatorValue(value = Account.Type.Values.SAVING)
+@NamedQueries({
+    @NamedQuery(
+        name = "has_saving_account",
+        query = "SELECT COUNT(a) FROM SavingAccount a "
+                + "WHERE a.savingBook.id = :book_id"
+                + "  AND a.client.id = :client_id")})
 public class SavingAccount extends Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -21,6 +30,12 @@ public class SavingAccount extends Account implements Serializable {
     private SavingBook savingBook;   
     
     public SavingAccount() {}
+    
+    public SavingAccount(String rib, Client client, Double money, Currency currency) {
+        super(rib, client);
+        this.money = money;
+        this.currency = currency;
+    }
     
     @Override
     public Type getType() {
