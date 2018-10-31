@@ -21,6 +21,7 @@ import jnpp.dao.entities.clients.Private;
 import jnpp.dao.entities.movements.Movement;
 import jnpp.dao.repositories.IAccountDAO;
 import jnpp.dao.repositories.IClientDAO;
+import jnpp.dao.repositories.ISavingBookDAO;
 import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.accounts.ClosureRequestException;
 import jnpp.service.exceptions.accounts.UnknownIdentityException;
@@ -47,6 +48,8 @@ public class AccountService implements IAccountService {
     IClientDAO clientDAO;
     @Resource
     IAccountDAO accountDAO;
+    @Resource
+    ISavingBookDAO savingBookDAO;
     
     private final Random random = new Random();
     
@@ -93,7 +96,14 @@ public class AccountService implements IAccountService {
 
     @Override
     public SavingAccount openSavingAccount(Private client, SavingBook book) throws FakeClientException, FakeBookException, DuplicateAccountException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (client == null) throw new IllegalArgumentException();
+        checkFake(client);
+        checkFake(book);
+        if (accountDAO.hasBookAccount(client, book)) throw new DuplicateAccountException();
+        String rib = generateNewRib();
+        SavingAccount account = new SavingAccount(rib, client, DEFAULT_MONEY, DEFAULT_CURRENCY);
+        account = (SavingAccount) accountDAO.save(account);
+        return account;
     }
 
     @Override
@@ -143,6 +153,11 @@ public class AccountService implements IAccountService {
     
     private void checkFake(Client client) throws FakeClientException {
         if (CHECK_FAKE_ENTITY && clientDAO.isFake(client)) 
+            throw new FakeClientException();
+    }
+    
+    private void checkFake(SavingBook book) throws FakeClientException {
+        if (CHECK_FAKE_ENTITY && savingBookDAO.isFake(book)) 
             throw new FakeClientException();
     }
     
