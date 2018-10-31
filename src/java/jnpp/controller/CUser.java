@@ -16,12 +16,13 @@ import jnpp.controller.views.Translator;
 import jnpp.controller.views.info.ViewInfo;
 import jnpp.dao.entities.clients.Client;
 import jnpp.dao.entities.clients.Gender;
-import jnpp.dao.entities.clients.Private;
-import jnpp.dao.entities.clients.Professional;
 import jnpp.service.IClientService;
+import jnpp.service.INotificationService;
+import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.clients.AgeException;
 import jnpp.service.exceptions.duplicates.DuplicateClientException;
 import jnpp.service.exceptions.clients.InformationException;
+import jnpp.service.exceptions.entities.FakeClientException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,6 +42,9 @@ public class CUser {
      */
     @Autowired
     IClientService clientService;
+    
+    @Autowired
+    INotificationService notifService;
     /**
      * Requête du formulaire de connexion, essaie de connecter l'utilisateur
      * @param model le model contient les alertes si il y a eu un redirect
@@ -64,7 +68,8 @@ public class CUser {
             String password = request.getParameter("password");
             Client client = this.clientService.signIn(id, password);
             if (client!=null) {
-                CSession.setHasNotif(session, false);
+                boolean hasNotif = notifService.receiveUnseenNotifications(client).size()>0;
+                CSession.setHasNotif(session, hasNotif);
                 CSession.setClient(session, client);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Connexion réussie"));
@@ -170,7 +175,6 @@ public class CUser {
                 } else {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Sexe invalide"));
-                    rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
             }
@@ -194,7 +198,6 @@ public class CUser {
                 } else {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce client est déjà enregistré"));
-                    rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
             } catch (AgeException age) {
@@ -203,7 +206,6 @@ public class CUser {
                 } else {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Un client ne peut pas être mineur"));
-                    rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
             } catch (InformationException invalidFormat) {
@@ -212,7 +214,6 @@ public class CUser {
                 } else {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
-                    rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
             }
@@ -261,7 +262,6 @@ public class CUser {
                 } else {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Sexe invalide"));
-                    rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
             }
@@ -286,14 +286,13 @@ public class CUser {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce client est déjà enregistré"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-            } catch (InformationException invalidFormat) {
                 return new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
+            } catch (InformationException invalidFormat) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
                 } else {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
-                    rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
             }
@@ -339,7 +338,6 @@ public class CUser {
                 } else {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Aucun compte associé à ces informations n'est enregistré chez nous"));
-                    rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new JNPPModelAndView("manageuser/privatepassword", ViewInfo.createInfo(session, alerts));
             }
@@ -386,7 +384,6 @@ public class CUser {
                 } else {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Aucun compte associé à ces informations n'est enregistré chez nous"));
-                    rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new JNPPModelAndView("manageuser/professionalpassword", ViewInfo.createInfo(session, alerts));
             }
@@ -498,7 +495,7 @@ public class CUser {
                     rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new ModelAndView("redirect:/userinfo.htm");
-            } catch (InvalidInformationException invalidFormat) {
+            } catch (InformationException invalidFormat) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
                 } else {
@@ -510,5 +507,55 @@ public class CUser {
             }
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
-    } 
+    }
+    /**
+     * Requête de fermeture de compte client
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return L'index si réussite, la vue userInfo sinon
+     * @throws Exception 
+     */
+    @RequestMapping(value = "closeuser", method = RequestMethod.POST)
+    protected ModelAndView closeUser(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm, String view) throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (CSession.isConnected(session)) {
+            try {
+                clientService.close(CSession.getClient(session));
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre compte a bien été cloturé"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre compte a bien été cloturé"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new ModelAndView("redirect:/index.htm");
+            } catch (ClosureException closure) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Votre compte client ne peut être cloturé, assuerz-vous d'avoir fermé tout vos comptes"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre compte client ne peut être cloturé, assuerz-vous d'avoir fermé tout vos comptes"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new ModelAndView("redirect:/userInfo.htm");
+            } catch (FakeClientException invalidClient) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+                return new ModelAndView("redirect:/userinfo.htm");
+            }
+        }
+        return new ModelAndView("redirect:/index.htm"); //ne devrait pas pouvoir arriver
+    }
 }
