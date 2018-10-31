@@ -10,12 +10,20 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import jnpp.dao.entities.clients.Client;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+@NamedQueries({
+    @NamedQuery(
+        name = "has_account",
+        query = "SELECT COUNT(a) FROM Account a "
+                + "WHERE a.client.id = :client_id")
+})
 public abstract class Account implements Serializable {
 
     public static enum Type {

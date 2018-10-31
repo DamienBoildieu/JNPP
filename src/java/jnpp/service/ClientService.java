@@ -16,6 +16,7 @@ import jnpp.dao.entities.clients.Gender;
 import jnpp.dao.entities.clients.Identifier;
 import jnpp.dao.entities.clients.Private;
 import jnpp.dao.entities.clients.Professional;
+import jnpp.dao.repositories.IAccountDAO;
 import jnpp.dao.repositories.IClientDAO;
 import jnpp.dao.repositories.IIdentifierDAO;
 import jnpp.service.exceptions.ClosureException;
@@ -41,6 +42,8 @@ public class ClientService implements IClientService {
     IClientDAO clientDAO;
     @Resource
     IIdentifierDAO identifierDAO;
+    @Resource
+    IAccountDAO accountDAO;
     
     private final Random random = new Random();
     
@@ -137,7 +140,9 @@ public class ClientService implements IClientService {
 
     @Override
     public void close(Client client) throws ClosureException, FakeClientException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       if (client == null) throw new IllegalArgumentException();
+       checkFake(client);
+       if (accountDAO.hasAccount(client)) throw new ClosureException();
     }
 
     @Override
