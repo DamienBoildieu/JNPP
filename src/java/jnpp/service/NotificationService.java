@@ -62,6 +62,8 @@ public class NotificationService implements INotificationService {
         checkFake(client);
         checkFake(notification);
         notification = notificationDAO.find(notification.getId());
+        if (!client.getId().equals(notification.getClient().getId()))
+            throw new NotificationOwnerException();
         notification.setSeen(true);
         notificationDAO.save(notification);
     }
@@ -71,6 +73,11 @@ public class NotificationService implements INotificationService {
         checkFake(client);
         checkFake(notifications);
         Iterator<Notification> it = notifications.iterator();
+        while (it.hasNext()) {
+            Notification notification = it.next();
+            if (!client.getId().equals(notification.getClient().getId()))
+                throw new NotificationOwnerException();
+        }
         while (it.hasNext()) {
             Notification notification = it.next();
             notificationDAO.find(notification.getId());
