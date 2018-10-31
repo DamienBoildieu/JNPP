@@ -20,44 +20,50 @@ public class CSession {
      */
     public static void clearSession(HttpSession session) throws UnconnectedException {
         if (CSession.isConnected(session)) {
-            session.removeAttribute("userName");
+            session.removeAttribute("client");
             session.removeAttribute("hasNotif");
         } else {
             throw new UnconnectedException();
         }
     }
     
-    public static void setUserName(HttpSession session, String userName) {
-        if (session == null)
+    public static void deleteSession(HttpSession session) throws NullSessionException {
+        if (session==null)
             throw new NullSessionException();
-        session.setAttribute("userName", userName);
+        session.invalidate();
     }
     
-    public static void setLanguage(HttpSession session, Translator.Language lang) {
+    public static void setClient(HttpSession session, Client client) throws NullSessionException {
+        if (session == null)
+            throw new NullSessionException();
+        session.setAttribute("client", client);
+    }
+    
+    public static void setLanguage(HttpSession session, Translator.Language lang) throws NullSessionException {
         if (session == null)
             throw new NullSessionException();
         session.setAttribute("language", lang);
     }
     
-    public static void setHasNotif(HttpSession session, boolean hasNotif) {
+    public static void setHasNotif(HttpSession session, boolean hasNotif) throws NullSessionException {
         if (session == null)
             throw new NullSessionException();
         session.setAttribute("hasNotif", hasNotif);
     }
     
-    public static String getUserName(HttpSession session) {
+    public static Client getClient(HttpSession session) throws NullSessionException {
         if (session == null)
             throw new NullSessionException();
-        return (String)session.getAttribute("userName");
+        return (Client)session.getAttribute("client");
     }
     
-    public static Translator.Language getLanguage(HttpSession session) {
+    public static Translator.Language getLanguage(HttpSession session) throws NullSessionException {
         if (session == null)
             throw new NullSessionException();
         return (Translator.Language)session.getAttribute("language");
     }
     
-    public static Boolean getHasNotif(HttpSession session) {
+    public static Boolean getHasNotif(HttpSession session) throws NullSessionException {
         if (session == null)
             throw new NullSessionException();
         return (Boolean)session.getAttribute("hasNotif");
@@ -68,6 +74,6 @@ public class CSession {
      * @return true si l'utilisateur a une session sur le site, false sinon
      */
     public static boolean isConnected(HttpSession session) {
-        return (session != null) && (session.getAttribute("userName") != null) && (session.getAttribute("hasNotif") != null);
+        return (session != null) && (session.getAttribute("client") != null) && (session.getAttribute("hasNotif") != null);
     }
 }

@@ -1,7 +1,9 @@
 package jnpp.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -340,19 +342,13 @@ public class CLink {
             CSession.setLanguage(session,Translator.Language.FR);
         if (!CSession.isConnected(session))
             return new ModelAndView("redirect:/index.htm");
-        Private client = new Private();
-        Identity identity = new Identity();
-        identity.setFirstname("to");
-        identity.setLastname("ta");
-        identity.setGender(Gender.MALE);
-        client.setIdentity(identity);
-        client.setEmail("bala@to.fr");
-        client.setBirthday(new GregorianCalendar(2018, Calendar.OCTOBER, 20).getTime());
-        client.setPhone("0549908657");
+        Client client = CSession.getClient(session);
         ModelAndView view = null;
         switch (client.getType()) {
             case PRIVATE:
                 view = new JNPPModelAndView("manageuser/privateinfo", ViewInfo.createInfo(session, alerts));
+                String birthday = new SimpleDateFormat("yyyy-MM-dd").format(((Private)client).getBirthday());
+                view.addObject("birthday", birthday);
                 break;
             case PROFESIONAL:
                 view = new JNPPModelAndView("manageuser/professionalinfo", ViewInfo.createInfo(session, alerts));
@@ -361,6 +357,7 @@ public class CLink {
                 throw new AssertionError(client.getType().name());     
         }
         view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
+        
         view.addObject("client", client);
         return view;
     }

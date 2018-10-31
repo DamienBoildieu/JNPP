@@ -6,6 +6,9 @@ import javax.servlet.http.HttpSession;
 import jnpp.controller.CSession;
 import jnpp.controller.exceptions.UnconnectedException;
 import jnpp.controller.views.alerts.AlertMessage;
+import jnpp.dao.entities.clients.Client;
+import jnpp.dao.entities.clients.Private;
+import jnpp.dao.entities.clients.Professional;
 
 /**
  * Classe contenant les informations nécessaires à une vue de l'application
@@ -54,21 +57,63 @@ public class ViewInfo {
     
     public static ViewInfo createInfo(HttpSession session) {
         if (CSession.isConnected(session)) {
-            return new ConnectedInfo(CSession.getUserName(session), CSession.getHasNotif(session));  
+            Client client = CSession.getClient(session);
+            String userName = "";
+            switch (client.getType()) {
+                case PRIVATE:
+                    Private priv = (Private)client;
+                    userName = priv.getIdentity().getFirstname() + " " + priv.getIdentity().getLastname();
+                    break;
+                case PROFESIONAL:
+                    Professional pro = (Professional)client;
+                    userName = pro.getName();
+                    break;
+                default:
+                    throw new AssertionError(client.getType().name());      
+            }
+            return new ConnectedInfo(userName, CSession.getHasNotif(session));  
         }
         return new UnconnectedInfo();
     }
     
     public static ViewInfo createInfo(HttpSession session, AlertMessage alert) {
         if (CSession.isConnected(session)) {
-            return new ConnectedInfo(CSession.getUserName(session), alert, CSession.getHasNotif(session));
+            Client client = CSession.getClient(session);
+            String userName = "";
+            switch (client.getType()) {
+                case PRIVATE:
+                    Private priv = (Private)client;
+                    userName = priv.getIdentity().getFirstname() + " " + priv.getIdentity().getLastname();
+                    break;
+                case PROFESIONAL:
+                    Professional pro = (Professional)client;
+                    userName = pro.getName();
+                    break;
+                default:
+                    throw new AssertionError(client.getType().name());      
+            }
+            return new ConnectedInfo(userName, alert, CSession.getHasNotif(session));
         }
         return new UnconnectedInfo(alert);
     }
     
     public static ViewInfo createInfo(HttpSession session, List<AlertMessage> alerts) {
         if (CSession.isConnected(session)) {
-            return new ConnectedInfo(CSession.getUserName(session), alerts, CSession.getHasNotif(session));
+            Client client = CSession.getClient(session);
+            String userName = "";
+            switch (client.getType()) {
+                case PRIVATE:
+                    Private priv = (Private)client;
+                    userName = priv.getIdentity().getFirstname() + " " + priv.getIdentity().getLastname();
+                    break;
+                case PROFESIONAL:
+                    Professional pro = (Professional)client;
+                    userName = pro.getName();
+                    break;
+                default:
+                    throw new AssertionError(client.getType().name());      
+            }
+            return new ConnectedInfo(userName, alerts, CSession.getHasNotif(session));
         }
         return new UnconnectedInfo(alerts);
     }
