@@ -44,7 +44,7 @@ public class ClientDAO extends GenericDAO<Client> implements IClientDAO {
         q.setParameter("firstname", identity.getFirstname());
         q.setParameter("lastname", identity.getLastname());
         Long count = (Long) q.getSingleResult();
-        return count != 0;
+        return count == 0;
     }
     
     @Transactional(readOnly = true)
@@ -57,7 +57,7 @@ public class ClientDAO extends GenericDAO<Client> implements IClientDAO {
         q.setParameter("firstname", owner.getFirstname());
         q.setParameter("lastname", owner.getLastname());
         Long count = (Long) q.getSingleResult();
-        return count != 0;
+        return count == 0;
     }
 
     @Transactional(readOnly = true)
