@@ -11,8 +11,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import jnpp.dao.entities.AdvisorEntity;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -62,14 +65,19 @@ public abstract class ClientEntity implements Serializable {
     @Column(nullable = false)
     private Boolean notify;
     
+    @ManyToOne
+    @JoinColumn(name = "advisor_fk")
+    private AdvisorEntity advisor;
+    
     public ClientEntity(String login, String password, String email, Integer number, String street, String city, 
-            String state, String phone, Boolean notify) {
+            String state, String phone, Boolean notify, AdvisorEntity advisor) {
         this.login = login;
         this.password = password;
         this.email = email;
         this.address = new Address(number, street, city, state);
         this.phone = phone;
         this.notify = notify;
+        this.advisor = advisor;
     }
     
     public ClientEntity() {}
@@ -122,6 +130,14 @@ public abstract class ClientEntity implements Serializable {
 
     public void setNotify(Boolean notify) {
         this.notify = notify;
+    }
+
+    public AdvisorEntity getAdvisor() {
+        return advisor;
+    }
+
+    public void setAdvisor(AdvisorEntity advisor) {
+        this.advisor = advisor;
     }
     
     @Override

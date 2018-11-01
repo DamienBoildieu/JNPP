@@ -1,5 +1,6 @@
 package jnpp.service.dto;
 
+import java.util.Date;
 import jnpp.dao.entities.MessageEntity;
 
 public class MessageDTO {
@@ -12,6 +13,7 @@ public class MessageDTO {
     }
         
     private final Direction direction;
+    private final Date date;
     private final String content;    
         
     public MessageDTO(MessageEntity message) {
@@ -25,11 +27,16 @@ public class MessageDTO {
             default:
                 direction = null;
         }
+        date = message.getDate();
         content = message.getContent();
     }
 
     public Direction getDirection() {
         return direction;
+    }
+
+    public Date getDate() {
+        return date;
     }
 
     public String getContent() {

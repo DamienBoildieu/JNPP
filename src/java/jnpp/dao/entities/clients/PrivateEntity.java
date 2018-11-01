@@ -12,6 +12,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import jnpp.dao.entities.AdvisorEntity;
 
 @Entity
 @DiscriminatorValue(value = ClientEntity.Type.Values.PRIVATE)
@@ -34,8 +35,8 @@ public class PrivateEntity extends ClientEntity implements Serializable {
     
     public PrivateEntity(String login, String password, Gender gender, String firstname, String lastname,
             Date birthday, String email, Integer number, String street, 
-            String city, String state, String phone, Boolean notify) {
-        super(login, password, email, number, street, city, state, phone, notify);
+            String city, String state, String phone, Boolean notify, AdvisorEntity advisor) {
+        super(login, password, email, number, street, city, state, phone, notify, advisor);
         identity = new Identity(gender, firstname, lastname);
         this.birthday = birthday;
     }

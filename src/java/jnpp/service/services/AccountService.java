@@ -27,6 +27,7 @@ import jnpp.service.dto.accounts.SavingBookDTO;
 import jnpp.service.dto.accounts.ShareAccountDTO;
 import jnpp.service.dto.accounts.ShareDTO;
 import jnpp.service.dto.movements.MovementDTO;
+import jnpp.service.exceptions.accounts.ClientTypeException;
 import jnpp.service.exceptions.accounts.UnknownIdentityException;
 
 public interface AccountService extends IService {
@@ -37,8 +38,8 @@ public interface AccountService extends IService {
     List<AccountDTO> getAccounts(String login) throws FakeClientException;
     
     CurrentAccountDTO openCurrentAccount(String login) throws DuplicateAccountException, FakeClientException;
-    JointAccountDTO openJointAccount(String login, List<Identity> identities) throws FakeClientException, UnknownIdentityException;
-    SavingAccountDTO openSavingAccount(String login, String name) throws FakeClientException, FakeSavingBookException, DuplicateAccountException;
+    JointAccountDTO openJointAccount(String login, List<Identity> identities) throws FakeClientException, UnknownIdentityException, ClientTypeException;
+    SavingAccountDTO openSavingAccount(String login, String name) throws FakeClientException, FakeSavingBookException, DuplicateAccountException, ClientTypeException;
     ShareAccountDTO openShareAccount(String login) throws FakeClientException, DuplicateAccountException;
     
     void closeAccount(String login, String rib) throws FakeClientException, FakeAccountException, AccountOwnerException, ClosureException, CloseRequestException;

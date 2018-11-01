@@ -5,12 +5,14 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 import javax.annotation.Resource;
 
 import jnpp.dao.entities.Address;
+import jnpp.dao.entities.AdvisorEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.Gender;
 import jnpp.dao.entities.Identity;
@@ -24,6 +26,7 @@ import jnpp.service.exceptions.entities.FakeClientException;
 
 import org.springframework.stereotype.Service;
 import jnpp.dao.repositories.AccountDAO;
+import jnpp.dao.repositories.AdvisorDAO;
 import jnpp.dao.repositories.ClientDAO;
 import jnpp.service.dto.clients.ClientDTO;
 
@@ -45,6 +48,8 @@ public class ClientServiceImpl implements ClientService {
     ClientDAO clientDAO;
     @Resource
     AccountDAO accountDAO;
+    @Resource
+    AdvisorDAO advisorDAO;
     
     private final Random random = new Random();
     
@@ -75,7 +80,10 @@ public class ClientServiceImpl implements ClientService {
         if (clientDAO.findPrivateByIdentity(gender, firstname, lastname) != null) throw new DuplicateClientException();
         String login = generateNewLogin();
         String password = generateRandomLogin();
-        PrivateEntity client = new PrivateEntity(login, password, gender, firstname, lastname, birthday, email, number, street, city, state, phone, DEFAULT_NOTIFY);
+        AdvisorEntity advisor = chooseAdvisor();
+        PrivateEntity client = new PrivateEntity(login, password, gender, firstname, 
+                lastname, birthday, email, number, street, city, state, phone, 
+                DEFAULT_NOTIFY, advisor);
         clientDAO.save(client);
     }
 
@@ -94,9 +102,10 @@ public class ClientServiceImpl implements ClientService {
             throw new DuplicateClientException();  
         String login = generateNewLogin();
         String password = generateRandomLogin();
+        AdvisorEntity advisor = chooseAdvisor();
         ProfessionalEntity client = new ProfessionalEntity(login, password, name, ownerGender, 
                 ownerFirstname, ownerLastname, email, number, street, city, 
-                state, phone, DEFAULT_NOTIFY);
+                state, phone, DEFAULT_NOTIFY, advisor);
         clientDAO.save(client);
     }
 
@@ -198,6 +207,13 @@ public class ClientServiceImpl implements ClientService {
             sb.append(PASSWORD_SALT.
                     charAt((int) (random.nextFloat() * PASSWORD_SALT.length())));
         return sb.toString();
+    }
+    
+    private AdvisorEntity chooseAdvisor() {
+        List<AdvisorEntity> advisors = advisorDAO.findAll();
+        if (advisors.isEmpty()) return null;
+        int index = random.nextInt(advisors.size());
+        return advisors.get(index);
     }
     
     private static boolean isEmailValid(String email) {

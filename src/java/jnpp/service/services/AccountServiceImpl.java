@@ -48,6 +48,7 @@ import jnpp.service.dto.accounts.SavingBookDTO;
 import jnpp.service.dto.accounts.ShareAccountDTO;
 import jnpp.service.dto.accounts.ShareDTO;
 import jnpp.service.dto.movements.MovementDTO;
+import jnpp.service.exceptions.accounts.ClientTypeException;
 
 @Service("AccountService")
 public class AccountServiceImpl implements AccountService {
@@ -118,10 +119,11 @@ public class AccountServiceImpl implements AccountService {
     }
     
     @Override
-    public JointAccountDTO openJointAccount(String login, List<Identity> identities) throws FakeClientException, UnknownIdentityException {
+    public JointAccountDTO openJointAccount(String login, List<Identity> identities) throws FakeClientException, UnknownIdentityException, ClientTypeException {
         if (login == null || identities == null || identities.size() < 2) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
+        if (client.getType() != ClientEntity.Type.PRIVATE) throw new ClientTypeException();
         List<ClientEntity> clients = new ArrayList<ClientEntity>();
         boolean clientFound = false;
         Iterator<Identity> ite = identities.iterator();
@@ -140,10 +142,11 @@ public class AccountServiceImpl implements AccountService {
     }
     
     @Override
-    public SavingAccountDTO openSavingAccount(String login, String name) throws FakeClientException, FakeSavingBookException, DuplicateAccountException {
+    public SavingAccountDTO openSavingAccount(String login, String name) throws FakeClientException, FakeSavingBookException, DuplicateAccountException, ClientTypeException {
         if (login == null || name == null) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
+        if (client.getType() != ClientEntity.Type.PRIVATE) throw new ClientTypeException();
         SavingBookEntity savingBook = savingBookDAO.findByName(name);
         if (savingBook == null) throw new FakeSavingBookException();
         if (accountDAO.hasSavingAccount(login, savingBook.getId())) throw new DuplicateAccountException();

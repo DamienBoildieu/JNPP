@@ -9,6 +9,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import jnpp.dao.entities.AdvisorEntity;
 
 @Entity
 @DiscriminatorValue(value = ClientEntity.Type.Values.PROFESSIONAL)
@@ -32,8 +33,8 @@ public class ProfessionalEntity extends ClientEntity implements Serializable {
     public ProfessionalEntity(String login, String password, String name, Gender ownerGender, 
             String ownerFirstname, String ownerLastname, String email, 
             Integer number, String street, String city, String state, 
-            String phone, Boolean notify) {
-        super(login, password, email, number, street, city, state, phone, notify);
+            String phone, Boolean notify, AdvisorEntity advisor) {
+        super(login, password, email, number, street, city, state, phone, notify, advisor);
         this.name = name;
         owner = new Identity(ownerGender, ownerFirstname, ownerLastname);
     }

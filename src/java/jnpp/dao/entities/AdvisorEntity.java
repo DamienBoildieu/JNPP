@@ -9,12 +9,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import jnpp.dao.entities.clients.ClientEntity;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(
+        name = "find_all_advisor",
+        query = "SELECT a FROM AdvisorEntity a")})
 public class AdvisorEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,12 +35,7 @@ public class AdvisorEntity implements Serializable {
     @Embedded
     private Address officeAdress;
     
-    @JoinTable(
-            name = "Advisor_Client",
-            joinColumns = @JoinColumn(name = "id_advisor"),
-            inverseJoinColumns = @JoinColumn(name = "id_client")
-    )
-    @OneToMany
+    @OneToMany(mappedBy = "advisor")
     private List<ClientEntity> clients = new ArrayList<ClientEntity>();
     
     public AdvisorEntity() {}
