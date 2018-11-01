@@ -14,11 +14,13 @@ public class AppointmentDTO {
         
     }
     
+    private final Long id;
     private final Date date;
     private final AdvisorDTO advisor;
     private final Status status;
     
     public AppointmentDTO(AppointmentEntity appointment) {
+        id = appointment.getId();
         date = appointment.getDate();
         advisor = new AdvisorDTO(appointment.getAdvisor());
         switch (appointment.getStatus()) {
@@ -37,6 +39,22 @@ public class AppointmentDTO {
             default:
                 status = null;
         }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public AdvisorDTO getAdvisor() {
+        return advisor;
+    }
+
+    public Status getStatus() {
+        return status;
     }
     
 }

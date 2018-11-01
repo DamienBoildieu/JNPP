@@ -29,23 +29,23 @@ import jnpp.dao.entities.clients.ClientEntity;
                 + "WHERE n.client.login = :login "
                 + "ORDER BY n.date DESC"),
     @NamedQuery(
-        name = "find_all_client_unseen_notification",
-        query = "SELECT n FROM Notification n "
-                + "WHERE n.client.id = :client_id "
+        name = "find_unseen_notification_by_login",
+        query = "SELECT n FROM NotificationEntity n "
+                + "WHERE n.client.login = :login "
                 + "  AND n.seen = false "
                 + "ORDER BY n.date DESC"),
     @NamedQuery(
-        name = "find_all_client_recent_unseen_notification",
-        query = "SELECT n FROM Notification n "
-                + "WHERE n.client.id = :client_id "
-                + "  AND NOT n.seen "
+        name = "find_unseen_recent_notification_by_login",
+        query = "SELECT n FROM NotificationEntity n "
+                + "WHERE n.client.login = :login "
+                + "  AND n.seen = false"
                 + "  AND n.date >= :date "
                 + "ORDER BY n.date DESC"),
     @NamedQuery(
-        name = "update_all_client_notification_seen",
-        query = "UPDATE Notification n "
+        name = "set_all_notification_seen_by_login",
+        query = "UPDATE NotificationEntity n "
                 + "SET n.seen = true "
-                + "WHERE n.client.id = :client_id")})
+                + "WHERE n.client.login = :login")})
 public abstract class NotificationEntity implements Serializable {
 
     public static enum Type {

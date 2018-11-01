@@ -21,38 +21,38 @@ public class NotificationDAOImpl extends GenericDAOImpl<NotificationEntity> impl
     
     @Transactional(readOnly = true)
     @Override
-    public List<NotificationEntity> findAllUnseen(Long clientId) {
-        Query q = getEm().createNamedQuery("find_all_client_unseen_notification", 
+    public List<NotificationEntity> findUnseenByLogin(String login) {
+        Query q = getEm().createNamedQuery("find_unseen_notification_by_login", 
                 NotificationEntity.class);
-        q.setParameter("client_id", clientId);
+        q.setParameter("login", login);
         return q.getResultList();
     }
     
     @Transactional(readOnly = true)
     @Override
-    public List<NotificationEntity> findAllUnseen(Long clientId, int n) {
-        Query q = getEm().createNamedQuery("find_all_client_unseen_notification", 
+    public List<NotificationEntity> findNUnseenByLogin(String login, int n) {
+        Query q = getEm().createNamedQuery("find_unseen_notification_by_login", 
                 NotificationEntity.class);
-        q.setParameter("client_id", clientId);
+        q.setParameter("login", login);
         q.setMaxResults(n);
         return q.getResultList();
     }
     
     @Transactional(readOnly = true)
     @Override
-    public List<NotificationEntity> findAllUnseen(Long clientId, Date date) {
-        Query q = getEm().createNamedQuery("find_all_client_recent_unseen_notification", 
+    public List<NotificationEntity> findUnseenRecentByLogin(String login, Date date) {
+        Query q = getEm().createNamedQuery("find_unseen_recent_notification_by_login", 
                 NotificationEntity.class);
-        q.setParameter("client_id", clientId);
+        q.setParameter("login", login);
         q.setParameter("date", date);
         return q.getResultList();
     }
-        
+            
     @Transactional(readOnly = true)
     @Override
-    public void updateAllToSeen(Long clientId) {
-        Query q = getEm().createNamedQuery("update_all_client_notification_seen");
-        q.setParameter("client_id", clientId);
+    public void setAllSeenByLogin(String login) {
+        Query q = getEm().createNamedQuery("set_all_notification_seen_by_login");
+        q.setParameter("login", login);
         q.executeUpdate();
     }
     
