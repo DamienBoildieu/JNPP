@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
 
-public class GenericDAO<T extends Serializable> implements IGenericDAO<T> {
+public abstract class GenericDAO<T extends Serializable> implements IGenericDAO<T> {
 
     @PersistenceContext(unitName="JNPPPU")
     private EntityManager em;

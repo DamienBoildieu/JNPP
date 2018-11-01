@@ -16,15 +16,15 @@ import jnpp.controller.views.NotifView;
 import jnpp.controller.views.Translator;
 import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.info.ViewInfo;
-import jnpp.dao.entities.Message;
-import jnpp.dao.entities.clients.Advisor;
-import jnpp.dao.entities.clients.Client;
+import jnpp.dao.entities.MessageEntity;
+import jnpp.dao.entities.clients.AdvisorEntity;
+import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.clients.Gender;
 import jnpp.dao.entities.clients.Identity;
-import jnpp.dao.entities.clients.Private;
-import jnpp.dao.entities.notifications.MessageNotification;
-import jnpp.dao.entities.notifications.Notification;
-import jnpp.service.INotificationService;
+import jnpp.dao.entities.clients.PrivateEntity;
+import jnpp.dao.entities.notifications.MessageNotificationEntity;
+import jnpp.dao.entities.notifications.NotificationEntity;
+import jnpp.service.services.INotificationService;
 import jnpp.service.exceptions.entities.FakeClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -356,9 +356,9 @@ public class CLink {
             CSession.setLanguage(session,Translator.Language.FR);
         if (CSession.isConnected(session)) {
             try {
-                List<Notification> notifs = notifService.receiveNotifications(CSession.getClient(session));
+                List<NotificationEntity> notifs = notifService.receiveNotifications(CSession.getClient(session));
                 List<NotifView> notifsView = new ArrayList<NotifView>();
-                for (Notification notif : notifs) {
+                for (NotificationEntity notif : notifs) {
                     notifsView.add(new NotifView(notif));
                 }
                 ModelAndView view = new JNPPModelAndView("manageuser/notifs", ViewInfo.createInfo(session, alerts));
@@ -411,12 +411,12 @@ public class CLink {
                 }
             }
         }
-        Client client = CSession.getClient(session);
+        ClientEntity client = CSession.getClient(session);
         ModelAndView view = null;
         switch (client.getType()) {
             case PRIVATE:
                 view = new JNPPModelAndView("manageuser/privateinfo", ViewInfo.createInfo(session, alerts));
-                String birthday = new SimpleDateFormat("yyyy-MM-dd").format(((Private)client).getBirthday());
+                String birthday = new SimpleDateFormat("yyyy-MM-dd").format(((PrivateEntity)client).getBirthday());
                 view.addObject("birthday", birthday);
                 break;
             case PROFESIONAL:

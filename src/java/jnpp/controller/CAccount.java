@@ -10,9 +10,9 @@ import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.Translator;
 import jnpp.controller.views.info.ViewInfo;
-import jnpp.dao.entities.accounts.Account;
-import jnpp.dao.entities.accounts.CurrentAccount;
-import jnpp.dao.entities.accounts.SavingAccount;
+import jnpp.dao.entities.accounts.AccountEntity;
+import jnpp.dao.entities.accounts.CurrentAccountEntity;
+import jnpp.dao.entities.accounts.SavingAccountEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,12 +48,12 @@ public class CAccount {
         if (!CSession.isConnected(session))
             return new ModelAndView("redirect:/index.htm");
 	//resumeService.resumeAccounts("");
-        List<Account> listAc = new ArrayList<Account>();
-        CurrentAccount current = new CurrentAccount();
+        List<AccountEntity> listAc = new ArrayList<AccountEntity>();
+        CurrentAccountEntity current = new CurrentAccountEntity();
         current.setMoney(-20.d);
         current.setRib("134824");
         listAc.add(current);
-        SavingAccount saving = new SavingAccount();
+        SavingAccountEntity saving = new SavingAccountEntity();
         saving.setMoney(500.d);
         saving.setRib("5946513");
         listAc.add(saving);

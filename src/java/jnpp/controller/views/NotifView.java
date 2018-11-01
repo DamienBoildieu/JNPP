@@ -1,12 +1,12 @@
 package jnpp.controller.views;
 
 import java.util.Calendar;
-import jnpp.dao.entities.notifications.AppointmentNotification;
-import jnpp.dao.entities.notifications.MessageNotification;
-import jnpp.dao.entities.notifications.MovementNotification;
-import jnpp.dao.entities.notifications.Notification;
-import jnpp.dao.entities.notifications.OverdraftNotification;
-import jnpp.dao.entities.notifications.PaymentMeanNotification;
+import jnpp.dao.entities.notifications.AppointmentNotificationEntity;
+import jnpp.dao.entities.notifications.MessageNotificationEntity;
+import jnpp.dao.entities.notifications.MovementNotificationEntity;
+import jnpp.dao.entities.notifications.NotificationEntity;
+import jnpp.dao.entities.notifications.OverdraftNotificationEntity;
+import jnpp.dao.entities.notifications.PaymentMeanNotificationEntity;
 
 /**
  *
@@ -18,7 +18,7 @@ public class NotifView {
     private final int day;
     private final String message;
     
-    public NotifView(Notification notif) {
+    public NotifView(NotificationEntity notif) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(notif.getDate());
         year = cal.get(Calendar.YEAR);
@@ -26,23 +26,23 @@ public class NotifView {
         day = cal.get(Calendar.DAY_OF_MONTH);
         switch (notif.getType()) {
             case APPOINTMENT:
-                AppointmentNotification appoint = (AppointmentNotification) notif;
+                AppointmentNotificationEntity appoint = (AppointmentNotificationEntity) notif;
                 message = "Vous avez rendez-vous avec conseiller le " + appoint.getAppointment().getDate().toString();
                 break;
             case PAYMENT_MEAN:
-                PaymentMeanNotification mean = (PaymentMeanNotification) notif;    
+                PaymentMeanNotificationEntity mean = (PaymentMeanNotificationEntity) notif;    
                 message = "PaymentMean";
                 break;
             case MESSAGE:
-                MessageNotification msg = (MessageNotification) notif;    
+                MessageNotificationEntity msg = (MessageNotificationEntity) notif;    
                 message = "Vous avez un reçu un nouveau message";
                 break;
             case MOVEMENT:
-                MovementNotification move = (MovementNotification) notif;                    
+                MovementNotificationEntity move = (MovementNotificationEntity) notif;                    
                 message = "movement";
                 break;
             case OVERDRAFT:
-                OverdraftNotification over = (OverdraftNotification) notif;
+                OverdraftNotificationEntity over = (OverdraftNotificationEntity) notif;
                 message = "overdraft";
                 break;
             default:

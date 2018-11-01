@@ -3,7 +3,7 @@ package jnpp.controller.old;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import jnpp.service.IClientService;
+import jnpp.service.services.IClientService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

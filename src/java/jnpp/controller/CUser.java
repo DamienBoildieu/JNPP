@@ -14,10 +14,10 @@ import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.controller.views.Translator;
 import jnpp.controller.views.info.ViewInfo;
-import jnpp.dao.entities.clients.Client;
+import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.clients.Gender;
-import jnpp.service.IClientService;
-import jnpp.service.INotificationService;
+import jnpp.service.services.IClientService;
+import jnpp.service.services.INotificationService;
 import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.clients.AgeException;
 import jnpp.service.exceptions.duplicates.DuplicateClientException;
@@ -66,7 +66,7 @@ public class CUser {
         if (!CSession.isConnected(session)) {
             String id = request.getParameter("account");
             String password = request.getParameter("password");
-            Client client = this.clientService.signIn(id, password);
+            ClientEntity client = this.clientService.signIn(id, password);
             if (client!=null) {
                 boolean hasNotif = notifService.receiveUnseenNotifications(client).size()>0;
                 CSession.setHasNotif(session, hasNotif);
@@ -476,7 +476,7 @@ public class CUser {
             Integer streetNbr = Integer.parseInt(streetNbrStr);
             //Call service
             try {
-                Client client = clientService.update(CSession.getClient(session), email, streetNbr, street, city, country, phone);
+                ClientEntity client = clientService.update(CSession.getClient(session), email, streetNbr, street, city, country, phone);
                 CSession.setClient(session, client);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Mise à jour réussie"));

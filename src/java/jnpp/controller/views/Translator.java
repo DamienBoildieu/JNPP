@@ -2,7 +2,7 @@ package jnpp.controller.views;
 
 import java.util.HashMap;
 import java.util.Map;
-import jnpp.dao.entities.accounts.Account;
+import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.clients.Gender;
 
 
@@ -49,7 +49,7 @@ public class Translator {
         return map;
     }
     
-    public Map<Account.Type,String> translateAccounts(Language lang) {
+    public Map<AccountEntity.Type,String> translateAccounts(Language lang) {
         switch (lang) {
             case FR:    
                 return accountsToFrench();
@@ -58,9 +58,9 @@ public class Translator {
         }
     }
     
-    private Map<Account.Type, String> accountsToFrench() {
-        Map<Account.Type, String> map = new HashMap<Account.Type, String>();
-        for (Account.Type type : Account.Type.values()) {
+    private Map<AccountEntity.Type, String> accountsToFrench() {
+        Map<AccountEntity.Type, String> map = new HashMap<AccountEntity.Type, String>();
+        for (AccountEntity.Type type : AccountEntity.Type.values()) {
             switch (type) {
                 case CURRENT:
                     map.put(type, "Compte courrant");

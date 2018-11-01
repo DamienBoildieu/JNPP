@@ -2,17 +2,17 @@ package jnpp.dao.repositories;
 
 import java.util.Date;
 import java.util.List;
-import jnpp.dao.entities.notifications.Notification;
+import jnpp.dao.entities.notifications.NotificationEntity;
 
-public interface INotificationDAO extends IGenericDAO<Notification> {
+public interface INotificationDAO extends IGenericDAO<NotificationEntity> {
     
-    boolean isFake(Notification notification);
+    boolean isFake(NotificationEntity notification);
     
-    List<Notification> findAll(Long clientId);
+    List<NotificationEntity> findAll(Long clientId);
     
-    List<Notification> findAllUnseen(Long clientId);
-    List<Notification> findAllUnseen(Long clientId, int n);
-    List<Notification> findAllUnseen(Long clientId, Date date);
+    List<NotificationEntity> findAllUnseen(Long clientId);
+    List<NotificationEntity> findAllUnseen(Long clientId, int n);
+    List<NotificationEntity> findAllUnseen(Long clientId, Date date);
     
     void updateAllToSeen(Long clientId);
     

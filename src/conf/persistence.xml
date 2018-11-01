@@ -3,43 +3,44 @@
   <persistence-unit name="JNPPPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>jnpp.service.SUser</class>
-    <class>jnpp.dao.entities.accounts.CurrentAccount</class>
-    <class>jnpp.dao.entities.accounts.SavingAccount</class>
-    <class>jnpp.dao.entities.accounts.Account</class>
-    <class>jnpp.dao.entities.accounts.ShareAccount</class>
-    <class>jnpp.dao.entities.accounts.Share</class>
-    <class>jnpp.dao.entities.accounts.ShareTitle</class>
-    <class>jnpp.dao.entities.accounts.SavingBook</class>
-    <class>jnpp.dao.entities.clients.Advisor</class>
-    <class>jnpp.dao.entities.clients.Private</class>
-    <class>jnpp.dao.entities.clients.Client</class>
     <class>jnpp.dao.entities.transactions.Transaction</class>
-    <class>jnpp.dao.entities.accounts.DebitAuthorization</class>
     <class>jnpp.dao.old.EUser</class>
-    <class>jnpp.dao.entities.Message</class>
-    <class>jnpp.dao.entities.BankCard</class>
     <class>jnpp.dao.entities.Check</class>
-    <class>jnpp.dao.entities.Appointment</class>
-    <class>jnpp.dao.entities.accounts.JointAccount</class>
-    <class>jnpp.dao.entities.notifications.Notification</class>
-    <class>jnpp.dao.entities.notifications.AppointmentNotification</class>
-    <class>jnpp.dao.entities.notifications.MessageNotification</class>
-    <class>jnpp.dao.entities.notifications.MovementNotification</class>
-    <class>jnpp.dao.entities.movements.Purchase</class>
-    <class>jnpp.dao.entities.movements.Transfert</class>
-    <class>jnpp.dao.entities.movements.Sale</class>
-    <class>jnpp.dao.entities.movements.Debit</class>
-    <class>jnpp.dao.entities.movements.Trade</class>
-    <class>jnpp.dao.entities.movements.Withdraw</class>
-    <class>jnpp.dao.entities.movements.ShareTrade</class>
-    <class>jnpp.dao.entities.movements.MoneyTrade</class>
-    <class>jnpp.dao.entities.notifications.OverdraftNotification</class>
-    <class>jnpp.dao.entities.PaymentMean</class>
-    <class>jnpp.dao.entities.notifications.PaymentMeanNotification</class>
     <class>jnpp.dao.entities.clients.Identifier</class>
     <class>jnpp.dao.entities.movements.Paiement</class>
-    <class>jnpp.dao.entities.accounts.ClosureRequest</class>
     <class>jnpp.dao.entities.clients.Address</class>
+    <class>jnpp.dao.entities.accounts.CloseRequestEntity</class>
+    <class>jnpp.dao.entities.AppointmentEntity</class>
+    <class>jnpp.dao.entities.MessageEntity</class>
+    <class>jnpp.dao.entities.paymentmeans.PaymentMeanEntity</class>
+    <class>jnpp.dao.entities.paymentmeans.BankCardEntity</class>
+    <class>jnpp.dao.entities.clients.AdvisorEntity</class>
+    <class>jnpp.dao.entities.clients.ClientEntity</class>
+    <class>jnpp.dao.entities.clients.PrivateEntity</class>
+    <class>jnpp.dao.entities.notifications.NotificationEntity</class>
+    <class>jnpp.dao.entities.notifications.AppointmentNotificationEntity</class>
+    <class>jnpp.dao.entities.notifications.MessageNotificationEntity</class>
+    <class>jnpp.dao.entities.notifications.MovementNotificationEntity</class>
+    <class>jnpp.dao.entities.notifications.OverdraftNotificationEntity</class>
+    <class>jnpp.dao.entities.notifications.PaymentMeanNotificationEntity</class>
+    <class>jnpp.dao.entities.movements.TradeEntity</class>
+    <class>jnpp.dao.entities.movements.ShareTradeEntity</class>
+    <class>jnpp.dao.entities.movements.TransfertEntity</class>
+    <class>jnpp.dao.entities.movements.WithdrawEntity</class>
+    <class>jnpp.dao.entities.movements.SaleEntity</class>
+    <class>jnpp.dao.entities.movements.DebitEntity</class>
+    <class>jnpp.dao.entities.movements.MoneyTradeEntity</class>
+    <class>jnpp.dao.entities.movements.PurchaseEntity</class>
+    <class>jnpp.dao.entities.accounts.AccountEntity</class>
+    <class>jnpp.dao.entities.accounts.CurrentAccountEntity</class>
+    <class>jnpp.dao.entities.accounts.DebitAuthorizationEntity</class>
+    <class>jnpp.dao.entities.accounts.JointAccountEntity</class>
+    <class>jnpp.dao.entities.accounts.SavingAccountEntity</class>
+    <class>jnpp.dao.entities.accounts.SavingBookEntity</class>
+    <class>jnpp.dao.entities.accounts.ShareEntity</class>
+    <class>jnpp.dao.entities.accounts.ShareTitleEntity</class>
+    <class>jnpp.dao.entities.accounts.ShareAccountEntity</class>
+    <class>jnpp.dao.entities.accounts.MoneyAccountEntity</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/JNPPDB"/>
