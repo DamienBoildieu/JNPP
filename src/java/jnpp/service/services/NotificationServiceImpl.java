@@ -29,7 +29,7 @@ public class NotificationServiceImpl implements NotificationService {
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         List<NotificationEntity> notifications = notificationDAO.findAllByLogin(login);
-        return entityToDTO(notifications);
+        return NotificationEntity.toDTO(notifications);
     }
     
     @Override
@@ -38,7 +38,7 @@ public class NotificationServiceImpl implements NotificationService {
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         List<NotificationEntity> notifications = notificationDAO.findUnseenByLogin(login);
-        return entityToDTO(notifications);
+        return NotificationEntity.toDTO(notifications);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class NotificationServiceImpl implements NotificationService {
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         List<NotificationEntity> notifications = notificationDAO.findNUnseenByLogin(login, n);
-        return entityToDTO(notifications);
+        return NotificationEntity.toDTO(notifications);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class NotificationServiceImpl implements NotificationService {
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         List<NotificationEntity> notifications = notificationDAO.findUnseenRecentByLogin(login, date); 
-        return entityToDTO(notifications);   
+        return NotificationEntity.toDTO(notifications);
     }
 
     @Override
@@ -100,13 +100,6 @@ public class NotificationServiceImpl implements NotificationService {
             notification.setSeen(true);
             notificationDAO.save(notification);
         }
-    }
-    
-    private static List<NotificationDTO> entityToDTO(List<NotificationEntity> movements) {
-        List<NotificationDTO> dtos = new ArrayList<NotificationDTO>(movements.size());
-        Iterator<NotificationEntity> it = movements.iterator();
-        while (it.hasNext()) dtos.add(NotificationDTO.newDTO((it.next())));
-        return dtos;
     }
     
 }

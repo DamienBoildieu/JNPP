@@ -1,7 +1,10 @@
 package jnpp.dao.entities.notifications;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -17,7 +20,10 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import jnpp.dao.entities.advisor.AppointmentEntity;
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.service.dto.advisor.AppointmentDTO;
+import jnpp.service.dto.notifications.NotificationDTO;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -132,6 +138,15 @@ public abstract class NotificationEntity implements Serializable {
         }
         NotificationEntity other = (NotificationEntity) object;
         return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+    }
+    
+    public abstract NotificationDTO toDTO();
+    
+    public static List<NotificationDTO> toDTO(List<NotificationEntity> entities) {
+        List<NotificationDTO> dtos = new ArrayList<NotificationDTO>(entities.size());
+        Iterator<NotificationEntity> it = entities.iterator();
+        while (it.hasNext()) dtos.add(it.next().toDTO());
+        return dtos;
     }
     
 }

@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import jnpp.service.dto.accounts.ShareTitleDTO;
 
 @Entity
 public class ShareTitleEntity implements Serializable {
@@ -83,6 +84,10 @@ public class ShareTitleEntity implements Serializable {
     @Override
     public String toString() {
         return "jnpp.dao.entities.ShareTitleEntity[ id=" + id + " ]";
+    }
+    
+    public ShareTitleDTO toDTO() {
+        return new ShareTitleDTO(amount, share.toDTO());
     }
     
 }

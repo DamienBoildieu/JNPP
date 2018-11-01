@@ -1,7 +1,10 @@
 package jnpp.dao.entities.movements;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -18,6 +21,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import jnpp.dao.entities.accounts.AccountEntity;
+import jnpp.service.dto.movements.MovementDTO;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -113,6 +117,15 @@ public abstract class MovementEntity implements Serializable {
         }
         MovementEntity other = (MovementEntity) object;
         return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+    }
+    
+    public abstract MovementDTO toDTO();
+    
+    public static List<MovementDTO> toDTO(List<MovementEntity> entities) {
+        List<MovementDTO> dtos = new ArrayList<MovementDTO>(entities.size());
+        Iterator<MovementEntity> it = entities.iterator();
+        while (it.hasNext()) dtos.add(it.next().toDTO());
+        return dtos;
     }
     
 }

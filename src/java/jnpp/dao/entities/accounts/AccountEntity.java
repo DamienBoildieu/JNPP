@@ -2,6 +2,7 @@ package jnpp.dao.entities.accounts;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.DiscriminatorColumn;
@@ -17,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.service.dto.accounts.AccountDTO;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -69,7 +71,7 @@ public abstract class AccountEntity implements Serializable {
     
     public AccountEntity(String rib, ClientEntity client) {
         this.rib = rib;
-        this.clients.add(client);
+        clients.add(client);
     }
     
     public AccountEntity(String rib, List<ClientEntity> clients) {
@@ -77,7 +79,15 @@ public abstract class AccountEntity implements Serializable {
         this.clients.addAll(clients);
     }
     
-    public abstract Type getType();    
+    public boolean isOwnBy(ClientEntity client) {
+        if (client == null) return false;
+        boolean clientFound = false;
+        Iterator<ClientEntity> itc = clients.iterator();
+        while (itc.hasNext() && !clientFound) clientFound = client.equals(itc.next());
+        return clientFound;
+    }
+    
+    public abstract Type getType();   
     
     public String getRib() {
         return rib;
@@ -109,6 +119,15 @@ public abstract class AccountEntity implements Serializable {
         }
         AccountEntity other = (AccountEntity) object;
         return !((this.rib == null && other.rib != null) || (this.rib != null && !this.rib.equals(other.rib)));
+    }
+    
+    public abstract AccountDTO toDTO();
+    
+    public static List<AccountDTO> toDTO(List<AccountEntity> entities) {
+        List<AccountDTO> dtos = new ArrayList<AccountDTO>(entities.size());
+        Iterator<AccountEntity> it = entities.iterator();
+        while (it.hasNext()) dtos.add(it.next().toDTO());
+        return dtos;
     }
     
 }

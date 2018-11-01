@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import jnpp.dao.entities.paymentmeans.PaymentMeanEntity;
 
 import jnpp.dao.entities.accounts.Currency;
+import jnpp.service.dto.movements.PaymentDTO;
 
 @Entity
 @DiscriminatorValue(value = MovementEntity.Type.Values.PAYMENT)
@@ -18,6 +19,7 @@ public class PaymentEntity extends MovementEntity implements Serializable {
     
     private Double money;
     private Currency currency;
+    private String target;
     
     @ManyToOne
     @JoinColumn(name="paymentmean_fk")
@@ -46,6 +48,14 @@ public class PaymentEntity extends MovementEntity implements Serializable {
         this.currency = currency;
     }
 
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
     public PaymentMeanEntity getPaymentMean() {
         return paymentMean;
     }
@@ -57,6 +67,11 @@ public class PaymentEntity extends MovementEntity implements Serializable {
     @Override
     public String toString() {
         return "jnpp.dao.entities.movements.PaymentEntity[ id=" + getId() + " ]";
+    }
+    
+    @Override
+    public PaymentDTO toDTO() {
+        return new PaymentDTO(getDate(), getAccount().getRib(), money, currency, target);
     }
     
 }

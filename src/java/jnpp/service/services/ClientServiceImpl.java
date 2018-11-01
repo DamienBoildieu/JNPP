@@ -56,7 +56,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientDTO signIn(String login, String password) {
         if (login == null || password == null) throw new IllegalArgumentException();
-        return ClientDTO.newDTO(clientDAO.findByLoginPassword(login, password));
+        ClientEntity client = clientDAO.findByLoginPassword(login, password);
+        return client.toDTO();
     }
 
     @Override
@@ -127,7 +128,7 @@ public class ClientServiceImpl implements ClientService {
         if (state != null) address.setState(state);
         if (phone != null) client.setPhone(phone);    
         clientDAO.save(client);
-        return ClientDTO.newDTO(client);
+        return client.toDTO();
     }
 
     @Override

@@ -1,24 +1,29 @@
 package jnpp.service.dto.notifications;
 
+import java.util.Date;
 import jnpp.dao.entities.notifications.MovementNotificationEntity;
 import jnpp.service.dto.movements.MovementDTO;
 
 public class MovementNotificationDTO extends NotificationDTO {
     
-    private final MovementDTO movement;
-    
-    public MovementNotificationDTO(MovementNotificationEntity notification) {
-        super(notification);
-        movement = MovementDTO.newDTO(notification.getMovement());
+    private MovementDTO movement;
+
+    public MovementNotificationDTO(Long id, Date date, MovementDTO movement) {
+        super(id, date);
+        this.movement = movement;
     }
     
     @Override
     public Type getType() {
         return NotificationDTO.Type.MOVEMENT;
     }
-    
+
     public MovementDTO getMovement() {
         return movement;
+    }
+
+    public void setMovement(MovementDTO movement) {
+        this.movement = movement;
     }
     
 }

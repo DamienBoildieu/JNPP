@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import jnpp.dao.entities.paymentmeans.PaymentMeanEntity;
+import jnpp.service.dto.notifications.PaymentMeanNotificationDTO;
 
 @Entity
 @DiscriminatorValue(value = NotificationEntity.Type.Values.PAYMENT_MEAN)
@@ -36,6 +37,11 @@ public class PaymentMeanNotificationEntity extends NotificationEntity
     @Override
     public String toString() {
         return "jnpp.dao.entities.notifications.PaymentMeanNotificationEntity[ id=" + getId() + " ]";
+    }
+    
+    @Override
+    public PaymentMeanNotificationDTO toDTO() {
+        return new PaymentMeanNotificationDTO(getId(), getDate(), mean.toDTO());
     }
     
 }

@@ -1,19 +1,19 @@
 package jnpp.service.dto.clients;
 
+import jnpp.dao.entities.Address;
 import jnpp.dao.entities.Identity;
-import jnpp.dao.entities.clients.ProfessionalEntity;
 
 public class ProfessionalDTO extends ClientDTO {
 
-    private final String name;
-    private final Identity owner;
-    
-    public ProfessionalDTO(ProfessionalEntity client) {
-        super(client);
-        name = client.getName();
-        owner = client.getOwner();
+    private String name;
+    private Identity owner;
+
+    public ProfessionalDTO(String login, String name, Identity owner, String email, Address address, String phone) {
+        super(login, email, address, phone);
+        this.name = name;
+        this.owner = owner;
     }
-    
+        
     @Override
     public Type getType() {
         return ClientDTO.Type.PROFESIONAL;
@@ -23,8 +23,16 @@ public class ProfessionalDTO extends ClientDTO {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Identity getOwner() {
         return owner;
+    }
+
+    public void setOwner(Identity owner) {
+        this.owner = owner;
     }
     
 }

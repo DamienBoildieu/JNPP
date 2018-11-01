@@ -6,6 +6,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 import jnpp.dao.entities.accounts.Currency;
+import jnpp.service.dto.movements.WithdrawDTO;
 
 @Entity
 @DiscriminatorValue(value = MovementEntity.Type.Values.WITHDRAW)
@@ -42,6 +43,11 @@ public class WithdrawEntity extends MovementEntity implements Serializable {
     @Override
     public String toString() {
         return "jnpp.dao.entities.transactions.WithdrawEntity[ id=" + getId() + " ]";
+    }
+    
+    @Override
+    public WithdrawDTO toDTO() {
+        return new WithdrawDTO(getDate(), getAccount().getRib(), money, currency);
     }
     
 }

@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import jnpp.dao.entities.advisor.MessageEntity;
+import jnpp.service.dto.notifications.MessageNotificationDTO;
 
 @Entity
 @DiscriminatorValue(value = NotificationEntity.Type.Values.MESSAGE)
@@ -35,6 +36,11 @@ public class MessageNotificationEntity extends NotificationEntity implements Ser
     @Override
     public String toString() {
         return "jnpp.dao.entities.notifications.MessageNotificationEntity[ id=" + getId() + " ]";
+    }
+    
+    @Override
+    public MessageNotificationDTO toDTO() {
+        return new MessageNotificationDTO(getId(), getDate(), message.toDTO());
     }
     
 }

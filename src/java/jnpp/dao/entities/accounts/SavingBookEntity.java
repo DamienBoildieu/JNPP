@@ -1,6 +1,9 @@
 package jnpp.dao.entities.accounts;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import jnpp.service.dto.accounts.SavingBookDTO;
 
 @Entity
 @NamedQueries({
@@ -86,6 +90,17 @@ public class SavingBookEntity implements Serializable {
     @Override
     public String toString() {
         return "jnpp.dao.entities.SavingBookEntity[ id=" + id + " ]";
+    }
+    
+    public SavingBookDTO toDTO() {
+        return new SavingBookDTO(name, moneyRate, timeRate);
+    }
+    
+    public static List<SavingBookDTO> toDTO(List<SavingBookEntity> entities) {
+        List<SavingBookDTO> dtos = new ArrayList<SavingBookDTO>(entities.size());
+        Iterator<SavingBookEntity> it = entities.iterator();
+        while (it.hasNext()) dtos.add(it.next().toDTO());
+        return dtos;
     }
     
 }

@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.service.dto.accounts.AccountDTO;
+import jnpp.service.dto.accounts.CurrentAccountDTO;
 
 @Entity
 @DiscriminatorValue(value = AccountEntity.Type.Values.CURRENT)
@@ -44,6 +46,11 @@ public class CurrentAccountEntity extends MoneyAccountEntity implements Serializ
     @Override
     public String toString() {
         return "jnpp.dao.entities.CurrentAccountEntity[ id=" + getRib() + " ]";
+    }
+
+    @Override
+    public CurrentAccountDTO toDTO() {
+        return new CurrentAccountDTO(getRib(), getMoney(), getCurrency(), limit);
     }
     
 }

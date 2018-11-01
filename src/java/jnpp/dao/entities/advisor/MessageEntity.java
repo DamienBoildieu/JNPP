@@ -1,7 +1,10 @@
 package jnpp.dao.entities.advisor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,6 +20,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.dao.repositories.MessageDAO;
+import jnpp.service.dto.advisor.MessageDTO;
 
 @Entity
 @NamedQueries({
@@ -37,6 +42,16 @@ public class MessageEntity implements Serializable {
         
         CLIENT_TO_ADVISOR,
         ADVISOR_TO_CLIENT;
+        
+        public MessageDTO.Direction toDTO() {
+            switch (ordinal()) {
+                case 0:
+                    return MessageDTO.Direction.CLIENT_TO_ADVISOR;
+                case 1:
+                    return MessageDTO.Direction.ADVISOR_TO_CLIENT;
+            }
+            return null;
+        }
         
     }
     
@@ -137,6 +152,17 @@ public class MessageEntity implements Serializable {
     @Override
     public String toString() {
         return "jnpp.dao.entities.Message[ id=" + id + " ]";
+    }
+    
+    public MessageDTO toDTO() {
+        return new MessageDTO(direction.toDTO(), date, content, advisor.toDTO());
+    }
+    
+    public static List<MessageDTO> toDTO(List<MessageEntity> entities) {
+        List<MessageDTO> dtos = new ArrayList<MessageDTO>(entities.size());
+        Iterator<MessageEntity> it = entities.iterator();
+        while (it.hasNext()) dtos.add(it.next().toDTO());
+        return dtos;
     }
     
 }

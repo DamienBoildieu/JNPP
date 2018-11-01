@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import jnpp.dao.entities.advisor.AdvisorEntity;
+import jnpp.service.dto.clients.ClientDTO;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -153,5 +154,7 @@ public abstract class ClientEntity implements Serializable {
         return !((this.login == null && other.login != null) 
                 || (this.login != null && !this.login.equals(other.login)));
     }
+    
+    public abstract ClientDTO toDTO();
     
 }

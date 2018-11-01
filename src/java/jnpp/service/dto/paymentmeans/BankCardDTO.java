@@ -4,8 +4,8 @@ import jnpp.dao.entities.paymentmeans.BankCardEntity;
 
 public class BankCardDTO extends PaymentMeanDTO {
 
-    public BankCardDTO(BankCardEntity paymentMean) {
-        super(paymentMean);
+    public BankCardDTO(String login, String rib, Status status) {
+        super(login, rib, status);
     }
     
     @Override

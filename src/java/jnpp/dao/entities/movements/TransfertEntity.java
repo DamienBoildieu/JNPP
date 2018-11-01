@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import jnpp.service.dto.movements.TransfertDTO;
 
 @Entity
 @DiscriminatorValue(value = MovementEntity.Type.Values.TRANSFERT)
@@ -21,6 +22,11 @@ public class TransfertEntity extends MoneyTradeEntity implements Serializable {
     @Override
     public String toString() {
         return "jnpp.dao.entities.transactions.TransfertEntity[ id=" + getId() + " ]";
+    }
+    
+    @Override
+    public TransfertDTO toDTO() {
+        return new TransfertDTO(getDate(), getAccount().getRib(), getRibTo(), getMoney(), getCurrency());
     }
     
 }

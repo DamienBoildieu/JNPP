@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import jnpp.dao.entities.movements.MovementEntity;
+import jnpp.service.dto.notifications.MovementNotificationDTO;
 
 @Entity
 @DiscriminatorValue(value = NotificationEntity.Type.Values.MOVEMENT)
@@ -35,6 +36,11 @@ public class MovementNotificationEntity extends NotificationEntity implements Se
     @Override
     public String toString() {
         return "jnpp.dao.entities.notifications.MovementNotificationEntity[ id=" + getId() + " ]";
+    }
+    
+    @Override
+    public MovementNotificationDTO toDTO() {
+        return new MovementNotificationDTO(getId(), getDate(), movement.toDTO());
     }
     
 }

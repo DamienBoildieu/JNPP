@@ -5,26 +5,38 @@ import jnpp.dao.entities.advisor.AppointmentEntity;
 
 public class AppointmentDTO {
     
-    private final Long id;
-    private final Date date;
-    private final AdvisorDTO advisor;
+    private Long id;
+    private Date date;
+    private AdvisorDTO advisor;
     
-    public AppointmentDTO(AppointmentEntity appointment) {
-        id = appointment.getId();
-        date = appointment.getDate();
-        advisor = new AdvisorDTO(appointment.getAdvisor());
+    public AppointmentDTO(Long id, Date date, AdvisorDTO advisor) {
+        this.id = id;
+        this.date = date;
+        this.advisor = advisor;
     }
 
     public Long getId() {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Date getDate() {
         return date;
     }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public AdvisorDTO getAdvisor() {
         return advisor;
+    }
+
+    public void setAdvisor(AdvisorDTO advisor) {
+        this.advisor = advisor;
     }
     
 }

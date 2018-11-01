@@ -24,12 +24,12 @@ public abstract class MovementDTO {
         
     }
     
-    private final Date date;
-    private final String ribFrom;
-    
-    public MovementDTO(MovementEntity movement) {
-        date = movement.getDate();
-        ribFrom = movement.getAccount().getRib();
+    private Date date;
+    private String ribFrom;
+
+    public MovementDTO(Date date, String ribFrom) {
+        this.date = date;
+        this.ribFrom = ribFrom;
     }
     
     public abstract Type getType();
@@ -38,26 +38,15 @@ public abstract class MovementDTO {
         return date;
     }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public String getRibFrom() {
         return ribFrom;
     }
-    
-    public static MovementDTO newDTO(MovementEntity movement) {
-        switch(movement.getType()) {
-            case TRANSFERT:
-                return new TransfertDTO((TransfertEntity) movement);
-            case DEBIT:
-                return new DebitDTO((DebitEntity) movement);
-            case PURCHASE:
-                return new PurchaseDTO((PurchaseEntity) movement);
-            case SALE:
-                return new SaleDTO((SaleEntity) movement);
-            case WITHDRAW:
-                return new WithdrawDTO((WithdrawEntity) movement);
-            case PAYMENT:
-                return new PaymentDTO((PaymentEntity) movement);
-        }
-        return null;
+
+    public void setRibFrom(String ribFrom) {
+        this.ribFrom = ribFrom;
     }
-    
 }

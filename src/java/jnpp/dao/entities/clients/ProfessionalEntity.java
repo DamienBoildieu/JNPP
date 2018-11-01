@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import jnpp.dao.entities.advisor.AdvisorEntity;
+import jnpp.service.dto.clients.ProfessionalDTO;
 
 @Entity
 @DiscriminatorValue(value = ClientEntity.Type.Values.PROFESSIONAL)
@@ -65,6 +66,11 @@ public class ProfessionalEntity extends ClientEntity implements Serializable {
     @Override
     public String toString() {
         return "jnpp.dao.entities.ProfessionalEntity[ id=" + getLogin() + " ]";
+    }
+    
+    @Override
+    public ProfessionalDTO toDTO() {
+        return new ProfessionalDTO(getLogin(), name, owner, getEmail(), getAddress(), getPhone());
     }
     
 }

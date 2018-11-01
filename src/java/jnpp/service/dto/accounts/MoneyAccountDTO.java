@@ -5,21 +5,29 @@ import jnpp.dao.entities.accounts.MoneyAccountEntity;
 
 public abstract class MoneyAccountDTO extends AccountDTO {
     
-    private final Double money;
-    private final Currency currency;
+    private Double money;
+    private Currency currency;
 
-    public MoneyAccountDTO(MoneyAccountEntity account) {
-        super(account);
-        money = account.getMoney();
-        currency = account.getCurrency();
+    public MoneyAccountDTO(String rib, Double money, Currency currency) {
+        super(rib);
+        this.money = money;
+        this.currency = currency;
     }
 
     public Double getMoney() {
         return money;
     }
 
+    public void setMoney(Double money) {
+        this.money = money;
+    }
+
     public Currency getCurrency() {
         return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
     
 }

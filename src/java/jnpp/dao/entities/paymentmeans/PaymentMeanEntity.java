@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.service.dto.advisor.MessageDTO;
+import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -43,6 +45,18 @@ public abstract class PaymentMeanEntity implements Serializable {
         ARRIVED,
         DELIVERED;
 
+        public PaymentMeanDTO.Status toDTO() {
+            switch (ordinal()) {
+                case 0:
+                    return PaymentMeanDTO.Status.ORDERED;
+                case 1:
+                    return PaymentMeanDTO.Status.ARRIVED;
+                case 2:
+                    return PaymentMeanDTO.Status.DELIVERED;
+            }
+            return null;
+        }
+        
     }
     
     private static final long serialVersionUID = 1L;
@@ -60,6 +74,14 @@ public abstract class PaymentMeanEntity implements Serializable {
     
     @Enumerated(EnumType.STRING)
     private Status status;
+    
+    public PaymentMeanEntity() {}
+    
+    public PaymentMeanEntity(ClientEntity client, AccountEntity account, Status status) {
+        this.client = client;
+        this.account = account;
+        this.status = status;
+    }
     
     public abstract Type getType(); 
     
@@ -115,5 +137,7 @@ public abstract class PaymentMeanEntity implements Serializable {
     public String toString() {
         return "jnpp.dao.entities.PaymentObject[ id=" + id + " ]";
     }
+    
+    public abstract PaymentMeanDTO toDTO();
     
 }

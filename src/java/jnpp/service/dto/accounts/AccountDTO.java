@@ -17,30 +17,20 @@ public abstract class AccountDTO {
         
     }
     
-    private final String rib;
+    private String rib;
     
-    public AccountDTO(AccountEntity account) {
-        rib = account.getRib();
+    public AccountDTO(String rib) {
+        this.rib = rib;
     }
     
     public abstract Type getType();
-    
-    public String getTRib() {
+
+    public String getRib() {
         return rib;
     }
-    
-    public static AccountDTO newDTO(AccountEntity account) {
-        switch (account.getType()) {
-            case CURRENT:
-                return new CurrentAccountDTO((CurrentAccountEntity) account);
-            case JOINT:
-                return new JointAccountDTO((JointAccountEntity) account);
-            case SAVING:
-                return new SavingAccountDTO((SavingAccountEntity) account);
-            case SHARE:
-                return new ShareAccountDTO((ShareAccountEntity) account);
-        }
-        return null;
+
+    public void setRib(String rib) {
+        this.rib = rib;
     }
     
 }

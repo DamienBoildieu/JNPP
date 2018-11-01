@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.service.dto.accounts.SavingAccountDTO;
 
 @Entity
 @DiscriminatorValue(value = AccountEntity.Type.Values.SAVING)
@@ -52,6 +53,11 @@ public class SavingAccountEntity extends MoneyAccountEntity implements Serializa
     @Override
     public String toString() {
         return "jnpp.dao.entities.SavingAccountEntity[ id=" + getRib() + " ]";
+    }
+    
+    @Override
+    public SavingAccountDTO toDTO() {
+        return new SavingAccountDTO(getRib(), getMoney(), getCurrency(), savingBook.toDTO());
     }
     
 }

@@ -1,15 +1,15 @@
 package jnpp.service.dto.accounts;
 
-import jnpp.dao.entities.accounts.CurrentAccountEntity;
+import jnpp.dao.entities.accounts.Currency;
 import jnpp.service.dto.accounts.AccountDTO.Type;
 
 public class CurrentAccountDTO extends MoneyAccountDTO {
 
-    private final Double limit;
+    private Double limit;
     
-    public CurrentAccountDTO(CurrentAccountEntity account) {
-        super(account);
-        limit = account.getLimit();
+    public CurrentAccountDTO(String rib, Double money, Currency currency, Double limit) {
+        super(rib, money, currency);
+        this.limit = limit;
     }
     
     @Override
@@ -19,6 +19,10 @@ public class CurrentAccountDTO extends MoneyAccountDTO {
     
     public Double getLimit() {
         return limit;
+    }
+
+    public void setLimit(Double limit) {
+        this.limit = limit;
     }
     
 }

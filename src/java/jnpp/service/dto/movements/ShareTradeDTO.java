@@ -1,25 +1,34 @@
 package jnpp.service.dto.movements;
 
+import java.util.Date;
 import jnpp.dao.entities.movements.ShareTradeEntity;
 import jnpp.service.dto.accounts.ShareDTO;
 
 public abstract class ShareTradeDTO extends TradeDTO {
     
-    private final Integer amount;
-    private final ShareDTO share;
-    
-    public ShareTradeDTO(ShareTradeEntity movement) {
-        super(movement);
-        amount = movement.getAmount();
-        share = new ShareDTO((movement.getShare()));
+    private Integer amount;
+    private ShareDTO share;
+
+    public ShareTradeDTO(Date date, String ribFrom, String ribTo, Integer amount, ShareDTO share) {
+        super(date, ribFrom, ribTo);
+        this.amount = amount;
+        this.share = share;
     }
 
     public Integer getAmount() {
         return amount;
     }
 
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
     public ShareDTO getShare() {
         return share;
     }
 
+    public void setShare(ShareDTO share) {
+        this.share = share;
+    }
+  
 }

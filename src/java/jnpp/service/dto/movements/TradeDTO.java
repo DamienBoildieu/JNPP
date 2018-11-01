@@ -1,18 +1,22 @@
 package jnpp.service.dto.movements;
 
-import jnpp.dao.entities.movements.TradeEntity;
+import java.util.Date;
 
 public abstract class TradeDTO extends MovementDTO {
     
-    private final String ribTo;
+    private String ribTo;
 
-    public TradeDTO(TradeEntity movement) {
-        super(movement);
-        ribTo = movement.getRibTo();
+    public TradeDTO(Date date, String ribFrom, String ribTo) {
+        super(date, ribFrom);
+        this.ribTo = ribTo;
     }
     
     public String getRibTo() {
         return ribTo;
+    }
+
+    public void setRibTo(String ribTo) {
+        this.ribTo = ribTo;
     }
     
 }

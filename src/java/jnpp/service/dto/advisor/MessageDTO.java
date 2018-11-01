@@ -12,41 +12,48 @@ public class MessageDTO {
         
     }
         
-    private final Direction direction;
-    private final Date date;
-    private final String content;  
-    private final AdvisorDTO advisor;
-        
-    public MessageDTO(MessageEntity message) {
-        switch (message.getDirection()) {
-            case ADVISOR_TO_CLIENT:
-                direction = Direction.ADVISOR_TO_CLIENT;
-                break;
-            case CLIENT_TO_ADVISOR:
-                direction = Direction.CLIENT_TO_ADVISOR;
-                break;
-            default:
-                direction = null;
-        }
-        date = message.getDate();
-        content = message.getContent();
-        advisor = new AdvisorDTO(message.getAdvisor());
+    private Direction direction;
+    private Date date;
+    private String content;  
+    private AdvisorDTO advisor;
+
+    public MessageDTO(Direction direction, Date date, String content, AdvisorDTO advisor) {
+        this.direction = direction;
+        this.date = date;
+        this.content = content;
+        this.advisor = advisor;
     }
 
     public Direction getDirection() {
         return direction;
     }
 
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
     public Date getDate() {
         return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getContent() {
         return content;
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public AdvisorDTO getAdvisor() {
         return advisor;
     }
-        
+
+    public void setAdvisor(AdvisorDTO advisor) {
+        this.advisor = advisor;
+    }
+    
 }

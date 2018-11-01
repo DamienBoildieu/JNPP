@@ -1,17 +1,18 @@
 package jnpp.service.dto.notifications;
 
+import java.util.Date;
 import jnpp.dao.entities.notifications.AppointmentNotificationEntity;
 import jnpp.service.dto.advisor.AppointmentDTO;
 
 public class AppointmentNotificationDTO extends NotificationDTO {
     
-    private final AppointmentDTO appointment;
-    
-    public AppointmentNotificationDTO(AppointmentNotificationEntity notification) {
-        super(notification);
-        appointment = new AppointmentDTO(notification.getAppointment());
+    private AppointmentDTO appointment;
+
+    public AppointmentNotificationDTO(Long id, Date date, AppointmentDTO appointment) {
+        super(id, date);
+        this.appointment = appointment;
     }
-    
+
     @Override
     public Type getType() {
         return NotificationDTO.Type.APPOINTMENT;
@@ -19,6 +20,10 @@ public class AppointmentNotificationDTO extends NotificationDTO {
 
     public AppointmentDTO getAppointment() {
         return appointment;
+    }
+
+    public void setAppointment(AppointmentDTO appointment) {
+        this.appointment = appointment;
     }
     
 }

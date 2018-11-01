@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import jnpp.dao.entities.Address;
 import jnpp.dao.entities.Identity;
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.service.dto.advisor.AdvisorDTO;
 
 @Entity
 @NamedQueries({
@@ -108,6 +109,10 @@ public class AdvisorEntity implements Serializable {
     @Override
     public String toString() {
         return "jnpp.dao.entities.AdvisorEntity[ id=" + id + " ]";
+    }
+    
+    public AdvisorDTO toDTO() {
+        return new AdvisorDTO(identity, email, phone, officeAdress);
     }
     
 }

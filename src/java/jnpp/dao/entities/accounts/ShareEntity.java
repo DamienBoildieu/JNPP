@@ -1,6 +1,9 @@
 package jnpp.dao.entities.accounts;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import jnpp.service.dto.accounts.ShareDTO;
 
 @Entity
 @NamedQueries({
@@ -76,6 +80,17 @@ public class ShareEntity implements Serializable {
     @Override
     public String toString() {
         return "jnpp.dao.entities.ShareEntity[ id=" + id + " ]";
+    }
+    
+    public ShareDTO toDTO() {
+        return new ShareDTO(name, value);
+    }
+    
+    public static List<ShareDTO> toDTO(List<ShareEntity> entities) {
+        List<ShareDTO> dtos = new ArrayList<ShareDTO>(entities.size());
+        Iterator<ShareEntity> it = entities.iterator();
+        while (it.hasNext()) dtos.add(it.next().toDTO());
+        return dtos;
     }
     
 }

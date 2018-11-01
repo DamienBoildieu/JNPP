@@ -4,20 +4,28 @@ import jnpp.dao.entities.accounts.ShareTitleEntity;
 
 public class ShareTitleDTO {
     
-    private final Integer amount;
-    private final ShareDTO share;
+    private Integer amount;
+    private ShareDTO share;
     
-    public ShareTitleDTO(ShareTitleEntity shareTitle) {
-        amount = shareTitle.getAmount();
-        share = new ShareDTO(shareTitle.getShare());
+    public ShareTitleDTO(Integer amount, ShareDTO share) {
+        this.amount = amount;
+        this.share = share;
     }
 
     public Integer getAmount() {
         return amount;
     }
 
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
     public ShareDTO getShare() {
         return share;
+    }
+
+    public void setShare(ShareDTO share) {
+        this.share = share;
     }
     
 }

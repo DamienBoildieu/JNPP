@@ -44,7 +44,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         AdvisorEntity advisor = client.getAdvisor();
-        return new AdvisorDTO(advisor);
+        return advisor.toDTO();
     }
 
     @Override
@@ -56,7 +56,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         MessageEntity entity = new MessageEntity(client, client.getAdvisor(), 
                 MessageEntity.Direction.CLIENT_TO_ADVISOR, Date.from(Instant.now()), message);
         messageDAO.save(entity);
-        return new MessageDTO(entity);
+        return entity.toDTO();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         List<MessageEntity> messages = messageDAO.findAllByLogin(login);
-        return messageEntityToDTO(messages);
+        return MessageEntity.toDTO(messages);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         List<MessageEntity> messages = messageDAO.findNByLogin(login, n);
-        return messageEntityToDTO(messages);    
+        return MessageEntity.toDTO(messages);    
     }
 
     @Override
@@ -83,7 +83,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         List<MessageEntity> messages = messageDAO.findRecentByLogin(login, date);
-        return messageEntityToDTO(messages);        
+        return MessageEntity.toDTO(messages);        
     }
 
     @Override
@@ -100,7 +100,7 @@ public class AdvisorServiceImpl implements AdvisorService {
             throw new AvailableException();
         AppointmentEntity appointment = new AppointmentEntity(date, client, advisor);
         appointmentDAO.save(appointment);
-        return new AppointmentDTO(appointment);
+        return appointment.toDTO();
     }
 
     @Override
@@ -123,7 +123,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         List<AppointmentEntity> appointments = appointmentDAO.findAllByLogin(login);
-        return appointmentEntityToDTO(appointments);
+        return AppointmentEntity.toDTO(appointments);
     }
 
     @Override
@@ -132,21 +132,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         List<AppointmentEntity> appointments = appointmentDAO.findRecentByLogin(login, date);
-        return appointmentEntityToDTO(appointments);    
+        return AppointmentEntity.toDTO(appointments);    
     }
-    
-    private static List<MessageDTO> messageEntityToDTO(List<MessageEntity> movements) {
-        List<MessageDTO> dtos = new ArrayList<MessageDTO>(movements.size());
-        Iterator<MessageEntity> it = movements.iterator();
-        while (it.hasNext()) dtos.add(new MessageDTO((it.next())));
-        return dtos;
-    }   
-    
-    private static List<AppointmentDTO> appointmentEntityToDTO(List<AppointmentEntity> movements) {
-        List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>(movements.size());
-        Iterator<AppointmentEntity> it = movements.iterator();
-        while (it.hasNext()) dtos.add(new AppointmentDTO((it.next())));
-        return dtos;
-    } 
     
 }

@@ -21,50 +21,40 @@ public abstract class PaymentMeanDTO {
 
     }
     
-    private final String login;
-    private final String rib;
-    private final Status status;
-    
-    public PaymentMeanDTO(PaymentMeanEntity paymentMean) {
-        login = paymentMean.getClient().getLogin();
-        rib = paymentMean.getAccount().getRib();
-        switch (paymentMean.getStatus()) {
-            case ARRIVED:
-                status = PaymentMeanDTO.Status.ARRIVED;
-                break;
-            case DELIVERED:
-                status = PaymentMeanDTO.Status.DELIVERED;
-                break;
-            case ORDERED:
-                status = PaymentMeanDTO.Status.ORDERED;
-                break;
-            default:
-                status = null;
-        }
+    private String login;
+    private String rib;
+    private Status status;
+
+    public PaymentMeanDTO(String login, String rib, Status status) {
+        this.login = login;
+        this.rib = rib;
+        this.status = status;
     }
-    
-    public abstract Type getType(); 
+  
+    public abstract Type getType();
 
     public String getLogin() {
         return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getRib() {
         return rib;
     }
 
+    public void setRib(String rib) {
+        this.rib = rib;
+    }
+
     public Status getStatus() {
         return status;
     }
-    
-    public static PaymentMeanDTO newDTO(PaymentMeanEntity paymentMean) {
-        switch (paymentMean.getType()) {
-            case BANKCARD:
-                return new BankCardDTO((BankCardEntity) paymentMean);
-            case CHECKBOOK:
-                return new CheckbookDTO((CheckbookEntity) paymentMean);
-        }
-        return null;
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
     
 }

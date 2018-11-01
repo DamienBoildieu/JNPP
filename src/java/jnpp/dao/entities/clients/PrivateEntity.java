@@ -13,6 +13,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import jnpp.dao.entities.advisor.AdvisorEntity;
+import jnpp.service.dto.clients.PrivateDTO;
 
 @Entity
 @DiscriminatorValue(value = ClientEntity.Type.Values.PRIVATE)
@@ -67,6 +68,11 @@ public class PrivateEntity extends ClientEntity implements Serializable {
     @Override
     public String toString() {
         return "jnpp.dao.entities.PrivateEntity[ id=" + getLogin() + " ]";
+    }
+    
+    @Override
+    public PrivateDTO toDTO() {
+        return new PrivateDTO(getLogin(), identity, birthday, getEmail(), getAddress(), getPhone());
     }
     
 }

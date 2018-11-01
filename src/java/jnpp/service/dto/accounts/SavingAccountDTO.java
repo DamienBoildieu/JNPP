@@ -1,14 +1,14 @@
 package jnpp.service.dto.accounts;
 
-import jnpp.dao.entities.accounts.SavingAccountEntity;
+import jnpp.dao.entities.accounts.Currency;
 
 public class SavingAccountDTO extends MoneyAccountDTO {
     
-    private final SavingBookDTO savingBook;
+    private SavingBookDTO savingBook;
     
-    public SavingAccountDTO(SavingAccountEntity account) {
-        super(account);
-        savingBook = new SavingBookDTO(account.getSavingBook());
+    public SavingAccountDTO(String rib, Double money, Currency currency, SavingBookDTO savingBook) {
+        super(rib, money, currency);
+        this.savingBook = savingBook;
     }
 
     @Override
@@ -18,6 +18,10 @@ public class SavingAccountDTO extends MoneyAccountDTO {
 
     public SavingBookDTO getSavingBook() {
         return savingBook;
+    }
+
+    public void setSavingBook(SavingBookDTO savingBook) {
+        this.savingBook = savingBook;
     }
     
 }

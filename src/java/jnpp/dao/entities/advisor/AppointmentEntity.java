@@ -1,7 +1,10 @@
 package jnpp.dao.entities.advisor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,6 +20,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.service.dto.advisor.AppointmentDTO;
+import jnpp.service.dto.advisor.MessageDTO;
 
 @Entity
 @NamedQueries({
@@ -113,6 +118,17 @@ public class AppointmentEntity implements Serializable {
     @Override
     public String toString() {
         return "jnpp.dao.entities.Appointment[ id=" + id + " ]";
+    }
+    
+    public AppointmentDTO toDTO() {
+        return new AppointmentDTO(id, date, advisor.toDTO());
+    }
+    
+    public static List<AppointmentDTO> toDTO(List<AppointmentEntity> entities) {
+        List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>(entities.size());
+        Iterator<AppointmentEntity> it = entities.iterator();
+        while (it.hasNext()) dtos.add(it.next().toDTO());
+        return dtos;
     }
     
 }

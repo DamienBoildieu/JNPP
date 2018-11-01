@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import jnpp.dao.entities.advisor.AppointmentEntity;
+import jnpp.service.dto.notifications.AppointmentNotificationDTO;
 
 @Entity
 @DiscriminatorValue(value = NotificationEntity.Type.Values.APPOINTMENT)
@@ -36,6 +37,11 @@ public class AppointmentNotificationEntity extends NotificationEntity
     @Override
     public String toString() {
         return "jnpp.dao.entities.notifications.AppointmentNotificationEntity[ id=" + getId() + " ]";
+    }
+    
+    @Override
+    public AppointmentNotificationDTO toDTO() {
+        return new AppointmentNotificationDTO(getId(), getDate(), appointment.toDTO());
     }
     
 }

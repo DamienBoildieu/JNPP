@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import jnpp.dao.entities.accounts.AccountEntity;
+import jnpp.service.dto.notifications.OverdraftNotificationDTO;
 
 @Entity
 @DiscriminatorValue(value = NotificationEntity.Type.Values.OVERDRAFT)
@@ -36,6 +37,11 @@ public class OverdraftNotificationEntity extends NotificationEntity
     @Override
     public String toString() {
         return "jnpp.dao.entities.notifications.OverdraftNotificationEntity[ id=" + getId() + " ]";
+    }
+    
+    @Override
+    public OverdraftNotificationDTO toDTO() {
+        return new OverdraftNotificationDTO(getId(), getDate(), account.getRib());
     }
     
 }
