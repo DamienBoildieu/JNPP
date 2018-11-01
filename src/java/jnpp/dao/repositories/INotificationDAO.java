@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import jnpp.dao.entities.notifications.NotificationEntity;
 
-public interface INotificationDAO extends IGenericDAO<NotificationEntity> {
+public interface INotificationDAO extends GenericDAO<NotificationEntity> {
     
     boolean isFake(NotificationEntity notification);
     

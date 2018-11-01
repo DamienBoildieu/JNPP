@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class NotificationDAO extends GenericDAO<NotificationEntity> implements INotificationDAO {
+public class NotificationDAO extends GenericDAOImpl<NotificationEntity> implements INotificationDAO {
     
     @Transactional(readOnly = true)
     @Override

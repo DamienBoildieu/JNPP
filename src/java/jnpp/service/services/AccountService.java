@@ -42,19 +42,12 @@ public interface AccountService extends IService {
     ShareAccountDTO openShareAccount(String login) throws FakeClientException, DuplicateAccountException;
     
     void closeAccount(String login, String rib) throws FakeClientException, FakeAccountException, AccountOwnerException, ClosureException, CloseRequestException;
-    
-    List<MovementDTO> getMovements(String login)
-            throws FakeClientException;
-    List<MovementDTO> getMovements(String login, int n)
-            throws FakeClientException;
-    List<MovementDTO> getMovements(String login, Date date)
-            throws FakeClientException;
-    
+        
     List<MovementDTO> getMovements(String login, String rib)
-            throws FakeAccountException;
+            throws FakeAccountException, FakeClientException, AccountOwnerException;
     List<MovementDTO> getMovements(String login, String rib, int n)
-            throws FakeAccountException;
+            throws FakeAccountException, FakeClientException, AccountOwnerException;
     List<MovementDTO> getMovements(String login, String rib, Date date)
-            throws FakeAccountException;
+            throws FakeAccountException, FakeClientException, AccountOwnerException;
     
 }

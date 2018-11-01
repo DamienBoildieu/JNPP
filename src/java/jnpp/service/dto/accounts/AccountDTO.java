@@ -29,7 +29,7 @@ public abstract class AccountDTO {
         return rib;
     }
     
-    public static AccountDTO newAccountDTO(AccountEntity account) {
+    public static AccountDTO newDTO(AccountEntity account) {
         switch (account.getType()) {
             case CURRENT:
                 return new CurrentAccountDTO((CurrentAccountEntity) account);

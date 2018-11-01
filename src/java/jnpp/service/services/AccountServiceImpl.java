@@ -37,6 +37,7 @@ import jnpp.service.exceptions.owners.AccountOwnerException;
 import org.springframework.stereotype.Service;
 import jnpp.dao.repositories.AccountDAO;
 import jnpp.dao.repositories.ClientDAO;
+import jnpp.dao.repositories.MovementDAO;
 import jnpp.dao.repositories.SavingBookDAO;
 import jnpp.dao.repositories.ShareDAO;
 import jnpp.service.dto.accounts.AccountDTO;
@@ -69,6 +70,8 @@ public class AccountServiceImpl implements AccountService {
     CloseRequestDAO closeRequestDAO;
     @Resource
     ShareDAO shareDAO;
+    @Resource
+    MovementDAO movementDAO;
     
     private final Random random = new Random(); 
     
@@ -98,7 +101,7 @@ public class AccountServiceImpl implements AccountService {
         List<AccountEntity> entities = accountDAO.findAllByLogin(login);
         List<AccountDTO> dtos = new ArrayList<AccountDTO>(entities.size());
         Iterator<AccountEntity> it = entities.iterator();
-        while (it.hasNext()) dtos.add(AccountDTO.newAccountDTO((it.next())));
+        while (it.hasNext()) dtos.add(AccountDTO.newDTO((it.next())));
         return dtos;
     }
     
@@ -169,12 +172,7 @@ public class AccountServiceImpl implements AccountService {
         if (client == null) throw new FakeClientException();
         AccountEntity account = accountDAO.find(rib);
         if (account == null) throw new FakeAccountException();
-        List<ClientEntity> clients = account.getClients();
-        if (clients == null) throw new AccountOwnerException();
-        boolean clientFound = false;
-        Iterator<ClientEntity> itc = clients.iterator();
-        while (itc.hasNext() && !clientFound) clientFound = client.equals(itc.next());
-        if (!clientFound) throw new AccountOwnerException();
+        if (!isOwner(client, account)) throw new AccountOwnerException();
         switch (account.getType()) {
             case CURRENT:
                 closeAccount((CurrentAccountEntity) account);
@@ -252,34 +250,46 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<MovementDTO> getMovements(String login) throws FakeClientException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<MovementDTO> getMovements(String login, String rib) throws FakeAccountException, FakeClientException, AccountOwnerException {
+        if (login == null || rib == null) throw new IllegalArgumentException();
+        ClientEntity client = clientDAO.find(login);
+        if (client == null) throw new FakeClientException();
+        AccountEntity account = accountDAO.find(rib);
+        if (account == null) throw new FakeAccountException();
+        if (!isOwner(client, account)) throw new AccountOwnerException();
+        return entityToDTO(movementDAO.findAllByRib(rib));
+    }
+    
+    @Override
+    public List<MovementDTO> getMovements(String login, String rib, int n) throws FakeAccountException, FakeClientException, AccountOwnerException {
+        if (login == null || rib == null || n < 0) throw new IllegalArgumentException();
+        ClientEntity client = clientDAO.find(login);
+        if (client == null) throw new FakeClientException();
+        AccountEntity account = accountDAO.find(rib);
+        if (account == null) throw new FakeAccountException();
+        if (!isOwner(client, account)) throw new AccountOwnerException();
+        return entityToDTO(movementDAO.findNByRib(rib, n));    
     }
 
     @Override
-    public List<MovementDTO> getMovements(String login, int n) throws FakeClientException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<MovementDTO> getMovements(String login, Date date) throws FakeClientException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<MovementDTO> getMovements(String login, String rib) throws FakeAccountException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<MovementDTO> getMovements(String login, String rib, int n) throws FakeAccountException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<MovementDTO> getMovements(String login, String rib, Date date) throws FakeAccountException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<MovementDTO> getMovements(String login, String rib, Date date) throws FakeAccountException, FakeClientException, AccountOwnerException {
+        if (login == null || rib == null || date == null) throw new IllegalArgumentException();
+        ClientEntity client = clientDAO.find(login);
+        if (client == null) throw new FakeClientException();
+        AccountEntity account = accountDAO.find(rib);
+        if (account == null) throw new FakeAccountException();
+        if (!isOwner(client, account)) throw new AccountOwnerException();
+        return entityToDTO(movementDAO.findRecentByRib(rib, date));    
     }    
+
+    private boolean isOwner(ClientEntity client, AccountEntity account) {
+        List<ClientEntity> clients = account.getClients();
+        if (clients == null) return false;
+        boolean clientFound = false;
+        Iterator<ClientEntity> itc = clients.iterator();
+        while (itc.hasNext() && !clientFound) clientFound = client.equals(itc.next());
+        return clientFound;
+    }
     
     private String generateNewRib() {
         Set<String> ribs = new HashSet<String>(accountDAO.findAllRib());
@@ -291,5 +301,12 @@ public class AccountServiceImpl implements AccountService {
     private String generateRandomRib() {
         return "" + (RIB_MIN + random.nextInt(RIB_RANGE));
     }
+    
+    private static List<MovementDTO> entityToDTO(List<MovementEntity> movements) {
+        List<MovementDTO> dtos = new ArrayList<MovementDTO>(movements.size());
+        Iterator<MovementEntity> it = movements.iterator();
+        while (it.hasNext()) dtos.add(MovementDTO.newDTO((it.next())));
+        return dtos;
+    } 
     
 }

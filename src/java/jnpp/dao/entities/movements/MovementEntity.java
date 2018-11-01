@@ -11,12 +11,29 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import jnpp.dao.entities.accounts.AccountEntity;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+@NamedQueries({
+    @NamedQuery(
+        name = "find_all_movement_by_rib",
+        query = "SELECT m FROM MovementEntity m "
+                + "WHERE m.account.rib = :rib "
+                + "ORDER BY m.date DESC"),
+    @NamedQuery(
+        name = "find_recent_movement_by_rib",
+        query = "SELECT m FROM MovementEntity m "
+                + "WHERE m.account.rib = :rib "
+                + "  AND m.date >= :date "
+                + "ORDER BY m.date DESC")})
 public abstract class MovementEntity implements Serializable {
 
     public static enum Type {
@@ -52,7 +69,9 @@ public abstract class MovementEntity implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date;
     
-    private String ribFrom;
+    @ManyToOne
+    @JoinColumn(name = "account_fk")
+    private AccountEntity account;
     
     public abstract Type getType();
 
@@ -72,12 +91,12 @@ public abstract class MovementEntity implements Serializable {
         this.date = date;
     }
 
-    public String getRibFrom() {
-        return ribFrom;
+    public AccountEntity getAccount() {
+        return account;
     }
 
-    public void setRibFrom(String ribFrom) {
-        this.ribFrom = ribFrom;
+    public void setAccount(AccountEntity account) {
+        this.account = account;
     }
     
     @Override

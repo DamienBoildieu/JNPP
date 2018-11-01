@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class CloseRequestDAOImpl extends GenericDAO<CloseRequestEntity> implements CloseRequestDAO {
+public class CloseRequestDAOImpl extends GenericDAOImpl<CloseRequestEntity> implements CloseRequestDAO {
     
     @Transactional(readOnly = true)
     @Override

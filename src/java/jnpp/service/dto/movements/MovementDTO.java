@@ -29,7 +29,7 @@ public abstract class MovementDTO {
     
     public MovementDTO(MovementEntity movement) {
         date = movement.getDate();
-        ribFrom = movement.getRibFrom();
+        ribFrom = movement.getAccount().getRib();
     }
     
     public abstract Type getType();
@@ -42,7 +42,7 @@ public abstract class MovementDTO {
         return ribFrom;
     }
     
-    public static MovementDTO newMovementDTO(MovementEntity movement) {
+    public static MovementDTO newDTO(MovementEntity movement) {
         switch(movement.getType()) {
             case TRANSFERT:
                 return new TransfertDTO((TransfertEntity) movement);

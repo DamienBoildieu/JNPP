@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class SavingBookDAOImpl extends GenericDAO<SavingBookEntity> implements SavingBookDAO {
+public class SavingBookDAOImpl extends GenericDAOImpl<SavingBookEntity> implements SavingBookDAO {
         
     @Transactional(readOnly = true)
     @Override

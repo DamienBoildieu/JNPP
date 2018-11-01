@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class ShareDAOImpl extends GenericDAO<ShareEntity> implements ShareDAO {
+public class ShareDAOImpl extends GenericDAOImpl<ShareEntity> implements ShareDAO {
     
     @Transactional(readOnly = true)
     @Override

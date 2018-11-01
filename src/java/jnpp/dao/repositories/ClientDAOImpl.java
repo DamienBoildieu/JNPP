@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class ClientDAOImpl extends GenericDAO<ClientEntity> implements ClientDAO {
+public class ClientDAOImpl extends GenericDAOImpl<ClientEntity> implements ClientDAO {
  
     @Transactional(readOnly = true)
     @Override
