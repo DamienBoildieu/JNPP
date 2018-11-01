@@ -14,7 +14,8 @@ public class MessageDTO {
         
     private final Direction direction;
     private final Date date;
-    private final String content;    
+    private final String content;  
+    private final AdvisorDTO advisor;
         
     public MessageDTO(MessageEntity message) {
         switch (message.getDirection()) {
@@ -29,6 +30,7 @@ public class MessageDTO {
         }
         date = message.getDate();
         content = message.getContent();
+        advisor = new AdvisorDTO(message.getAdvisor());
     }
 
     public Direction getDirection() {
@@ -42,5 +44,9 @@ public class MessageDTO {
     public String getContent() {
         return content;
     }
-    
+
+    public AdvisorDTO getAdvisor() {
+        return advisor;
+    }
+        
 }

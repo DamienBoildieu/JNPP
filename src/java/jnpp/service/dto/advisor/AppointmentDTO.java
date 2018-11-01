@@ -5,40 +5,14 @@ import jnpp.dao.entities.advisor.AppointmentEntity;
 
 public class AppointmentDTO {
     
-    public static enum Status {
-        
-        DEMAND,
-        ACCEPTED,
-        DENIED,
-        CANCEL;
-        
-    }
-    
     private final Long id;
     private final Date date;
     private final AdvisorDTO advisor;
-    private final Status status;
     
     public AppointmentDTO(AppointmentEntity appointment) {
         id = appointment.getId();
         date = appointment.getDate();
-        advisor = new AdvisorDTO(appointment.getClient().getAdvisor());
-        switch (appointment.getStatus()) {
-            case ACCEPTED:
-                status = Status.ACCEPTED;
-                break;
-            case CANCEL:
-                status = Status.CANCEL;
-                break;
-            case DEMAND:
-                status = Status.DEMAND;
-                break;
-            case DENIED:
-                status = Status.DENIED;
-                break;
-            default:
-                status = null;
-        }
+        advisor = new AdvisorDTO(appointment.getAdvisor());
     }
 
     public Long getId() {
@@ -51,10 +25,6 @@ public class AppointmentDTO {
 
     public AdvisorDTO getAdvisor() {
         return advisor;
-    }
-
-    public Status getStatus() {
-        return status;
     }
     
 }

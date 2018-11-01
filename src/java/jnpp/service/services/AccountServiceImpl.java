@@ -78,20 +78,14 @@ public class AccountServiceImpl implements AccountService {
     
     @Override
     public List<SavingBookDTO> getSavingBooks() {
-        List<SavingBookEntity> entities = savingBookDAO.findAll();
-        List<SavingBookDTO> dtos = new ArrayList<SavingBookDTO>(entities.size());
-        Iterator<SavingBookEntity> it = entities.iterator();
-        while (it.hasNext()) dtos.add(new SavingBookDTO(it.next()));
-        return dtos;
+        List<SavingBookEntity> savingBooks = savingBookDAO.findAll();
+        return savingBookEntityToDTO(savingBooks);
     }
     
     @Override
     public List<ShareDTO> getShares() {
-        List<ShareEntity> entities = shareDAO.findAll();
-        List<ShareDTO> dtos = new ArrayList<ShareDTO>(entities.size());
-        Iterator<ShareEntity> it = entities.iterator();
-        while (it.hasNext()) dtos.add(new ShareDTO(it.next()));
-        return dtos;
+        List<ShareEntity> shares = shareDAO.findAll();
+        return shareEntityToDTO(shares);
     }
     
     @Override
@@ -99,11 +93,8 @@ public class AccountServiceImpl implements AccountService {
         if (login == null) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
-        List<AccountEntity> entities = accountDAO.findAllByLogin(login);
-        List<AccountDTO> dtos = new ArrayList<AccountDTO>(entities.size());
-        Iterator<AccountEntity> it = entities.iterator();
-        while (it.hasNext()) dtos.add(AccountDTO.newDTO((it.next())));
-        return dtos;
+        List<AccountEntity> accounts = accountDAO.findAllByLogin(login);
+        return accountEntityToDTO(accounts);
     }
     
     @Override
@@ -260,7 +251,7 @@ public class AccountServiceImpl implements AccountService {
         AccountEntity account = accountDAO.find(rib);
         if (account == null) throw new FakeAccountException();
         if (!isOwner(client, account)) throw new AccountOwnerException();
-        return entityToDTO(movementDAO.findAllByRib(rib));
+        return movementEntityToDTO(movementDAO.findAllByRib(rib));
     }
     
     @Override
@@ -271,7 +262,7 @@ public class AccountServiceImpl implements AccountService {
         AccountEntity account = accountDAO.find(rib);
         if (account == null) throw new FakeAccountException();
         if (!isOwner(client, account)) throw new AccountOwnerException();
-        return entityToDTO(movementDAO.findNByRib(rib, n));    
+        return movementEntityToDTO(movementDAO.findNByRib(rib, n));    
     }
 
     @Override
@@ -282,7 +273,7 @@ public class AccountServiceImpl implements AccountService {
         AccountEntity account = accountDAO.find(rib);
         if (account == null) throw new FakeAccountException();
         if (!isOwner(client, account)) throw new AccountOwnerException();
-        return entityToDTO(movementDAO.findRecentByRib(rib, date));    
+        return movementEntityToDTO(movementDAO.findRecentByRib(rib, date));    
     }    
 
     private boolean isOwner(ClientEntity client, AccountEntity account) {
@@ -304,8 +295,29 @@ public class AccountServiceImpl implements AccountService {
     private String generateRandomRib() {
         return "" + (RIB_MIN + random.nextInt(RIB_RANGE));
     }
-    
-    private static List<MovementDTO> entityToDTO(List<MovementEntity> movements) {
+        
+    private static List<SavingBookDTO> savingBookEntityToDTO(List<SavingBookEntity> movements) {
+        List<SavingBookDTO> dtos = new ArrayList<SavingBookDTO>(movements.size());
+        Iterator<SavingBookEntity> it = movements.iterator();
+        while (it.hasNext()) dtos.add(new SavingBookDTO((it.next())));
+        return dtos;
+    }
+        
+    private static List<ShareDTO> shareEntityToDTO(List<ShareEntity> movements) {
+        List<ShareDTO> dtos = new ArrayList<ShareDTO>(movements.size());
+        Iterator<ShareEntity> it = movements.iterator();
+        while (it.hasNext()) dtos.add(new ShareDTO((it.next())));
+        return dtos;
+    }
+        
+    private static List<AccountDTO> accountEntityToDTO(List<AccountEntity> movements) {
+        List<AccountDTO> dtos = new ArrayList<AccountDTO>(movements.size());
+        Iterator<AccountEntity> it = movements.iterator();
+        while (it.hasNext()) dtos.add(AccountDTO.newDTO((it.next())));
+        return dtos;
+    }
+        
+    private static List<MovementDTO> movementEntityToDTO(List<MovementEntity> movements) {
         List<MovementDTO> dtos = new ArrayList<MovementDTO>(movements.size());
         Iterator<MovementEntity> it = movements.iterator();
         while (it.hasNext()) dtos.add(MovementDTO.newDTO((it.next())));

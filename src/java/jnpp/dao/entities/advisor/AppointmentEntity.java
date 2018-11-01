@@ -11,22 +11,33 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import jnpp.dao.entities.clients.ClientEntity;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(
+        name = "find_all_appointment_by_rib",
+        query = "SELECT a FROM AppointmentEntity a "
+                + "WHERE a.client.login = :login "
+                + "ORDER BY a.date DESC"),
+    @NamedQuery(
+        name = "find_recent_appointment_by_rib",
+        query = "SELECT a FROM AppointmentEntity a "
+                + "WHERE a.client.login = :login "
+                + "  AND a.date >= :date "
+                + "ORDER BY a.date DESC"),
+    @NamedQuery(
+        name = "count_advisor_appointment_in_min_max",
+        query = "SELECT COUNT(a) FROM AppointmentEntity a "
+                + "WHERE a.advisor.id = :id "
+                + "  AND :min <= a.date "
+                + "  AND a.date <= :max")})
 public class AppointmentEntity implements Serializable {
-
-    public static enum Status {
-        
-        DEMAND,
-        ACCEPTED,
-        DENIED,
-        CANCEL;
-        
-    }
     
     private static final long serialVersionUID = 1L;
     
@@ -39,11 +50,17 @@ public class AppointmentEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name="client_fk")
     private ClientEntity client;
-    
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    @ManyToOne
+    @JoinColumn(name="advisor_fk")
+    private AdvisorEntity advisor;
     
     public AppointmentEntity() {}
+    
+    public AppointmentEntity(Date date, ClientEntity client, AdvisorEntity advisor) {
+        this.date = date;
+        this.client = client;
+        this.advisor = advisor;
+    }
     
     public Long getId() {
         return id;
@@ -69,12 +86,12 @@ public class AppointmentEntity implements Serializable {
         this.client = client;
     }
 
-    public Status getStatus() {
-        return status;
+    public AdvisorEntity getAdvisor() {
+        return advisor;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setAdvisor(AdvisorEntity advisor) {
+        this.advisor = advisor;
     }
     
     @Override

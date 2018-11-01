@@ -3,8 +3,14 @@ package jnpp.service.services;
 import java.util.Date;
 import java.util.List;
 import jnpp.service.dto.advisor.AdvisorDTO;
+import jnpp.service.dto.advisor.AppointmentDTO;
 import jnpp.service.dto.advisor.MessageDTO;
+import jnpp.service.exceptions.advisors.AvailableException;
+import jnpp.service.exceptions.advisors.DateException;
+import jnpp.service.exceptions.duplicates.DuplicateAppointmentException;
+import jnpp.service.exceptions.entities.FakeAppointmentException;
 import jnpp.service.exceptions.entities.FakeClientException;
+import jnpp.service.exceptions.owners.AppointmentOwnerException;
 
 public interface AdvisorService extends IService {
    
@@ -19,4 +25,17 @@ public interface AdvisorService extends IService {
             throws FakeClientException;
     List<MessageDTO> receiveLastMessages(String login, Date date)
             throws FakeClientException;
+    
+    AppointmentDTO makeAppointment(String login, Date date)
+            throws FakeClientException, DateException, 
+            DuplicateAppointmentException, AvailableException;
+    void cancelAppoint(String login, Long id)
+            throws FakeClientException, FakeAppointmentException, AppointmentOwnerException, DateException;
+    
+    List<AppointmentDTO> getAppoinments(String login)
+            throws FakeClientException;
+    List<AppointmentDTO> getAppoinments(String login, Date date)
+            throws FakeClientException;
+    
+    
 }
