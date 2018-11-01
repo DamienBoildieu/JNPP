@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import jnpp.dao.entities.clients.AdvisorEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 
 @Entity

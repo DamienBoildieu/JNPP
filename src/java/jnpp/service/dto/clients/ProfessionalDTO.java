@@ -1,6 +1,6 @@
 package jnpp.service.dto.clients;
 
-import jnpp.dao.entities.clients.Identity;
+import jnpp.dao.entities.Identity;
 import jnpp.dao.entities.clients.ProfessionalEntity;
 
 public class ProfessionalDTO extends ClientDTO {

@@ -8,10 +8,10 @@ public abstract class ShareTradeDTO extends TradeDTO {
     private final Integer amount;
     private final ShareDTO share;
     
-    public ShareTradeDTO(ShareTradeEntity shareTrade) {
-        super(shareTrade);
-        amount = shareTrade.getAmount();
-        share = new ShareDTO((shareTrade.getShare()));
+    public ShareTradeDTO(ShareTradeEntity movement) {
+        super(movement);
+        amount = movement.getAmount();
+        share = new ShareDTO((movement.getShare()));
     }
 
     public Integer getAmount() {

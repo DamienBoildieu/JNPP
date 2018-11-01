@@ -1,4 +1,4 @@
-package jnpp.dao.entities.clients;
+package jnpp.dao.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import jnpp.dao.entities.clients.ClientEntity;
 
 @Entity
 public class AdvisorEntity implements Serializable {

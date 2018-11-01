@@ -1,5 +1,7 @@
 package jnpp.dao.entities.clients;
 
+import jnpp.dao.entities.Identity;
+import jnpp.dao.entities.Gender;
 import java.io.Serializable;
 
 import javax.persistence.DiscriminatorValue;

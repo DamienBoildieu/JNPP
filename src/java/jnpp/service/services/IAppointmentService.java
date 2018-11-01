@@ -5,7 +5,7 @@ import java.util.List;
 
 import jnpp.dao.entities.AppointmentEntity;
 import jnpp.dao.entities.AppointmentEntity.Status;
-import jnpp.dao.entities.clients.AdvisorEntity;
+import jnpp.dao.entities.AdvisorEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.service.exceptions.owners.AdvisorOwnerException;
 import jnpp.service.exceptions.entities.FakeAdvisorException;

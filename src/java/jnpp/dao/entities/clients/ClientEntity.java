@@ -1,5 +1,6 @@
 package jnpp.dao.entities.clients;
 
+import jnpp.dao.entities.Address;
 import java.io.Serializable;
 
 import javax.persistence.Column;

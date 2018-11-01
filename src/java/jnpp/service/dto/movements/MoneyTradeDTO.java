@@ -8,10 +8,10 @@ public abstract class MoneyTradeDTO extends TradeDTO {
     private final Double money;
     private final Currency currency;
 
-    public MoneyTradeDTO(MoneyTradeEntity moneyTrade) {
-        super(moneyTrade);
-        money = moneyTrade.getMoney();
-        currency = moneyTrade.getCurrency();
+    public MoneyTradeDTO(MoneyTradeEntity movement) {
+        super(movement);
+        money = movement.getMoney();
+        currency = movement.getCurrency();
     }
     
     public Double getMoney() {

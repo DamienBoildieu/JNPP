@@ -3,7 +3,7 @@ package jnpp.controller.views;
 import java.util.HashMap;
 import java.util.Map;
 import jnpp.dao.entities.accounts.AccountEntity;
-import jnpp.dao.entities.clients.Gender;
+import jnpp.dao.entities.Gender;
 
 
 public class Translator {

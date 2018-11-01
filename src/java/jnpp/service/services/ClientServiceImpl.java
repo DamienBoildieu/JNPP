@@ -10,10 +10,10 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-import jnpp.dao.entities.clients.Address;
+import jnpp.dao.entities.Address;
 import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.dao.entities.clients.Gender;
-import jnpp.dao.entities.clients.Identity;
+import jnpp.dao.entities.Gender;
+import jnpp.dao.entities.Identity;
 import jnpp.dao.entities.clients.PrivateEntity;
 import jnpp.dao.entities.clients.ProfessionalEntity;
 import jnpp.service.exceptions.ClosureException;

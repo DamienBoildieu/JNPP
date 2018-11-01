@@ -8,10 +8,10 @@ public class PaymentDTO extends MovementDTO {
     private final Double money;
     private final Currency currency;
     
-    public PaymentDTO(PaymentEntity payment) {
-        super(payment);
-        money = payment.getMoney();
-        currency = payment.getCurrency();
+    public PaymentDTO(PaymentEntity movement) {
+        super(movement);
+        money = movement.getMoney();
+        currency = movement.getCurrency();
     }
     
     @Override

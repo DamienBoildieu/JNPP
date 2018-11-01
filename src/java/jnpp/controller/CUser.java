@@ -15,8 +15,7 @@ import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.controller.views.Translator;
 import jnpp.controller.views.info.ViewInfo;
 import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.dao.entities.clients.Gender;
-import jnpp.service.services.INotificationService;
+import jnpp.dao.entities.Gender;
 import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.clients.AgeException;
 import jnpp.service.exceptions.duplicates.DuplicateClientException;
@@ -31,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jnpp.service.services.ClientService;
+import jnpp.service.services.NotificationService;
 
 /**
  * Classe contrôlant la gestion des utilisateurs
@@ -44,7 +44,7 @@ public class CUser {
     ClientService clientService;
     
     @Autowired
-    INotificationService notifService;
+    NotificationService notifService;
     /**
      * Requête du formulaire de connexion, essaie de connecter l'utilisateur
      * @param model le model contient les alertes si il y a eu un redirect

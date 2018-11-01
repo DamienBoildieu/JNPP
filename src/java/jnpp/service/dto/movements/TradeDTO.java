@@ -6,9 +6,9 @@ public abstract class TradeDTO extends MovementDTO {
     
     private final String ribTo;
 
-    public TradeDTO(TradeEntity trade) {
-        super(trade);
-        ribTo = trade.getRibTo();
+    public TradeDTO(TradeEntity movement) {
+        super(movement);
+        ribTo = movement.getRibTo();
     }
     
     public String getRibTo() {

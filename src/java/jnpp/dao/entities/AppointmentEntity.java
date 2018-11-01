@@ -14,7 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import jnpp.dao.entities.clients.AdvisorEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 
 @Entity

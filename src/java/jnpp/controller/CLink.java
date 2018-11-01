@@ -17,14 +17,13 @@ import jnpp.controller.views.Translator;
 import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.info.ViewInfo;
 import jnpp.dao.entities.MessageEntity;
-import jnpp.dao.entities.clients.AdvisorEntity;
+import jnpp.dao.entities.AdvisorEntity;
 import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.dao.entities.clients.Gender;
-import jnpp.dao.entities.clients.Identity;
+import jnpp.dao.entities.Gender;
+import jnpp.dao.entities.Identity;
 import jnpp.dao.entities.clients.PrivateEntity;
 import jnpp.dao.entities.notifications.MessageNotificationEntity;
 import jnpp.dao.entities.notifications.NotificationEntity;
-import jnpp.service.services.INotificationService;
 import jnpp.service.exceptions.entities.FakeClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import jnpp.service.services.NotificationService;
 
 /**
  * Classe contrôlant les différents liens qui ne requièrent pas de traitement particulier
@@ -41,7 +41,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class CLink {
     @Autowired
-    private INotificationService notifService;
+    private NotificationService notifService;
     /**
      * Requête sur l'index
      * @param model le model contient les alertes si il y a eu un redirect

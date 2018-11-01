@@ -1,4 +1,4 @@
-package jnpp.dao.entities.clients;
+package jnpp.dao.entities;
 
 public enum Gender {
     MALE,

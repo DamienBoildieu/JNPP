@@ -1,6 +1,6 @@
 package jnpp.service.services;
 
-import jnpp.dao.entities.clients.AdvisorEntity;
+import jnpp.dao.entities.AdvisorEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.service.exceptions.entities.FakeClientException;
 

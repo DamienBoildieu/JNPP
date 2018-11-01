@@ -1,6 +1,6 @@
 package jnpp.service.dto.clients;
 
-import jnpp.dao.entities.clients.Address;
+import jnpp.dao.entities.Address;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.clients.PrivateEntity;
 import jnpp.dao.entities.clients.ProfessionalEntity;

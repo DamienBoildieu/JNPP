@@ -8,10 +8,10 @@ public class WithdrawDTO extends MovementDTO {
     private final Double money;
     private final Currency currency;
     
-    public WithdrawDTO(WithdrawEntity withdraw) {
-        super(withdraw);
-        money = withdraw.getMoney();
-        currency = withdraw.getCurrency();
+    public WithdrawDTO(WithdrawEntity movement) {
+        super(movement);
+        money = movement.getMoney();
+        currency = movement.getCurrency();
     }
     
     @Override

@@ -4,8 +4,8 @@ import jnpp.dao.entities.movements.PurchaseEntity;
 
 public class PurchaseDTO extends ShareTradeDTO {
     
-    public PurchaseDTO(PurchaseEntity purchase) {
-        super(purchase);
+    public PurchaseDTO(PurchaseEntity movement) {
+        super(movement);
     }
     
     @Override

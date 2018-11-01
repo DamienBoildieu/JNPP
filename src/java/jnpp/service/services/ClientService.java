@@ -3,7 +3,7 @@ package jnpp.service.services;
 import java.util.Date;
   
 import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.dao.entities.clients.Gender;
+import jnpp.dao.entities.Gender;
 import jnpp.dao.entities.clients.PrivateEntity;
 import jnpp.dao.entities.clients.ProfessionalEntity;
 import jnpp.service.dto.clients.ClientDTO;

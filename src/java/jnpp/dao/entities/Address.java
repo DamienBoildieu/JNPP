@@ -1,4 +1,4 @@
-package jnpp.dao.entities.clients;
+package jnpp.dao.entities;
 
 import java.io.Serializable;
 

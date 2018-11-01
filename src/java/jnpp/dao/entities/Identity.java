@@ -1,5 +1,6 @@
-package jnpp.dao.entities.clients;
+package jnpp.dao.entities;
 
+import jnpp.dao.entities.Gender;
 import java.io.Serializable;
 
 import javax.persistence.Embeddable;

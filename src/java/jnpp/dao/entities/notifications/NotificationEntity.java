@@ -24,13 +24,9 @@ import jnpp.dao.entities.clients.ClientEntity;
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
     @NamedQuery(
-        name = "is_notification_fake",
-        query = "SELECT COUNT(n) FROM Notification n "
-                + "WHERE n.id = :id"),
-    @NamedQuery(
-        name = "find_all_client_notification",
-        query = "SELECT n FROM Notification n "
-                + "WHERE n.client.id = :client_id "
+        name = "find_all_notification_by_login",
+        query = "SELECT n FROM NotificationEntity n "
+                + "WHERE n.client.login = :login "
                 + "ORDER BY n.date DESC"),
     @NamedQuery(
         name = "find_all_client_unseen_notification",

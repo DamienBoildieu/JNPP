@@ -4,8 +4,8 @@ import java.util.List;
 import javax.persistence.Query;
 
 import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.dao.entities.clients.Gender;
-import jnpp.dao.entities.clients.Identity;
+import jnpp.dao.entities.Gender;
+import jnpp.dao.entities.Identity;
 import jnpp.dao.entities.clients.PrivateEntity;
 import jnpp.dao.entities.clients.ProfessionalEntity;
 

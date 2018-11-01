@@ -1,7 +1,7 @@
 package jnpp.service.dto.clients;
 
 import java.util.Date;
-import jnpp.dao.entities.clients.Identity;
+import jnpp.dao.entities.Identity;
 import jnpp.dao.entities.clients.PrivateEntity;
 
 public class PrivateDTO extends ClientDTO {

@@ -4,8 +4,8 @@ import jnpp.dao.entities.movements.TransfertEntity;
 
 public class TransfertDTO extends MoneyTradeDTO {
 
-    public TransfertDTO(TransfertEntity transfert) {
-        super(transfert);
+    public TransfertDTO(TransfertEntity movement) {
+        super(movement);
     }
     
     @Override

@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.dao.entities.clients.Identity;
+import jnpp.dao.entities.Identity;
 import jnpp.dao.entities.movements.MovementEntity;
 import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.accounts.CurrentAccountDTO;

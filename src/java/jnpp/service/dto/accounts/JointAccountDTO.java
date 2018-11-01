@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import jnpp.dao.entities.accounts.JointAccountEntity;
 import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.dao.entities.clients.Identity;
+import jnpp.dao.entities.Identity;
 import jnpp.dao.entities.clients.PrivateEntity;
 
 public class JointAccountDTO extends MoneyAccountDTO {

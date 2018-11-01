@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import jnpp.dao.entities.MessageEntity;
-import jnpp.dao.entities.clients.AdvisorEntity;
+import jnpp.dao.entities.AdvisorEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.service.exceptions.entities.FakeAdvisorException;
 import jnpp.service.exceptions.entities.FakeClientException;
