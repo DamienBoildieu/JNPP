@@ -15,7 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import jnpp.dao.entities.AdvisorEntity;
+import jnpp.dao.entities.advisor.AdvisorEntity;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

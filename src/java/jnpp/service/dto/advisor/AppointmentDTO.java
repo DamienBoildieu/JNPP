@@ -1,7 +1,7 @@
-package jnpp.service.dto;
+package jnpp.service.dto.advisor;
 
 import java.util.Date;
-import jnpp.dao.entities.AppointmentEntity;
+import jnpp.dao.entities.advisor.AppointmentEntity;
 
 public class AppointmentDTO {
     
@@ -22,7 +22,7 @@ public class AppointmentDTO {
     public AppointmentDTO(AppointmentEntity appointment) {
         id = appointment.getId();
         date = appointment.getDate();
-        advisor = new AdvisorDTO(appointment.getAdvisor());
+        advisor = new AdvisorDTO(appointment.getClient().getAdvisor());
         switch (appointment.getStatus()) {
             case ACCEPTED:
                 status = Status.ACCEPTED;

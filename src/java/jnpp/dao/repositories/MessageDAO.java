@@ -2,7 +2,7 @@ package jnpp.dao.repositories;
 
 import java.util.Date;
 import java.util.List;
-import jnpp.dao.entities.MessageEntity;
+import jnpp.dao.entities.advisor.MessageEntity;
 
 public interface MessageDAO extends GenericDAO<MessageEntity> {
     

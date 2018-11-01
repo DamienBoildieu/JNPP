@@ -9,8 +9,6 @@
     <class>jnpp.dao.entities.clients.Identifier</class>
     <class>jnpp.dao.entities.movements.Paiement</class>
     <class>jnpp.dao.entities.accounts.CloseRequestEntity</class>
-    <class>jnpp.dao.entities.AppointmentEntity</class>
-    <class>jnpp.dao.entities.MessageEntity</class>
     <class>jnpp.dao.entities.paymentmeans.PaymentMeanEntity</class>
     <class>jnpp.dao.entities.paymentmeans.BankCardEntity</class>
     <class>jnpp.dao.entities.clients.ClientEntity</class>
@@ -39,8 +37,10 @@
     <class>jnpp.dao.entities.accounts.ShareTitleEntity</class>
     <class>jnpp.dao.entities.accounts.ShareAccountEntity</class>
     <class>jnpp.dao.entities.accounts.MoneyAccountEntity</class>
-    <class>jnpp.dao.entities.AdvisorEntity</class>
     <class>jnpp.dao.entities.Address</class>
+    <class>jnpp.dao.entities.advisor.AdvisorEntity</class>
+    <class>jnpp.dao.entities.advisor.AppointmentEntity</class>
+    <class>jnpp.dao.entities.advisor.MessageEntity</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/JNPPDB"/>

@@ -1,7 +1,7 @@
-package jnpp.service.dto;
+package jnpp.service.dto.advisor;
 
 import java.util.Date;
-import jnpp.dao.entities.MessageEntity;
+import jnpp.dao.entities.advisor.MessageEntity;
 
 public class MessageDTO {
     

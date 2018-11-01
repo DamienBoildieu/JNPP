@@ -9,7 +9,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import jnpp.dao.entities.AdvisorEntity;
+import jnpp.dao.entities.advisor.AdvisorEntity;
 
 @Entity
 @DiscriminatorValue(value = ClientEntity.Type.Values.PROFESSIONAL)

@@ -1,7 +1,7 @@
 package jnpp.service.dto.notifications;
 
 import jnpp.dao.entities.notifications.MessageNotificationEntity;
-import jnpp.service.dto.MessageDTO;
+import jnpp.service.dto.advisor.MessageDTO;
 
 public class MessageNotificationDTO extends NotificationDTO {
     

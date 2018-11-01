@@ -3,9 +3,9 @@ package jnpp.service.services;
 import java.util.Date;
 import java.util.List;
 
-import jnpp.dao.entities.AppointmentEntity;
-import jnpp.dao.entities.AppointmentEntity.Status;
-import jnpp.dao.entities.AdvisorEntity;
+import jnpp.dao.entities.advisor.AppointmentEntity;
+import jnpp.dao.entities.advisor.AppointmentEntity.Status;
+import jnpp.dao.entities.advisor.AdvisorEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.service.exceptions.owners.AdvisorOwnerException;
 import jnpp.service.exceptions.entities.FakeAdvisorException;

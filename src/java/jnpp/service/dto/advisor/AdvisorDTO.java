@@ -1,7 +1,7 @@
-package jnpp.service.dto;
+package jnpp.service.dto.advisor;
 
 import jnpp.dao.entities.Address;
-import jnpp.dao.entities.AdvisorEntity;
+import jnpp.dao.entities.advisor.AdvisorEntity;
 import jnpp.dao.entities.Identity;
 
 public class AdvisorDTO {

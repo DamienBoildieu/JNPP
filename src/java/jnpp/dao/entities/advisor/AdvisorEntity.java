@@ -1,4 +1,4 @@
-package jnpp.dao.entities;
+package jnpp.dao.entities.advisor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import jnpp.dao.entities.Address;
+import jnpp.dao.entities.Identity;
 import jnpp.dao.entities.clients.ClientEntity;
 
 @Entity

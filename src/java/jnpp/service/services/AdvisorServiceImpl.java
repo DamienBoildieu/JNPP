@@ -6,14 +6,13 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Resource;
-import jnpp.dao.entities.AdvisorEntity;
-import jnpp.dao.entities.MessageEntity;
+import jnpp.dao.entities.advisor.AdvisorEntity;
+import jnpp.dao.entities.advisor.MessageEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.repositories.ClientDAO;
 import jnpp.dao.repositories.MessageDAO;
-import jnpp.service.dto.AdvisorDTO;
-import jnpp.service.dto.MessageDTO;
-import jnpp.service.dto.movements.MovementDTO;
+import jnpp.service.dto.advisor.AdvisorDTO;
+import jnpp.service.dto.advisor.MessageDTO;
 import jnpp.service.exceptions.entities.FakeClientException;
 import org.springframework.stereotype.Service;
 

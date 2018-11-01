@@ -12,7 +12,7 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import jnpp.dao.entities.Address;
-import jnpp.dao.entities.AdvisorEntity;
+import jnpp.dao.entities.advisor.AdvisorEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.Gender;
 import jnpp.dao.entities.Identity;

@@ -1,4 +1,4 @@
-package jnpp.dao.entities;
+package jnpp.dao.entities.advisor;
 
 import java.io.Serializable;
 import java.util.Date;

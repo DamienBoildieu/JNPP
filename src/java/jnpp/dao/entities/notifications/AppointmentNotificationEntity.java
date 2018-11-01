@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import jnpp.dao.entities.AppointmentEntity;
+import jnpp.dao.entities.advisor.AppointmentEntity;
 
 @Entity
 @DiscriminatorValue(value = NotificationEntity.Type.Values.APPOINTMENT)

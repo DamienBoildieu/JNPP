@@ -1,4 +1,4 @@
-package jnpp.dao.entities;
+package jnpp.dao.entities.advisor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -39,9 +39,6 @@ public class AppointmentEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name="client_fk")
     private ClientEntity client;
-    @ManyToOne
-    @JoinColumn(name="advisor_fk")
-    private AdvisorEntity advisor;
     
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -70,14 +67,6 @@ public class AppointmentEntity implements Serializable {
 
     public void setClient(ClientEntity client) {
         this.client = client;
-    }
-
-    public AdvisorEntity getAdvisor() {
-        return advisor;
-    }
-
-    public void setAdvisor(AdvisorEntity advisor) {
-        this.advisor = advisor;
     }
 
     public Status getStatus() {

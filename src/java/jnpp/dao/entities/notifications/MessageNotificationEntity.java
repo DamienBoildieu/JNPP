@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import jnpp.dao.entities.MessageEntity;
+import jnpp.dao.entities.advisor.MessageEntity;
 
 @Entity
 @DiscriminatorValue(value = NotificationEntity.Type.Values.MESSAGE)

@@ -3,7 +3,7 @@ package jnpp.dao.repositories;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Query;
-import jnpp.dao.entities.MessageEntity;
+import jnpp.dao.entities.advisor.MessageEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 public class MessageDAOImpl extends GenericDAOImpl<MessageEntity> implements MessageDAO {
