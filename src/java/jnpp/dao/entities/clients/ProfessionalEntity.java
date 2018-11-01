@@ -12,13 +12,9 @@ import javax.persistence.NamedQuery;
 @DiscriminatorValue(value = ClientEntity.Type.Values.PROFESSIONAL)
 @NamedQueries({
     @NamedQuery(
-        name = "find_by_name",
-        query = "SELECT COUNT(p) FROM Professional p WHERE p.name = :name"),
-    @NamedQuery(
-        name = "is_professional_fake",
-        query = "SELECT COUNT(p) FROM Professional p "
-                + "WHERE p.id = :id "
-                + "  AND p.name = :name "
+        name = "find_professional_by_name_identity",
+        query = "SELECT p FROM ProfessionalEntity p "
+                + "WHERE p.name = :name "
                 + "  AND p.owner.gender = :gender "
                 + "  AND p.owner.firstname = :firstname "
                 + "  AND p.owner.lastname = :lastname")})

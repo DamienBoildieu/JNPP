@@ -127,7 +127,7 @@ public class AccountServiceImpl implements AccountService {
         Iterator<Identity> ite = identities.iterator();
         while (ite.hasNext()) {
             Identity identity = ite.next();
-            PrivateEntity currentClient = clientDAO.findPrivate(identity);
+            PrivateEntity currentClient = clientDAO.findPrivateByIdentity(identity.getGender(), identity.getFirstname(), identity.getLastname());
             if (currentClient == null) throw new UnknownIdentityException();
             else clients.add(currentClient);
             if (!clientFound && currentClient.getLogin().equals(login)) clientFound = true;

@@ -10,10 +10,21 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+@NamedQueries({
+    @NamedQuery(
+        name = "find_client_by_login_password",
+        query = "SELECT c FROM ClientEntity c "
+                + "WHERE c.login = :login "
+                + "  AND c.password = :password"),
+    @NamedQuery(
+        name = "find_all_login",
+        query = "SELECT c.login FROM ClientEntity c")})
 public abstract class ClientEntity implements Serializable {
 
     public static enum Type {

@@ -16,7 +16,6 @@ import jnpp.controller.views.Translator;
 import jnpp.controller.views.info.ViewInfo;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.clients.Gender;
-import jnpp.service.services.IClientService;
 import jnpp.service.services.INotificationService;
 import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.clients.AgeException;
@@ -31,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import jnpp.service.services.ClientService;
 
 /**
  * Classe contrôlant la gestion des utilisateurs
@@ -41,7 +41,7 @@ public class CUser {
      * Le service des utilisateurs
      */
     @Autowired
-    IClientService clientService;
+    ClientService clientService;
     
     @Autowired
     INotificationService notifService;

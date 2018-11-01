@@ -13,6 +13,15 @@ public class AccountDAOImpl extends GenericDAOImpl<AccountEntity> implements Acc
     
     @Transactional(readOnly = true)
     @Override
+    public boolean hasAccount(String login) {
+        Query query = getEm().createNamedQuery("has_account",  Long.class);
+        query.setParameter("login", login);
+        Long count = (Long) query.getSingleResult();
+        return count != 0;
+    }
+    
+    @Transactional(readOnly = true)
+    @Override
     public boolean hasCurrentAccount(String login) {
         Query query = getEm().createNamedQuery("has_current_account",  Long.class);
         query.setParameter("login", login);
