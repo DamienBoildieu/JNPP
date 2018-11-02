@@ -1,12 +1,7 @@
 package jnpp.service.services;
 
 import java.util.List;
-
-import jnpp.dao.entities.paymentmeans.BankCardEntity;
-import jnpp.dao.entities.paymentmeans.CheckbookEntity;
 import jnpp.dao.entities.paymentmeans.PaymentMeanEntity.Status;
-import jnpp.dao.entities.accounts.AccountEntity;
-import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.service.dto.paymentmeans.BankCardDTO;
 import jnpp.service.dto.paymentmeans.CheckbookDTO;
 import jnpp.service.exceptions.entities.FakeAccountException;

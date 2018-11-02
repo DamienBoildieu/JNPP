@@ -2,13 +2,10 @@ package jnpp.dao.repositories;
 
 import java.util.List;
 import javax.persistence.Query;
-
+import jnpp.dao.entities.IdentityEntity;
 import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.dao.entities.Gender;
-import jnpp.dao.entities.Identity;
 import jnpp.dao.entities.clients.PrivateEntity;
 import jnpp.dao.entities.clients.ProfessionalEntity;
-
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +14,7 @@ public class ClientDAOImpl extends GenericDAOImpl<ClientEntity> implements Clien
  
     @Transactional(readOnly = true)
     @Override
-    public PrivateEntity findPrivateByIdentity(Gender gender, String firstname, String lastname) {
+    public PrivateEntity findPrivateByIdentity(IdentityEntity.Gender gender, String firstname, String lastname) {
         Query query = getEm().createNamedQuery("find_private_by_identity");
         query.setParameter("gender", gender);
         query.setParameter("firstname", firstname);
@@ -27,7 +24,7 @@ public class ClientDAOImpl extends GenericDAOImpl<ClientEntity> implements Clien
         
     @Transactional(readOnly = true)
     @Override
-    public ProfessionalEntity findProfessionalByNameIdentity(String name, Gender ownerGender, String ownerFirstname, String ownerLastname) {
+    public ProfessionalEntity findProfessionalByNameIdentity(String name, IdentityEntity.Gender ownerGender, String ownerFirstname, String ownerLastname) {
         Query query = getEm().createNamedQuery("find_professional_by_name_identity");
         query.setParameter("name", name);
         query.setParameter("gender", ownerGender);

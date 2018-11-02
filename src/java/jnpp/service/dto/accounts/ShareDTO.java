@@ -1,13 +1,12 @@
 package jnpp.service.dto.accounts;
 
-import jnpp.dao.entities.accounts.ShareEntity;
-
 public class ShareDTO {
     
     private String name;
     private Double value;
+    private CurrencyDTO currency;
     
-    public ShareDTO(String name, Double value) {
+    public ShareDTO(String name, Double value, CurrencyDTO currency) {
         this.name = name;
         this.value = value;
     }
@@ -26,6 +25,14 @@ public class ShareDTO {
 
     public void setValue(Double value) {
         this.value = value;
+    }
+
+    public CurrencyDTO getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(CurrencyDTO currency) {
+        this.currency = currency;
     }
     
 }

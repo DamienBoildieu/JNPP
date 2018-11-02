@@ -1,16 +1,15 @@
 package jnpp.service.dto.clients;
 
 import java.util.Date;
-import jnpp.dao.entities.Address;
-import jnpp.dao.entities.Identity;
-import jnpp.dao.entities.clients.PrivateEntity;
+import jnpp.service.dto.AddressDTO;
+import jnpp.service.dto.IdentityDTO;
 
 public class PrivateDTO extends ClientDTO {
     
-    private Identity identity;
+    private IdentityDTO identity;
     private Date birthday;
 
-    public PrivateDTO(String login, Identity identity, Date birthday, String email, Address address, String phone) {
+    public PrivateDTO(String login, IdentityDTO identity, Date birthday, String email, AddressDTO address, String phone) {
         super(login, email, address, phone);
         this.identity = identity;
         this.birthday = birthday;
@@ -21,11 +20,11 @@ public class PrivateDTO extends ClientDTO {
         return ClientDTO.Type.PRIVATE;
     }
 
-    public Identity getIdentity() {
+    public IdentityDTO getIdentity() {
         return identity;
     }
 
-    public void setIdentity(Identity identity) {
+    public void setIdentity(IdentityDTO identity) {
         this.identity = identity;
     }
 

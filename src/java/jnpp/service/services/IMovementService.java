@@ -9,15 +9,15 @@ import jnpp.dao.entities.movements.PurchaseEntity;
 import jnpp.dao.entities.movements.SaleEntity;
 import jnpp.dao.entities.movements.TransfertEntity;
 import jnpp.service.exceptions.accounts.NoCurrentAccountException;
-import jnpp.service.exceptions.owners.AccountOwnerException;
 import jnpp.service.exceptions.accounts.NoShareAccountException;
 import jnpp.service.exceptions.entities.FakeAccountException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeShareException;
 import jnpp.service.exceptions.entities.FakeShareTitleException;
+import jnpp.service.exceptions.movements.AccountTypeException;
 import jnpp.service.exceptions.movements.AmountException;
 import jnpp.service.exceptions.movements.DebitAuthorizationException;
-import jnpp.service.exceptions.movements.AccountTypeException;
+import jnpp.service.exceptions.owners.AccountOwnerException;
 
 /** Service de gestion des transactions.
  * @author Pierre Bourquat

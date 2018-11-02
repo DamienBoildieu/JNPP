@@ -1,7 +1,5 @@
 package jnpp.service.exceptions.advisors;
 
-import jnpp.service.exceptions.ServiceException;
-
 public class DateException extends AdvisorException {
 
     public DateException() {}

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,6 +33,8 @@ public class ShareEntity implements Serializable {
     private String name;
     @Column(nullable = false)
     private Double value;
+    @Column(nullable = false)
+    private CurrencyEntity currency;
     
     public ShareEntity() {}
     
@@ -60,6 +61,14 @@ public class ShareEntity implements Serializable {
     public void setValue(Double value) {
         this.value = value;
     }
+
+    public CurrencyEntity getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(CurrencyEntity currency) {
+        this.currency = currency;
+    }
     
     @Override
     public int hashCode() {
@@ -83,7 +92,7 @@ public class ShareEntity implements Serializable {
     }
     
     public ShareDTO toDTO() {
-        return new ShareDTO(name, value);
+        return new ShareDTO(name, value, currency.toDTO());
     }
     
     public static List<ShareDTO> toDTO(List<ShareEntity> entities) {

@@ -1,7 +1,6 @@
 package jnpp.dao.entities.movements;
 
 import java.io.Serializable;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import jnpp.service.dto.movements.PurchaseDTO;

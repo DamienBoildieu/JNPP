@@ -2,14 +2,6 @@
 package jnpp.service.dto.movements;
 
 import java.util.Date;
-import jnpp.dao.entities.movements.DebitEntity;
-import jnpp.dao.entities.movements.MovementEntity;
-import jnpp.dao.entities.movements.PaymentEntity;
-import jnpp.dao.entities.movements.PurchaseEntity;
-import jnpp.dao.entities.movements.SaleEntity;
-import jnpp.dao.entities.movements.TradeEntity;
-import jnpp.dao.entities.movements.TransfertEntity;
-import jnpp.dao.entities.movements.WithdrawEntity;
 
 public abstract class MovementDTO {
     

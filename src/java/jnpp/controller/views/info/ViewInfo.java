@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import jnpp.controller.CSession;
-import jnpp.controller.exceptions.UnconnectedException;
 import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.clients.PrivateEntity;

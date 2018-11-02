@@ -1,7 +1,6 @@
 package jnpp.service.dto.advisor;
 
 import java.util.Date;
-import jnpp.dao.entities.advisor.AppointmentEntity;
 
 public class AppointmentDTO {
     

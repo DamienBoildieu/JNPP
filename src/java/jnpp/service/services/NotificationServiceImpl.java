@@ -7,13 +7,13 @@ import java.util.List;
 import javax.annotation.Resource;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.notifications.NotificationEntity;
+import jnpp.dao.repositories.ClientDAO;
+import jnpp.dao.repositories.NotificationDAO;
+import jnpp.service.dto.notifications.NotificationDTO;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeNotificationException;
 import jnpp.service.exceptions.owners.NotificationOwnerException;
 import org.springframework.stereotype.Service;
-import jnpp.dao.repositories.ClientDAO;
-import jnpp.dao.repositories.NotificationDAO;
-import jnpp.service.dto.notifications.NotificationDTO;
 
 @Service("NotificationService")
 public class NotificationServiceImpl implements NotificationService {

@@ -1,14 +1,14 @@
 package jnpp.service.dto.clients;
 
-import jnpp.dao.entities.Address;
-import jnpp.dao.entities.Identity;
+import jnpp.service.dto.AddressDTO;
+import jnpp.service.dto.IdentityDTO;
 
 public class ProfessionalDTO extends ClientDTO {
 
     private String name;
-    private Identity owner;
+    private IdentityDTO owner;
 
-    public ProfessionalDTO(String login, String name, Identity owner, String email, Address address, String phone) {
+    public ProfessionalDTO(String login, String name, IdentityDTO owner, String email, AddressDTO address, String phone) {
         super(login, email, address, phone);
         this.name = name;
         this.owner = owner;
@@ -27,11 +27,11 @@ public class ProfessionalDTO extends ClientDTO {
         this.name = name;
     }
 
-    public Identity getOwner() {
+    public IdentityDTO getOwner() {
         return owner;
     }
 
-    public void setOwner(Identity owner) {
+    public void setOwner(IdentityDTO owner) {
         this.owner = owner;
     }
     

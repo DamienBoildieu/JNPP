@@ -1,16 +1,15 @@
 package jnpp.service.dto.movements;
 
 import java.util.Date;
-import jnpp.dao.entities.accounts.Currency;
-import jnpp.dao.entities.movements.PaymentEntity;
+import jnpp.service.dto.accounts.CurrencyDTO;
 
 public class PaymentDTO extends MovementDTO {
     
     private Double money;
-    private Currency currency;
+    private CurrencyDTO currency;
     private String target;
 
-    public PaymentDTO(Date date, String ribFrom, Double money, Currency currency, String target) {
+    public PaymentDTO(Date date, String ribFrom, Double money, CurrencyDTO currency, String target) {
         super(date, ribFrom);
         this.money = money;
         this.currency = currency;
@@ -30,11 +29,11 @@ public class PaymentDTO extends MovementDTO {
         this.money = money;
     }
 
-    public Currency getCurrency() {
+    public CurrencyDTO getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(CurrencyDTO currency) {
         this.currency = currency;
     }
 

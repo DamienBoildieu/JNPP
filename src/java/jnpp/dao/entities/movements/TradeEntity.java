@@ -1,7 +1,6 @@
 package jnpp.dao.entities.movements;
 
 import java.io.Serializable;
-
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;

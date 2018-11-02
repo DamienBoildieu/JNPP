@@ -1,7 +1,6 @@
 package jnpp.dao.entities.accounts;
 
 import java.io.Serializable;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -24,7 +23,7 @@ public class SavingAccountEntity extends MoneyAccountEntity implements Serializa
     private static final long serialVersionUID = 1L;
 
     private Double money;
-    private Currency currency;
+    private CurrencyEntity currency;
     
     @ManyToOne
     @JoinColumn(name="savingbook_fk")
@@ -32,7 +31,7 @@ public class SavingAccountEntity extends MoneyAccountEntity implements Serializa
     
     public SavingAccountEntity() {}
     
-    public SavingAccountEntity(String rib, ClientEntity client, Double money, Currency currency, SavingBookEntity savingBook) {
+    public SavingAccountEntity(String rib, ClientEntity client, Double money, CurrencyEntity currency, SavingBookEntity savingBook) {
         super(rib, client, money, currency);
         this.savingBook = savingBook;
     }
@@ -57,7 +56,7 @@ public class SavingAccountEntity extends MoneyAccountEntity implements Serializa
     
     @Override
     public SavingAccountDTO toDTO() {
-        return new SavingAccountDTO(getRib(), getMoney(), getCurrency(), savingBook.toDTO());
+        return new SavingAccountDTO(getRib(), getMoney(), getCurrency().toDTO(), savingBook.toDTO());
     }
     
 }

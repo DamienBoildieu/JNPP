@@ -1,14 +1,11 @@
 package jnpp.service.dto.accounts;
 
-import jnpp.dao.entities.accounts.Currency;
-import jnpp.dao.entities.accounts.MoneyAccountEntity;
-
 public abstract class MoneyAccountDTO extends AccountDTO {
     
     private Double money;
-    private Currency currency;
+    private CurrencyDTO currency;
 
-    public MoneyAccountDTO(String rib, Double money, Currency currency) {
+    public MoneyAccountDTO(String rib, Double money, CurrencyDTO currency) {
         super(rib);
         this.money = money;
         this.currency = currency;
@@ -22,11 +19,11 @@ public abstract class MoneyAccountDTO extends AccountDTO {
         this.money = money;
     }
 
-    public Currency getCurrency() {
+    public CurrencyDTO getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(CurrencyDTO currency) {
         this.currency = currency;
     }
     

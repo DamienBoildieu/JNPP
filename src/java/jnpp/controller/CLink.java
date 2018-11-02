@@ -2,38 +2,29 @@ package jnpp.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.NotifView;
 import jnpp.controller.views.Translator;
 import jnpp.controller.views.alerts.AlertEnum;
+import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.controller.views.info.ViewInfo;
-import jnpp.dao.entities.advisor.MessageEntity;
-import jnpp.dao.entities.advisor.AdvisorEntity;
-import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.Gender;
-import jnpp.dao.entities.Identity;
+import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.clients.PrivateEntity;
-import jnpp.dao.entities.notifications.MessageNotificationEntity;
 import jnpp.dao.entities.notifications.NotificationEntity;
 import jnpp.service.exceptions.entities.FakeClientException;
+import jnpp.service.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import jnpp.service.services.NotificationService;
 
 /**
  * Classe contrôlant les différents liens qui ne requièrent pas de traitement particulier

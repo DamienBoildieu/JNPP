@@ -1,6 +1,6 @@
 package jnpp.service.dto.clients;
 
-import jnpp.dao.entities.Address;
+import jnpp.service.dto.AddressDTO;
 
 public abstract class ClientDTO {
     
@@ -13,10 +13,10 @@ public abstract class ClientDTO {
     
     private String login;
     private String email;
-    private Address address;
+    private AddressDTO address;
     private String phone;
 
-    public ClientDTO(String login, String email, Address address, String phone) {
+    public ClientDTO(String login, String email, AddressDTO address, String phone) {
         this.login = login;
         this.email = email;
         this.address = address;
@@ -41,11 +41,11 @@ public abstract class ClientDTO {
         this.email = email;
     }
 
-    public Address getAddress() {
+    public AddressDTO getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressDTO address) {
         this.address = address;
     }
 

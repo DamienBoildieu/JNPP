@@ -1,28 +1,27 @@
 package jnpp.service.dto.advisor;
 
-import jnpp.dao.entities.Address;
-import jnpp.dao.entities.advisor.AdvisorEntity;
-import jnpp.dao.entities.Identity;
+import jnpp.dao.entities.AddressEntity;
+import jnpp.dao.entities.IdentityEntity;
 
 public class AdvisorDTO {
     
-    private Identity identity;
+    private IdentityEntity identity;
     private String email;
     private String phone;
-    private Address officeAdress;
+    private AddressEntity officeAdress;
     
-    public AdvisorDTO(Identity identity, String email, String phone, Address officeAdress) {
+    public AdvisorDTO(IdentityEntity identity, String email, String phone, AddressEntity officeAdress) {
         this.identity = identity;
         this.email = email;
         this.phone = phone;
         this.officeAdress = officeAdress;
     }
 
-    public Identity getIdentity() {
+    public IdentityEntity getIdentity() {
         return identity;
     }
 
-    public void setIdentity(Identity identity) {
+    public void setIdentity(IdentityEntity identity) {
         this.identity = identity;
     }
 
@@ -42,11 +41,11 @@ public class AdvisorDTO {
         this.phone = phone;
     }
 
-    public Address getOfficeAdress() {
+    public AddressEntity getOfficeAdress() {
         return officeAdress;
     }
 
-    public void setOfficeAdress(Address officeAdress) {
+    public void setOfficeAdress(AddressEntity officeAdress) {
         this.officeAdress = officeAdress;
     }
     

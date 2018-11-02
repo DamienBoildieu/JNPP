@@ -1,32 +1,24 @@
-package jnpp.dao.entities;
+package jnpp.service.dto;
 
-import jnpp.dao.entities.Gender;
-import java.io.Serializable;
-
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-
-@Embeddable
-public class Identity implements Serializable {
+public class IdentityDTO {
     
-    private static final long serialVersionUID = 1L;
-    
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+    public enum Gender {
+        
+        MALE,
+        FEMALE;
+        
+    }   
+   
+    private IdentityDTO.Gender gender;
     private String firstname;
     private String lastname;
 
-    public Identity() {
-        this(null, null, null);
-    }
-    
-    public Identity(Gender gender, String firstname, String lastname) {
+    public IdentityDTO(Gender gender, String firstname, String lastname) {
         this.gender = gender;
         this.firstname = firstname;
         this.lastname = lastname;
     }
-    
+
     public Gender getGender() {
         return gender;
     }
@@ -50,5 +42,5 @@ public class Identity implements Serializable {
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
-    
+        
 }

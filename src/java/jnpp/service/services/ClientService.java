@@ -1,17 +1,13 @@
 package jnpp.service.services;
 
 import java.util.Date;
-  
-import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.dao.entities.Gender;
-import jnpp.dao.entities.clients.PrivateEntity;
-import jnpp.dao.entities.clients.ProfessionalEntity;
+import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.clients.ClientDTO;
-import jnpp.service.exceptions.entities.FakeClientException;
-import jnpp.service.exceptions.clients.AgeException;
 import jnpp.service.exceptions.ClosureException;
-import jnpp.service.exceptions.duplicates.DuplicateClientException;
+import jnpp.service.exceptions.clients.AgeException;
 import jnpp.service.exceptions.clients.InformationException;
+import jnpp.service.exceptions.duplicates.DuplicateClientException;
+import jnpp.service.exceptions.entities.FakeClientException;
 
 public interface ClientService extends IService {
     
@@ -38,7 +34,7 @@ public interface ClientService extends IService {
      * @throws AgeException Exception levee si le particulier est mineur.
      * @throws InformationException Exception levee si une des 
      * informations specifiees n'est pas valide. */
-    void signUp(Gender gender, String firstname, String lastname,
+    void signUp(IdentityDTO.Gender gender, String firstname, String lastname,
             Date birthday, String email, Integer number, String street, 
             String city, String state, String phone) 
             throws DuplicateClientException, AgeException,
@@ -47,7 +43,7 @@ public interface ClientService extends IService {
             Integer number, String street, String city, String state, 
             String phone) 
             throws InformationException, FakeClientException;
-    void signUp(String name, Gender ownerGender, 
+    void signUp(String name, IdentityDTO.Gender ownerGender, 
             String ownerFirstname, String ownerLastname, String email, 
             Integer number, String street, String city, String state, 
             String phone) 
@@ -56,9 +52,9 @@ public interface ClientService extends IService {
     boolean updatePassword(String login, String oldPassword, 
             String newPassword) throws FakeClientException;
     
-    boolean resetPassword(String login, Gender gender, String firstname, 
+    boolean resetPassword(String login, IdentityDTO.Gender gender, String firstname, 
             String lastname, String email) throws FakeClientException;
-    boolean resetPassword(String login, String name, Gender ownerGender,
+    boolean resetPassword(String login, String name, IdentityDTO.Gender ownerGender,
             String ownerFirstname, String ownerLastname, String email) throws FakeClientException;
     
 }

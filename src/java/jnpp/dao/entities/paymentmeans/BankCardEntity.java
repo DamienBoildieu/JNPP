@@ -5,16 +5,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.DiscriminatorValue;
-
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import jnpp.dao.entities.accounts.AccountEntity;
-import jnpp.dao.entities.advisor.AppointmentEntity;
 import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.service.dto.advisor.AppointmentDTO;
 import jnpp.service.dto.paymentmeans.BankCardDTO;
-import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 
 @Entity
 @DiscriminatorValue(value = PaymentMeanEntity.Type.Values.BANKCARD)

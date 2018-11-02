@@ -1,14 +1,12 @@
 package jnpp.dao.entities.clients;
 
-import jnpp.dao.entities.Identity;
-import jnpp.dao.entities.Gender;
 import java.io.Serializable;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import jnpp.dao.entities.IdentityEntity;
 import jnpp.dao.entities.advisor.AdvisorEntity;
 import jnpp.service.dto.clients.ProfessionalDTO;
 
@@ -29,15 +27,15 @@ public class ProfessionalEntity extends ClientEntity implements Serializable {
     private String name;
    
     @Embedded
-    private Identity owner;
+    private IdentityEntity owner;
     
-    public ProfessionalEntity(String login, String password, String name, Gender ownerGender, 
+    public ProfessionalEntity(String login, String password, String name, IdentityEntity.Gender ownerGender, 
             String ownerFirstname, String ownerLastname, String email, 
             Integer number, String street, String city, String state, 
             String phone, Boolean notify, AdvisorEntity advisor) {
         super(login, password, email, number, street, city, state, phone, notify, advisor);
         this.name = name;
-        owner = new Identity(ownerGender, ownerFirstname, ownerLastname);
+        owner = new IdentityEntity(ownerGender, ownerFirstname, ownerLastname);
     }
     
     public ProfessionalEntity() {}
@@ -55,11 +53,11 @@ public class ProfessionalEntity extends ClientEntity implements Serializable {
         this.name = name;
     }
     
-    public Identity getOwner() {
+    public IdentityEntity getOwner() {
         return owner;
     }
     
-    public void setOwner(Identity owner) {
+    public void setOwner(IdentityEntity owner) {
         this.owner = owner;
     }
     
@@ -70,7 +68,7 @@ public class ProfessionalEntity extends ClientEntity implements Serializable {
     
     @Override
     public ProfessionalDTO toDTO() {
-        return new ProfessionalDTO(getLogin(), name, owner, getEmail(), getAddress(), getPhone());
+        return new ProfessionalDTO(getLogin(), name, owner.toDTO(), getEmail(), getAddress().toDTO(), getPhone());
     }
     
 }

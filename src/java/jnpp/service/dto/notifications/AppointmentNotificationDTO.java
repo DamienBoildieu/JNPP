@@ -1,7 +1,6 @@
 package jnpp.service.dto.notifications;
 
 import java.util.Date;
-import jnpp.dao.entities.notifications.AppointmentNotificationEntity;
 import jnpp.service.dto.advisor.AppointmentDTO;
 
 public class AppointmentNotificationDTO extends NotificationDTO {

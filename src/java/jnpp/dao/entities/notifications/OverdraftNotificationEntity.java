@@ -1,12 +1,10 @@
 package jnpp.dao.entities.notifications;
 
 import java.io.Serializable;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.service.dto.notifications.OverdraftNotificationDTO;
 

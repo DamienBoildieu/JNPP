@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -20,9 +19,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import jnpp.dao.entities.advisor.AppointmentEntity;
 import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.service.dto.advisor.AppointmentDTO;
 import jnpp.service.dto.notifications.NotificationDTO;
 
 @Entity

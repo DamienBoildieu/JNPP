@@ -2,9 +2,7 @@ package jnpp.dao.repositories;
 
 import java.util.List;
 import javax.persistence.Query;
-
 import jnpp.dao.entities.accounts.AccountEntity;
-
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

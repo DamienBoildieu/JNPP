@@ -1,7 +1,6 @@
 package jnpp.service.dto.movements;
 
 import java.util.Date;
-import jnpp.dao.entities.movements.ShareTradeEntity;
 import jnpp.service.dto.accounts.ShareDTO;
 
 public abstract class ShareTradeDTO extends TradeDTO {

@@ -1,21 +1,16 @@
 package jnpp.service.dto.accounts;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import jnpp.dao.entities.accounts.JointAccountEntity;
-import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.dao.entities.Identity;
-import jnpp.dao.entities.accounts.Currency;
-import jnpp.dao.entities.clients.PrivateEntity;
+import jnpp.dao.entities.IdentityEntity;
 
 public class JointAccountDTO extends MoneyAccountDTO {
     
-    private List<Identity> owners;
+    private List<IdentityEntity> owners;
     
-    public JointAccountDTO(String rib, Double money, Currency currency, List<Identity> owners) {
+    public JointAccountDTO(String rib, Double money, CurrencyDTO currency, List<IdentityEntity> owners) {
         super(rib, money, currency);
-        this.owners = new ArrayList<Identity>(owners);
+        this.owners = new ArrayList<IdentityEntity>(owners);
     }
     
     @Override
@@ -23,11 +18,11 @@ public class JointAccountDTO extends MoneyAccountDTO {
         return AccountDTO.Type.JOINT;
     }
     
-    public List<Identity> getOwners() {
+    public List<IdentityEntity> getOwners() {
         return owners;
     }
 
-    public void setOwners(List<Identity> owners) {
+    public void setOwners(List<IdentityEntity> owners) {
         this.owners = owners;
     }
     

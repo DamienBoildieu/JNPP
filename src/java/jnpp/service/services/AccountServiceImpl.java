@@ -10,33 +10,22 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import javax.annotation.Resource;
-
+import jnpp.dao.entities.IdentityEntity;
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.accounts.CloseRequestEntity;
-import jnpp.dao.entities.accounts.Currency;
+import jnpp.dao.entities.accounts.CurrencyEntity;
 import jnpp.dao.entities.accounts.CurrentAccountEntity;
 import jnpp.dao.entities.accounts.JointAccountEntity;
 import jnpp.dao.entities.accounts.SavingAccountEntity;
 import jnpp.dao.entities.accounts.SavingBookEntity;
-import jnpp.dao.entities.accounts.ShareEntity;
 import jnpp.dao.entities.accounts.ShareAccountEntity;
+import jnpp.dao.entities.accounts.ShareEntity;
 import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.dao.entities.Identity;
 import jnpp.dao.entities.clients.PrivateEntity;
 import jnpp.dao.entities.movements.MovementEntity;
-import jnpp.dao.repositories.CloseRequestDAO;
-import jnpp.service.exceptions.ClosureException;
-import jnpp.service.exceptions.accounts.CloseRequestException;
-import jnpp.service.exceptions.accounts.UnknownIdentityException;
-import jnpp.service.exceptions.duplicates.DuplicateAccountException;
-import jnpp.service.exceptions.entities.FakeAccountException;
-import jnpp.service.exceptions.entities.FakeSavingBookException;
-import jnpp.service.exceptions.entities.FakeClientException;
-import jnpp.service.exceptions.owners.AccountOwnerException;
-
-import org.springframework.stereotype.Service;
 import jnpp.dao.repositories.AccountDAO;
 import jnpp.dao.repositories.ClientDAO;
+import jnpp.dao.repositories.CloseRequestDAO;
 import jnpp.dao.repositories.MovementDAO;
 import jnpp.dao.repositories.SavingBookDAO;
 import jnpp.dao.repositories.ShareDAO;
@@ -48,7 +37,16 @@ import jnpp.service.dto.accounts.SavingBookDTO;
 import jnpp.service.dto.accounts.ShareAccountDTO;
 import jnpp.service.dto.accounts.ShareDTO;
 import jnpp.service.dto.movements.MovementDTO;
+import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.accounts.ClientTypeException;
+import jnpp.service.exceptions.accounts.CloseRequestException;
+import jnpp.service.exceptions.accounts.UnknownIdentityException;
+import jnpp.service.exceptions.duplicates.DuplicateAccountException;
+import jnpp.service.exceptions.entities.FakeAccountException;
+import jnpp.service.exceptions.entities.FakeClientException;
+import jnpp.service.exceptions.entities.FakeSavingBookException;
+import jnpp.service.exceptions.owners.AccountOwnerException;
+import org.springframework.stereotype.Service;
 
 @Service("AccountService")
 public class AccountServiceImpl implements AccountService {
@@ -58,7 +56,7 @@ public class AccountServiceImpl implements AccountService {
     private static final int RIB_RANGE = 9 * RIB_MIN;
     
     public static final Double DEFAULT_MONEY = 0.0;
-    public static final Currency DEFAULT_CURRENCY = Currency.EURO;
+    public static final CurrencyEntity DEFAULT_CURRENCY = CurrencyEntity.EURO;
     public static final Double DEFAULT_LIMIT = -50.0;
     
     @Resource
@@ -110,16 +108,16 @@ public class AccountServiceImpl implements AccountService {
     }
     
     @Override
-    public JointAccountDTO openJointAccount(String login, List<Identity> identities) throws FakeClientException, UnknownIdentityException, ClientTypeException {
+    public JointAccountDTO openJointAccount(String login, List<IdentityEntity> identities) throws FakeClientException, UnknownIdentityException, ClientTypeException {
         if (login == null || identities == null || identities.size() < 2) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         if (client.getType() != ClientEntity.Type.PRIVATE) throw new ClientTypeException();
         List<ClientEntity> clients = new ArrayList<ClientEntity>();
         boolean clientFound = false;
-        Iterator<Identity> ite = identities.iterator();
+        Iterator<IdentityEntity> ite = identities.iterator();
         while (ite.hasNext()) {
-            Identity identity = ite.next();
+            IdentityEntity identity = ite.next();
             PrivateEntity currentClient = clientDAO.findPrivateByIdentity(identity.getGender(), identity.getFirstname(), identity.getLastname());
             if (currentClient == null) throw new UnknownIdentityException();
             else clients.add(currentClient);

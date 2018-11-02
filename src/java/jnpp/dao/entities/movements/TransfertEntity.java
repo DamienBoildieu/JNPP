@@ -1,7 +1,6 @@
 package jnpp.dao.entities.movements;
 
 import java.io.Serializable;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import jnpp.service.dto.movements.TransfertDTO;
@@ -26,7 +25,7 @@ public class TransfertEntity extends MoneyTradeEntity implements Serializable {
     
     @Override
     public TransfertDTO toDTO() {
-        return new TransfertDTO(getDate(), getAccount().getRib(), getRibTo(), getMoney(), getCurrency());
+        return new TransfertDTO(getDate(), getAccount().getRib(), getRibTo(), getMoney(), getCurrency().toDTO());
     }
     
 }

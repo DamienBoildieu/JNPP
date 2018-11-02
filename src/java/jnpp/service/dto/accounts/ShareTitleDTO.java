@@ -1,7 +1,5 @@
 package jnpp.service.dto.accounts;
 
-import jnpp.dao.entities.accounts.ShareTitleEntity;
-
 public class ShareTitleDTO {
     
     private Integer amount;

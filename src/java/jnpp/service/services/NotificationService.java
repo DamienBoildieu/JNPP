@@ -2,9 +2,6 @@ package jnpp.service.services;
 
 import java.util.Date;
 import java.util.List;
-
-import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.dao.entities.notifications.NotificationEntity;
 import jnpp.service.dto.notifications.NotificationDTO;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeNotificationException;

@@ -1,9 +1,5 @@
 package jnpp.service.dto.paymentmeans;
 
-import jnpp.dao.entities.paymentmeans.BankCardEntity;
-import jnpp.dao.entities.paymentmeans.CheckbookEntity;
-import jnpp.dao.entities.paymentmeans.PaymentMeanEntity;
-
 public abstract class PaymentMeanDTO {
     
     public static enum Type {

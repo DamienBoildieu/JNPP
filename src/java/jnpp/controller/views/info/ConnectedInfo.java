@@ -2,7 +2,6 @@ package jnpp.controller.views.info;
 
 import java.util.List;
 import jnpp.controller.views.alerts.AlertMessage;
-import jnpp.dao.entities.clients.ClientEntity;
 
 /**
  * Classe contenant les informations dont a besoin la vue si un utilisateur est connecté

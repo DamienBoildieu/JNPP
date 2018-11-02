@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Embedded;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,8 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import jnpp.dao.entities.Address;
-import jnpp.dao.entities.Identity;
+import jnpp.dao.entities.AddressEntity;
+import jnpp.dao.entities.IdentityEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.service.dto.advisor.AdvisorDTO;
 
@@ -31,12 +30,12 @@ public class AdvisorEntity implements Serializable {
     private Long id;
     
     @Embedded
-    private Identity identity;
+    private IdentityEntity identity;
     
     private String email;
     private String phone;
     @Embedded
-    private Address officeAdress;
+    private AddressEntity officeAdress;
     
     @OneToMany(mappedBy = "advisor")
     private List<ClientEntity> clients = new ArrayList<ClientEntity>();
@@ -59,11 +58,11 @@ public class AdvisorEntity implements Serializable {
         this.clients = clients;
     }
     
-    public Identity getIdentity() {
+    public IdentityEntity getIdentity() {
         return identity;
     }
     
-    public void setIdentity(Identity identity) {
+    public void setIdentity(IdentityEntity identity) {
         this.identity = identity;
     }
 
@@ -83,11 +82,11 @@ public class AdvisorEntity implements Serializable {
         this.phone = phone;
     }
 
-    public Address getOfficeAdress() {
+    public AddressEntity getOfficeAdress() {
         return officeAdress;
     }
 
-    public void setOfficeAdress(Address officeAdress) {
+    public void setOfficeAdress(AddressEntity officeAdress) {
         this.officeAdress = officeAdress;
     }
 

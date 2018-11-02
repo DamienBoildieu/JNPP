@@ -1,8 +1,6 @@
 package jnpp.dao.entities.clients;
 
-import jnpp.dao.entities.Address;
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -15,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import jnpp.dao.entities.AddressEntity;
 import jnpp.dao.entities.advisor.AdvisorEntity;
 import jnpp.service.dto.clients.ClientDTO;
 
@@ -59,7 +58,7 @@ public abstract class ClientEntity implements Serializable {
     private String email;
     @Embedded
     @Column(nullable = false)
-    private Address address;
+    private AddressEntity address;
     @Column(nullable = false)
     private String phone;
     
@@ -75,7 +74,7 @@ public abstract class ClientEntity implements Serializable {
         this.login = login;
         this.password = password;
         this.email = email;
-        this.address = new Address(number, street, city, state);
+        this.address = new AddressEntity(number, street, city, state);
         this.phone = phone;
         this.notify = notify;
         this.advisor = advisor;
@@ -109,11 +108,11 @@ public abstract class ClientEntity implements Serializable {
         this.email = email;
     }
 
-    public Address getAddress() {
+    public AddressEntity getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressEntity address) {
         this.address = address;
     }
 

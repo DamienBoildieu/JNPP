@@ -18,17 +18,17 @@ public abstract class MoneyAccountEntity extends AccountEntity implements Serial
     private static final long serialVersionUID = 1L;
 
     private Double money;
-    private Currency currency;
+    private CurrencyEntity currency;
     
     public MoneyAccountEntity() {}
     
-    public MoneyAccountEntity(String rib, ClientEntity client, Double money, Currency currency) {
+    public MoneyAccountEntity(String rib, ClientEntity client, Double money, CurrencyEntity currency) {
         super(rib, client);
         this.money = money;
         this.currency = currency;
     }
     
-    public MoneyAccountEntity(String rib, List<ClientEntity> clients, Double money, Currency currency) {
+    public MoneyAccountEntity(String rib, List<ClientEntity> clients, Double money, CurrencyEntity currency) {
         super(rib, clients);
         this.money = money;
         this.currency = currency;
@@ -42,11 +42,11 @@ public abstract class MoneyAccountEntity extends AccountEntity implements Serial
         this.money = money;
     }
 
-    public Currency getCurrency() {
+    public CurrencyEntity getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(CurrencyEntity currency) {
         this.currency = currency;
     }
     

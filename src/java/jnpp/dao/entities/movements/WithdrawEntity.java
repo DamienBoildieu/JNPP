@@ -1,11 +1,9 @@
 package jnpp.dao.entities.movements;
 
 import java.io.Serializable;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-
-import jnpp.dao.entities.accounts.Currency;
+import jnpp.dao.entities.accounts.CurrencyEntity;
 import jnpp.service.dto.movements.WithdrawDTO;
 
 @Entity
@@ -15,7 +13,7 @@ public class WithdrawEntity extends MovementEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Double money;
-    private Currency currency;
+    private CurrencyEntity currency;
     
     public WithdrawEntity() {}
     
@@ -32,11 +30,11 @@ public class WithdrawEntity extends MovementEntity implements Serializable {
         this.money = money;
     }
 
-    public Currency getCurrency() {
+    public CurrencyEntity getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(CurrencyEntity currency) {
         this.currency = currency;
     }
     
@@ -47,7 +45,7 @@ public class WithdrawEntity extends MovementEntity implements Serializable {
     
     @Override
     public WithdrawDTO toDTO() {
-        return new WithdrawDTO(getDate(), getAccount().getRib(), money, currency);
+        return new WithdrawDTO(getDate(), getAccount().getRib(), money, currency.toDTO());
     }
     
 }

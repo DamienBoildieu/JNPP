@@ -1,13 +1,11 @@
 package jnpp.dao.entities.accounts;
 
 import java.io.Serializable;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.accounts.CurrentAccountDTO;
 
 @Entity
@@ -25,7 +23,7 @@ public class CurrentAccountEntity extends MoneyAccountEntity implements Serializ
     
     public CurrentAccountEntity() {}
     
-    public CurrentAccountEntity(String rib, ClientEntity client, Double money, Currency currency, Double limit) {
+    public CurrentAccountEntity(String rib, ClientEntity client, Double money, CurrencyEntity currency, Double limit) {
         super(rib, client, money, currency);
         this.limit = limit;
     }
@@ -50,7 +48,7 @@ public class CurrentAccountEntity extends MoneyAccountEntity implements Serializ
 
     @Override
     public CurrentAccountDTO toDTO() {
-        return new CurrentAccountDTO(getRib(), getMoney(), getCurrency(), limit);
+        return new CurrentAccountDTO(getRib(), getMoney(), getCurrency().toDTO(), limit);
     }
     
 }

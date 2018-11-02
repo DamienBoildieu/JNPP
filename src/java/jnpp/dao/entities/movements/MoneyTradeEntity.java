@@ -3,12 +3,10 @@ package jnpp.dao.entities.movements;
 import java.io.Serializable;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
-
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-
-import jnpp.dao.entities.accounts.Currency;
+import jnpp.dao.entities.accounts.CurrencyEntity;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -18,7 +16,7 @@ public abstract class MoneyTradeEntity extends TradeEntity implements Serializab
     private static final long serialVersionUID = 1L;
     
     private Double money;
-    private Currency currency;
+    private CurrencyEntity currency;
 
     public Double getMoney() {
         return money;
@@ -28,11 +26,11 @@ public abstract class MoneyTradeEntity extends TradeEntity implements Serializab
         this.money = money;
     }
 
-    public Currency getCurrency() {
+    public CurrencyEntity getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(CurrencyEntity currency) {
         this.currency = currency;
     }
     

@@ -1,7 +1,6 @@
 package jnpp.service.dto.notifications;
 
 import java.util.Date;
-import jnpp.dao.entities.notifications.OverdraftNotificationEntity;
 
 public class OverdraftNotificationDTO extends NotificationDTO {
 

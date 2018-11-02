@@ -1,13 +1,13 @@
 package jnpp.dao.entities.accounts;
 
 import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import jnpp.service.dto.accounts.DebitAuthorizationDTO;
 
 @Entity
 public class DebitAuthorizationEntity implements Serializable {
@@ -68,6 +68,10 @@ public class DebitAuthorizationEntity implements Serializable {
     @Override
     public String toString() {
         return "jnpp.dao.entities.accounts.DebitAuthorizationEntity[ id=" + id + " ]";
+    }
+    
+    public DebitAuthorizationDTO toDTO() {
+        return new DebitAuthorizationDTO(from.getRib(), ribTo);
     }
     
 }

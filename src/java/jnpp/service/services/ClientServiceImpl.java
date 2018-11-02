@@ -8,27 +8,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
 import javax.annotation.Resource;
-
-import jnpp.dao.entities.Address;
+import jnpp.dao.entities.AddressEntity;
+import jnpp.dao.entities.IdentityEntity;
 import jnpp.dao.entities.advisor.AdvisorEntity;
 import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.dao.entities.Gender;
-import jnpp.dao.entities.Identity;
 import jnpp.dao.entities.clients.PrivateEntity;
 import jnpp.dao.entities.clients.ProfessionalEntity;
-import jnpp.service.exceptions.ClosureException;
-import jnpp.service.exceptions.clients.AgeException;
-import jnpp.service.exceptions.duplicates.DuplicateClientException;
-import jnpp.service.exceptions.clients.InformationException;
-import jnpp.service.exceptions.entities.FakeClientException;
-
-import org.springframework.stereotype.Service;
 import jnpp.dao.repositories.AccountDAO;
 import jnpp.dao.repositories.AdvisorDAO;
 import jnpp.dao.repositories.ClientDAO;
+import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.clients.ClientDTO;
+import jnpp.service.exceptions.ClosureException;
+import jnpp.service.exceptions.clients.AgeException;
+import jnpp.service.exceptions.clients.InformationException;
+import jnpp.service.exceptions.duplicates.DuplicateClientException;
+import jnpp.service.exceptions.entities.FakeClientException;
+import org.springframework.stereotype.Service;
 
 @Service("ClientService")
 public class ClientServiceImpl implements ClientService {
@@ -69,7 +66,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void signUp(Gender gender, String firstname, String lastname, 
+    public void signUp(IdentityDTO.Gender gender, String firstname, String lastname, 
             Date birthday, String email, Integer number, String street, 
             String city, String state, String phone) 
             throws DuplicateClientException, AgeException, 
@@ -78,18 +75,18 @@ public class ClientServiceImpl implements ClientService {
                 street == null || city == null || state == null || phone == null) throw new IllegalArgumentException();
         if (!isOfAge(birthday)) throw new AgeException();      
         if (!isEmailValid(email) || !isAddressValid(number, street, city, state) || !isPhoneValid(phone)) throw new InformationException();
-        if (clientDAO.findPrivateByIdentity(gender, firstname, lastname) != null) throw new DuplicateClientException();
+        if (clientDAO.findPrivateByIdentity(IdentityEntity.Gender.toEntity(gender), firstname, lastname) != null) throw new DuplicateClientException();
         String login = generateNewLogin();
         String password = generateRandomLogin();
         AdvisorEntity advisor = chooseAdvisor();
-        PrivateEntity client = new PrivateEntity(login, password, gender, firstname, 
+        PrivateEntity client = new PrivateEntity(login, password, IdentityEntity.Gender.toEntity(gender), firstname, 
                 lastname, birthday, email, number, street, city, state, phone, 
                 DEFAULT_NOTIFY, advisor);
         clientDAO.save(client);
     }
 
     @Override
-    public void signUp(String name, Gender ownerGender, 
+    public void signUp(String name, IdentityDTO.Gender ownerGender, 
             String ownerFirstname, String ownerLastname, String email, 
             Integer number, String street, String city, String state, 
             String phone) 
@@ -99,12 +96,12 @@ public class ClientServiceImpl implements ClientService {
                 street == null || city == null || state == null || 
                 phone == null) throw new IllegalArgumentException();      
         if (!isEmailValid(email) || !isAddressValid(number, street, city, state) || !isPhoneValid(phone)) throw new InformationException();
-        if (clientDAO.findProfessionalByNameIdentity(name, ownerGender, ownerFirstname, ownerLastname) != null) 
+        if (clientDAO.findProfessionalByNameIdentity(name, IdentityEntity.Gender.toEntity(ownerGender), ownerFirstname, ownerLastname) != null) 
             throw new DuplicateClientException();  
         String login = generateNewLogin();
         String password = generateRandomLogin();
         AdvisorEntity advisor = chooseAdvisor();
-        ProfessionalEntity client = new ProfessionalEntity(login, password, name, ownerGender, 
+        ProfessionalEntity client = new ProfessionalEntity(login, password, name, IdentityEntity.Gender.toEntity(ownerGender), 
                 ownerFirstname, ownerLastname, email, number, street, city, 
                 state, phone, DEFAULT_NOTIFY, advisor);
         clientDAO.save(client);
@@ -121,7 +118,7 @@ public class ClientServiceImpl implements ClientService {
         if (client == null) throw new FakeClientException();
         if (!isEmailValid(email) || !isAddressValid(number, street, city, state) || !isPhoneValid(phone)) throw new InformationException();  
         if (email != null) client.setEmail(email);
-        Address address = client.getAddress();
+        AddressEntity address = client.getAddress();
         if (number != null) address.setNumber(number);
         if (street != null) address.setStreet(street);
         if (city != null) address.setCity(city);
@@ -153,7 +150,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public boolean resetPassword(String login, Gender gender, String firstname, 
+    public boolean resetPassword(String login, IdentityDTO.Gender gender, String firstname, 
             String lastname, String email) throws FakeClientException {
         if (login == null || gender == null || firstname == null  
                 || lastname == null || email == null) throw new IllegalArgumentException();
@@ -161,7 +158,7 @@ public class ClientServiceImpl implements ClientService {
         if (client == null) throw new FakeClientException();
         if (!email.equals(client.getEmail())) return false;
         if (client.getType() != ClientEntity.Type.PRIVATE) return false;
-        Identity identity = ((PrivateEntity) client).getIdentity();
+        IdentityEntity identity = ((PrivateEntity) client).getIdentity();
         if (identity == null) return false;
         if (!gender.equals(identity.getGender()) || !firstname.equals(identity.getFirstname()) 
                 || !lastname.equals(identity.getLastname())) return false;
@@ -172,7 +169,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public boolean resetPassword(String login, String name, Gender ownerGender, 
+    public boolean resetPassword(String login, String name, IdentityDTO.Gender ownerGender, 
             String ownerFirstname, String ownerLastname, String email) throws FakeClientException {
         if (login == null || name == null || ownerGender == null 
                 || ownerFirstname == null || ownerLastname == null) throw new IllegalArgumentException();
@@ -180,7 +177,7 @@ public class ClientServiceImpl implements ClientService {
         if (client == null) throw new FakeClientException();
         if (!email.equals(client.getEmail())) return false;
         if (client.getType() != ClientEntity.Type.PROFESIONAL) return false;
-        Identity identity = ((ProfessionalEntity) client).getOwner();
+        IdentityEntity identity = ((ProfessionalEntity) client).getOwner();
         if (identity == null) return false;
         if (!ownerGender.equals(identity.getGender()) || !ownerFirstname.equals(identity.getFirstname()) 
                 || !ownerLastname.equals(identity.getLastname())) return false;

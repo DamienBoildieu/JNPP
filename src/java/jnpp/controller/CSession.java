@@ -1,7 +1,7 @@
 package jnpp.controller;
 
-import jnpp.controller.exceptions.NullSessionException;
 import javax.servlet.http.HttpSession;
+import jnpp.controller.exceptions.NullSessionException;
 import jnpp.controller.exceptions.UnconnectedException;
 import jnpp.controller.views.Translator;
 import jnpp.dao.entities.clients.ClientEntity;

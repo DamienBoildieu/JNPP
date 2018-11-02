@@ -1,7 +1,6 @@
 package jnpp.service.dto.notifications;
 
 import java.util.Date;
-import jnpp.dao.entities.notifications.PaymentMeanNotificationEntity;
 import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 
 public class PaymentMeanNotificationDTO extends NotificationDTO {

@@ -1,11 +1,5 @@
 package jnpp.service.dto.accounts;
 
-import jnpp.dao.entities.accounts.AccountEntity;
-import jnpp.dao.entities.accounts.CurrentAccountEntity;
-import jnpp.dao.entities.accounts.JointAccountEntity;
-import jnpp.dao.entities.accounts.SavingAccountEntity;
-import jnpp.dao.entities.accounts.ShareAccountEntity;
-
 public abstract class AccountDTO {
     
     public static enum Type {

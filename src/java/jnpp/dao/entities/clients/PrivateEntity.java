@@ -1,10 +1,7 @@
 package jnpp.dao.entities.clients;
 
-import jnpp.dao.entities.Identity;
-import jnpp.dao.entities.Gender;
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -12,6 +9,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import jnpp.dao.entities.IdentityEntity;
 import jnpp.dao.entities.advisor.AdvisorEntity;
 import jnpp.service.dto.clients.PrivateDTO;
 
@@ -29,16 +27,16 @@ public class PrivateEntity extends ClientEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Embedded
-    private Identity identity;
+    private IdentityEntity identity;
     
     @Temporal(TemporalType.DATE)
     private Date birthday;
     
-    public PrivateEntity(String login, String password, Gender gender, String firstname, String lastname,
+    public PrivateEntity(String login, String password, IdentityEntity.Gender gender, String firstname, String lastname,
             Date birthday, String email, Integer number, String street, 
             String city, String state, String phone, Boolean notify, AdvisorEntity advisor) {
         super(login, password, email, number, street, city, state, phone, notify, advisor);
-        identity = new Identity(gender, firstname, lastname);
+        identity = new IdentityEntity(gender, firstname, lastname);
         this.birthday = birthday;
     }
     
@@ -49,11 +47,11 @@ public class PrivateEntity extends ClientEntity implements Serializable {
         return ClientEntity.Type.PRIVATE;
     }
     
-    public Identity getIdentity() {
+    public IdentityEntity getIdentity() {
         return identity;
     }
 
-    public void setIdentity(Identity identity) {
+    public void setIdentity(IdentityEntity identity) {
         this.identity = identity;
     }
    
@@ -72,7 +70,7 @@ public class PrivateEntity extends ClientEntity implements Serializable {
     
     @Override
     public PrivateDTO toDTO() {
-        return new PrivateDTO(getLogin(), identity, birthday, getEmail(), getAddress(), getPhone());
+        return new PrivateDTO(getLogin(), identity.toDTO(), birthday, getEmail(), getAddress().toDTO(), getPhone());
     }
     
 }

@@ -1,7 +1,6 @@
 package jnpp.service.dto.notifications;
 
 import java.util.Date;
-import jnpp.dao.entities.notifications.MessageNotificationEntity;
 import jnpp.service.dto.advisor.MessageDTO;
 
 public class MessageNotificationDTO extends NotificationDTO {

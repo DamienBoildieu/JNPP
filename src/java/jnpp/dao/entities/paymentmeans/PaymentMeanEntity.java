@@ -15,7 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.service.dto.advisor.MessageDTO;
 import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 
 @Entity

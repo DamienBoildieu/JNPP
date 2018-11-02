@@ -1,25 +1,25 @@
 package jnpp.dao.entities;
 
 import java.io.Serializable;
-
 import javax.persistence.Embeddable;
+import jnpp.service.dto.AddressDTO;
 
 @Embeddable
-public class Address implements Serializable {
+public class AddressEntity implements Serializable {
 
     private Integer number;
     private String street;
     private String city;
     private String state;
 
-    public Address(Integer number, String street, String city, String state) {
+    public AddressEntity(Integer number, String street, String city, String state) {
         this.number = number;
         this.street = street;
         this.city = city;
         this.state = state;
     }
     
-    public Address() {
+    public AddressEntity() {
         this(null, null, null, null);
     }
     
@@ -53,6 +53,10 @@ public class Address implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+    
+    public AddressDTO toDTO() {
+        return new AddressDTO(number, street, city, state);
     }
     
 }

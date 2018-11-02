@@ -2,8 +2,8 @@ package jnpp.controller.views;
 
 import java.util.HashMap;
 import java.util.Map;
-import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.Gender;
+import jnpp.dao.entities.accounts.AccountEntity;
 
 
 public class Translator {

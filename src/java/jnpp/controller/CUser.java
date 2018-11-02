@@ -1,6 +1,5 @@
 package jnpp.controller;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,19 +8,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import jnpp.controller.views.JNPPModelAndView;
-
+import jnpp.controller.views.Translator;
 import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.alerts.AlertMessage;
-import jnpp.controller.views.Translator;
 import jnpp.controller.views.info.ViewInfo;
-import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.Gender;
+import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.clients.AgeException;
-import jnpp.service.exceptions.duplicates.DuplicateClientException;
 import jnpp.service.exceptions.clients.InformationException;
+import jnpp.service.exceptions.duplicates.DuplicateClientException;
 import jnpp.service.exceptions.entities.FakeClientException;
-
+import jnpp.service.services.ClientService;
+import jnpp.service.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,8 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import jnpp.service.services.ClientService;
-import jnpp.service.services.NotificationService;
 
 /**
  * Classe contrôlant la gestion des utilisateurs
