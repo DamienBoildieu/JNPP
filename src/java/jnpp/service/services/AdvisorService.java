@@ -30,7 +30,7 @@ public interface AdvisorService extends IService {
             throws FakeClientException, DateException, 
             DuplicateAppointmentException, AvailableException;
     void cancelAppoint(String login, Long id)
-            throws FakeClientException, FakeAppointmentException, AppointmentOwnerException, DateException;
+            throws FakeClientException, AppointmentOwnerException, DateException;
     
     List<AppointmentDTO> getAppoinments(String login)
             throws FakeClientException;

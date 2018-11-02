@@ -29,13 +29,12 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
     PaymentMeanDAO paymentMeanDAO;
     
     @Override
-    public BankCardDTO commandBankCard(String login, String rib) throws FakeClientException, FakeAccountException, AccountTypeException, AccountOwnerException {
+    public BankCardDTO commandBankCard(String login, String rib) throws FakeClientException, AccountTypeException, AccountOwnerException {
         if (login == null || rib == null) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         AccountEntity account = accountDAO.find(rib);
-        if (account == null) throw new FakeAccountException();
-        if (!account.isOwnBy(client)) throw new AccountOwnerException();
+        if (account == null || !account.isOwnBy(client)) throw new AccountOwnerException();   
         if (!canBindToBanckCard(account)) throw new AccountTypeException();
         BankCardEntity bankcard = new BankCardEntity(client, account, PaymentMeanEntity.Status.ORDERED);
         paymentMeanDAO.save(bankcard);
@@ -43,13 +42,12 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
     }
 
     @Override
-    public CheckbookDTO commandCheckbook(String login, String rib) throws FakeClientException, FakeAccountException, AccountTypeException, AccountOwnerException {
+    public CheckbookDTO commandCheckbook(String login, String rib) throws FakeClientException, AccountTypeException, AccountOwnerException {
         if (login == null || rib == null) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         AccountEntity account = accountDAO.find(rib);
-        if (account == null) throw new FakeAccountException();
-        if (!account.isOwnBy(client)) throw new AccountOwnerException();
+        if (account == null || !account.isOwnBy(client)) throw new AccountOwnerException();  
         if (!canBindToCheckbook(account)) throw new AccountTypeException();
         CheckbookEntity checkbook = new CheckbookEntity(client, account, PaymentMeanEntity.Status.ORDERED);
         paymentMeanDAO.save(checkbook);
@@ -105,13 +103,12 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
     }
 
     @Override
-    public List<CheckbookDTO> getCheckBooks(String login, String rib) throws FakeClientException, FakeAccountException, AccountOwnerException {
+    public List<CheckbookDTO> getCheckBooks(String login, String rib) throws FakeClientException, AccountOwnerException {
         if (login == null || rib == null) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         AccountEntity account = accountDAO.find(rib);
-        if (account == null) throw new FakeAccountException();
-        if (!account.isOwnBy(client)) throw new AccountOwnerException();    
+        if (account == null || !account.isOwnBy(client)) throw new AccountOwnerException();     
         List<CheckbookEntity> checkbooks = paymentMeanDAO.findCheckBookByLoginRib(login, rib);
         return CheckbookEntity.toDTO(checkbooks); 
     }

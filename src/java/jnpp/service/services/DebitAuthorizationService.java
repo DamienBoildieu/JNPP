@@ -12,7 +12,7 @@ public interface DebitAuthorizationService extends IService {
 
     DebitAuthorizationDTO createDebitAuthorization(String login, String ribFrom, 
             String ribTo)
-            throws FakeClientException, FakeAccountException, AccountOwnerException,
+            throws FakeClientException, AccountOwnerException,
             DuplicateDebitAuthorizationException;
 
     void deleteDebitAuthorization(String login, String ribFrom, 
@@ -24,6 +24,6 @@ public interface DebitAuthorizationService extends IService {
             throws FakeClientException;
 
     List<DebitAuthorizationDTO> getDebitAuthorizations(String login, String rib)
-            throws FakeClientException, FakeAccountException, AccountOwnerException;
+            throws FakeClientException, AccountOwnerException;
     
 }

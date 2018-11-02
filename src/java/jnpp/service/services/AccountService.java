@@ -33,13 +33,13 @@ public interface AccountService extends IService {
     SavingAccountDTO openSavingAccount(String login, String name) throws FakeClientException, FakeSavingBookException, DuplicateAccountException, ClientTypeException;
     ShareAccountDTO openShareAccount(String login) throws FakeClientException, DuplicateAccountException;
     
-    void closeAccount(String login, String rib) throws FakeClientException, FakeAccountException, AccountOwnerException, ClosureException, CloseRequestException;
+    void closeAccount(String login, String rib) throws FakeClientException, AccountOwnerException, ClosureException, CloseRequestException;
         
     List<MovementDTO> getMovements(String login, String rib)
-            throws FakeAccountException, FakeClientException, AccountOwnerException;
+            throws FakeClientException, AccountOwnerException;
     List<MovementDTO> getMovements(String login, String rib, int n)
-            throws FakeAccountException, FakeClientException, AccountOwnerException;
+            throws FakeClientException, AccountOwnerException;
     List<MovementDTO> getMovements(String login, String rib, Date date)
-            throws FakeAccountException, FakeClientException, AccountOwnerException;
+            throws FakeClientException, AccountOwnerException;
     
 }

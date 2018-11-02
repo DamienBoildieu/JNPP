@@ -158,13 +158,12 @@ public class AccountServiceImpl implements AccountService {
     }
     
     @Override
-    public void closeAccount(String login, String rib) throws FakeClientException, FakeAccountException, AccountOwnerException, ClosureException, CloseRequestException {
+    public void closeAccount(String login, String rib) throws FakeClientException, AccountOwnerException, ClosureException, CloseRequestException {
         if (login == null || rib == null) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         AccountEntity account = accountDAO.find(rib);
-        if (account == null) throw new FakeAccountException();
-        if (!account.isOwnBy(client)) throw new AccountOwnerException();
+        if (account == null || !account.isOwnBy(client)) throw new AccountOwnerException();
         switch (account.getType()) {
             case CURRENT:
                 closeAccount((CurrentAccountEntity) account);
@@ -242,35 +241,32 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<MovementDTO> getMovements(String login, String rib) throws FakeAccountException, FakeClientException, AccountOwnerException {
+    public List<MovementDTO> getMovements(String login, String rib) throws FakeClientException, AccountOwnerException {
         if (login == null || rib == null) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         AccountEntity account = accountDAO.find(rib);
-        if (account == null) throw new FakeAccountException();
-        if (!account.isOwnBy(client)) throw new AccountOwnerException();
+        if (account == null || !account.isOwnBy(client)) throw new AccountOwnerException();
         return MovementEntity.toDTO(movementDAO.findAllByRib(rib));
     }
     
     @Override
-    public List<MovementDTO> getMovements(String login, String rib, int n) throws FakeAccountException, FakeClientException, AccountOwnerException {
+    public List<MovementDTO> getMovements(String login, String rib, int n) throws FakeClientException, AccountOwnerException {
         if (login == null || rib == null || n < 0) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         AccountEntity account = accountDAO.find(rib);
-        if (account == null) throw new FakeAccountException();
-        if (!account.isOwnBy(client)) throw new AccountOwnerException();
+        if (account == null || !account.isOwnBy(client)) throw new AccountOwnerException();
         return MovementEntity.toDTO(movementDAO.findNByRib(rib, n));    
     }
 
     @Override
-    public List<MovementDTO> getMovements(String login, String rib, Date date) throws FakeAccountException, FakeClientException, AccountOwnerException {
+    public List<MovementDTO> getMovements(String login, String rib, Date date) throws FakeClientException, AccountOwnerException {
         if (login == null || rib == null || date == null) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         AccountEntity account = accountDAO.find(rib);
-        if (account == null) throw new FakeAccountException();
-        if (!account.isOwnBy(client)) throw new AccountOwnerException();
+        if (account == null || !account.isOwnBy(client)) throw new AccountOwnerException();
         return MovementEntity.toDTO(movementDAO.findRecentByRib(rib, date));    
     }
     

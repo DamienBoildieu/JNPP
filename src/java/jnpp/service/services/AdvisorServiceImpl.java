@@ -102,13 +102,12 @@ public class AdvisorServiceImpl implements AdvisorService {
     }
 
     @Override
-    public void cancelAppoint(String login, Long id) throws FakeClientException, FakeAppointmentException, AppointmentOwnerException, DateException {
+    public void cancelAppoint(String login, Long id) throws FakeClientException, AppointmentOwnerException, DateException {
         if (login == null || id == null) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         AppointmentEntity appointment = appointmentDAO.find(id);
-        if (appointment == null) throw new FakeAppointmentException();
-        if (!client.equals(appointment.getClient())) throw new AppointmentOwnerException();
+        if (appointment == null || !client.equals(appointment.getClient())) throw new AppointmentOwnerException();
         Date date = appointment.getDate();
         Date limit = Date.from(Instant.now().plusSeconds(CANCEL_APPOINTMENT_DELTA));
         if (limit.after(date)) throw new DateException();

@@ -27,13 +27,12 @@ public class DebitAuthorizationServiceImpl implements DebitAuthorizationService 
     DebitAuthorizationDAO debitAuthorizationDAO;
     
     @Override
-    public DebitAuthorizationDTO createDebitAuthorization(String login, String ribFrom, String ribTo) throws FakeClientException, FakeAccountException, AccountOwnerException, DuplicateDebitAuthorizationException {
+    public DebitAuthorizationDTO createDebitAuthorization(String login, String ribFrom, String ribTo) throws FakeClientException, AccountOwnerException, DuplicateDebitAuthorizationException {
         if (login == null || ribFrom == null || ribTo == null) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         AccountEntity account = accountDAO.find(ribFrom);
-        if (account == null) throw new FakeAccountException();
-        if (!account.isOwnBy(client)) throw new AccountOwnerException();
+        if (account == null || !account.isOwnBy(client)) throw new AccountOwnerException();
         DebitAuthorizationEntity authorization = debitAuthorizationDAO.findByRibFromRibTo(ribFrom, ribTo);
         if (authorization != null) throw new DuplicateDebitAuthorizationException();      
         authorization = new DebitAuthorizationEntity(account, ribTo);
@@ -62,13 +61,12 @@ public class DebitAuthorizationServiceImpl implements DebitAuthorizationService 
     }
 
     @Override
-    public List<DebitAuthorizationDTO> getDebitAuthorizations(String login, String rib) throws FakeClientException, FakeAccountException, AccountOwnerException {
+    public List<DebitAuthorizationDTO> getDebitAuthorizations(String login, String rib) throws FakeClientException, AccountOwnerException {
         if (login == null || rib == null) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         AccountEntity account = accountDAO.find(rib);
-        if (account == null) throw new FakeAccountException();
-        if (!account.isOwnBy(client)) throw new AccountOwnerException();    
+        if (account == null || !account.isOwnBy(client)) throw new AccountOwnerException();   
         List<DebitAuthorizationEntity> authorizations = debitAuthorizationDAO.findAllByLoginRibFrom(login, rib);
         return DebitAuthorizationEntity.toDTO(authorizations);    
     }
