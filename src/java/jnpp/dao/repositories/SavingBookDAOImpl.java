@@ -1,6 +1,7 @@
 package jnpp.dao.repositories;
 
 import java.util.List;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import jnpp.dao.entities.accounts.SavingBookEntity;
 import org.springframework.stereotype.Repository;
@@ -21,7 +22,11 @@ public class SavingBookDAOImpl extends GenericDAOImpl<SavingBookEntity> implemen
     public SavingBookEntity findByName(String name) {
         Query query = getEm().createNamedQuery("find_savingbook_by_name");
         query.setParameter("name", name);
-        return (SavingBookEntity) query.getSingleResult();
+        try {
+            return (SavingBookEntity) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
         
 }

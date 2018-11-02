@@ -1,6 +1,7 @@
 package jnpp.dao.repositories;
 
 import java.util.List;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import jnpp.dao.entities.IdentityEntity;
 import jnpp.dao.entities.clients.ClientEntity;
@@ -19,7 +20,11 @@ public class ClientDAOImpl extends GenericDAOImpl<ClientEntity> implements Clien
         query.setParameter("gender", gender);
         query.setParameter("firstname", firstname);
         query.setParameter("lastname", lastname);
-        return (PrivateEntity) query.getSingleResult();
+        try {
+            return (PrivateEntity) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
         
     @Transactional(readOnly = true)
@@ -30,7 +35,11 @@ public class ClientDAOImpl extends GenericDAOImpl<ClientEntity> implements Clien
         query.setParameter("gender", ownerGender);
         query.setParameter("firstname", ownerFirstname);
         query.setParameter("lastname", ownerLastname);
-        return (ProfessionalEntity) query.getSingleResult();    
+        try {
+            return (ProfessionalEntity) query.getSingleResult(); 
+        } catch (NoResultException e) {
+            return null;
+        }   
     }
         
     @Transactional(readOnly = true)
@@ -39,7 +48,11 @@ public class ClientDAOImpl extends GenericDAOImpl<ClientEntity> implements Clien
         Query query = getEm().createNamedQuery("find_client_by_login_password");
         query.setParameter("login", login);
         query.setParameter("password", password);
-        return (ClientEntity) query.getSingleResult();
+        try {
+            return (ClientEntity) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }   
     }
     
     @Transactional(readOnly = true)
