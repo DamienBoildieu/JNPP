@@ -2,6 +2,8 @@ package jnpp.dao.repositories;
 
 import java.util.List;
 import jnpp.dao.entities.accounts.AccountEntity;
+import jnpp.dao.entities.accounts.CurrentAccountEntity;
+import jnpp.dao.entities.accounts.ShareAccountEntity;
 
 public interface AccountDAO extends GenericDAO<AccountEntity> {
     
@@ -13,5 +15,7 @@ public interface AccountDAO extends GenericDAO<AccountEntity> {
     List<String> findAllRib();
     
     List<AccountEntity> findAllByLogin(String login);
+    CurrentAccountEntity findCurrentByLogin(String login);
+    ShareAccountEntity findShareByLogin(String login);
     
 }

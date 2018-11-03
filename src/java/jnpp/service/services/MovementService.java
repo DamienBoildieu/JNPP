@@ -37,7 +37,6 @@ public interface MovementService {
     SaleDTO saleShareTitles(String login, String name, 
            Integer amount)
            throws FakeClientException, NoCurrentAccountException, 
-           NoShareAccountException, FakeShareTitleException, 
-           AccountOwnerException, AmountException;
+           NoShareAccountException, FakeShareTitleException, AmountException;
     
 }

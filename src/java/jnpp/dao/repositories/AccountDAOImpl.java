@@ -1,8 +1,11 @@
 package jnpp.dao.repositories;
 
 import java.util.List;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import jnpp.dao.entities.accounts.AccountEntity;
+import jnpp.dao.entities.accounts.CurrentAccountEntity;
+import jnpp.dao.entities.accounts.ShareAccountEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +62,29 @@ public class AccountDAOImpl extends GenericDAOImpl<AccountEntity> implements Acc
         Query query = getEm().createNamedQuery("find_all_account_by_login");
         query.setParameter("login", login);
         return query.getResultList();
+    }
+    
+    @Transactional(readOnly = true)
+    @Override
+    public CurrentAccountEntity findCurrentByLogin(String login) {
+        Query query = getEm().createNamedQuery("find_current_account_by_login");
+        query.setParameter("login", login);
+        try {
+            return (CurrentAccountEntity) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public ShareAccountEntity findShareByLogin(String login) {
+        Query query = getEm().createNamedQuery("find_share_account_by_login");
+        query.setParameter("login", login);
+        try {
+            return (ShareAccountEntity) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
     
 }

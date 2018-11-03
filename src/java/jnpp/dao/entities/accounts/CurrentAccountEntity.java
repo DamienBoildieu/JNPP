@@ -15,7 +15,11 @@ import jnpp.service.dto.accounts.CurrentAccountDTO;
     @NamedQuery(
         name = "has_current_account",
         query = "SELECT COUNT(a) FROM CurrentAccountEntity a "
-                + "WHERE a.clients.id = :client_id")})
+                + "WHERE a.clients.login = :login"),
+    @NamedQuery(
+        name = "find_current_account_by_login",
+        query = "SELECT a FROM CurrentAccountEntity a "
+                + "WHERE a.clients.login = :login")})
 public class CurrentAccountEntity extends MoneyAccountEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;    

@@ -7,10 +7,16 @@ import java.util.List;
 import javax.annotation.Resource;
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.accounts.CurrencyEntity;
+import jnpp.dao.entities.accounts.CurrentAccountEntity;
 import jnpp.dao.entities.accounts.MoneyAccountEntity;
+import jnpp.dao.entities.accounts.ShareAccountEntity;
+import jnpp.dao.entities.accounts.ShareEntity;
+import jnpp.dao.entities.accounts.ShareTitleEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.movements.DebitEntity;
 import jnpp.dao.entities.movements.MovementEntity;
+import jnpp.dao.entities.movements.PurchaseEntity;
+import jnpp.dao.entities.movements.SaleEntity;
 import jnpp.dao.entities.movements.TransfertEntity;
 import jnpp.dao.entities.notifications.MovementNotificationEntity;
 import jnpp.dao.entities.notifications.OverdraftNotificationEntity;
@@ -18,12 +24,13 @@ import jnpp.dao.repositories.AccountDAO;
 import jnpp.dao.repositories.ClientDAO;
 import jnpp.dao.repositories.MovementDAO;
 import jnpp.dao.repositories.NotificationDAO;
+import jnpp.dao.repositories.ShareDAO;
+import jnpp.dao.repositories.ShareTitleDAO;
 import jnpp.service.dto.accounts.CurrencyDTO;
 import jnpp.service.dto.movements.DebitDTO;
 import jnpp.service.dto.movements.PurchaseDTO;
 import jnpp.service.dto.movements.SaleDTO;
 import jnpp.service.dto.movements.TransfertDTO;
-import jnpp.service.dto.notifications.OverdraftNotificationDTO;
 import jnpp.service.exceptions.accounts.CurrencyException;
 import jnpp.service.exceptions.accounts.NoCurrentAccountException;
 import jnpp.service.exceptions.accounts.NoShareAccountException;
@@ -48,11 +55,15 @@ public class MovementServiceImpl implements MovementService {
     MovementDAO movementDAO;
     @Resource
     NotificationDAO notificationDAO;
+    @Resource
+    ShareDAO shareDAO;
+    @Resource
+    ShareTitleDAO shareTitleDAO;
     
     @Override
     public TransfertDTO transfertMoney(String login, String ribFrom, String ribTo, Double amount, CurrencyDTO currency) throws FakeClientException, FakeAccountException, AccountOwnerException, AccountTypeException, CurrencyException {
         if (login == null || ribFrom == null || ribTo == null || amount == null 
-                || amount <= 0|| currency == null) throw new IllegalArgumentException();
+                || amount <= 0 || currency == null) throw new IllegalArgumentException();
         
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
@@ -136,7 +147,9 @@ public class MovementServiceImpl implements MovementService {
 
     @Override
     public DebitDTO debitMoney(String login, String ribFrom, String ribTo, Double amount, CurrencyDTO currency) throws FakeClientException, FakeAccountException, AccountOwnerException, AccountTypeException, DebitAuthorizationException, CurrencyException {
-
+        if (login == null || ribFrom == null || ribTo == null || amount == null 
+                || amount <= 0 || currency == null) throw new IllegalArgumentException();
+        
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         
@@ -219,12 +232,98 @@ public class MovementServiceImpl implements MovementService {
 
     @Override
     public PurchaseDTO purchaseShareTitles(String login, String name, Integer amount) throws FakeClientException, NoCurrentAccountException, NoShareAccountException, FakeShareException, AmountException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (login == null || name == null || amount == null || amount <= 1) throw new IllegalArgumentException();
+        
+        ClientEntity client = clientDAO.find(login);
+        if (client == null) throw new FakeClientException();
+        
+        ShareAccountEntity shareAccount = accountDAO.findShareByLogin(login);
+        if (shareAccount == null) throw new NoShareAccountException();
+        
+        CurrentAccountEntity currentAccount = accountDAO.findCurrentByLogin(login);
+        if (currentAccount == null) throw new NoCurrentAccountException();
+        
+        ShareEntity share = shareDAO.find(this);
+        if (share == null) throw new FakeShareException();
+        
+        Date now = Date.from(Instant.now());
+        
+        double cost = amount * currentAccount.getCurrency().convert(
+                share.getValue(), share.getCurrency());
+        
+        ShareTitleEntity shareTitle = shareTitleDAO.findByRibName(shareAccount.getRib(), name);
+        
+        if (shareTitle == null) shareTitle = new ShareTitleEntity(amount, share, shareAccount);
+        else shareTitle.setAmount(shareTitle.getAmount() + amount);
+        shareTitleDAO.save(shareTitle);
+        
+        currentAccount.setMoney(currentAccount.getMoney() - cost);
+        accountDAO.save(currentAccount);
+        
+        PurchaseEntity purchase = new PurchaseEntity(now, shareAccount.getRib(), 
+                currentAccount.getRib(), amount, share);
+        movementDAO.save(purchase);
+        
+        if (client.getNotify()) {
+            
+            MovementNotificationEntity movementNotification = 
+                    new MovementNotificationEntity(client, now, false, purchase);
+            notificationDAO.save(movementNotification);
+            
+            if (currentAccount.getMoney() < 0) {
+                
+                OverdraftNotificationEntity overdraftNotification =
+                    new OverdraftNotificationEntity(client, now, false, currentAccount);
+                notificationDAO.save(overdraftNotification);
+            }
+        }
+        
+        return purchase.toDTO();
     }
 
     @Override
-    public SaleDTO saleShareTitles(String login, String name, Integer amount) throws FakeClientException, NoCurrentAccountException, NoShareAccountException, FakeShareTitleException, AccountOwnerException, AmountException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public SaleDTO saleShareTitles(String login, String name, Integer amount) throws FakeClientException, NoCurrentAccountException, NoShareAccountException, FakeShareTitleException, AmountException  {
+        if (login == null || name == null || amount == null || amount <= 1) throw new IllegalArgumentException();
+        
+        ClientEntity client = clientDAO.find(login);
+        if (client == null) throw new FakeClientException();
+        
+        ShareAccountEntity shareAccount = accountDAO.findShareByLogin(login);
+        if (shareAccount == null) throw new NoShareAccountException();
+        
+        CurrentAccountEntity currentAccount = accountDAO.findCurrentByLogin(login);
+        if (currentAccount == null) throw new NoCurrentAccountException();
+        
+        ShareTitleEntity shareTitle = shareTitleDAO.findByRibName(shareAccount.getRib(), name);
+        if (shareTitle == null) throw new FakeShareTitleException();
+        if (shareTitle.getAmount() < amount) throw new AmountException();
+
+        Date now = Date.from(Instant.now());
+        
+        ShareEntity share = shareTitle.getShare();
+        double cost = amount * currentAccount.getCurrency().convert(
+            share.getValue(), share.getCurrency());
+
+        shareTitle.setAmount(shareTitle.getAmount() - amount);
+        
+        if (shareTitle.getAmount() == 0) shareTitleDAO.delete(shareTitle);
+        else shareTitleDAO.save(shareTitle);
+        
+        currentAccount.setMoney(currentAccount.getMoney() + cost);
+        accountDAO.save(currentAccount);
+        
+        SaleEntity sale = new SaleEntity(now, shareAccount.getRib(), 
+                currentAccount.getRib(), amount, share);
+        movementDAO.save(sale);
+        
+        if (client.getNotify()) {
+            
+            MovementNotificationEntity movementNotification = 
+                    new MovementNotificationEntity(client, now, false, sale);
+            notificationDAO.save(movementNotification);
+        }
+        
+        return sale.toDTO();
     }
     
 }

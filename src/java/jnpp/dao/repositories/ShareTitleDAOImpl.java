@@ -1,0 +1,21 @@
+package jnpp.dao.repositories;
+
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import jnpp.dao.entities.accounts.ShareTitleEntity;
+
+public class ShareTitleDAOImpl extends GenericDAOImpl<ShareTitleEntity> implements ShareTitleDAO {
+
+    @Override
+    public ShareTitleEntity findByRibName(String rib, String name) {
+        Query query = getEm().createNamedQuery("find_sharetitle_by_rib_name");
+        query.setParameter("rib", rib);
+        query.setParameter("name", name);
+        try {
+            return (ShareTitleEntity) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+    
+}

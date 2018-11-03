@@ -20,7 +20,11 @@ import jnpp.service.dto.accounts.ShareTitleDTO;
     @NamedQuery(
         name = "has_share_account",
         query = "SELECT COUNT(a) FROM ShareAccountEntity a "
-                + "WHERE a.clients.id = :login")})
+                + "WHERE a.clients.login = :login"),
+    @NamedQuery(
+        name = "find_share_account_by_login",
+        query = "SELECT a FROM ShareAccountEntity a "
+                + "WHERE a.clients.login = :login")})
 public class ShareAccountEntity extends AccountEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

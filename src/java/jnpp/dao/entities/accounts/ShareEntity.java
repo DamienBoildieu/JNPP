@@ -27,24 +27,14 @@ public class ShareEntity implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Column(nullable = false)
     private String name;
+    
     @Column(nullable = false)
     private Double value;
     @Column(nullable = false)
     private CurrencyEntity currency;
     
     public ShareEntity() {}
-    
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -73,7 +63,7 @@ public class ShareEntity implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (name != null ? name.hashCode() : 0);
         return hash;
     }
 
@@ -83,12 +73,12 @@ public class ShareEntity implements Serializable {
             return false;
         }
         ShareEntity other = (ShareEntity) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        return !((this.name == null && other.name != null) || (this.name != null && !this.name.equals(other.name)));
     }
 
     @Override
     public String toString() {
-        return "jnpp.dao.entities.ShareEntity[ id=" + id + " ]";
+        return "jnpp.dao.entities.ShareEntity[ id=" + name + " ]";
     }
     
     public ShareDTO toDTO() {

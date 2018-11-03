@@ -1,6 +1,7 @@
 package jnpp.dao.entities.movements;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -22,6 +23,14 @@ public abstract class ShareTradeEntity extends TradeEntity implements Serializab
     @JoinColumn(name="share_fk")
     private ShareEntity share;
 
+    public ShareTradeEntity() {}
+    
+    public ShareTradeEntity(Date date, String ribFrom, String ribTo, Integer amount, ShareEntity share) {
+        super(date, ribFrom, ribTo);
+        this.amount = amount;
+        this.share = share;
+    }
+    
     public Integer getAmount() {
         return amount;
     }

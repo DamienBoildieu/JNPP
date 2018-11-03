@@ -8,9 +8,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import jnpp.service.dto.accounts.ShareTitleDTO;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(
+        name = "find_sharetitle_by_rib_name",
+        query = "SELECT s FROM ShareTitleEntity s "
+                + "WHERE s.shareAccount.rib = :rib "
+                + "  AND s.share.name = :name")})
 public class ShareTitleEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,6 +39,12 @@ public class ShareTitleEntity implements Serializable {
     private ShareAccountEntity shareAccount;
     
     public ShareTitleEntity() {}
+    
+    public ShareTitleEntity(Integer amount, ShareEntity share, ShareAccountEntity shareAccount) {
+        this.amount = amount;
+        this.share = share;
+        this.shareAccount = shareAccount;
+    }
     
     public Long getId() {
         return id;
