@@ -69,7 +69,7 @@ public class PaymentEntity extends MovementEntity implements Serializable {
     
     @Override
     public PaymentDTO toDTO() {
-        return new PaymentDTO(getDate(), getAccount().getRib(), money, currency.toDTO(), target);
+        return new PaymentDTO(getDate(), getRibFrom(), money, currency.toDTO(), target);
     }
     
 }

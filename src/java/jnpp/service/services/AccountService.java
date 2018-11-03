@@ -21,7 +21,7 @@ import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeSavingBookException;
 import jnpp.service.exceptions.owners.AccountOwnerException;
 
-public interface AccountService extends IService {
+public interface AccountService {
     
     List<SavingBookDTO> getSavingBooks();
     List<ShareDTO> getShares();

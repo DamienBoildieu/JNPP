@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.dao.entities.movements.MovementEntity;
 import jnpp.service.dto.accounts.AccountDTO;
 
 @Entity
@@ -120,6 +121,10 @@ public abstract class AccountEntity implements Serializable {
     }
     
     public abstract AccountDTO toDTO();
+    
+    public abstract boolean canEmit(MovementEntity.Type movement);
+    
+    public abstract boolean canReceive(MovementEntity.Type movement);
     
     public static List<AccountDTO> toDTO(List<AccountEntity> entities) {
         List<AccountDTO> dtos = new ArrayList<AccountDTO>(entities.size());

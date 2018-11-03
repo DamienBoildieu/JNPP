@@ -1,11 +1,13 @@
 package jnpp.dao.entities.movements;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import jnpp.dao.entities.accounts.AccountEntity;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -16,6 +18,13 @@ public abstract class TradeEntity extends MovementEntity implements Serializable
     
     private String ribTo;
 
+    public TradeEntity() {}
+    
+    public TradeEntity(Date date, String ribFrom, String ribTo) {
+        super(date, ribFrom);
+        this.ribTo = ribTo;
+    }
+    
     public String getRibTo() {
         return ribTo;
     }

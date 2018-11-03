@@ -25,7 +25,7 @@ public class SaleEntity extends ShareTradeEntity implements Serializable {
     
     @Override
     public SaleDTO toDTO() {
-        return new SaleDTO(getDate(), getAccount().getRib(), getRibTo(), getAmount(), getShare().toDTO());
+        return new SaleDTO(getDate(), getRibFrom(), getRibTo(), getAmount(), getShare().toDTO());
     }
     
 }

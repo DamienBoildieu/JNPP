@@ -12,7 +12,7 @@ import jnpp.service.exceptions.entities.FakeAppointmentException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.owners.AppointmentOwnerException;
 
-public interface AdvisorService extends IService {
+public interface AdvisorService {
    
     AdvisorDTO getAdvisor(String login) throws FakeClientException;
     

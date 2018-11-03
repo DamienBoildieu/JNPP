@@ -1,11 +1,13 @@
 package jnpp.dao.entities.notifications;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import jnpp.dao.entities.accounts.AccountEntity;
+import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.service.dto.notifications.OverdraftNotificationDTO;
 
 @Entity
@@ -19,6 +21,13 @@ public class OverdraftNotificationEntity extends NotificationEntity
     @JoinColumn(name = "account_fk")
     private AccountEntity account;
 
+    public OverdraftNotificationEntity() {}
+    
+    public OverdraftNotificationEntity(ClientEntity client, Date date, Boolean seen, AccountEntity account) {
+        super(client, date, seen);
+        this.account = account;
+    }
+    
     @Override
     public Type getType() {
         return NotificationEntity.Type.OVERDRAFT;

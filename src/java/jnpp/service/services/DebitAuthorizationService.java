@@ -8,7 +8,7 @@ import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeDebitAuthorizationException;
 import jnpp.service.exceptions.owners.AccountOwnerException;
 
-public interface DebitAuthorizationService extends IService {
+public interface DebitAuthorizationService {
 
     DebitAuthorizationDTO createDebitAuthorization(String login, String ribFrom, 
             String ribTo)

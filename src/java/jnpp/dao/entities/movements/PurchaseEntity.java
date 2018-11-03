@@ -25,7 +25,7 @@ public class PurchaseEntity extends ShareTradeEntity implements Serializable {
     
     @Override
     public PurchaseDTO toDTO() {
-        return new PurchaseDTO(getDate(), getAccount().getRib(), getRibTo(), getAmount(), getShare().toDTO());
+        return new PurchaseDTO(getDate(), getRibFrom(), getRibTo(), getAmount(), getShare().toDTO());
     }
     
 }

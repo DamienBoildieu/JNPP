@@ -10,6 +10,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.dao.entities.movements.MovementEntity;
 import jnpp.service.dto.accounts.ShareAccountDTO;
 import jnpp.service.dto.accounts.ShareTitleDTO;
 
@@ -57,6 +58,28 @@ public class ShareAccountEntity extends AccountEntity implements Serializable {
         Iterator<ShareTitleEntity> it = shareTitles.iterator();
         while (it.hasNext()) titles.add(it.next().toDTO());
         return new ShareAccountDTO(getRib(), titles);
+    }
+
+    @Override
+    public boolean canEmit(MovementEntity.Type movement) {
+        switch (movement) {
+            case PURCHASE:
+            case SALE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public boolean canReceive(MovementEntity.Type movement) {
+        switch (movement) {
+            case PURCHASE:
+            case SALE:
+                return true;
+            default:
+                return false;
+        }
     }
     
 }

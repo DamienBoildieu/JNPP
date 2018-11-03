@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.dao.entities.movements.MovementEntity;
 import jnpp.service.dto.accounts.CurrentAccountDTO;
 
 @Entity
@@ -50,5 +51,29 @@ public class CurrentAccountEntity extends MoneyAccountEntity implements Serializ
     public CurrentAccountDTO toDTO() {
         return new CurrentAccountDTO(getRib(), getMoney(), getCurrency().toDTO(), limit);
     }
-    
+
+    @Override
+    public boolean canEmit(MovementEntity.Type movement) {
+        switch (movement) {
+            case DEBIT:
+            case PAYMENT:
+            case TRANSFERT:
+            case WITHDRAW:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public boolean canReceive(MovementEntity.Type movement) {
+        switch (movement) {
+            case DEBIT:
+            case TRANSFERT:
+                return true;
+            default:
+                return false;
+        }
+    }
+        
 }

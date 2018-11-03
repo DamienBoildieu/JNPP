@@ -45,7 +45,7 @@ public class WithdrawEntity extends MovementEntity implements Serializable {
     
     @Override
     public WithdrawDTO toDTO() {
-        return new WithdrawDTO(getDate(), getAccount().getRib(), money, currency.toDTO());
+        return new WithdrawDTO(getDate(), getRibFrom(), money, currency.toDTO());
     }
     
 }

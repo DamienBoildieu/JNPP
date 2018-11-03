@@ -45,12 +45,12 @@ public abstract class PaymentMeanEntity implements Serializable {
         DELIVERED;
 
         public PaymentMeanDTO.Status toDTO() {
-            switch (ordinal()) {
-                case 0:
+            switch (this) {
+                case ORDERED:
                     return PaymentMeanDTO.Status.ORDERED;
-                case 1:
+                case ARRIVED:
                     return PaymentMeanDTO.Status.ARRIVED;
-                case 2:
+                case DELIVERED:
                     return PaymentMeanDTO.Status.DELIVERED;
             }
             return null;

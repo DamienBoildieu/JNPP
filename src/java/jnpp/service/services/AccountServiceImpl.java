@@ -123,7 +123,7 @@ public class AccountServiceImpl implements AccountService {
             else clients.add(currentClient);
             if (!clientFound && currentClient.getLogin().equals(login)) clientFound = true;
         }
-        if (!clientFound) throw new IllegalArgumentException("Le login ne fait pas reference a une identite contenue dans la liste.");
+        if (!clientFound) throw new IllegalStateException("Le login ne fait pas reference a une identite contenue dans la liste.");
         String rib = generateNewRib();
         JointAccountEntity account = new JointAccountEntity(rib, clients, DEFAULT_MONEY, DEFAULT_CURRENCY);
         accountDAO.save(account);
@@ -174,7 +174,7 @@ public class AccountServiceImpl implements AccountService {
                         closeAccount((JointAccountEntity) account, (PrivateEntity) client);
                         break;
                     case PROFESIONAL:
-                        throw new IllegalArgumentException("Un professionel a ferme un compte joint.");
+                        throw new IllegalStateException("Un professionel a ferme un compte joint.");
                 }
                 break;
             case SAVING:
@@ -183,7 +183,7 @@ public class AccountServiceImpl implements AccountService {
                         closeAccount((SavingAccountEntity) account);
                         break;
                     case PROFESIONAL:
-                        throw new IllegalArgumentException("Un professionel a ferme un compte joint.");
+                        throw new IllegalStateException("Un professionel a ferme un compte joint.");
                 }
                 break;
             case SHARE:
@@ -193,13 +193,13 @@ public class AccountServiceImpl implements AccountService {
     }
     
     private void closeAccount(CurrentAccountEntity account) throws ClosureException {
-        if (account.getClients() != null && account.getClients().size() > 1) throw new IllegalArgumentException("Un compte courant a plusieurs proprietaires.");
+        if (account.getClients() != null && account.getClients().size() > 1) throw new IllegalStateException("Un compte courant a plusieurs proprietaires.");
         if (account.getMoney() != 0) throw new ClosureException();
         accountDAO.delete(account);
     }
     
     private void closeAccount(JointAccountEntity account, PrivateEntity client) throws ClosureException, CloseRequestException {
-        if (account.getClients() != null && account.getClients().size() < 2) throw new IllegalArgumentException("Un compte joint n'a que un seul proprietaire.");
+        if (account.getClients() != null && account.getClients().size() < 2) throw new IllegalStateException("Un compte joint n'a que un seul proprietaire.");
 
         if (account.getMoney() != 0) throw new ClosureException();
         
@@ -229,13 +229,13 @@ public class AccountServiceImpl implements AccountService {
     }
     
     private void closeAccount(SavingAccountEntity account) throws ClosureException {
-        if (account.getClients() != null && account.getClients().size() > 1) throw new IllegalArgumentException("Un compte livret a plusieurs proprietaires.");
+        if (account.getClients() != null && account.getClients().size() > 1) throw new IllegalStateException("Un compte livret a plusieurs proprietaires.");
         if (account.getMoney() != 0)  throw new ClosureException();
         accountDAO.delete(account);
     }
     
     private void closeAccount(ShareAccountEntity account) throws ClosureException {
-        if (account.getClients() != null && account.getClients().size() > 1) throw new IllegalArgumentException("Un compte d'actions a plusieurs proprietaires.");
+        if (account.getClients() != null && account.getClients().size() > 1) throw new IllegalStateException("Un compte d'actions a plusieurs proprietaires.");
         if (!account.getShareTitles().isEmpty()) throw new ClosureException();
         accountDAO.delete(account);
     }

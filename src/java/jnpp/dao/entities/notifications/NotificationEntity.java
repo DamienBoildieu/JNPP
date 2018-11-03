@@ -87,6 +87,14 @@ public abstract class NotificationEntity implements Serializable {
     private Date date;
     private Boolean seen;
     
+    public NotificationEntity() {}
+    
+    public NotificationEntity(ClientEntity client, Date date, Boolean seen) {
+        this.client = client;
+        this.date = date;
+        this.seen = seen;
+    }
+    
     public abstract Type getType();
     
     public Long getId() {

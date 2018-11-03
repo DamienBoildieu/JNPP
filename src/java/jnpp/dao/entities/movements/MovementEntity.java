@@ -29,12 +29,14 @@ import jnpp.service.dto.movements.MovementDTO;
     @NamedQuery(
         name = "find_all_movement_by_rib",
         query = "SELECT m FROM MovementEntity m "
-                + "WHERE m.account.rib = :rib "
+                + "WHERE (m.ribFrom = :rib "
+                + "      OR TREAT(m AS TradeEntity).ribTo = :rib) "
                 + "ORDER BY m.date DESC"),
     @NamedQuery(
         name = "find_recent_movement_by_rib",
         query = "SELECT m FROM MovementEntity m "
-                + "WHERE m.account.rib = :rib "
+                + "WHERE (m.ribFrom = :rib "
+                + "      OR TREAT(m AS TradeEntity).ribTo = :rib) "
                 + "  AND m.date >= :date "
                 + "ORDER BY m.date DESC")})
 public abstract class MovementEntity implements Serializable {
@@ -71,10 +73,14 @@ public abstract class MovementEntity implements Serializable {
     
     @Temporal(TemporalType.DATE)
     private Date date;
+    private String ribFrom;
+
+    public MovementEntity() {}
     
-    @ManyToOne
-    @JoinColumn(name = "account_fk")
-    private AccountEntity account;
+    public MovementEntity(Date date, String ribFrom) {
+        this.date = date;
+        this.ribFrom = ribFrom;
+    }
     
     public abstract Type getType();
 
@@ -94,12 +100,12 @@ public abstract class MovementEntity implements Serializable {
         this.date = date;
     }
 
-    public AccountEntity getAccount() {
-        return account;
+    public String getRibFrom() {
+        return ribFrom;
     }
 
-    public void setAccount(AccountEntity account) {
-        this.account = account;
+    public void setRibFrom(String ribFrom) {
+        this.ribFrom = ribFrom;
     }
     
     @Override

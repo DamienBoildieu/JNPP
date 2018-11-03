@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.dao.entities.movements.MovementEntity;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

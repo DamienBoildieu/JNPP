@@ -7,7 +7,7 @@ import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeNotificationException;
 import jnpp.service.exceptions.owners.NotificationOwnerException;
 
-public interface NotificationService extends IService {
+public interface NotificationService {
 
     List<NotificationDTO> receiveNotifications(String login) throws FakeClientException;
     List<NotificationDTO> receiveUnseenNotifications(String login)

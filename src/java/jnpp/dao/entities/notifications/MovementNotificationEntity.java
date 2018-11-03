@@ -1,10 +1,12 @@
 package jnpp.dao.entities.notifications;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.movements.MovementEntity;
 import jnpp.service.dto.notifications.MovementNotificationDTO;
 
@@ -18,6 +20,13 @@ public class MovementNotificationEntity extends NotificationEntity implements Se
     @JoinColumn(name = "movement_fk")
     private MovementEntity movement;
 
+    public MovementNotificationEntity() {}
+    
+    public MovementNotificationEntity(ClientEntity client, Date date, Boolean seen, MovementEntity movement) {
+        super(client, date, seen);
+        this.movement = movement;
+    }    
+    
     @Override
     public Type getType() {
         return NotificationEntity.Type.MOVEMENT;

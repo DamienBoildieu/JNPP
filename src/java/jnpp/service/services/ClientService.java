@@ -9,7 +9,7 @@ import jnpp.service.exceptions.clients.InformationException;
 import jnpp.service.exceptions.duplicates.DuplicateClientException;
 import jnpp.service.exceptions.entities.FakeClientException;
 
-public interface ClientService extends IService {
+public interface ClientService {
     
     ClientDTO signIn(String login, String password);
     void signOut(String login)

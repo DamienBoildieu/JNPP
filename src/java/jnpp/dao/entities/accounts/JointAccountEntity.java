@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import jnpp.dao.entities.IdentityEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.clients.PrivateEntity;
+import jnpp.dao.entities.movements.MovementEntity;
 import jnpp.service.dto.accounts.JointAccountDTO;
 
 @Entity
@@ -42,9 +43,33 @@ public class JointAccountEntity extends MoneyAccountEntity implements Serializab
             if (client.getType() == ClientEntity.Type.PRIVATE)
                 owners.add(((PrivateEntity) client).getIdentity());
             else 
-                throw new IllegalArgumentException("Un professionel a un compte joint.");
+                throw new IllegalStateException("Un professionel a un compte joint.");
         }
         return new JointAccountDTO(getRib(), getMoney(), getCurrency().toDTO(), owners);
+    }
+
+    @Override
+    public boolean canEmit(MovementEntity.Type movement) {
+        switch (movement) {
+            case DEBIT:
+            case PAYMENT:
+            case TRANSFERT:
+            case WITHDRAW:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public boolean canReceive(MovementEntity.Type movement) {
+        switch (movement) {
+            case DEBIT:
+            case TRANSFERT:
+                return true;
+            default:
+                return false;
+        }
     }
     
 }

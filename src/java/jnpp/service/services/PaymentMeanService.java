@@ -9,7 +9,7 @@ import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.movements.AccountTypeException;
 import jnpp.service.exceptions.owners.AccountOwnerException;
 
-public interface PaymentMeanService extends IService {
+public interface PaymentMeanService {
     
     BankCardDTO commandBankCard(String login, String rib)
             throws FakeClientException, AccountTypeException, AccountOwnerException;

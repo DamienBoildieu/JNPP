@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.dao.entities.movements.MovementEntity;
 import jnpp.service.dto.accounts.SavingAccountDTO;
 
 @Entity
@@ -57,6 +58,26 @@ public class SavingAccountEntity extends MoneyAccountEntity implements Serializa
     @Override
     public SavingAccountDTO toDTO() {
         return new SavingAccountDTO(getRib(), getMoney(), getCurrency().toDTO(), savingBook.toDTO());
+    }
+
+    @Override
+    public boolean canEmit(MovementEntity.Type movement) {
+        switch (movement) {
+            case TRANSFERT:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public boolean canReceive(MovementEntity.Type movement) {
+        switch (movement) {
+            case TRANSFERT:
+                return true;
+            default:
+                return false;
+        }
     }
     
 }
