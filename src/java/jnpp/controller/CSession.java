@@ -4,7 +4,7 @@ import javax.servlet.http.HttpSession;
 import jnpp.controller.exceptions.NullSessionException;
 import jnpp.controller.exceptions.UnconnectedException;
 import jnpp.controller.views.Translator;
-import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.service.dto.clients.ClientDTO;
 
 /**
  * Classe permettant de gérer les HttpSession
@@ -33,7 +33,7 @@ public class CSession {
         session.invalidate();
     }
     
-    public static void setClient(HttpSession session, ClientEntity client) throws NullSessionException {
+    public static void setClient(HttpSession session, ClientDTO client) throws NullSessionException {
         if (session == null)
             throw new NullSessionException();
         session.setAttribute("client", client);
@@ -51,10 +51,10 @@ public class CSession {
         session.setAttribute("hasNotif", hasNotif);
     }
     
-    public static ClientEntity getClient(HttpSession session) throws NullSessionException {
+    public static ClientDTO getClient(HttpSession session) throws NullSessionException {
         if (session == null)
             throw new NullSessionException();
-        return (ClientEntity)session.getAttribute("client");
+        return (ClientDTO)session.getAttribute("client");
     }
     
     public static Translator.Language getLanguage(HttpSession session) throws NullSessionException {

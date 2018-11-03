@@ -26,7 +26,7 @@ public enum CurrencyEntity {
         changes = new double[n][n];
         for (int i = 0; i < n; ++i) {
             changes[i][i] = 1;
-            for (int j = i + 1; i < n; ++j) {
+            for (int j = i + 1; j < n; ++j) {
                 changes[i][j] = 1;
                 changes[j][i] = 1;
             }        

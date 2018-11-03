@@ -12,10 +12,10 @@ import jnpp.controller.views.Translator;
 import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.controller.views.info.ViewInfo;
-import jnpp.dao.entities.Gender;
-import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.dao.entities.clients.PrivateEntity;
-import jnpp.dao.entities.notifications.NotificationEntity;
+import jnpp.service.dto.IdentityDTO;
+import jnpp.service.dto.clients.ClientDTO;
+import jnpp.service.dto.clients.PrivateDTO;
+import jnpp.service.dto.notifications.NotificationDTO;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,7 @@ public class CLink {
             Boolean hasNotif = CSession.getHasNotif(session);
             if (!hasNotif) {  
                 try {
-                    hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session)).size()>0;
+                    hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session).getLogin()).size()>0;
                     CSession.setHasNotif(session, hasNotif);
                 } catch (FakeClientException invalidClient) {
                     if (alerts != null) {
@@ -126,7 +126,7 @@ public class CLink {
             CSession.setLanguage(session,Translator.Language.FR);
         if (!CSession.isConnected(session)) {
             ModelAndView view = new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
-            view.addObject("genders", Gender.values());
+            view.addObject("genders", IdentityDTO.Gender.values());
             view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
             return view;
         }
@@ -151,7 +151,7 @@ public class CLink {
             CSession.setLanguage(session,Translator.Language.FR);
         if (!CSession.isConnected(session)) {
             ModelAndView view = new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
-            view.addObject("genders", Gender.values());
+            view.addObject("genders", IdentityDTO.Gender.values());
             view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
             return view;
         }
@@ -198,7 +198,7 @@ public class CLink {
             Boolean hasNotif = CSession.getHasNotif(session);
             if (!hasNotif) {  
                 try {
-                    hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session)).size()>0;
+                    hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session).getLogin()).size()>0;
                     CSession.setHasNotif(session, hasNotif);
                 } catch (FakeClientException invalidClient) {
                     if (alerts != null) {
@@ -235,7 +235,7 @@ public class CLink {
         Boolean hasNotif = CSession.getHasNotif(session);
         if (!hasNotif) {  
             try {
-                hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session)).size()>0;
+                hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session).getLogin()).size()>0;
                 CSession.setHasNotif(session, hasNotif);
             } catch (FakeClientException invalidClient) {
                 if (alerts != null) {
@@ -347,14 +347,14 @@ public class CLink {
             CSession.setLanguage(session,Translator.Language.FR);
         if (CSession.isConnected(session)) {
             try {
-                List<NotificationEntity> notifs = notifService.receiveNotifications(CSession.getClient(session));
+                List<NotificationDTO> notifs = notifService.receiveNotifications(CSession.getClient(session).getLogin());
                 List<NotifView> notifsView = new ArrayList<NotifView>();
-                for (NotificationEntity notif : notifs) {
+                for (NotificationDTO notif : notifs) {
                     notifsView.add(new NotifView(notif));
                 }
                 ModelAndView view = new JNPPModelAndView("manageuser/notifs", ViewInfo.createInfo(session, alerts));
                 view.addObject("notifs", notifsView);
-                notifService.seeAllNotications(CSession.getClient(session));
+                notifService.seeAllNotications(CSession.getClient(session).getLogin());
                 CSession.setHasNotif(session, false);
                 return view;
             } catch (FakeClientException invalidClient) {
@@ -391,7 +391,7 @@ public class CLink {
         Boolean hasNotif = CSession.getHasNotif(session);
         if (!hasNotif) {  
             try {
-                hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session)).size()>0;
+                hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session).getLogin()).size()>0;
                 CSession.setHasNotif(session, hasNotif);
             } catch (FakeClientException invalidClient) {
                 if (alerts != null) {
@@ -402,12 +402,12 @@ public class CLink {
                 }
             }
         }
-        ClientEntity client = CSession.getClient(session);
+        ClientDTO client = CSession.getClient(session);
         ModelAndView view = null;
         switch (client.getType()) {
             case PRIVATE:
                 view = new JNPPModelAndView("manageuser/privateinfo", ViewInfo.createInfo(session, alerts));
-                String birthday = new SimpleDateFormat("yyyy-MM-dd").format(((PrivateEntity)client).getBirthday());
+                String birthday = new SimpleDateFormat("yyyy-MM-dd").format(((PrivateDTO)client).getBirthday());
                 view.addObject("birthday", birthday);
                 break;
             case PROFESIONAL:

@@ -16,8 +16,10 @@ import jnpp.service.dto.accounts.SavingAccountDTO;
 @NamedQueries({
     @NamedQuery(
         name = "has_saving_account",
-        query = "SELECT COUNT(a) FROM SavingAccountEntity a "
-                + "WHERE a.clients.login = :login "
+        query = "SELECT COUNT(a) "
+                + "FROM SavingAccountEntity a "
+                + "INNER JOIN a.clients a_clients "
+                + "WHERE a_clients.login = :login "
                 + "  AND a.savingBook.id = :savingbook_id")})
 public class SavingAccountEntity extends MoneyAccountEntity implements Serializable {
 

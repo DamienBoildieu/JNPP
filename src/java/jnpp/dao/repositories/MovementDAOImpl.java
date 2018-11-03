@@ -4,7 +4,9 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Query;
 import jnpp.dao.entities.movements.MovementEntity;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class MovementDAOImpl extends GenericDAOImpl<MovementEntity> implements MovementDAO {
 
     @Override

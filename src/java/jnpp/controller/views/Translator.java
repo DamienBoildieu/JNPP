@@ -2,8 +2,8 @@ package jnpp.controller.views;
 
 import java.util.HashMap;
 import java.util.Map;
-import jnpp.dao.entities.Gender;
-import jnpp.dao.entities.accounts.AccountEntity;
+import jnpp.service.dto.IdentityDTO;
+import jnpp.service.dto.accounts.AccountDTO;
 
 
 public class Translator {
@@ -23,7 +23,7 @@ public class Translator {
         return TranslatorHolder.instance;
     }
     
-    public Map<Gender,String> translateGenders(Language lang) {
+    public Map<IdentityDTO.Gender,String> translateGenders(Language lang) {
         switch (lang) {
             case FR:    
                 return gendersToFrench();
@@ -32,9 +32,9 @@ public class Translator {
         }
     }
     
-    private Map<Gender, String> gendersToFrench() {
-        Map<Gender, String> map = new HashMap<Gender, String>();
-        for (Gender gender : Gender.values()) {
+    private Map<IdentityDTO.Gender, String> gendersToFrench() {
+        Map<IdentityDTO.Gender, String> map = new HashMap<IdentityDTO.Gender, String>();
+        for (IdentityDTO.Gender gender : IdentityDTO.Gender.values()) {
             switch (gender) {
                 case MALE:
                     map.put(gender, "Homme");
@@ -49,7 +49,7 @@ public class Translator {
         return map;
     }
     
-    public Map<AccountEntity.Type,String> translateAccounts(Language lang) {
+    public Map<AccountDTO.Type,String> translateAccounts(Language lang) {
         switch (lang) {
             case FR:    
                 return accountsToFrench();
@@ -58,9 +58,9 @@ public class Translator {
         }
     }
     
-    private Map<AccountEntity.Type, String> accountsToFrench() {
-        Map<AccountEntity.Type, String> map = new HashMap<AccountEntity.Type, String>();
-        for (AccountEntity.Type type : AccountEntity.Type.values()) {
+    private Map<AccountDTO.Type, String> accountsToFrench() {
+        Map<AccountDTO.Type, String> map = new HashMap<AccountDTO.Type, String>();
+        for (AccountDTO.Type type : AccountDTO.Type.values()) {
             switch (type) {
                 case CURRENT:
                     map.put(type, "Compte courrant");

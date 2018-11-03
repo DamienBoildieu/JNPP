@@ -12,8 +12,8 @@ import jnpp.controller.views.Translator;
 import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.controller.views.info.ViewInfo;
-import jnpp.dao.entities.Gender;
-import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.service.dto.IdentityDTO;
+import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.clients.AgeException;
 import jnpp.service.exceptions.clients.InformationException;
@@ -63,9 +63,9 @@ public class CUser {
         if (!CSession.isConnected(session)) {
             String id = request.getParameter("account");
             String password = request.getParameter("password");
-            ClientEntity client = this.clientService.signIn(id, password);
+            ClientDTO client = this.clientService.signIn(id, password);
             if (client!=null) {
-                boolean hasNotif = notifService.receiveUnseenNotifications(client).size()>0;
+                boolean hasNotif = notifService.receiveUnseenNotifications(client.getLogin()).size()>0;
                 CSession.setHasNotif(session, hasNotif);
                 CSession.setClient(session, client);
                 if (alerts != null) {
@@ -161,11 +161,11 @@ public class CUser {
             String city = request.getParameter("city");
             String country = request.getParameter("country");  
             String phone = request.getParameter("phone");
-            Gender gender;
-            if (genderStr.equals(Gender.MALE.name())) {
-                gender = Gender.MALE;
-            } else if (genderStr.equals(Gender.FEMALE.name())) {
-                gender = Gender.FEMALE;
+            IdentityDTO.Gender gender;
+            if (genderStr.equals(IdentityDTO.Gender.MALE.name())) {
+                gender = IdentityDTO.Gender.MALE;
+            } else if (genderStr.equals(IdentityDTO.Gender.FEMALE.name())) {
+                gender = IdentityDTO.Gender.FEMALE;
             } else {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Sexe invalide"));
@@ -248,11 +248,11 @@ public class CUser {
             String city = request.getParameter("city");
             String country = request.getParameter("country");  
             String phone = request.getParameter("phone");
-            Gender gender;
-            if (genderStr.equals(Gender.MALE.name())) {
-                gender = Gender.MALE;
-            } else if (genderStr.equals(Gender.FEMALE.name())) {
-                gender = Gender.FEMALE;
+            IdentityDTO.Gender gender;
+            if (genderStr.equals(IdentityDTO.Gender.MALE.name())) {
+                gender = IdentityDTO.Gender.MALE;
+            } else if (genderStr.equals(IdentityDTO.Gender.FEMALE.name())) {
+                gender = IdentityDTO.Gender.FEMALE;
             } else {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Sexe invalide"));
@@ -320,7 +320,9 @@ public class CUser {
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
             String email = request.getParameter("email");
-            if (clientService.resetPassword(id, firstName, lastName, email)) {
+            //TODO add gender to session et remplacer id par login
+            IdentityDTO.Gender TODO_gender = IdentityDTO.Gender.MALE;
+            if (clientService.resetPassword(id, TODO_gender, firstName, lastName, email)) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Demande de nouveau mot de passe accepté"));
                 } else {
@@ -366,7 +368,9 @@ public class CUser {
             String lastName = request.getParameter("lastName");
             String company = request.getParameter("company");
             String email = request.getParameter("email");
-            if (clientService.resetPassword(id, company, firstName, lastName, email)) {
+            //TODO add gender to session
+            IdentityDTO.Gender TODO_gender = IdentityDTO.Gender.MALE;
+            if (clientService.resetPassword(id, company, TODO_gender, firstName, lastName, email)) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Demande de nouveau mot de passe accepté"));
                 } else {
@@ -421,7 +425,7 @@ public class CUser {
                 return new ModelAndView("redirect:/userinfo.htm");
             }
             try {
-                clientService.updatePassword(CSession.getClient(session), old, newp);
+                clientService.updatePassword(CSession.getClient(session).getLogin(), old, newp);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Mise à jour réussie"));
                 } else {
@@ -473,7 +477,7 @@ public class CUser {
             Integer streetNbr = Integer.parseInt(streetNbrStr);
             //Call service
             try {
-                ClientEntity client = clientService.update(CSession.getClient(session), email, streetNbr, street, city, country, phone);
+                ClientDTO client = clientService.update(CSession.getClient(session).getLogin(), email, streetNbr, street, city, country, phone);
                 CSession.setClient(session, client);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Mise à jour réussie"));
@@ -524,7 +528,9 @@ public class CUser {
             CSession.setLanguage(session,Translator.Language.FR);
         if (CSession.isConnected(session)) {
             try {
-                clientService.close(CSession.getClient(session));
+                //TODO add password to close compte
+                String TODO_password = "";
+                clientService.close(CSession.getClient(session).getLogin(), TODO_password);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre compte a bien été cloturé"));
                 } else {

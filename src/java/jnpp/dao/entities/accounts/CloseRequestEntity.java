@@ -15,7 +15,7 @@ import jnpp.dao.entities.clients.PrivateEntity;
 @NamedQueries({
     @NamedQuery(
         name = "find_closerequest_by_rib",
-        query = "SELECT c FROM CloseRequestEntity c WHERE c.account.rib == :rib")})
+        query = "SELECT c FROM CloseRequestEntity c WHERE c.account.rib = :rib")})
 public class CloseRequestEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

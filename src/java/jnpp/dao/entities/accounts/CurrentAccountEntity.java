@@ -14,12 +14,16 @@ import jnpp.service.dto.accounts.CurrentAccountDTO;
 @NamedQueries({
     @NamedQuery(
         name = "has_current_account",
-        query = "SELECT COUNT(a) FROM CurrentAccountEntity a "
-                + "WHERE a.clients.login = :login"),
+        query = "SELECT COUNT(a) "
+                + "FROM CurrentAccountEntity a "
+                + "INNER JOIN a.clients a_clients "
+                + "WHERE a_clients.login = :login"),
     @NamedQuery(
         name = "find_current_account_by_login",
-        query = "SELECT a FROM CurrentAccountEntity a "
-                + "WHERE a.clients.login = :login")})
+        query = "SELECT a "
+                + "FROM CurrentAccountEntity a "
+                + "INNER JOIN a.clients a_clients "
+                + "WHERE a_clients.login = :login")})
 public class CurrentAccountEntity extends MoneyAccountEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;    

@@ -4,8 +4,10 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Query;
 import jnpp.dao.entities.advisor.MessageEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 public class MessageDAOImpl extends GenericDAOImpl<MessageEntity> implements MessageDAO {
 
     @Transactional(readOnly = true)

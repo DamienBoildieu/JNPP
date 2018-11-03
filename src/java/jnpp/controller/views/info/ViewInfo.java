@@ -5,9 +5,9 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 import jnpp.controller.CSession;
 import jnpp.controller.views.alerts.AlertMessage;
-import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.dao.entities.clients.PrivateEntity;
-import jnpp.dao.entities.clients.ProfessionalEntity;
+import jnpp.service.dto.clients.ClientDTO;
+import jnpp.service.dto.clients.PrivateDTO;
+import jnpp.service.dto.clients.ProfessionalDTO;
 
 /**
  * Classe contenant les informations nécessaires à une vue de l'application
@@ -56,15 +56,15 @@ public class ViewInfo {
     
     public static ViewInfo createInfo(HttpSession session) {
         if (CSession.isConnected(session)) {
-            ClientEntity client = CSession.getClient(session);
+            ClientDTO client = CSession.getClient(session);
             String userName = "";
             switch (client.getType()) {
                 case PRIVATE:
-                    PrivateEntity priv = (PrivateEntity)client;
+                    PrivateDTO priv = (PrivateDTO)client;
                     userName = priv.getIdentity().getFirstname() + " " + priv.getIdentity().getLastname();
                     break;
                 case PROFESIONAL:
-                    ProfessionalEntity pro = (ProfessionalEntity)client;
+                    ProfessionalDTO pro = (ProfessionalDTO)client;
                     userName = pro.getName();
                     break;
                 default:
@@ -77,15 +77,15 @@ public class ViewInfo {
     
     public static ViewInfo createInfo(HttpSession session, AlertMessage alert) {
         if (CSession.isConnected(session)) {
-            ClientEntity client = CSession.getClient(session);
+            ClientDTO client = CSession.getClient(session);
             String userName = "";
             switch (client.getType()) {
                 case PRIVATE:
-                    PrivateEntity priv = (PrivateEntity)client;
+                    PrivateDTO priv = (PrivateDTO)client;
                     userName = priv.getIdentity().getFirstname() + " " + priv.getIdentity().getLastname();
                     break;
                 case PROFESIONAL:
-                    ProfessionalEntity pro = (ProfessionalEntity)client;
+                    ProfessionalDTO pro = (ProfessionalDTO)client;
                     userName = pro.getName();
                     break;
                 default:
@@ -98,15 +98,15 @@ public class ViewInfo {
     
     public static ViewInfo createInfo(HttpSession session, List<AlertMessage> alerts) {
         if (CSession.isConnected(session)) {
-            ClientEntity client = CSession.getClient(session);
+            ClientDTO client = CSession.getClient(session);
             String userName = "";
             switch (client.getType()) {
                 case PRIVATE:
-                    PrivateEntity priv = (PrivateEntity)client;
+                    PrivateDTO priv = (PrivateDTO)client;
                     userName = priv.getIdentity().getFirstname() + " " + priv.getIdentity().getLastname();
                     break;
                 case PROFESIONAL:
-                    ProfessionalEntity pro = (ProfessionalEntity)client;
+                    ProfessionalDTO pro = (ProfessionalDTO)client;
                     userName = pro.getName();
                     break;
                 default:

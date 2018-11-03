@@ -28,10 +28,16 @@ import jnpp.service.dto.accounts.AccountDTO;
         query = "SELECT a.rib FROM AccountEntity a"),
     @NamedQuery(
         name = "find_all_account_by_login",
-        query = "SELECT a FROM AccountEntity a WHERE a.clients.login = :login"),
+        query = "SELECT a "
+                + "FROM AccountEntity a "
+                + "INNER JOIN a.clients a_clients "
+                + "WHERE a_clients.login = :login"),
     @NamedQuery(
         name = "has_account",
-        query = "SELECT COUNT(a) FROM AccountEntity a WHERE a.clients.login = :login")})
+        query = "SELECT COUNT(a) "
+                + "FROM AccountEntity a "
+                + "INNER JOIN a.clients a_clients "
+                + "WHERE a_clients.login = :login")})
 public abstract class AccountEntity implements Serializable {
 
     public static enum Type {

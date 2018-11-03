@@ -1,5 +1,7 @@
 package jnpp.service.services;
 
+import jnpp.dao.entities.movements.MovementEntity;
+import jnpp.dao.repositories.GenericDAO;
 import jnpp.service.dto.accounts.CurrencyDTO;
 import jnpp.service.dto.movements.DebitDTO;
 import jnpp.service.dto.movements.PurchaseDTO;

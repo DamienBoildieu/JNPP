@@ -3,7 +3,9 @@ package jnpp.dao.repositories;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import jnpp.dao.entities.accounts.ShareTitleEntity;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ShareTitleDAOImpl extends GenericDAOImpl<ShareTitleEntity> implements ShareTitleDAO {
 
     @Override

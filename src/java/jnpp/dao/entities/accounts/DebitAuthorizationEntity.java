@@ -18,18 +18,23 @@ import jnpp.service.dto.accounts.DebitAuthorizationDTO;
 @NamedQueries({
     @NamedQuery(
         name = "find_debit_authorization_by_rib_from_rib_to",
-        query = "SELECT d FROM DebitAuthorizationEntity d "
+        query = "SELECT d "
+                + "FROM DebitAuthorizationEntity d "
                 + "WHERE d.from.rib = :rib_from "
                 + "  AND d.ribTo = :rib_to"),
     @NamedQuery(
         name = "find_all_debit_authorization_by_login",
-        query = "SELECT d FROM DebitAuthorizationEntity d "
-                + "WHERE d.from.clients.login = :login"),
+        query = "SELECT d "
+                + "FROM DebitAuthorizationEntity d "
+                + "INNER JOIN d.from.clients d_from_clients "
+                + "WHERE d_from_clients.login = :login"),
     @NamedQuery(
         name = "find_all_debit_authorization_by_login_rib_from",
-        query = "SELECT d FROM DebitAuthorizationEntity d "
+        query = "SELECT d "
+                + "FROM DebitAuthorizationEntity d "
+                + "INNER JOIN d.from.clients d_from_clients "
                 + "WHERE d.from.rib = :rib "
-                + "  AND d.from.clients.login = :login")})
+                + "  AND d_from_clients.login = :login")})
 public class DebitAuthorizationEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
