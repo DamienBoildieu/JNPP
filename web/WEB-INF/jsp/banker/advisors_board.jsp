@@ -14,7 +14,8 @@
                         <th>Prenom</th>
                         <th>Email</th>
                         <th>Telephone</th>
-                        <th colspan=4>Bureau</th>
+                        <th>Bureau</th>
+                        <th>Clients</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -25,6 +26,8 @@
                         <td>${advisor.email}</td>
                         <td>${advisor.phone}</td>
                         <td>${advisor.officeAddress}</td>
+                        <td><a class="waves-effect waves-light btn" 
+                               href="<c:url value='/conseiller/clients.htm' />?nom=${advisor.identity.lastname}&prenom=${advisor.identity.firstname}">Clients</a></td>
                     </tr>
                     </c:forEach>
                 </tbody>

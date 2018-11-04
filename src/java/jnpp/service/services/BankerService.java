@@ -6,10 +6,13 @@ import jnpp.service.dto.accounts.CurrencyDTO;
 import jnpp.service.dto.accounts.SavingBookDTO;
 import jnpp.service.dto.accounts.ShareDTO;
 import jnpp.service.dto.advisor.AdvisorDTO;
+import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.clients.LoginDTO;
 import jnpp.service.exceptions.duplicates.DuplicateAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateSavingbookException;
 import jnpp.service.exceptions.duplicates.DuplicateShareException;
+import jnpp.service.exceptions.entities.FakeAdvisorException;
+import jnpp.service.exceptions.entities.FakeClientException;
 
 public interface BankerService {
 
@@ -23,5 +26,9 @@ public interface BankerService {
             String lastname, String email, String phone, Integer number, 
             String street, String city, String state)
             throws DuplicateAdvisorException;
+    List<LoginDTO> getAdvisorLogins(String firstname, String lastname) 
+            throws FakeAdvisorException;
+    LoginDTO getLogin(String login)
+            throws FakeClientException;
     
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import jnpp.dao.entities.advisor.AdvisorEntity;
+import jnpp.dao.entities.clients.ClientEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,5 +30,14 @@ public class AdvisorDAOImpl extends GenericDAOImpl<AdvisorEntity> implements Adv
             return null;
         }
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ClientEntity> findAllClientByID(Long id) {
+        Query query = getEm().createNamedQuery("find_advisor_clients_by_id");
+        query.setParameter("id", id);
+        return query.getResultList();
+    }
    
+            
 }

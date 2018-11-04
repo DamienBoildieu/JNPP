@@ -167,6 +167,13 @@ public abstract class ClientEntity implements Serializable {
     
     public abstract LoginDTO toLoginDTO();
     
+    public static List<ClientDTO> toDTO(List<ClientEntity> entities) {
+        List<ClientDTO> dtos = new ArrayList<ClientDTO>(entities.size());
+        Iterator<ClientEntity> it = entities.iterator();
+        while (it.hasNext()) dtos.add(it.next().toDTO());
+        return dtos;
+    }
+    
     public static List<LoginDTO> toLoginDTO(List<ClientEntity> entities) {
         List<LoginDTO> dtos = new ArrayList<LoginDTO>(entities.size());
         Iterator<ClientEntity> it = entities.iterator();

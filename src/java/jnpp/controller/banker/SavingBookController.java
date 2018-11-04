@@ -1,4 +1,4 @@
-package jnpp.controller.bank;
+package jnpp.controller.banker;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;

@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +27,10 @@ import jnpp.service.dto.advisor.AdvisorDTO;
         name = "find_advisor_by_identity",
         query = "SELECT a FROM AdvisorEntity a "
                 + "WHERE a.identity.firstname = :firstname "
-                + "  AND a.identity.lastname = :lastname")})
+                + "  AND a.identity.lastname = :lastname"),
+    @NamedQuery(
+        name = "find_advisor_clients_by_id",
+        query = "SELECT a_clients FROM AdvisorEntity a INNER JOIN a.clients a_clients WHERE a.id = :id")})
 public class AdvisorEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

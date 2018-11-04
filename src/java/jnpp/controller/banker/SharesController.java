@@ -1,4 +1,4 @@
-package jnpp.controller.bank;
+package jnpp.controller.banker;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -21,6 +21,8 @@ import jnpp.service.dto.clients.LoginDTO;
 import jnpp.service.exceptions.duplicates.DuplicateAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateSavingbookException;
 import jnpp.service.exceptions.duplicates.DuplicateShareException;
+import jnpp.service.exceptions.entities.FakeAdvisorException;
+import jnpp.service.exceptions.entities.FakeClientException;
 import org.springframework.stereotype.Service;
 
 @Service("BankerService")
@@ -89,7 +91,22 @@ public class BankerServiceImpl implements BankerService {
         advisorDAO.save(advisor);
         return advisor.toDTO();
     }
-    
-    
+
+    @Override
+    public List<LoginDTO> getAdvisorLogins(String firstname, String lastname) throws FakeAdvisorException {
+        if (firstname == null || lastname == null) throw new IllegalArgumentException();
+        AdvisorEntity advisor = advisorDAO.findByIdentity(firstname, lastname);
+        if (advisor == null) throw new FakeAdvisorException();
+        List<ClientEntity> clients = advisorDAO.findAllClientByID(advisor.getId());
+        return ClientEntity.toLoginDTO(clients);
+    }
+
+    @Override
+    public LoginDTO getLogin(String login) throws FakeClientException {
+        if (login == null) throw new IllegalArgumentException();
+        ClientEntity client = clientDAO.find(login);
+        if (client == null) throw new FakeClientException();
+        return client.toLoginDTO();
+    }
     
 }
