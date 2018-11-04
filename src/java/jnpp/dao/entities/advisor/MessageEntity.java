@@ -26,13 +26,13 @@ import jnpp.service.dto.advisor.MessageDTO;
         name = "find_all_message_by_login",
         query = "SELECT m FROM MessageEntity m "
                 + "WHERE m.client.login = :login "
-                + "ORDER BY m.date DESC"),
+                + "ORDER BY m.date ASC"),
     @NamedQuery(
         name = "find_recent_message_by_login",
         query = "SELECT m FROM MessageEntity m "
                 + "WHERE m.client.login = :login "
                 + "  AND m.date >= :date "
-                + "ORDER BY m.date DESC")})
+                + "ORDER BY m.date ASC")})
 public class MessageEntity implements Serializable {
 
     public static enum Direction {

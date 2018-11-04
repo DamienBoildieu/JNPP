@@ -6,13 +6,17 @@ import jnpp.service.dto.accounts.CurrencyDTO;
 import jnpp.service.dto.accounts.SavingBookDTO;
 import jnpp.service.dto.accounts.ShareDTO;
 import jnpp.service.dto.advisor.AdvisorDTO;
+import jnpp.service.dto.advisor.MessageDTO;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.clients.LoginDTO;
+import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
+import jnpp.service.exceptions.advisors.NoAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateSavingbookException;
 import jnpp.service.exceptions.duplicates.DuplicateShareException;
 import jnpp.service.exceptions.entities.FakeAdvisorException;
 import jnpp.service.exceptions.entities.FakeClientException;
+import jnpp.service.exceptions.entities.FakePaymentMeanException;
 
 public interface BankerService {
 
@@ -30,5 +34,9 @@ public interface BankerService {
             throws FakeAdvisorException;
     LoginDTO getLogin(String login)
             throws FakeClientException;
+    MessageDTO sedMessage(String login, String content)
+            throws FakeClientException, NoAdvisorException;
+    List<PaymentMeanDTO> getPaymentMents();
+    PaymentMeanDTO upgradePaymentMean(String id) throws FakePaymentMeanException;
     
 }

@@ -2,8 +2,8 @@ package jnpp.service.dto.paymentmeans;
 
 public class BankCardDTO extends PaymentMeanDTO {
 
-    public BankCardDTO(String login, String rib, Status status) {
-        super(login, rib, status);
+    public BankCardDTO(String id, String login, String rib, Status status) {
+        super(id, login, rib, status);
     }
     
     @Override

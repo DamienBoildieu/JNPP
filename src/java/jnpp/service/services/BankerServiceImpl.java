@@ -1,5 +1,9 @@
 package jnpp.service.services;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Resource;
 import jnpp.dao.entities.IdentityEntity;
@@ -7,9 +11,13 @@ import jnpp.dao.entities.accounts.CurrencyEntity;
 import jnpp.dao.entities.accounts.SavingBookEntity;
 import jnpp.dao.entities.accounts.ShareEntity;
 import jnpp.dao.entities.advisor.AdvisorEntity;
+import jnpp.dao.entities.advisor.MessageEntity;
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.dao.entities.paymentmeans.PaymentMeanEntity;
 import jnpp.dao.repositories.AdvisorDAO;
 import jnpp.dao.repositories.ClientDAO;
+import jnpp.dao.repositories.MessageDAO;
+import jnpp.dao.repositories.PaymentMeanDAO;
 import jnpp.dao.repositories.SavingBookDAO;
 import jnpp.dao.repositories.ShareDAO;
 import jnpp.service.dto.IdentityDTO;
@@ -17,12 +25,16 @@ import jnpp.service.dto.accounts.CurrencyDTO;
 import jnpp.service.dto.accounts.SavingBookDTO;
 import jnpp.service.dto.accounts.ShareDTO;
 import jnpp.service.dto.advisor.AdvisorDTO;
+import jnpp.service.dto.advisor.MessageDTO;
 import jnpp.service.dto.clients.LoginDTO;
+import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
+import jnpp.service.exceptions.advisors.NoAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateSavingbookException;
 import jnpp.service.exceptions.duplicates.DuplicateShareException;
 import jnpp.service.exceptions.entities.FakeAdvisorException;
 import jnpp.service.exceptions.entities.FakeClientException;
+import jnpp.service.exceptions.entities.FakePaymentMeanException;
 import org.springframework.stereotype.Service;
 
 @Service("BankerService")
@@ -36,6 +48,10 @@ public class BankerServiceImpl implements BankerService {
     ClientDAO clientDAO;
     @Resource
     AdvisorDAO advisorDAO;
+    @Resource
+    MessageDAO messageDAO;
+    @Resource
+    PaymentMeanDAO paymentMeanDAO;
     
     @Override
     public ShareDTO addShare(String name, Double value, CurrencyDTO currency) 
@@ -107,6 +123,41 @@ public class BankerServiceImpl implements BankerService {
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         return client.toLoginDTO();
+    }
+
+    @Override
+    public MessageDTO sedMessage(String login, String content)
+            throws FakeClientException, NoAdvisorException {
+        if (login == null || content == null) throw new IllegalArgumentException();
+        ClientEntity client = clientDAO.find(login);
+        if (client == null) throw new FakeClientException();
+        AdvisorEntity advisor = client.getAdvisor();
+        if (advisor == null) throw new NoAdvisorException();
+        Date now = Date.from(Instant.now());
+        MessageEntity message = new MessageEntity(client, advisor, MessageEntity.Direction.ADVISOR_TO_CLIENT, now, content);
+        messageDAO.save(message);
+        return message.toDTO();
+    }
+
+    @Override
+    public List<PaymentMeanDTO> getPaymentMents() {
+        List<PaymentMeanEntity> paymentmeans = paymentMeanDAO.findAll();
+        List<PaymentMeanDTO> dtos = new ArrayList<PaymentMeanDTO>(paymentmeans.size());
+        Iterator<PaymentMeanEntity> it = paymentmeans.iterator();
+        while (it.hasNext()) dtos.add(it.next().toDTO());
+        return dtos;
+    }    
+
+    @Override
+    public PaymentMeanDTO upgradePaymentMean(String id) throws FakePaymentMeanException {
+        if (id == null) throw new IllegalArgumentException();
+        PaymentMeanEntity paymentMean = paymentMeanDAO.find(id);
+        if (paymentMean == null) throw new FakePaymentMeanException();
+        if (paymentMean.getStatus() != PaymentMeanEntity.Status.DELIVERED) {
+            paymentMean.setStatus(paymentMean.getStatus().next());
+            paymentMeanDAO.save(paymentMean);
+        }
+        return paymentMean.toDTO();
     }
     
 }

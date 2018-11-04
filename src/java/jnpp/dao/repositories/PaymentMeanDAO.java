@@ -14,5 +14,8 @@ public interface PaymentMeanDAO extends GenericDAO<PaymentMeanEntity> {
     List<CheckbookEntity> findCheckBookByLogin(String login);
     List<CheckbookEntity> findCheckBookByLoginStatus(String login, PaymentMeanEntity.Status status);
     List<CheckbookEntity> findCheckBookByLoginRib(String login, String rib);
+ 
+    List<PaymentMeanEntity> findAll();
+    List<String> findAllId();
     
 }

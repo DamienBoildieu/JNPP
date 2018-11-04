@@ -34,8 +34,8 @@ public class BankCardEntity extends PaymentMeanEntity implements Serializable {
 
     public BankCardEntity() {}
     
-    public BankCardEntity(ClientEntity client, AccountEntity account, Status status) {
-        super(client, account, status);
+    public BankCardEntity(String id, ClientEntity client, AccountEntity account, Status status) {
+        super(id, client, account, status);
     }
     
     @Override
@@ -50,7 +50,7 @@ public class BankCardEntity extends PaymentMeanEntity implements Serializable {
     
     @Override
     public BankCardDTO toDTO() {
-        return new BankCardDTO(getClient().getLogin(), getAccount().getRib(), getStatus().toDTO());
+        return new BankCardDTO(getId(), getClient().getLogin(), getAccount().getRib(), getStatus().toDTO());
     }
     
     public static List<BankCardDTO> toDTO(List<BankCardEntity> entities) {

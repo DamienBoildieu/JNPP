@@ -21,7 +21,7 @@ public class AdvisorClientsController {
     BankerService bankerService;
     
     @RequestMapping(value = "conseiller/clients", method = RequestMethod.GET)
-    protected ModelAndView advisorsGet(Model model, HttpServletRequest request, 
+    protected ModelAndView advisorClientsGet(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) {
         String firstname = request.getParameter("prenom");
         String lastname = request.getParameter("nom");

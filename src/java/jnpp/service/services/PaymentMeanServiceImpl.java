@@ -1,6 +1,9 @@
 package jnpp.service.services;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import javax.annotation.Resource;
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.clients.ClientEntity;
@@ -19,7 +22,11 @@ import jnpp.service.exceptions.owners.AccountOwnerException;
 import org.springframework.stereotype.Service;
 
 @Service("PaymentMeanService")
-public class PaymentMeanServiceImpl implements PaymentMeanService {
+public class PaymentMeanServiceImpl implements PaymentMeanService {    
+    
+    public static final int ID_LENGTH = 8;
+    private static final int ID_MIN = (int) Math.pow(10, ID_LENGTH - 1);
+    private static final int ID_RANGE = 9 * ID_MIN;
 
     @Resource
     ClientDAO clientDAO;
@@ -27,6 +34,8 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
     AccountDAO accountDAO;
     @Resource
     PaymentMeanDAO paymentMeanDAO;
+    
+    private final Random random = new Random();
     
     @Override
     public BankCardDTO commandBankCard(String login, String rib) throws FakeClientException, AccountTypeException, AccountOwnerException {
@@ -36,7 +45,8 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
         AccountEntity account = accountDAO.find(rib);
         if (account == null || !account.isOwnBy(client)) throw new AccountOwnerException();   
         if (!canBindToBanckCard(account)) throw new AccountTypeException();
-        BankCardEntity bankcard = new BankCardEntity(client, account, PaymentMeanEntity.Status.ORDERED);
+        String id = generateNewId();
+        BankCardEntity bankcard = new BankCardEntity(id, client, account, PaymentMeanEntity.Status.ORDERED);
         paymentMeanDAO.save(bankcard);
         return bankcard.toDTO();
     }
@@ -49,7 +59,8 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
         AccountEntity account = accountDAO.find(rib);
         if (account == null || !account.isOwnBy(client)) throw new AccountOwnerException();  
         if (!canBindToCheckbook(account)) throw new AccountTypeException();
-        CheckbookEntity checkbook = new CheckbookEntity(client, account, PaymentMeanEntity.Status.ORDERED);
+        String id = generateNewId();
+        CheckbookEntity checkbook = new CheckbookEntity(id, client, account, PaymentMeanEntity.Status.ORDERED);
         paymentMeanDAO.save(checkbook);
         return checkbook.toDTO();
     }
@@ -90,7 +101,7 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();    
         List<CheckbookEntity> checkbooks = paymentMeanDAO.findCheckBookByLogin(login);
-        return CheckbookEntity.toDTO(checkbooks);    
+        return (List<CheckbookDTO>) CheckbookEntity.toDTO(checkbooks);    
     }
 
     @Override
@@ -112,6 +123,17 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
         List<CheckbookEntity> checkbooks = paymentMeanDAO.findCheckBookByLoginRib(login, rib);
         return CheckbookEntity.toDTO(checkbooks); 
     }
+    
+    private String generateNewId() {
+        Set<String> ids = new HashSet<String>(paymentMeanDAO.findAllId());
+        String id = generateRandomId();
+        while (ids.contains(id)) id = generateRandomId();
+        return id;
+    }
+    
+    private String generateRandomId() {
+        return "" + (ID_MIN + random.nextInt(ID_RANGE));
+    }   
     
     private static boolean canBindToBanckCard(AccountEntity account) {
         switch (account.getType()) {

@@ -34,8 +34,8 @@ public class CheckbookEntity extends PaymentMeanEntity implements Serializable {
     
     public CheckbookEntity() {} 
     
-    public CheckbookEntity(ClientEntity client, AccountEntity account, Status status) {
-        super(client, account, status);
+    public CheckbookEntity(String id, ClientEntity client, AccountEntity account, Status status) {
+        super(id, client, account, status);
     }           
     
     @Override
@@ -50,7 +50,7 @@ public class CheckbookEntity extends PaymentMeanEntity implements Serializable {
     
     @Override
     public CheckbookDTO toDTO() {
-        return new CheckbookDTO(getClient().getLogin(), getAccount().getRib(), getStatus().toDTO());
+        return new CheckbookDTO(getId(), getClient().getLogin(), getAccount().getRib(), getStatus().toDTO());
     }
     
     public static List<CheckbookDTO> toDTO(List<CheckbookEntity> entities) {

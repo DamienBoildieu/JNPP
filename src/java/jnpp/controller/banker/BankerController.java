@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class BankerController {
     
     @RequestMapping(value = "banquier", method = RequestMethod.GET)
-    protected ModelAndView bankHomeGet(Model model, HttpServletRequest request, 
+    protected ModelAndView bankerGet(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) 
             throws Exception {
         ModelAndView mv = new ModelAndView("banker/banker_home");

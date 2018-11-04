@@ -1,6 +1,9 @@
 package jnpp.dao.entities.paymentmeans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -13,13 +16,24 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+@NamedQueries({
+    @NamedQuery(
+        name = "find_all_paymentmeans",
+        query = "SELECT p FROM PaymentMeanEntity p"),
+    @NamedQuery(
+        name = "find_all_paymentmean_ids",
+        query = "SELECT p.id FROM PaymentMeanEntity p"
+    )})
 public abstract class PaymentMeanEntity implements Serializable {
 
     public static enum Type {
@@ -56,13 +70,17 @@ public abstract class PaymentMeanEntity implements Serializable {
             return null;
         }
         
+        public Status next() {
+            Status[] status = values();
+            return status[(ordinal() + 1) % status.length];
+        }
+        
     }
     
     private static final long serialVersionUID = 1L;
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String id;
 
     @ManyToOne
     @JoinColumn(name="client_fk")
@@ -76,7 +94,8 @@ public abstract class PaymentMeanEntity implements Serializable {
     
     public PaymentMeanEntity() {}
     
-    public PaymentMeanEntity(ClientEntity client, AccountEntity account, Status status) {
+    public PaymentMeanEntity(String id, ClientEntity client, AccountEntity account, Status status) {
+        this.id = id;
         this.client = client;
         this.account = account;
         this.status = status;
@@ -84,11 +103,11 @@ public abstract class PaymentMeanEntity implements Serializable {
     
     public abstract Type getType(); 
     
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -134,7 +153,7 @@ public abstract class PaymentMeanEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "jnpp.dao.entities.PaymentObject[ id=" + id + " ]";
+        return "jnpp.dao.entities.PaymentMeanEntity[ id=" + id + " ]";
     }
     
     public abstract PaymentMeanDTO toDTO();

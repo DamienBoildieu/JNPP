@@ -34,7 +34,7 @@
             </table>
         </div>
         <div class="container">
-            <form method="POST" action="conseillers.htm" class="card">
+            <form method="POST" action="/JNPP/conseillers.htm" class="card">
                 <table class="responsive-table centered striped card">
                     <tbody>
                         <tr>

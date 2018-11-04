@@ -29,7 +29,7 @@ public class SharesController {
     BankerService bankerService;
     
     @RequestMapping(value = "actions", method = RequestMethod.GET)
-    protected ModelAndView sharesBoardGet(Model model, HttpServletRequest request, 
+    protected ModelAndView sharesGet(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) 
             throws Exception {
         List<ShareDTO> shares = accountService.getShares();
@@ -39,7 +39,7 @@ public class SharesController {
     }
     
     @RequestMapping(value = "actions", method = RequestMethod.POST)
-    protected ModelAndView sharesBoardPost(Model model, HttpServletRequest request,
+    protected ModelAndView sharesPost(Model model, HttpServletRequest request,
             HttpServletResponse response, RedirectAttributes rm) 
             throws Exception {
         String name = request.getParameter("name");
