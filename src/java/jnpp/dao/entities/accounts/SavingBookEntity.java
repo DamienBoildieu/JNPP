@@ -37,6 +37,12 @@ public class SavingBookEntity implements Serializable {
     private Double timeRate;
     
     public SavingBookEntity() {}
+
+    public SavingBookEntity(String name, Double moneyRate, Double timeRate) {
+        this.name = name;
+        this.moneyRate = moneyRate;
+        this.timeRate = timeRate;
+    }
     
     public Long getId() {
         return id;

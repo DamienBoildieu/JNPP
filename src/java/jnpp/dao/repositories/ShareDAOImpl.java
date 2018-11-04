@@ -6,6 +6,7 @@
 package jnpp.dao.repositories;
 
 import java.util.List;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import jnpp.dao.entities.accounts.ShareEntity;
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,18 @@ public class ShareDAOImpl extends GenericDAOImpl<ShareEntity> implements ShareDA
     public List<ShareEntity> findAll() {
         Query query = getEm().createNamedQuery("find_all_share");
         return query.getResultList();
+    }
+    
+    @Transactional(readOnly = true)
+    @Override
+    public ShareEntity findByName(String name) {
+        Query query = getEm().createNamedQuery("find_share_by_name");
+        query.setParameter("name", name);
+        try {
+            return (ShareEntity) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
     
 }

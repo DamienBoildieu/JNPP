@@ -36,6 +36,12 @@ public class ShareEntity implements Serializable {
     
     public ShareEntity() {}
 
+    public ShareEntity(String name, Double value, CurrencyEntity currency) {
+        this.name = name;
+        this.value = value;
+        this.currency = currency;
+    }
+    
     public String getName() {
         return name;
     }

@@ -1,4 +1,4 @@
-<%@page import="jnpp.dao.entities.clients.Gender"%>
+<%@page import="jnpp.service.dto.IdentityDTO.Gender"%>
 <%@page import="jnpp.controller.views.info.ViewInfo"%>
 <%@page import="jnpp.controller.views.Translator"%>
 <%@ include file="../include/jsptags.jsp"%>
