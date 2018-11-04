@@ -27,7 +27,7 @@ public class PaymentMeansController {
     @RequestMapping(value = "commandes", method = RequestMethod.GET)
     protected ModelAndView paymentMeansGet(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) {
-        List<PaymentMeanDTO> paymentmeans = bankerService.getPaymentMents();
+        List<PaymentMeanDTO> paymentmeans = bankerService.getPaymentMeans();
         ModelAndView mv = new ModelAndView("banker/paymentmeans_board");
         mv.addObject("paymentmeans", paymentmeans);
         return mv;

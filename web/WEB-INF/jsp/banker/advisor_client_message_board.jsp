@@ -6,15 +6,15 @@
     </head>
     <body>
         <%@ include file="banker_header.jsp" %>
-        <div class="container">
-            <table class="responsive-table striped card">
+        <div class="container" style="overflow: scroll; max-height: 60vh;">
+            <table class="table striped card">
                 <tbody>
                     <c:forEach items="${messages}" var="message">
                     <tr>
                         <td class="
                             <c:choose>
-                                <c:when test="${message.direction eq 'CLIENT_TO_ADVISOR'}">left-align</c:when>
-                                <c:otherwise>right-align</c:otherwise>
+                                <c:when test="${message.direction eq 'CLIENT_TO_ADVISOR'}">left-align light-grey</c:when>
+                                <c:otherwise>right-align white</c:otherwise>
                             </c:choose>">
                             ${message.content}
                         </td>
@@ -25,9 +25,15 @@
         </div>
         <div class="container">
             <form method="POST" action="/JNPP/conseiller/client/messages.htm" class="card">
-                <input type="text" name="content" class="center-align">
-                <input type="hidden" name="login" value="${client.login}">
-                <input type="submit" value="Envoyer" class="waves-effect waves-light btn-small center-align">
+                <div class="row">
+                    <div class="col s10">
+                        <input type="text" name="content" class="left-align">
+                    </div>
+                    <input type="hidden" name="login" value="${client.login}">
+                    <div class="col s2">
+                        <input type="submit" value="Envoyer" class="waves-effect waves-light btn-small center-align" style="width: 100%; margin-top: 7%;">
+                    </div>
+                </div>
             </form>
         </div>
     </body>

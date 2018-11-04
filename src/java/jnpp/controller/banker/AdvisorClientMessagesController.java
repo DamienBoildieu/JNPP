@@ -60,7 +60,7 @@ public class AdvisorClientMessagesController {
                 || content.length() == 0)
             return new ModelAndView("redirect:/conseiller/client/messages.htm?login=" + login); 
         try {
-            bankerService.sedMessage(login, content);
+            bankerService.sendMessage(login, content);
             return new ModelAndView("redirect:/conseiller/client/messages.htm?login=" + login); 
         } catch (FakeClientException ex) {
         } catch (NoAdvisorException ex) {

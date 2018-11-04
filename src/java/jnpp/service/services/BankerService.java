@@ -34,9 +34,9 @@ public interface BankerService {
             throws FakeAdvisorException;
     LoginDTO getLogin(String login)
             throws FakeClientException;
-    MessageDTO sedMessage(String login, String content)
+    MessageDTO sendMessage(String login, String content)
             throws FakeClientException, NoAdvisorException;
-    List<PaymentMeanDTO> getPaymentMents();
+    List<PaymentMeanDTO> getPaymentMeans();
     PaymentMeanDTO upgradePaymentMean(String id) throws FakePaymentMeanException;
     
 }

@@ -13,10 +13,13 @@ import jnpp.dao.entities.accounts.ShareEntity;
 import jnpp.dao.entities.advisor.AdvisorEntity;
 import jnpp.dao.entities.advisor.MessageEntity;
 import jnpp.dao.entities.clients.ClientEntity;
+import jnpp.dao.entities.notifications.MessageNotificationEntity;
+import jnpp.dao.entities.notifications.PaymentMeanNotificationEntity;
 import jnpp.dao.entities.paymentmeans.PaymentMeanEntity;
 import jnpp.dao.repositories.AdvisorDAO;
 import jnpp.dao.repositories.ClientDAO;
 import jnpp.dao.repositories.MessageDAO;
+import jnpp.dao.repositories.NotificationDAO;
 import jnpp.dao.repositories.PaymentMeanDAO;
 import jnpp.dao.repositories.SavingBookDAO;
 import jnpp.dao.repositories.ShareDAO;
@@ -52,6 +55,8 @@ public class BankerServiceImpl implements BankerService {
     MessageDAO messageDAO;
     @Resource
     PaymentMeanDAO paymentMeanDAO;
+    @Resource
+    NotificationDAO notificationDAO;
     
     @Override
     public ShareDTO addShare(String name, Double value, CurrencyDTO currency) 
@@ -126,7 +131,7 @@ public class BankerServiceImpl implements BankerService {
     }
 
     @Override
-    public MessageDTO sedMessage(String login, String content)
+    public MessageDTO sendMessage(String login, String content)
             throws FakeClientException, NoAdvisorException {
         if (login == null || content == null) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
@@ -136,11 +141,13 @@ public class BankerServiceImpl implements BankerService {
         Date now = Date.from(Instant.now());
         MessageEntity message = new MessageEntity(client, advisor, MessageEntity.Direction.ADVISOR_TO_CLIENT, now, content);
         messageDAO.save(message);
+        MessageNotificationEntity notification = new MessageNotificationEntity(client, now, false, message);
+        notificationDAO.save(notification);
         return message.toDTO();
     }
 
     @Override
-    public List<PaymentMeanDTO> getPaymentMents() {
+    public List<PaymentMeanDTO> getPaymentMeans() {
         List<PaymentMeanEntity> paymentmeans = paymentMeanDAO.findAll();
         List<PaymentMeanDTO> dtos = new ArrayList<PaymentMeanDTO>(paymentmeans.size());
         Iterator<PaymentMeanEntity> it = paymentmeans.iterator();
@@ -156,6 +163,10 @@ public class BankerServiceImpl implements BankerService {
         if (paymentMean.getStatus() != PaymentMeanEntity.Status.DELIVERED) {
             paymentMean.setStatus(paymentMean.getStatus().next());
             paymentMeanDAO.save(paymentMean);
+            ClientEntity client = paymentMean.getClient();
+            Date now = Date.from(Instant.now());
+            PaymentMeanNotificationEntity notification = new PaymentMeanNotificationEntity(client, now, false, paymentMean);
+            notificationDAO.save(notification);
         }
         return paymentMean.toDTO();
     }

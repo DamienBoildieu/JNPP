@@ -1,10 +1,12 @@
 package jnpp.dao.entities.notifications;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.paymentmeans.PaymentMeanEntity;
 import jnpp.service.dto.notifications.PaymentMeanNotificationDTO;
 
@@ -17,19 +19,26 @@ public class PaymentMeanNotificationEntity extends NotificationEntity
     
     @ManyToOne
     @JoinColumn(name = "paymentmean_fk")
-    private PaymentMeanEntity mean;
+    private PaymentMeanEntity paymentmean;
 
+    public PaymentMeanNotificationEntity() {}
+    
+    public PaymentMeanNotificationEntity(ClientEntity client, Date date, Boolean seen, PaymentMeanEntity paymentmean) {
+        super(client, date, seen);
+        this.paymentmean = paymentmean;
+    }
+    
     @Override
     public NotificationEntity.Type getType() {
         return NotificationEntity.Type.PAYMENT_MEAN;
     }
 
     public PaymentMeanEntity getPaymentMean() {
-        return mean;
+        return paymentmean;
     }
 
     public void setPaymentMean(PaymentMeanEntity mean) {
-        this.mean = mean;
+        this.paymentmean = mean;
     }
 
     @Override
@@ -39,7 +48,7 @@ public class PaymentMeanNotificationEntity extends NotificationEntity
     
     @Override
     public PaymentMeanNotificationDTO toDTO() {
-        return new PaymentMeanNotificationDTO(getId(), getDate(), mean.toDTO());
+        return new PaymentMeanNotificationDTO(getId(), getDate(), paymentmean.toDTO());
     }
     
 }
