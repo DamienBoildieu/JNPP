@@ -83,4 +83,9 @@ public class IdentityEntity implements Serializable {
         return new IdentityDTO(gender.toDTO(), firstname, lastname);
     }
     
+    @Override
+    public String toString() {
+        return firstname + " " + lastname;
+    }
+    
 }

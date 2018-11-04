@@ -12,13 +12,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-public class BankController {
+public class BankerController {
     
     @RequestMapping(value = "banquier", method = RequestMethod.GET)
     protected ModelAndView bankHomeGet(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) 
             throws Exception {
-        ModelAndView mv = new ModelAndView("bank/banker_home");
+        ModelAndView mv = new ModelAndView("banker/banker_home");
         return mv;          
     }
     

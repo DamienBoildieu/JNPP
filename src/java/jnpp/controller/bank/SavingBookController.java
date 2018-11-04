@@ -10,7 +10,7 @@ import jnpp.service.dto.accounts.ShareDTO;
 import jnpp.service.exceptions.duplicates.DuplicateSavingbookException;
 import jnpp.service.exceptions.duplicates.DuplicateShareException;
 import jnpp.service.services.AccountService;
-import jnpp.service.services.banker.BankerService;
+import jnpp.service.services.BankerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +33,7 @@ public class SavingBookController {
             HttpServletResponse response, RedirectAttributes rm) 
             throws Exception {
         List<SavingBookDTO> savingbooks = accountService.getSavingBooks();
-        ModelAndView mv = new ModelAndView("bank/savingbooks_board");
+        ModelAndView mv = new ModelAndView("banker/savingbooks_board");
         mv.addObject("savingbooks", savingbooks);
         return mv;       
     }
@@ -45,7 +45,8 @@ public class SavingBookController {
         String name = request.getParameter("name");
         String moneyRate = request.getParameter("moneyRate");
         String timeRate = request.getParameter("timeRate");
-        if (name != null && moneyRate != null && timeRate != null)
+        if (name != null && name.length() > 0 && moneyRate != null && moneyRate.length() > 0 
+                && timeRate != null && timeRate.length() > 0)
             try {
                 bankerService.addSavingbook(name, Double.valueOf(moneyRate), Double.valueOf(timeRate));
             } catch (IllegalArgumentException e) {

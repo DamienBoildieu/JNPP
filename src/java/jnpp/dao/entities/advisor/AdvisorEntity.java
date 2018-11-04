@@ -2,6 +2,7 @@ package jnpp.dao.entities.advisor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -20,7 +21,12 @@ import jnpp.service.dto.advisor.AdvisorDTO;
 @NamedQueries({
     @NamedQuery(
         name = "find_all_advisor",
-        query = "SELECT a FROM AdvisorEntity a")})
+        query = "SELECT a FROM AdvisorEntity a"),
+    @NamedQuery(
+        name = "find_advisor_by_identity",
+        query = "SELECT a FROM AdvisorEntity a "
+                + "WHERE a.identity.firstname = :firstname "
+                + "  AND a.identity.lastname = :lastname")})
 public class AdvisorEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,6 +47,15 @@ public class AdvisorEntity implements Serializable {
     private List<ClientEntity> clients = new ArrayList<ClientEntity>();
     
     public AdvisorEntity() {}
+    
+    public AdvisorEntity(IdentityEntity.Gender gender, String firstname, 
+            String lastname, String email, String phone, Integer number, 
+            String street, String city, String state) {
+        identity = new IdentityEntity(gender, firstname, lastname);
+        this.email = email;
+        this.phone = phone;
+        officeAdress = new AddressEntity(number, street, city, state);
+    }
     
     public Long getId() {
         return id;
@@ -111,7 +126,14 @@ public class AdvisorEntity implements Serializable {
     }
     
     public AdvisorDTO toDTO() {
-        return new AdvisorDTO(identity, email, phone, officeAdress);
+        return new AdvisorDTO(identity.toDTO(), email, phone, officeAdress.toDTO());
+    }
+    
+    public static List<AdvisorDTO> toDTO(List<AdvisorEntity> entities) {
+        List<AdvisorDTO> dtos = new ArrayList<AdvisorDTO>(entities.size());
+        Iterator<AdvisorEntity> it = entities.iterator();
+        while (it.hasNext()) dtos.add(it.next().toDTO());
+        return dtos;
     }
     
 }

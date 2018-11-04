@@ -8,6 +8,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import jnpp.dao.entities.IdentityEntity;
 import jnpp.dao.entities.advisor.AdvisorEntity;
+import jnpp.service.dto.clients.ClientDTO;
+import jnpp.service.dto.clients.LoginDTO;
 import jnpp.service.dto.clients.ProfessionalDTO;
 
 @Entity
@@ -69,6 +71,11 @@ public class ProfessionalEntity extends ClientEntity implements Serializable {
     @Override
     public ProfessionalDTO toDTO() {
         return new ProfessionalDTO(getLogin(), name, owner.toDTO(), getEmail(), getAddress().toDTO(), getPhone());
+    }
+
+    @Override
+    public LoginDTO toLoginDTO() {
+        return new LoginDTO(getLogin(), getPassword(), ClientDTO.Type.PROFESIONAL, name, getEmail());
     }
     
 }

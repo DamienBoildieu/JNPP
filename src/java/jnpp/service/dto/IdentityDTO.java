@@ -13,7 +13,7 @@ public class IdentityDTO {
     private String firstname;
     private String lastname;
 
-    public IdentityDTO(Gender gender, String firstname, String lastname) {
+    public IdentityDTO(IdentityDTO.Gender gender, String firstname, String lastname) {
         this.gender = gender;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -43,4 +43,9 @@ public class IdentityDTO {
         this.lastname = lastname;
     }
         
+    @Override
+    public String toString() {
+        return firstname + " " + lastname;
+    }
+    
 }

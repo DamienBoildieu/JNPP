@@ -11,6 +11,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import jnpp.dao.entities.IdentityEntity;
 import jnpp.dao.entities.advisor.AdvisorEntity;
+import jnpp.service.dto.clients.ClientDTO;
+import jnpp.service.dto.clients.LoginDTO;
 import jnpp.service.dto.clients.PrivateDTO;
 
 @Entity
@@ -71,6 +73,11 @@ public class PrivateEntity extends ClientEntity implements Serializable {
     @Override
     public PrivateDTO toDTO() {
         return new PrivateDTO(getLogin(), identity.toDTO(), birthday, getEmail(), getAddress().toDTO(), getPhone());
+    }
+
+    @Override
+    public LoginDTO toLoginDTO() {
+        return new LoginDTO(getLogin(), getPassword(), ClientDTO.Type.PRIVATE, identity.toString(), getEmail());
     }
     
 }

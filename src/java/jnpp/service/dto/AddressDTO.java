@@ -46,4 +46,9 @@ public class AddressDTO {
         this.state = state;
     }
     
+    @Override
+    public String toString() {
+        return number + " " + street + ", " + city + ", " + state;
+    }
+    
 }

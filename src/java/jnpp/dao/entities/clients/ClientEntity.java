@@ -1,6 +1,9 @@
 package jnpp.dao.entities.clients;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -14,8 +17,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import jnpp.dao.entities.AddressEntity;
+import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.advisor.AdvisorEntity;
+import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.clients.ClientDTO;
+import jnpp.service.dto.clients.LoginDTO;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -28,7 +34,10 @@ import jnpp.service.dto.clients.ClientDTO;
                 + "  AND c.password = :password"),
     @NamedQuery(
         name = "find_all_login",
-        query = "SELECT c.login FROM ClientEntity c")})
+        query = "SELECT c.login FROM ClientEntity c"),
+    @NamedQuery(
+        name = "find_all_clients",
+        query = "SELECT c FROM ClientEntity c")})
 public abstract class ClientEntity implements Serializable {
 
     public static enum Type {
@@ -155,5 +164,14 @@ public abstract class ClientEntity implements Serializable {
     }
     
     public abstract ClientDTO toDTO();
+    
+    public abstract LoginDTO toLoginDTO();
+    
+    public static List<LoginDTO> toLoginDTO(List<ClientEntity> entities) {
+        List<LoginDTO> dtos = new ArrayList<LoginDTO>(entities.size());
+        Iterator<ClientEntity> it = entities.iterator();
+        while (it.hasNext()) dtos.add(it.next().toLoginDTO());
+        return dtos;
+    }
     
 }
