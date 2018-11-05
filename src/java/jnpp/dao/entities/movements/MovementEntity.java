@@ -48,7 +48,8 @@ public abstract class MovementEntity implements Serializable {
         PURCHASE,
         SALE,
         WITHDRAW,
-        PAYMENT;
+        PAYMENT,
+        DEPOSIT;
         
         public static class Values {
 
@@ -58,6 +59,7 @@ public abstract class MovementEntity implements Serializable {
             public static final String SALE = "SALE";
             public static final String WITHDRAW = "WITHDRAW";
             public static final String PAYMENT = "PAYMENT";
+            public static final String DEPOSIT = "DEPOSIT";
             
             private Values() {}
 

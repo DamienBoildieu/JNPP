@@ -5,35 +5,34 @@ import java.util.Date;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import jnpp.dao.entities.accounts.CurrencyEntity;
-import jnpp.dao.entities.paymentmeans.PaymentMeanEntity;
+import jnpp.service.dto.movements.DepositDTO;
 import jnpp.service.dto.movements.WithdrawDTO;
-
 @Entity
-@DiscriminatorValue(value = MovementEntity.Type.Values.WITHDRAW)
-public class WithdrawEntity extends MoneyMovementEntity implements Serializable {
+@DiscriminatorValue(value = MovementEntity.Type.Values.DEPOSIT)
+public class DepositEntity extends MoneyMovementEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    public DepositEntity() {}
     
-    public WithdrawEntity() {}
-    
-    public WithdrawEntity(Date date, String ribFrom, Double money, 
+    public DepositEntity(Date date, String ribFrom, Double money, 
             CurrencyEntity currency) {
         super(date, ribFrom, money, currency);
     }
     
     @Override
     public Type getType() {
-        return MovementEntity.Type.WITHDRAW;
+        return MovementEntity.Type.DEPOSIT;
     }
     
     @Override
     public String toString() {
-        return "jnpp.dao.entities.transactions.WithdrawEntity[ id=" + getId() + " ]";
+        return "jnpp.dao.entities.movements.DepositEntity[ id=" + getId() + " ]";
     }
     
     @Override
-    public WithdrawDTO toDTO() {
-        return new WithdrawDTO(getDate(), getRibFrom(), getMoney(), getCurrency().toDTO());
+    public DepositDTO toDTO() {
+        return new DepositDTO(getDate(), getRibFrom(), getMoney(), getCurrency().toDTO());
     }
     
 }
