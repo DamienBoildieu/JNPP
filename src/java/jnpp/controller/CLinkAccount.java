@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class CAccountLink {
+public class CLinkAccount {
     @Autowired
     private NotificationService notifService;
     
@@ -141,6 +141,11 @@ public class CAccountLink {
         current.setMoney(-20.d);
         current.setRib("134824");
         listAc.add(current);
+        listAc.add(current);
+        listAc.add(current);
+        listAc.add(current);
+        listAc.add(current);listAc.add(current);listAc.add(current);listAc.add(current);listAc.add(current);
+        
         SavingAccountEntity saving = new SavingAccountEntity();
         saving.setMoney(500.d);
         saving.setRib("5946513");
