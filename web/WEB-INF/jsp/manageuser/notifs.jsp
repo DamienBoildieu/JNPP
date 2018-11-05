@@ -13,7 +13,6 @@
                 <div class="row">
                     <div class='card-panel white col s6 offset-s3 center-align'>
                         <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
-                            <c:set var="count" value="0" scope="page" />
                             <c:forEach items="${notifs}" var="element">
                                 <c:choose>
                                     <c:when test="${count%2==0}">

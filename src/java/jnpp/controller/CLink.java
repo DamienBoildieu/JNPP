@@ -170,10 +170,11 @@ public class CLink {
                 for (NotificationDTO notif : notifs) {
                     notifsView.add(new NotifView(notif));
                 }
-                ModelAndView view = new JNPPModelAndView("manageuser/notifs", ViewInfo.createInfo(session, alerts));
-                view.addObject("notifs", notifsView);
+
                 notifService.seeAllNotications(CSession.getClient(session).getLogin());
                 CSession.setHasNotif(session, false);
+                ModelAndView view = new JNPPModelAndView("manageuser/notifs", ViewInfo.createInfo(session, alerts));
+                view.addObject("notifs", notifsView);
                 return view;
             } catch (FakeClientException invalidClient) {
                 if (alerts != null) {
