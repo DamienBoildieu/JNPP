@@ -7,8 +7,8 @@ public class MessageNotificationDTO extends NotificationDTO {
     
     private MessageDTO message;
 
-    public MessageNotificationDTO(Long id, Date date, MessageDTO message) {
-        super(id, date);
+    public MessageNotificationDTO(Long id, Date date, Boolean seen, MessageDTO message) {
+        super(id, date, seen);
         this.message = message;
     }
             

@@ -30,7 +30,7 @@ public class AdvisorClientMessagesController {
     @Autowired
     BankerService bankerService;
     
-    @RequestMapping(value = "conseiller/client/messages", method = RequestMethod.GET)
+    @RequestMapping(value = "banquier/conseiller/client/messages", method = RequestMethod.GET)
     protected ModelAndView advisorClientMessagesGet(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) {
         String login = request.getParameter("login");
@@ -51,21 +51,21 @@ public class AdvisorClientMessagesController {
         return new ModelAndView("redirect:/conseillers.htm");  
     }
     
-    @RequestMapping(value = "conseiller/client/messages", method = RequestMethod.POST)
+    @RequestMapping(value = "banquier/conseiller/client/messages", method = RequestMethod.POST)
     protected ModelAndView advisorClientMessagesPost(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) {
         String login = request.getParameter("login");
         String content = request.getParameter("content");
         if (login == null || login.length() == 0 || content == null 
                 || content.length() == 0)
-            return new ModelAndView("redirect:/conseiller/client/messages.htm?login=" + login); 
+            return new ModelAndView("redirect:/banquier/conseiller/client/messages.htm?login=" + login); 
         try {
             bankerService.sendMessage(login, content);
-            return new ModelAndView("redirect:/conseiller/client/messages.htm?login=" + login); 
+            return new ModelAndView("redirect:/banquier/conseiller/client/messages.htm?login=" + login); 
         } catch (FakeClientException ex) {
         } catch (NoAdvisorException ex) {
         }
-        return new ModelAndView("redirect:/conseillers.htm"); 
+        return new ModelAndView("redirect:/banquier/conseillers.htm"); 
     }
     
 }

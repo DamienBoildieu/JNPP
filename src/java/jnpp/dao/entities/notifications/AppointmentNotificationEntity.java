@@ -39,7 +39,7 @@ public class AppointmentNotificationEntity extends NotificationEntity
     
     @Override
     public AppointmentNotificationDTO toDTO() {
-        return new AppointmentNotificationDTO(getId(), getDate(), appointment.toDTO());
+        return new AppointmentNotificationDTO(getId(), getDate(), getSeen(), appointment.toDTO());
     }
     
 }

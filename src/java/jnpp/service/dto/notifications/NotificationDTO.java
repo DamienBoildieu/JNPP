@@ -16,10 +16,12 @@ public abstract class NotificationDTO {
     
     private Long id;
     private Date date;
+    private Boolean seen;
 
-    public NotificationDTO(Long id, Date date) {
+    public NotificationDTO(Long id, Date date, Boolean seen) {
         this.id = id;
         this.date = date;
+        this.seen = seen;
     }
     
     public abstract Type getType();
@@ -40,4 +42,12 @@ public abstract class NotificationDTO {
         this.date = date;
     }
 
+    public Boolean getSeen() {
+        return seen;
+    }
+
+    public void setSeen(Boolean seen) {
+        this.seen = seen;
+    }
+    
 }

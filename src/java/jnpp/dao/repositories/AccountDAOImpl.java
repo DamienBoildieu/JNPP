@@ -76,6 +76,7 @@ public class AccountDAOImpl extends GenericDAOImpl<AccountEntity> implements Acc
         }
     }
 
+    @Transactional(readOnly = true)
     @Override
     public ShareAccountEntity findShareByLogin(String login) {
         Query query = getEm().createNamedQuery("find_share_account_by_login");
@@ -85,6 +86,13 @@ public class AccountDAOImpl extends GenericDAOImpl<AccountEntity> implements Acc
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<AccountEntity> findAll() {
+        Query query = getEm().createNamedQuery("find_all_account");
+        return query.getResultList();
     }
     
 }

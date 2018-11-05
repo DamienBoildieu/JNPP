@@ -24,7 +24,7 @@ public class PaymentMeansController {
     @Autowired
     BankerService bankerService;
     
-    @RequestMapping(value = "commandes", method = RequestMethod.GET)
+    @RequestMapping(value = "banquier/commandes", method = RequestMethod.GET)
     protected ModelAndView paymentMeansGet(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) {
         List<PaymentMeanDTO> paymentmeans = bankerService.getPaymentMeans();
@@ -33,7 +33,7 @@ public class PaymentMeansController {
         return mv;
     }
      
-    @RequestMapping(value = "commandes", method = RequestMethod.POST)
+    @RequestMapping(value = "banquier/commandes", method = RequestMethod.POST)
     protected ModelAndView paymentMeansPost(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) {
         String id = request.getParameter("id");
@@ -43,7 +43,7 @@ public class PaymentMeansController {
             } catch (FakePaymentMeanException e) {
             }            
         }
-        return new ModelAndView("redirect:/commandes.htm");
+        return new ModelAndView("redirect:/banquier/commandes.htm");
     }  
     
 }

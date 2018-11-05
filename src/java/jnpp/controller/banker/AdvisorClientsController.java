@@ -20,14 +20,14 @@ public class AdvisorClientsController {
     @Autowired
     BankerService bankerService;
     
-    @RequestMapping(value = "conseiller/clients", method = RequestMethod.GET)
+    @RequestMapping(value = "banquier/conseiller/clients", method = RequestMethod.GET)
     protected ModelAndView advisorClientsGet(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) {
         String firstname = request.getParameter("prenom");
         String lastname = request.getParameter("nom");
         if (firstname == null || firstname.length() == 0 || lastname == null  
                 || lastname.length() == 0) 
-            return new ModelAndView("redirect:/conseillers.htm"); 
+            return new ModelAndView("redirect:/banquier/conseillers.htm"); 
         try {
             List<LoginDTO> clients = bankerService.getAdvisorLogins(firstname, lastname);
             ModelAndView mv = new ModelAndView("banker/advisor_clients_board");
@@ -37,7 +37,7 @@ public class AdvisorClientsController {
             return mv;  
         } catch (FakeAdvisorException e) {
         } catch (IllegalArgumentException e) {}
-        return new ModelAndView("redirect:/conseillers.htm");       
+        return new ModelAndView("redirect:/banquier/conseillers.htm");       
     }
     
 }

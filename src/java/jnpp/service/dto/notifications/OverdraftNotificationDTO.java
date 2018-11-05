@@ -6,8 +6,8 @@ public class OverdraftNotificationDTO extends NotificationDTO {
 
     private String rib;
 
-    public OverdraftNotificationDTO(Long id, Date date, String rib) {
-        super(id, date);
+    public OverdraftNotificationDTO(Long id, Date date, Boolean seen, String rib) {
+        super(id, date, seen);
         this.rib = rib;
     }
     

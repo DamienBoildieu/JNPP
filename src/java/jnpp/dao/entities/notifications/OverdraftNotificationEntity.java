@@ -48,7 +48,7 @@ public class OverdraftNotificationEntity extends NotificationEntity
     
     @Override
     public OverdraftNotificationDTO toDTO() {
-        return new OverdraftNotificationDTO(getId(), getDate(), account.getRib());
+        return new OverdraftNotificationDTO(getId(), getDate(), getSeen(), account.getRib());
     }
     
 }

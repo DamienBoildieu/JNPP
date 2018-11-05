@@ -7,8 +7,8 @@ public class PaymentMeanNotificationDTO extends NotificationDTO {
     
     private PaymentMeanDTO paymentMean;
 
-    public PaymentMeanNotificationDTO(Long id, Date date, PaymentMeanDTO paymentMean) {
-        super(id, date);
+    public PaymentMeanNotificationDTO(Long id, Date date, Boolean seen, PaymentMeanDTO paymentMean) {
+        super(id, date, seen);
         this.paymentMean = paymentMean;
     }
         

@@ -48,7 +48,7 @@ public class PaymentMeanNotificationEntity extends NotificationEntity
     
     @Override
     public PaymentMeanNotificationDTO toDTO() {
-        return new PaymentMeanNotificationDTO(getId(), getDate(), paymentmean.toDTO());
+        return new PaymentMeanNotificationDTO(getId(), getDate(), getSeen(), paymentmean.toDTO());
     }
     
 }

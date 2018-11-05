@@ -24,7 +24,7 @@
                         <td>${client.name}</td>
                         <td>${client.email}</td>
                         <td><a class="waves-effect waves-light btn" 
-                               href="<c:url value='/conseiller/client/messages.htm' />?login=${client.login}">Messages</a></td>
+                               href="<c:url value='/banquier/conseiller/client/messages.htm' />?login=${client.login}">Messages</a></td>
                     </tr>
                     </c:forEach>
                 </tbody>
