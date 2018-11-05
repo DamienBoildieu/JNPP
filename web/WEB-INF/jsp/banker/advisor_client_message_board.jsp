@@ -6,7 +6,7 @@
     </head>
     <body>
         <%@ include file="banker_header.jsp" %>
-        <div class="container" style="overflow: scroll; max-height: 60vh;">
+        <div class="container" style="overflow: auto; max-height: 60vh;">
             <table class="table striped card">
                 <tbody>
                     <c:forEach items="${messages}" var="message">
@@ -31,7 +31,7 @@
                     </div>
                     <input type="hidden" name="login" value="${client.login}">
                     <div class="col s2">
-                        <input type="submit" value="Envoyer" class="waves-effect waves-light btn-small center-align" style="width: 100%; margin-top: 7%;">
+                        <input type="submit" value="Envoyer" class=" btn blue center-align" style="width: 100%; margin-top: 5%;">
                     </div>
                 </div>
             </form>
