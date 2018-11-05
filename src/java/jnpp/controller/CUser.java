@@ -402,7 +402,7 @@ public class CUser {
      * @throws Exception 
      */
     @RequestMapping(value = "changepassword", method = RequestMethod.POST)
-    protected ModelAndView changePassword(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm, String view) throws Exception {
+    protected ModelAndView changePassword(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
@@ -457,7 +457,7 @@ public class CUser {
      * @throws Exception 
      */
     @RequestMapping(value = "editinfo", method = RequestMethod.POST)
-    private ModelAndView validateInfo(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm, String view)
+    private ModelAndView validateInfo(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
@@ -528,9 +528,21 @@ public class CUser {
             CSession.setLanguage(session,Translator.Language.FR);
         if (CSession.isConnected(session)) {
             try {
-                //TODO add password to close compte
-                String TODO_password = "";
-                clientService.close(CSession.getClient(session).getLogin(), TODO_password);
+                String password = request.getParameter("psswd");
+                String confirm = request.getParameter("confirm");
+                if (!password.equals(confirm)) {
+                    if (alerts != null) {
+                        alerts.add(new AlertMessage(AlertEnum.ERROR, "Les deux champs de mot de passe doivent correspondre"));
+                    } else {
+                        alerts = new ArrayList<AlertMessage>();                         
+                        alerts.add(new AlertMessage(AlertEnum.ERROR, "Les deux champs de mot de passe doivent correspondre"));
+                        rm.addFlashAttribute("alerts", alerts);    
+                    }
+                
+                    return new ModelAndView("redirect:/userinfo.htm");
+                }
+                clientService.close(CSession.getClient(session).getLogin(), password);
+                CSession.clearSession(session);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre compte a bien été cloturé"));
                 } else {

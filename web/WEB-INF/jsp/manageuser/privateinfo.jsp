@@ -90,7 +90,7 @@
                             </form>
                         </div>
                     </div>
-                    <div class='card-panel white col s5 offset-s1 center-align' style="margin-top: 10%">
+                    <div class='card-panel white col s5 offset-s1 center-align'>
                         <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
                             <form method="POST" action="changeprivatepassword.htm">
                                 <div class="row">
@@ -126,6 +126,22 @@
                         </div>
                         <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
                             <form method="POST" action="closeuser.htm">
+                                 <div class="row">
+                                    <div class="col s12">
+                                        <div class="input-field">
+                                            <label for="psswd"> Mot de passe </label> <input type="password"
+                                                                                             class="validate" name="psswd" id="psswd">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12">
+                                        <div class="input-field">
+                                            <label for="confirm"> Confirmer le mot de passe </label> <input type="password"
+                                                                                             class="validate" name="confirm" id="confirm">
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col s12">
                                         <input type="submit" value="Supprimer votre compte" class="btn blue" />
