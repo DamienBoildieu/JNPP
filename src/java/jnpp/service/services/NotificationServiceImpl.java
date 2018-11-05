@@ -76,7 +76,7 @@ public class NotificationServiceImpl implements NotificationService {
         if (notification == null) throw new FakeNotificationException();
         if (!client.equals(notification.getClient())) throw new NotificationOwnerException();
         notification.setSeen(true);
-        notificationDAO.save(notification);
+        notificationDAO.update(notification);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class NotificationServiceImpl implements NotificationService {
         while (itn.hasNext()) {
             NotificationEntity notification = itn.next();
             notification.setSeen(true);
-            notificationDAO.save(notification);
+            notificationDAO.update(notification);
         }
     }
     

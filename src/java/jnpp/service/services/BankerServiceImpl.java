@@ -66,7 +66,7 @@ public class BankerServiceImpl implements BankerService {
         ShareEntity share = shareDAO.findByName(name);
         if (share != null) throw new DuplicateShareException();
         share = new ShareEntity(name, value, CurrencyEntity.toEntity(currency));
-        shareDAO.save(share);
+        share = shareDAO.save(share);
         return share.toDTO();
     }
     
@@ -80,7 +80,7 @@ public class BankerServiceImpl implements BankerService {
         SavingBookEntity savingbook = savingBookDAO.findByName(name);
         if (savingbook != null) throw new DuplicateSavingbookException();
         savingbook = new SavingBookEntity(name, moneyRate, timeRate);
-        savingBookDAO.save(savingbook);
+        savingbook = savingBookDAO.save(savingbook);
         return savingbook.toDTO();
     }
 
@@ -109,7 +109,7 @@ public class BankerServiceImpl implements BankerService {
         if (advisor != null) throw new DuplicateAdvisorException();
         advisor = new AdvisorEntity(IdentityEntity.Gender.toEntity(gender), 
                 firstname, lastname, email, phone, number, street, city, state);
-        advisorDAO.save(advisor);
+        advisor = advisorDAO.save(advisor);
         return advisor.toDTO();
     }
 
@@ -140,7 +140,7 @@ public class BankerServiceImpl implements BankerService {
         if (advisor == null) throw new NoAdvisorException();
         Date now = Date.from(Instant.now());
         MessageEntity message = new MessageEntity(client, advisor, MessageEntity.Direction.ADVISOR_TO_CLIENT, now, content);
-        messageDAO.save(message);
+        message = messageDAO.save(message);
         MessageNotificationEntity notification = new MessageNotificationEntity(client, now, false, message);
         notificationDAO.save(notification);
         return message.toDTO();
@@ -162,7 +162,7 @@ public class BankerServiceImpl implements BankerService {
         if (paymentMean == null) throw new FakePaymentMeanException();
         if (paymentMean.getStatus() != PaymentMeanEntity.Status.DELIVERED) {
             paymentMean.setStatus(paymentMean.getStatus().next());
-            paymentMeanDAO.save(paymentMean);
+            paymentMean = paymentMeanDAO.save(paymentMean);
             ClientEntity client = paymentMean.getClient();
             Date now = Date.from(Instant.now());
             PaymentMeanNotificationEntity notification = new PaymentMeanNotificationEntity(client, now, false, paymentMean);

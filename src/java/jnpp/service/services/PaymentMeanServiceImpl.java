@@ -47,7 +47,7 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
         if (!canBindToBanckCard(account)) throw new AccountTypeException();
         String id = generateNewId();
         BankCardEntity bankcard = new BankCardEntity(id, client, account, PaymentMeanEntity.Status.ORDERED);
-        paymentMeanDAO.save(bankcard);
+        bankcard = (BankCardEntity) paymentMeanDAO.save(bankcard);
         return bankcard.toDTO();
     }
 
@@ -61,7 +61,7 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
         if (!canBindToCheckbook(account)) throw new AccountTypeException();
         String id = generateNewId();
         CheckbookEntity checkbook = new CheckbookEntity(id, client, account, PaymentMeanEntity.Status.ORDERED);
-        paymentMeanDAO.save(checkbook);
+        checkbook = (CheckbookEntity) paymentMeanDAO.save(checkbook);
         return checkbook.toDTO();
     }
 

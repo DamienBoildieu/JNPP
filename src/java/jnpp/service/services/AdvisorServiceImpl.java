@@ -53,7 +53,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         if (client == null) throw new FakeClientException();
         MessageEntity entity = new MessageEntity(client, client.getAdvisor(), 
                 MessageEntity.Direction.CLIENT_TO_ADVISOR, Date.from(Instant.now()), message);
-        messageDAO.save(entity);
+        entity = messageDAO.save(entity);
         return entity.toDTO();
     }
 
@@ -97,7 +97,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         if (appointmentDAO.countByAdvisorIdInMinMax(advisor.getId(), min, max) > 0 )
             throw new AvailableException();
         AppointmentEntity appointment = new AppointmentEntity(date, client, advisor);
-        appointmentDAO.save(appointment);
+        appointment = appointmentDAO.save(appointment);
         return appointment.toDTO();
     }
 

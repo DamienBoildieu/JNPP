@@ -4,7 +4,7 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	rel="stylesheet">
 <link type="text/css" rel="stylesheet"
-	href="css/common.css"
+	href="/JNPP/css/common.css"
 	media="screen" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />

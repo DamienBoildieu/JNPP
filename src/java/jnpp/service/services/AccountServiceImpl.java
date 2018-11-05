@@ -103,7 +103,7 @@ public class AccountServiceImpl implements AccountService {
         if (accountDAO.hasCurrentAccount(login)) throw new DuplicateAccountException();
         String rib = generateNewRib();
         CurrentAccountEntity account = new CurrentAccountEntity(rib, client, DEFAULT_MONEY, DEFAULT_CURRENCY, DEFAULT_LIMIT);
-        accountDAO.save(account);
+        account = (CurrentAccountEntity) accountDAO.save(account);
         return account.toDTO();
     }
     
@@ -126,7 +126,7 @@ public class AccountServiceImpl implements AccountService {
         if (!clientFound) throw new IllegalStateException("Le login ne fait pas reference a une identite contenue dans la liste.");
         String rib = generateNewRib();
         JointAccountEntity account = new JointAccountEntity(rib, clients, DEFAULT_MONEY, DEFAULT_CURRENCY);
-        accountDAO.save(account);
+        account = (JointAccountEntity) accountDAO.save(account);
         return account.toDTO();
     }
     
@@ -141,7 +141,7 @@ public class AccountServiceImpl implements AccountService {
         if (accountDAO.hasSavingAccount(login, savingBook.getId())) throw new DuplicateAccountException();
         String rib = generateNewRib();
         SavingAccountEntity account = new SavingAccountEntity(rib, client, DEFAULT_MONEY, DEFAULT_CURRENCY, savingBook);
-        accountDAO.save(account);
+        account = (SavingAccountEntity) accountDAO.save(account);
         return account.toDTO();
     }
     
@@ -153,7 +153,7 @@ public class AccountServiceImpl implements AccountService {
         if (accountDAO.hasShareAccount(login)) throw new DuplicateAccountException();
         String rib = generateNewRib();
         ShareAccountEntity account = new ShareAccountEntity(rib, client);
-        accountDAO.save(account);
+        account = (ShareAccountEntity) accountDAO.save(account);
         return account.toDTO();
     }
     

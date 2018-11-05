@@ -36,7 +36,7 @@ public class DebitAuthorizationServiceImpl implements DebitAuthorizationService 
         DebitAuthorizationEntity authorization = debitAuthorizationDAO.findByRibFromRibTo(ribFrom, ribTo);
         if (authorization != null) throw new DuplicateDebitAuthorizationException();      
         authorization = new DebitAuthorizationEntity(account, ribTo);
-        debitAuthorizationDAO.save(authorization);
+        authorization = debitAuthorizationDAO.save(authorization);
         return authorization.toDTO();
     }
 

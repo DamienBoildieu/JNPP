@@ -85,7 +85,8 @@ public class MovementServiceImpl implements MovementService {
         Date now = Date.from(Instant.now());
         
         moneyAccountFrom.setMoney(moneyAccountFrom.getMoney() - amount);
-        accountDAO.save(moneyAccountFrom);
+        moneyAccountFrom = (MoneyAccountEntity) accountDAO.update(moneyAccountFrom);
+        accountFrom = moneyAccountFrom;
         
         if (accountTo != null) {
             
@@ -96,11 +97,12 @@ public class MovementServiceImpl implements MovementService {
             
             CurrencyEntity currencyTo = moneyAccountTo.getCurrency();
             moneyAccountTo.setMoney(moneyAccountTo.getMoney() + currencyTo.convert(amount, currencyFrom));
-            accountDAO.save(moneyAccountTo);
+            moneyAccountTo = (MoneyAccountEntity) accountDAO.update(moneyAccountTo);
+            accountTo = moneyAccountTo;
         }
         
         TransfertEntity transfert = new TransfertEntity(now, ribFrom, ribTo, amount, currencyFrom);
-        movementDAO.save(transfert);        
+        transfert = (TransfertEntity) movementDAO.save(transfert);        
         
         boolean isOverdraft = moneyAccountFrom.getMoney() < 0;
         
@@ -170,7 +172,8 @@ public class MovementServiceImpl implements MovementService {
         Date now = Date.from(Instant.now());
         
         moneyAccountFrom.setMoney(moneyAccountFrom.getMoney() + amount);
-        accountDAO.save(moneyAccountFrom);
+        moneyAccountFrom = (MoneyAccountEntity) accountDAO.update(moneyAccountFrom);
+        accountFrom = moneyAccountFrom;
         
         if (accountTo != null) {
             
@@ -181,11 +184,12 @@ public class MovementServiceImpl implements MovementService {
             
             CurrencyEntity currencyTo = moneyAccountTo.getCurrency();
             moneyAccountTo.setMoney(moneyAccountTo.getMoney() + currencyTo.convert(amount, currencyFrom));
-            accountDAO.save(moneyAccountTo);
+            moneyAccountTo = (MoneyAccountEntity) accountDAO.update(moneyAccountTo);
+            accountTo = moneyAccountTo;
         }
         
         DebitEntity debit = new DebitEntity(now, ribFrom, ribTo, amount, currencyFrom);
-        movementDAO.save(debit);
+        debit = (DebitEntity) movementDAO.save(debit);
 
         List<ClientEntity> clientFroms = accountFrom.getClients();
         Iterator<ClientEntity> it = clientFroms.iterator();        
@@ -253,16 +257,20 @@ public class MovementServiceImpl implements MovementService {
         
         ShareTitleEntity shareTitle = shareTitleDAO.findByRibName(shareAccount.getRib(), name);
         
-        if (shareTitle == null) shareTitle = new ShareTitleEntity(amount, share, shareAccount);
-        else shareTitle.setAmount(shareTitle.getAmount() + amount);
-        shareTitleDAO.save(shareTitle);
+        if (shareTitle == null) {
+            shareTitle = new ShareTitleEntity(amount, share, shareAccount);
+            shareTitle = shareTitleDAO.save(shareTitle);
+        } else {
+            shareTitle.setAmount(shareTitle.getAmount() + amount);
+            shareTitle = shareTitleDAO.update(shareTitle);
+        }
         
         currentAccount.setMoney(currentAccount.getMoney() - cost);
-        accountDAO.save(currentAccount);
+        currentAccount = (CurrentAccountEntity) accountDAO.update(currentAccount);
         
         PurchaseEntity purchase = new PurchaseEntity(now, shareAccount.getRib(), 
                 currentAccount.getRib(), amount, share);
-        movementDAO.save(purchase);
+        purchase = (PurchaseEntity) movementDAO.save(purchase);
         
         if (client.getNotify()) {
             
@@ -307,14 +315,14 @@ public class MovementServiceImpl implements MovementService {
         shareTitle.setAmount(shareTitle.getAmount() - amount);
         
         if (shareTitle.getAmount() == 0) shareTitleDAO.delete(shareTitle);
-        else shareTitleDAO.save(shareTitle);
+        else shareTitle = shareTitleDAO.update(shareTitle);
         
         currentAccount.setMoney(currentAccount.getMoney() + cost);
-        accountDAO.save(currentAccount);
+        currentAccount = (CurrentAccountEntity) accountDAO.update(currentAccount);
         
         SaleEntity sale = new SaleEntity(now, shareAccount.getRib(), 
                 currentAccount.getRib(), amount, share);
-        movementDAO.save(sale);
+        sale = (SaleEntity) movementDAO.save(sale);
         
         if (client.getNotify()) {
             

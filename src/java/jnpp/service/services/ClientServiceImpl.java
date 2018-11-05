@@ -124,7 +124,7 @@ public class ClientServiceImpl implements ClientService {
         if (city != null) address.setCity(city);
         if (state != null) address.setState(state);
         if (phone != null) client.setPhone(phone);    
-        clientDAO.save(client);
+        client = clientDAO.update(client);
         return client.toDTO();
     }
 
@@ -145,7 +145,7 @@ public class ClientServiceImpl implements ClientService {
         if (client == null) throw new FakeClientException();
         if (!oldPassword.equals(client.getPassword())) return false;
         client.setPassword(newPassword);
-        clientDAO.save(client);
+        clientDAO.update(client);
         return true;
     }
 
@@ -164,7 +164,7 @@ public class ClientServiceImpl implements ClientService {
                 || !lastname.equals(identity.getLastname())) return false;
         String password = generateRandomPassword();
         client.setPassword(password);
-        clientDAO.save(client);
+        clientDAO.update(client);
         return true;    
     }
 
@@ -184,7 +184,7 @@ public class ClientServiceImpl implements ClientService {
         if (!name.equals(((ProfessionalEntity) client).getName())) return false;
         String password = generateRandomPassword();
         client.setPassword(password);
-        clientDAO.save(client);
+        clientDAO.update(client);
         return true;    
     }
     
