@@ -9,24 +9,34 @@
         </header>
         <main>
             <%@ include file="../include/alerts.jsp"%>
-            <div class="container">
-                <div class="row">
-                    <div class="col s1">
-                        <div class="card-panel white">
-                            <div clas="row">
-                                <a class="btn blue" href="<c:url value='/openaccount.htm' />">Ouvrir un compte</a>
-                            </div>
-                        </div>
+            <div class="row">
+            <div class="col s2 center-align">
+                <div class="card-panel white">
+                    <div clas="row">
+                        <a class="btn blue" href="<c:url value='/openaccount.htm' />">Ouvrir un compte</a>
                     </div>
+                </div>
+            </div>
+            <div class="container">
+                
                      <div class='col s10 offset-s1 center-align'>
-                        <c:forEach items="${listAccounts}" var="element">
+                        <c:forEach items="${accounts}" var="element">
                             <div class="col s12 m4">
                                 <div class="card blue">
                                     <div class="card-content white-text">
                                         <span class="card-title center-align">${element.rib}</span>
                                         <div class="row">
                                             <div class="col s12">
-                                                <p>${accountsMap[element.type]}</p>
+                                                <p>
+                                                <c:choose>
+                                                    <c:when test="${element.type == 'SAVING'}">
+                                                       ${element.getSavingBook().getName()}
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        ${accountsMap[element.type]}                                                   
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                </p>
                                             </div>
                                         </div>
                                         <div class="card white s12">
