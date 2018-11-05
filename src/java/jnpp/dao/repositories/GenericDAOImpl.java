@@ -45,7 +45,7 @@ public abstract class GenericDAOImpl<T extends Serializable> implements GenericD
     @Transactional
     @Override
     public void delete(T t) {
-        em.merge(t);
+        t = em.merge(t);
         em.remove(t);
     }
 

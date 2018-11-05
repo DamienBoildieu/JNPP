@@ -54,7 +54,7 @@ public class ClientServiceImpl implements ClientService {
     public ClientDTO signIn(String login, String password) {
         if (login == null || password == null) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.findByLoginPassword(login, password);
-        return client.toDTO();
+        return (client == null) ? null : client.toDTO();
     }
 
     @Override

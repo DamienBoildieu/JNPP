@@ -87,5 +87,10 @@ public class IdentityEntity implements Serializable {
     public String toString() {
         return firstname + " " + lastname;
     }
+ 
+    public static IdentityEntity toEntity(IdentityDTO dto) {
+        return new IdentityEntity(Gender.toEntity(dto.getGender()), 
+                dto.getFirstname(), dto.getLastname());
+    }
     
 }
