@@ -12,7 +12,8 @@ public abstract class MovementDTO {
         PURCHASE,
         SALE,
         WITHDRAW,
-        PAYMENT;
+        PAYMENT,
+        DEPOSIT;
         
     }
     

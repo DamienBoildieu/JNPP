@@ -38,6 +38,8 @@
     <class>jnpp.dao.entities.paymentmeans.BankCardEntity</class>
     <class>jnpp.dao.entities.paymentmeans.CheckbookEntity</class>
     <class>jnpp.dao.entities.paymentmeans.PaymentMeanEntity</class>
+    <class>jnpp.dao.entities.movements.MoneyMovementEntity</class>
+    <class>jnpp.dao.entities.movements.DepositEntity</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/JNPPDB"/>

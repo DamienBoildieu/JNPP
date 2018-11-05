@@ -12,10 +12,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class MovementsController {
     
-    @RequestMapping(value = "banquier/conseiller/transfert", method = RequestMethod.GET)
+    @RequestMapping(value = "banquier/transactions", method = RequestMethod.GET)
     protected ModelAndView movementsGet(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) {
-        ModelAndView mv = new ModelAndView("banker/accounts_board");
+        ModelAndView mv = new ModelAndView("banker/movements_board");
         return mv;         
     }
         
