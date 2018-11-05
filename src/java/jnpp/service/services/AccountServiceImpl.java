@@ -29,6 +29,7 @@ import jnpp.dao.repositories.CloseRequestDAO;
 import jnpp.dao.repositories.MovementDAO;
 import jnpp.dao.repositories.SavingBookDAO;
 import jnpp.dao.repositories.ShareDAO;
+import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.accounts.CurrentAccountDTO;
 import jnpp.service.dto.accounts.JointAccountDTO;
@@ -108,16 +109,16 @@ public class AccountServiceImpl implements AccountService {
     }
     
     @Override
-    public JointAccountDTO openJointAccount(String login, List<IdentityEntity> identities) throws FakeClientException, UnknownIdentityException, ClientTypeException {
+    public JointAccountDTO openJointAccount(String login, List<IdentityDTO> identities) throws FakeClientException, UnknownIdentityException, ClientTypeException {
         if (login == null || identities == null || identities.size() < 2) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
         if (client.getType() != ClientEntity.Type.PRIVATE) throw new ClientTypeException();
         List<ClientEntity> clients = new ArrayList<ClientEntity>();
         boolean clientFound = false;
-        Iterator<IdentityEntity> ite = identities.iterator();
+        Iterator<IdentityDTO> ite = identities.iterator();
         while (ite.hasNext()) {
-            IdentityEntity identity = ite.next();
+            IdentityEntity identity = IdentityEntity.toEntity(ite.next());
             PrivateEntity currentClient = clientDAO.findPrivateByIdentity(identity.getGender(), identity.getFirstname(), identity.getLastname());
             if (currentClient == null) throw new UnknownIdentityException();
             else clients.add(currentClient);

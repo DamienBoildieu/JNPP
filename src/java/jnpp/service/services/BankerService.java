@@ -7,16 +7,18 @@ import jnpp.service.dto.accounts.SavingBookDTO;
 import jnpp.service.dto.accounts.ShareDTO;
 import jnpp.service.dto.advisor.AdvisorDTO;
 import jnpp.service.dto.advisor.MessageDTO;
-import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.clients.LoginDTO;
+import jnpp.service.dto.movements.TransfertDTO;
 import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 import jnpp.service.exceptions.advisors.NoAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateSavingbookException;
 import jnpp.service.exceptions.duplicates.DuplicateShareException;
+import jnpp.service.exceptions.entities.FakeAccountException;
 import jnpp.service.exceptions.entities.FakeAdvisorException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakePaymentMeanException;
+import jnpp.service.exceptions.movements.AccountTypeException;
 
 public interface BankerService {
 
@@ -38,5 +40,8 @@ public interface BankerService {
             throws FakeClientException, NoAdvisorException;
     List<PaymentMeanDTO> getPaymentMeans();
     PaymentMeanDTO upgradePaymentMean(String id) throws FakePaymentMeanException;
+    
+    TransfertDTO transfert(String ribFrom, String ribTo, Double amount, CurrencyDTO currencyDTO)
+            throws FakeAccountException, AccountTypeException;
     
 }

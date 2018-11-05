@@ -3,6 +3,7 @@ package jnpp.service.services;
 import java.util.Date;
 import java.util.List;
 import jnpp.dao.entities.IdentityEntity;
+import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.accounts.CurrentAccountDTO;
 import jnpp.service.dto.accounts.JointAccountDTO;
@@ -29,7 +30,7 @@ public interface AccountService {
     List<AccountDTO> getAccounts(String login) throws FakeClientException;
     
     CurrentAccountDTO openCurrentAccount(String login) throws DuplicateAccountException, FakeClientException;
-    JointAccountDTO openJointAccount(String login, List<IdentityEntity> identities) throws FakeClientException, UnknownIdentityException, ClientTypeException;
+    JointAccountDTO openJointAccount(String login, List<IdentityDTO> identities) throws FakeClientException, UnknownIdentityException, ClientTypeException;
     SavingAccountDTO openSavingAccount(String login, String name) throws FakeClientException, FakeSavingBookException, DuplicateAccountException, ClientTypeException;
     ShareAccountDTO openShareAccount(String login) throws FakeClientException, DuplicateAccountException;
     
