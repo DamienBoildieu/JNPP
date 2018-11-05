@@ -15,7 +15,7 @@
                         <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
                             <c:forEach items="${notifs}" var="element">
                                 <c:choose>
-                                    <c:when test="${count%2==0}">
+                                    <c:when test="${!element.seen}">
                                         <div class="card-panel blue s12">
                                             <span class="white-text">
                                     </c:when>
@@ -27,7 +27,6 @@
                                                ${element.day}/${element.month}/${element.year} : ${element.message}
                                             </span>
                                         </div>
-                                <c:set var="count" value="${count + 1}" scope="page"/>
                             </c:forEach>
                         </div>
                     </div>

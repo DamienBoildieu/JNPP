@@ -17,6 +17,7 @@ public class NotifView {
     private final int month;
     private final int day;
     private final String message;
+    private final boolean seen;
     
     public NotifView(NotificationDTO notif) {
         Calendar cal = Calendar.getInstance();
@@ -24,6 +25,7 @@ public class NotifView {
         year = cal.get(Calendar.YEAR);
         month = (cal.get(Calendar.MONTH)+1);
         day = cal.get(Calendar.DAY_OF_MONTH);
+        seen = notif.getSeen();
         switch (notif.getType()) {
             case APPOINTMENT:
                 AppointmentNotificationDTO appoint = (AppointmentNotificationDTO) notif;
@@ -65,6 +67,8 @@ public class NotifView {
     public String getMessage() {
         return message;
     }
-    
-    
+
+    public boolean isSeen() {
+        return seen;
+    }
 }
