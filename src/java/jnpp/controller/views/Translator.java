@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.AccountDTO;
+import jnpp.service.dto.accounts.SavingBookDTO;
 
 
 public class Translator {

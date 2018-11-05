@@ -18,7 +18,11 @@ import jnpp.controller.views.info.ViewInfo;
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.accounts.CurrentAccountEntity;
 import jnpp.dao.entities.accounts.SavingAccountEntity;
+import jnpp.service.dto.accounts.AccountDTO;
+import jnpp.service.dto.accounts.SavingBookDTO;
+import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.exceptions.entities.FakeClientException;
+import jnpp.service.services.AccountService;
 import jnpp.service.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +35,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class CLinkAccount {
     @Autowired
     private NotificationService notifService;
+    @Autowired
+     private AccountService accountService;
     
     /**
      * Requête sur la vue d'un compte
@@ -100,8 +106,21 @@ public class CLinkAccount {
                 }
             }
         }
-	//resumeService.resumeAccounts("");
-        return new JNPPModelAndView("accounts/openaccount", ViewInfo.createInfo(session, alerts));
+        ClientDTO client = CSession.getClient(session);
+        ModelAndView view = null;
+        switch (client.getType()) {
+            case PRIVATE:
+                view = new JNPPModelAndView("accounts/openprivateaccount", ViewInfo.createInfo(session, alerts));
+                List<SavingBookDTO> books = accountService.getSavingBooks();
+                view.addObject("books", books);
+                break;
+            case PROFESIONAL:
+                view = new JNPPModelAndView("accounts/openproaccount", ViewInfo.createInfo(session, alerts));
+                break;
+            default:
+                throw new AssertionError(client.getType().name());
+        }       
+        return view;
     }
     /**
      * Requête sur la vue de la liste des comptes
@@ -135,24 +154,12 @@ public class CLinkAccount {
                 }
             }
         }
-	//resumeService.resumeAccounts("");
-        List<AccountEntity> listAc = new ArrayList<AccountEntity>();
-        CurrentAccountEntity current = new CurrentAccountEntity();
-        current.setMoney(-20.d);
-        current.setRib("134824");
-        listAc.add(current);
-        listAc.add(current);
-        listAc.add(current);
-        listAc.add(current);
-        listAc.add(current);listAc.add(current);listAc.add(current);listAc.add(current);listAc.add(current);
-        
-        SavingAccountEntity saving = new SavingAccountEntity();
-        saving.setMoney(500.d);
-        saving.setRib("5946513");
-        listAc.add(saving);
+        List<AccountDTO> accounts = accountService.getAccounts(CSession.getClient(session).getLogin());
         ModelAndView view = new JNPPModelAndView("accounts/resume", ViewInfo.createInfo(session, alerts));
-        view.addObject("listAccounts", listAc);
+        view.addObject("accounts", accounts);
         view.addObject("accountsMap", Translator.getInstance().translateAccounts(CSession.getLanguage(session)));
         return view;
     }
+    
+    
 }
