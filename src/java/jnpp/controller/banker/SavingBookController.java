@@ -28,7 +28,7 @@ public class SavingBookController {
     @Autowired
     BankerService bankerService;
     
-    @RequestMapping(value = "livrets", method = RequestMethod.GET)
+    @RequestMapping(value = "banquier/livrets", method = RequestMethod.GET)
     protected ModelAndView savingBookGet(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) 
             throws Exception {
@@ -38,7 +38,7 @@ public class SavingBookController {
         return mv;       
     }
     
-    @RequestMapping(value = "livrets", method = RequestMethod.POST)
+    @RequestMapping(value = "banquier/livrets", method = RequestMethod.POST)
     protected ModelAndView savingBookPost(Model model, HttpServletRequest request,
             HttpServletResponse response, RedirectAttributes rm) 
             throws Exception {
@@ -51,7 +51,7 @@ public class SavingBookController {
                 bankerService.addSavingbook(name, Double.valueOf(moneyRate), Double.valueOf(timeRate));
             } catch (IllegalArgumentException e) {
             } catch (DuplicateSavingbookException e) {}
-        return new ModelAndView("redirect:/livrets.htm");
+        return new ModelAndView("redirect:/banquier/livrets.htm");
     }
     
 }

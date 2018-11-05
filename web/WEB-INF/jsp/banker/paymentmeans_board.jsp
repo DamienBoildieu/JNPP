@@ -28,7 +28,7 @@
                         <td>${paymentmean.status}</td>
                         <td>
                             <c:if test="${paymentmean.status ne 'DELIVERED'}">
-                            <form method="POST" action="/JNPP/commandes.htm">
+                            <form method="POST" action="/JNPP/banquier/commandes.htm">
                                 <input type="hidden" name="id" value="${paymentmean.id}">
                                 <button class="btn waves-effect waves-light" type="submit" name="action">
                                     ${paymentmean.status.next()}

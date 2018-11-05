@@ -27,7 +27,7 @@
             </table>
         </div>
         <div class="container">
-            <form method="POST" action="/JNPP/livrets.htm" class="card">
+            <form method="POST" action="/JNPP/banquier/livrets.htm" class="card">
                 <table class="responsive-table centered striped card">
                     <tbody>
                         <tr>

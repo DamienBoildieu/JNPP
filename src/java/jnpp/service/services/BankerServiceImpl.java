@@ -31,6 +31,7 @@ import jnpp.dao.repositories.PaymentMeanDAO;
 import jnpp.dao.repositories.SavingBookDAO;
 import jnpp.dao.repositories.ShareDAO;
 import jnpp.service.dto.IdentityDTO;
+import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.accounts.CurrencyDTO;
 import jnpp.service.dto.accounts.SavingBookDTO;
 import jnpp.service.dto.accounts.ShareDTO;
@@ -186,10 +187,16 @@ public class BankerServiceImpl implements BankerService {
     }
 
     @Override
+    public List<AccountDTO> getAccounts() {   
+        List<AccountEntity> accounts = accountDAO.findAll();
+        return AccountEntity.toDTO(accounts);
+    }
+    
+    @Override
     public TransfertDTO transfert(String ribFrom, String ribTo, Double amount, CurrencyDTO currency) throws FakeAccountException, AccountTypeException {
         if (ribFrom == null || ribTo == null || amount == 0 || amount <= 0 
                 || currency == null) throw new IllegalArgumentException();
-        
+
         AccountEntity accountFrom = accountDAO.find(ribFrom);
         if (accountFrom == null) throw new FakeAccountException();
         AccountEntity accountTo = accountDAO.find(ribTo);
@@ -246,7 +253,6 @@ public class BankerServiceImpl implements BankerService {
                     new MovementNotificationEntity(clientTo, now, false, transfert);
             notificationDAO.save(movementNotificationFrom);
         }
-        
         
         return transfert.toDTO();
     }    

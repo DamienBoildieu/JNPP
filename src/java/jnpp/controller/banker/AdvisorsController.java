@@ -31,7 +31,7 @@ public class AdvisorsController {
     @Autowired
     BankerService bankerService;
     
-    @RequestMapping(value = "conseillers", method = RequestMethod.GET)
+    @RequestMapping(value = "banquier/conseillers", method = RequestMethod.GET)
     protected ModelAndView advisorsGet(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) {
         List<AdvisorDTO> advisors = bankerService.getAdvisors();
@@ -41,7 +41,7 @@ public class AdvisorsController {
         return mv;            
     }
 
-    @RequestMapping(value = "conseillers", method = RequestMethod.POST)
+    @RequestMapping(value = "banquier/conseillers", method = RequestMethod.POST)
     protected ModelAndView advisorsPOST(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) {
         String firstname = request.getParameter("firstname");
@@ -60,7 +60,7 @@ public class AdvisorsController {
                         address.getCity(), address.getState());
             } catch (IllegalArgumentException e) {e.printStackTrace();
             } catch (DuplicateAdvisorException e) {e.printStackTrace();}
-        return new ModelAndView("redirect:/conseillers.htm");       
+        return new ModelAndView("redirect:/banquier/conseillers.htm");       
     }
     
     private static AddressDTO parseAddress(String address) {

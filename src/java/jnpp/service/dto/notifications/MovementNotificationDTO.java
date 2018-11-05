@@ -7,8 +7,8 @@ public class MovementNotificationDTO extends NotificationDTO {
     
     private MovementDTO movement;
 
-    public MovementNotificationDTO(Long id, Date date, MovementDTO movement) {
-        super(id, date);
+    public MovementNotificationDTO(Long id, Date date, Boolean seen, MovementDTO movement) {
+        super(id, date, seen);
         this.movement = movement;
     }
     

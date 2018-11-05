@@ -47,7 +47,7 @@ public class MovementNotificationEntity extends NotificationEntity implements Se
     
     @Override
     public MovementNotificationDTO toDTO() {
-        return new MovementNotificationDTO(getId(), getDate(), movement.toDTO());
+        return new MovementNotificationDTO(getId(), getDate(), getSeen(), movement.toDTO());
     }
     
 }

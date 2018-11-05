@@ -18,4 +18,6 @@ public interface AccountDAO extends GenericDAO<AccountEntity> {
     CurrentAccountEntity findCurrentByLogin(String login);
     ShareAccountEntity findShareByLogin(String login);
     
+    List<AccountEntity> findAll();
+    
 }

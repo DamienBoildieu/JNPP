@@ -7,8 +7,8 @@ public class AppointmentNotificationDTO extends NotificationDTO {
     
     private AppointmentDTO appointment;
 
-    public AppointmentNotificationDTO(Long id, Date date, AppointmentDTO appointment) {
-        super(id, date);
+    public AppointmentNotificationDTO(Long id, Date date, Boolean seen, AppointmentDTO appointment) {
+        super(id, date, seen);
         this.appointment = appointment;
     }
 

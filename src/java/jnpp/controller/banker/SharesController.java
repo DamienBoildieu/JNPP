@@ -28,7 +28,7 @@ public class SharesController {
     @Autowired
     BankerService bankerService;
     
-    @RequestMapping(value = "actions", method = RequestMethod.GET)
+    @RequestMapping(value = "banquier/actions", method = RequestMethod.GET)
     protected ModelAndView sharesGet(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) 
             throws Exception {
@@ -38,7 +38,7 @@ public class SharesController {
         return mv;       
     }
     
-    @RequestMapping(value = "actions", method = RequestMethod.POST)
+    @RequestMapping(value = "banquier/actions", method = RequestMethod.POST)
     protected ModelAndView sharesPost(Model model, HttpServletRequest request,
             HttpServletResponse response, RedirectAttributes rm) 
             throws Exception {
@@ -49,7 +49,7 @@ public class SharesController {
                 bankerService.addShare(name,  Double.valueOf(value), DEFAULT_CURRENCY);
             } catch (IllegalArgumentException e) {
             } catch (DuplicateShareException e) {}
-        return new ModelAndView("redirect:/actions.htm");
+        return new ModelAndView("redirect:/banquier/actions.htm");
     }
     
 }

@@ -37,7 +37,10 @@ import jnpp.service.dto.accounts.AccountDTO;
         query = "SELECT COUNT(a) "
                 + "FROM AccountEntity a "
                 + "INNER JOIN a.clients a_clients "
-                + "WHERE a_clients.login = :login")})
+                + "WHERE a_clients.login = :login"),
+    @NamedQuery(
+        name = "find_all_account",
+        query = "SELECT a FROM AccountEntity a")})
 public abstract class AccountEntity implements Serializable {
 
     public static enum Type {

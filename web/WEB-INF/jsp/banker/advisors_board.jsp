@@ -27,14 +27,14 @@
                         <td>${advisor.phone}</td>
                         <td>${advisor.officeAddress}</td>
                         <td><a class="waves-effect waves-light btn" 
-                               href="<c:url value='/conseiller/clients.htm' />?nom=${advisor.identity.lastname}&prenom=${advisor.identity.firstname}">Clients</a></td>
+                               href="<c:url value='/banquier/conseiller/clients.htm' />?nom=${advisor.identity.lastname}&prenom=${advisor.identity.firstname}">Clients</a></td>
                     </tr>
                     </c:forEach>
                 </tbody>
             </table>
         </div>
         <div class="container">
-            <form method="POST" action="/JNPP/conseillers.htm" class="card">
+            <form method="POST" action="/JNPP/banquier/conseillers.htm" class="card">
                 <table class="responsive-table centered striped card">
                     <tbody>
                         <tr>

@@ -19,7 +19,7 @@ public class LoginsController {
     @Autowired
     BankerService bankerService;
     
-    @RequestMapping(value = "identifiants", method = RequestMethod.GET)
+    @RequestMapping(value = "banquier/identifiants", method = RequestMethod.GET)
     protected ModelAndView loginsGet(Model model, HttpServletRequest request, 
             HttpServletResponse response, RedirectAttributes rm) {
         List<LoginDTO> logins = bankerService.getClientLogins();

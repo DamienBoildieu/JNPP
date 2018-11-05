@@ -47,7 +47,7 @@ public class MessageNotificationEntity extends NotificationEntity implements Ser
     
     @Override
     public MessageNotificationDTO toDTO() {
-        return new MessageNotificationDTO(getId(), getDate(), message.toDTO());
+        return new MessageNotificationDTO(getId(), getDate(), getSeen(), message.toDTO());
     }
     
 }

@@ -2,6 +2,7 @@ package jnpp.service.services;
 
 import java.util.List;
 import jnpp.service.dto.IdentityDTO;
+import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.accounts.CurrencyDTO;
 import jnpp.service.dto.accounts.SavingBookDTO;
 import jnpp.service.dto.accounts.ShareDTO;
@@ -41,6 +42,7 @@ public interface BankerService {
     List<PaymentMeanDTO> getPaymentMeans();
     PaymentMeanDTO upgradePaymentMean(String id) throws FakePaymentMeanException;
     
+    List<AccountDTO> getAccounts();
     TransfertDTO transfert(String ribFrom, String ribTo, Double amount, CurrencyDTO currencyDTO)
             throws FakeAccountException, AccountTypeException;
     
