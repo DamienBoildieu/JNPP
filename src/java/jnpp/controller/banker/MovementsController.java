@@ -12,6 +12,7 @@ import jnpp.service.exceptions.entities.FakeShareTitleException;
 import jnpp.service.exceptions.movements.AccountTypeException;
 import jnpp.service.exceptions.movements.AmountException;
 import jnpp.service.exceptions.movements.DebitAuthorizationException;
+import jnpp.service.exceptions.movements.OverdraftException;
 import jnpp.service.services.AccountService;
 import jnpp.service.services.BankerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,7 @@ public class MovementsController {
                 bankerService.transfert(ribFrom, ribTo, Double.valueOf(amount), DEFAULT_CURRENCY);
             } catch (FakeAccountException ex) {
             } catch (AccountTypeException ex) {
+            } catch (OverdraftException ex) {
             }
         } else if (debit != null && debit.length() > 0) {
             try {
@@ -82,6 +84,7 @@ public class MovementsController {
             } catch (FakeAccountException ex) {
             } catch (AccountTypeException ex) {
             } catch (DebitAuthorizationException ex) {
+            } catch (OverdraftException ex) {
             }
         }
         return new ModelAndView("redirect:/banquier/transactions.htm");

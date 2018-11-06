@@ -1,9 +1,9 @@
-
 package jnpp.service.exceptions.accounts;
 
 public class NoShareAccountException extends AccountException {
 
-    public NoShareAccountException() {}
+    public NoShareAccountException() {
+    }
 
     public NoShareAccountException(String message) {
         super(message);
@@ -20,5 +20,5 @@ public class NoShareAccountException extends AccountException {
     public NoShareAccountException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

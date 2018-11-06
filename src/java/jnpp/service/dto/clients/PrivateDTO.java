@@ -5,7 +5,7 @@ import jnpp.service.dto.AddressDTO;
 import jnpp.service.dto.IdentityDTO;
 
 public class PrivateDTO extends ClientDTO {
-    
+
     private IdentityDTO identity;
     private Date birthday;
 
@@ -14,7 +14,7 @@ public class PrivateDTO extends ClientDTO {
         this.identity = identity;
         this.birthday = birthday;
     }
-    
+
     @Override
     public Type getType() {
         return ClientDTO.Type.PRIVATE;
@@ -35,5 +35,5 @@ public class PrivateDTO extends ClientDTO {
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
-    
+
 }

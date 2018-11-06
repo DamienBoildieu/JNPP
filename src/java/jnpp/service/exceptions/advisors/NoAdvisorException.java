@@ -1,8 +1,9 @@
 package jnpp.service.exceptions.advisors;
 
 public class NoAdvisorException extends AdvisorException {
-    
-    public NoAdvisorException() {}
+
+    public NoAdvisorException() {
+    }
 
     public NoAdvisorException(String message) {
         super(message);

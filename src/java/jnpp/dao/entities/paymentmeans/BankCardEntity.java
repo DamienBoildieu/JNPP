@@ -16,48 +16,53 @@ import jnpp.service.dto.paymentmeans.BankCardDTO;
 @DiscriminatorValue(value = PaymentMeanEntity.Type.Values.BANKCARD)
 @NamedQueries({
     @NamedQuery(
-        name = "find_bankcard_by_login",
-        query = "SELECT b FROM BankCardEntity b WHERE b.client.login = :login"),
+            name = "find_bankcard_by_login",
+            query = "SELECT b FROM BankCardEntity b WHERE b.client.login = :login")
+    ,
     @NamedQuery(
-        name = "find_bankcard_by_login_status",
-        query = "SELECT b FROM BankCardEntity b "
-                + "WHERE b.client.login = :login "
-                + "  AND b.status = :status"),
+            name = "find_bankcard_by_login_status",
+            query = "SELECT b FROM BankCardEntity b "
+            + "WHERE b.client.login = :login "
+            + "  AND b.status = :status")
+    ,
     @NamedQuery(
-        name = "find_bankcard_by_login_rib",
-        query = "SELECT b FROM BankCardEntity b "
-                + "WHERE b.client.login = :login "
-                + "  AND b.account.rib = :rib")})
+            name = "find_bankcard_by_login_rib",
+            query = "SELECT b FROM BankCardEntity b "
+            + "WHERE b.client.login = :login "
+            + "  AND b.account.rib = :rib")})
 public class BankCardEntity extends PaymentMeanEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public BankCardEntity() {}
-    
+    public BankCardEntity() {
+    }
+
     public BankCardEntity(String id, ClientEntity client, AccountEntity account, Status status) {
         super(id, client, account, status);
     }
-    
+
     @Override
     public Type getType() {
         return PaymentMeanEntity.Type.BANKCARD;
     }
-    
+
     @Override
     public String toString() {
         return "jnpp.dao.entities.BankCard[ id=" + getId() + " ]";
     }
-    
+
     @Override
     public BankCardDTO toDTO() {
         return new BankCardDTO(getId(), getClient().getLogin(), getAccount().getRib(), getStatus().toDTO());
     }
-    
+
     public static List<BankCardDTO> toDTO(List<BankCardEntity> entities) {
         List<BankCardDTO> dtos = new ArrayList<BankCardDTO>(entities.size());
         Iterator<BankCardEntity> it = entities.iterator();
-        while (it.hasNext()) dtos.add(it.next().toDTO());
+        while (it.hasNext()) {
+            dtos.add(it.next().toDTO());
+        }
         return dtos;
     }
-    
+
 }

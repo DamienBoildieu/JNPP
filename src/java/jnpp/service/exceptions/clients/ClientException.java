@@ -4,7 +4,8 @@ import jnpp.service.exceptions.ServiceException;
 
 public abstract class ClientException extends ServiceException {
 
-    public ClientException() {}
+    public ClientException() {
+    }
 
     public ClientException(String message) {
         super(message);
@@ -21,5 +22,5 @@ public abstract class ClientException extends ServiceException {
     public ClientException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

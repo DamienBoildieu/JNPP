@@ -17,33 +17,35 @@ import jnpp.service.dto.accounts.JointAccountDTO;
 public class JointAccountEntity extends MoneyAccountEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-  
-    public JointAccountEntity() {}
+
+    public JointAccountEntity() {
+    }
 
     public JointAccountEntity(String rib, List<ClientEntity> clients, Double money, CurrencyEntity currency) {
         super(rib, clients, money, currency);
     }
-    
+
     @Override
     public Type getType() {
         return AccountEntity.Type.JOINT;
     }
-    
+
     @Override
     public String toString() {
         return "jnpp.dao.entities.accounts.JointAccountEntity[ id=" + getRib() + " ]";
     }
-    
+
     @Override
     public JointAccountDTO toDTO() {
         List<IdentityEntity> owners = new ArrayList<IdentityEntity>(getClients().size());
         Iterator<ClientEntity> it = getClients().iterator();
         while (it.hasNext()) {
             ClientEntity client = it.next();
-            if (client.getType() == ClientEntity.Type.PRIVATE)
+            if (client.getType() == ClientEntity.Type.PRIVATE) {
                 owners.add(((PrivateEntity) client).getIdentity());
-            else 
+            } else {
                 throw new IllegalStateException("Un professionel a un compte joint.");
+            }
         }
         return new JointAccountDTO(getRib(), getMoney(), getCurrency().toDTO(), owners);
     }
@@ -72,5 +74,10 @@ public class JointAccountEntity extends MoneyAccountEntity implements Serializab
                 return false;
         }
     }
-    
+
+    @Override
+    public boolean canOverdraft() {
+        return true;
+    }
+
 }

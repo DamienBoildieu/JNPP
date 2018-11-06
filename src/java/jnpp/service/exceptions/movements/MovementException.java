@@ -4,7 +4,8 @@ import jnpp.service.exceptions.ServiceException;
 
 public abstract class MovementException extends ServiceException {
 
-    public MovementException() {}
+    public MovementException() {
+    }
 
     public MovementException(String message) {
         super(message);
@@ -21,5 +22,5 @@ public abstract class MovementException extends ServiceException {
     public MovementException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

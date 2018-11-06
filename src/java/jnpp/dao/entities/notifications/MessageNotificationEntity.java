@@ -20,13 +20,14 @@ public class MessageNotificationEntity extends NotificationEntity implements Ser
     @JoinColumn(name = "message_fk")
     private MessageEntity message;
 
-    public MessageNotificationEntity() {}
-    
+    public MessageNotificationEntity() {
+    }
+
     public MessageNotificationEntity(ClientEntity client, Date date, Boolean seen, MessageEntity message) {
         super(client, date, seen);
         this.message = message;
     }
-    
+
     @Override
     public Type getType() {
         return NotificationEntity.Type.MESSAGE;
@@ -44,10 +45,10 @@ public class MessageNotificationEntity extends NotificationEntity implements Ser
     public String toString() {
         return "jnpp.dao.entities.notifications.MessageNotificationEntity[ id=" + getId() + " ]";
     }
-    
+
     @Override
     public MessageNotificationDTO toDTO() {
         return new MessageNotificationDTO(getId(), getDate(), getSeen(), message.toDTO());
     }
-    
+
 }

@@ -16,15 +16,16 @@ import jnpp.service.dto.accounts.SavingBookDTO;
 @Entity
 @NamedQueries({
     @NamedQuery(
-        name = "find_savingbook_by_name",
-        query = "SELECT s FROM SavingBookEntity s WHERE s.name = :name"),
+            name = "find_savingbook_by_name",
+            query = "SELECT s FROM SavingBookEntity s WHERE s.name = :name")
+    ,
     @NamedQuery(
-        name = "find_all_savingbook",
-        query = "SELECT s FROM SavingBookEntity s")})
+            name = "find_all_savingbook",
+            query = "SELECT s FROM SavingBookEntity s")})
 public class SavingBookEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -35,15 +36,16 @@ public class SavingBookEntity implements Serializable {
     private Double moneyRate;
     @Column(nullable = false)
     private Double timeRate;
-    
-    public SavingBookEntity() {}
+
+    public SavingBookEntity() {
+    }
 
     public SavingBookEntity(String name, Double moneyRate, Double timeRate) {
         this.name = name;
         this.moneyRate = moneyRate;
         this.timeRate = timeRate;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -96,16 +98,18 @@ public class SavingBookEntity implements Serializable {
     public String toString() {
         return "jnpp.dao.entities.SavingBookEntity[ id=" + id + " ]";
     }
-    
+
     public SavingBookDTO toDTO() {
         return new SavingBookDTO(name, moneyRate, timeRate);
     }
-    
+
     public static List<SavingBookDTO> toDTO(List<SavingBookEntity> entities) {
         List<SavingBookDTO> dtos = new ArrayList<SavingBookDTO>(entities.size());
         Iterator<SavingBookEntity> it = entities.iterator();
-        while (it.hasNext()) dtos.add(it.next().toDTO());
+        while (it.hasNext()) {
+            dtos.add(it.next().toDTO());
+        }
         return dtos;
     }
-    
+
 }

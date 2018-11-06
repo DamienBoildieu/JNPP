@@ -10,19 +10,19 @@ import jnpp.service.exceptions.movements.AccountTypeException;
 import jnpp.service.exceptions.owners.AccountOwnerException;
 
 public interface PaymentMeanService {
-    
+
     BankCardDTO commandBankCard(String login, String rib)
             throws FakeClientException, AccountTypeException, AccountOwnerException;
-    
+
     CheckbookDTO commandCheckbook(String login, String rib)
             throws FakeClientException, AccountTypeException, AccountOwnerException;
-            
+
     List<BankCardDTO> getBankCards(String login)
             throws FakeClientException;
-    
+
     List<BankCardDTO> getBankCards(String login, Status status)
             throws FakeClientException;
-    
+
     List<BankCardDTO> getBankCards(String login, String rib)
             throws FakeClientException, FakeAccountException,
             AccountOwnerException;
@@ -35,5 +35,5 @@ public interface PaymentMeanService {
 
     List<CheckbookDTO> getCheckBooks(String login, String rib)
             throws FakeClientException, AccountOwnerException;
-    
+
 }

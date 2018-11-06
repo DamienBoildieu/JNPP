@@ -4,7 +4,7 @@ import java.util.Date;
 import jnpp.service.dto.accounts.CurrencyDTO;
 
 public abstract class MoneyMovementDTO extends MovementDTO {
-    
+
     private Double money;
     private CurrencyDTO currency;
 
@@ -29,5 +29,5 @@ public abstract class MoneyMovementDTO extends MovementDTO {
     public void setCurrency(CurrencyDTO currency) {
         this.currency = currency;
     }
-    
+
 }

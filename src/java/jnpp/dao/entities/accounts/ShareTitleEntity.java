@@ -15,37 +15,38 @@ import jnpp.service.dto.accounts.ShareTitleDTO;
 @Entity
 @NamedQueries({
     @NamedQuery(
-        name = "find_sharetitle_by_rib_name",
-        query = "SELECT s FROM ShareTitleEntity s "
-                + "WHERE s.shareAccount.rib = :rib "
-                + "  AND s.share.name = :name")})
+            name = "find_sharetitle_by_rib_name",
+            query = "SELECT s FROM ShareTitleEntity s "
+            + "WHERE s.shareAccount.rib = :rib "
+            + "  AND s.share.name = :name")})
 public class ShareTitleEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
     private Integer amount;
-    
+
     @ManyToOne
     @JoinColumn(name = "share_fk")
     private ShareEntity share;
-    
+
     @ManyToOne
     @JoinColumn(name = "shareaccount_fk")
     private ShareAccountEntity shareAccount;
-    
-    public ShareTitleEntity() {}
-    
+
+    public ShareTitleEntity() {
+    }
+
     public ShareTitleEntity(Integer amount, ShareEntity share, ShareAccountEntity shareAccount) {
         this.amount = amount;
         this.share = share;
         this.shareAccount = shareAccount;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -76,8 +77,8 @@ public class ShareTitleEntity implements Serializable {
 
     public void setShareAccount(ShareAccountEntity shareAccount) {
         this.shareAccount = shareAccount;
-    }    
-    
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -98,9 +99,9 @@ public class ShareTitleEntity implements Serializable {
     public String toString() {
         return "jnpp.dao.entities.ShareTitleEntity[ id=" + id + " ]";
     }
-    
+
     public ShareTitleDTO toDTO() {
         return new ShareTitleDTO(amount, share.toDTO());
     }
-    
+
 }

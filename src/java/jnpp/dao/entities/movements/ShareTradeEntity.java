@@ -20,17 +20,18 @@ public abstract class ShareTradeEntity extends TradeEntity implements Serializab
 
     private Integer amount;
     @ManyToOne
-    @JoinColumn(name="share_fk")
+    @JoinColumn(name = "share_fk")
     private ShareEntity share;
 
-    public ShareTradeEntity() {}
-    
+    public ShareTradeEntity() {
+    }
+
     public ShareTradeEntity(Date date, String ribFrom, String ribTo, Integer amount, ShareEntity share) {
         super(date, ribFrom, ribTo);
         this.amount = amount;
         this.share = share;
     }
-    
+
     public Integer getAmount() {
         return amount;
     }
@@ -46,5 +47,5 @@ public abstract class ShareTradeEntity extends TradeEntity implements Serializab
     public void setShare(ShareEntity share) {
         this.share = share;
     }
-    
+
 }

@@ -16,32 +16,34 @@ import jnpp.service.dto.accounts.ShareDTO;
 @Entity
 @NamedQueries({
     @NamedQuery(
-        name = "find_share_by_name",
-        query = "SELECT s FROM ShareEntity s WHERE s.name = :name"),
+            name = "find_share_by_name",
+            query = "SELECT s FROM ShareEntity s WHERE s.name = :name")
+    ,
     @NamedQuery(
-        name = "find_all_share",
-        query = "SELECT s FROM ShareEntity s")})
+            name = "find_all_share",
+            query = "SELECT s FROM ShareEntity s")})
 public class ShareEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String name;
-    
+
     @Column(nullable = false)
     private Double value;
     @Column(nullable = false)
     private CurrencyEntity currency;
-    
-    public ShareEntity() {}
+
+    public ShareEntity() {
+    }
 
     public ShareEntity(String name, Double value, CurrencyEntity currency) {
         this.name = name;
         this.value = value;
         this.currency = currency;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -65,7 +67,7 @@ public class ShareEntity implements Serializable {
     public void setCurrency(CurrencyEntity currency) {
         this.currency = currency;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -86,16 +88,18 @@ public class ShareEntity implements Serializable {
     public String toString() {
         return "jnpp.dao.entities.ShareEntity[ id=" + name + " ]";
     }
-    
+
     public ShareDTO toDTO() {
         return new ShareDTO(name, value, currency.toDTO());
     }
-    
+
     public static List<ShareDTO> toDTO(List<ShareEntity> entities) {
         List<ShareDTO> dtos = new ArrayList<ShareDTO>(entities.size());
         Iterator<ShareEntity> it = entities.iterator();
-        while (it.hasNext()) dtos.add(it.next().toDTO());
+        while (it.hasNext()) {
+            dtos.add(it.next().toDTO());
+        }
         return dtos;
     }
-    
+
 }

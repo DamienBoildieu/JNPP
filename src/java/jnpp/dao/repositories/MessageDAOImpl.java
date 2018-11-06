@@ -17,7 +17,7 @@ public class MessageDAOImpl extends GenericDAOImpl<MessageEntity> implements Mes
         query.setParameter("login", login);
         return query.getResultList();
     }
-        
+
     @Transactional(readOnly = true)
     @Override
     public List<MessageEntity> findNByLogin(String login, int n) {
@@ -26,7 +26,7 @@ public class MessageDAOImpl extends GenericDAOImpl<MessageEntity> implements Mes
         query.setMaxResults(n);
         return query.getResultList();
     }
-        
+
     @Transactional(readOnly = true)
     @Override
     public List<MessageEntity> findRecentByLogin(String login, Date date) {
@@ -35,5 +35,5 @@ public class MessageDAOImpl extends GenericDAOImpl<MessageEntity> implements Mes
         query.setParameter("date", date);
         return query.getResultList();
     }
-    
+
 }

@@ -17,50 +17,54 @@ import jnpp.service.dto.accounts.DebitAuthorizationDTO;
 @Entity
 @NamedQueries({
     @NamedQuery(
-        name = "find_debit_authorization_by_rib_from_rib_to",
-        query = "SELECT d "
-                + "FROM DebitAuthorizationEntity d "
-                + "WHERE d.from.rib = :rib_from "
-                + "  AND d.ribTo = :rib_to"),
+            name = "find_debit_authorization_by_rib_from_rib_to",
+            query = "SELECT d "
+            + "FROM DebitAuthorizationEntity d "
+            + "WHERE d.from.rib = :rib_from "
+            + "  AND d.ribTo = :rib_to")
+    ,
     @NamedQuery(
-        name = "find_all_debit_authorization_by_login",
-        query = "SELECT d "
-                + "FROM DebitAuthorizationEntity d "
-                + "INNER JOIN d.from.clients d_from_clients "
-                + "WHERE d_from_clients.login = :login"),
+            name = "find_all_debit_authorization_by_login",
+            query = "SELECT d "
+            + "FROM DebitAuthorizationEntity d "
+            + "INNER JOIN d.from.clients d_from_clients "
+            + "WHERE d_from_clients.login = :login")
+    ,
     @NamedQuery(
-        name = "find_all_debit_authorization_by_login_rib_from",
-        query = "SELECT d "
-                + "FROM DebitAuthorizationEntity d "
-                + "INNER JOIN d.from.clients d_from_clients "
-                + "WHERE d.from.rib = :rib "
-                + "  AND d_from_clients.login = :login"),
+            name = "find_all_debit_authorization_by_login_rib_from",
+            query = "SELECT d "
+            + "FROM DebitAuthorizationEntity d "
+            + "INNER JOIN d.from.clients d_from_clients "
+            + "WHERE d.from.rib = :rib "
+            + "  AND d_from_clients.login = :login")
+    ,
     @NamedQuery(
-        name = "can_debit",
-        query = "SELECT COUNT(d) "
-                + "FROM DebitAuthorizationEntity d "
-                + "WHERE d.from.rib = :rib_to "
-                + "  AND d.ribTo = :rib_from")})
+            name = "can_debit",
+            query = "SELECT COUNT(d) "
+            + "FROM DebitAuthorizationEntity d "
+            + "WHERE d.from.rib = :rib_to "
+            + "  AND d.ribTo = :rib_from")})
 public class DebitAuthorizationEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="from_account_fk")
+    @JoinColumn(name = "from_account_fk")
     private AccountEntity from;
     private String ribTo;
-    
-    public DebitAuthorizationEntity() {}
-    
+
+    public DebitAuthorizationEntity() {
+    }
+
     public DebitAuthorizationEntity(AccountEntity from, String ribTo) {
         this.from = from;
         this.ribTo = ribTo;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -84,7 +88,7 @@ public class DebitAuthorizationEntity implements Serializable {
     public void setTo(String ribTo) {
         this.ribTo = ribTo;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -105,16 +109,18 @@ public class DebitAuthorizationEntity implements Serializable {
     public String toString() {
         return "jnpp.dao.entities.accounts.DebitAuthorizationEntity[ id=" + id + " ]";
     }
-    
+
     public DebitAuthorizationDTO toDTO() {
         return new DebitAuthorizationDTO(from.getRib(), ribTo);
     }
-    
+
     public static List<DebitAuthorizationDTO> toDTO(List<DebitAuthorizationEntity> entities) {
         List<DebitAuthorizationDTO> dtos = new ArrayList<DebitAuthorizationDTO>(entities.size());
         Iterator<DebitAuthorizationEntity> it = entities.iterator();
-        while (it.hasNext()) dtos.add(it.next().toDTO());
+        while (it.hasNext()) {
+            dtos.add(it.next().toDTO());
+        }
         return dtos;
     }
-    
+
 }

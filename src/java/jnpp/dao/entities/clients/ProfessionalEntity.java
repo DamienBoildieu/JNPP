@@ -17,32 +17,33 @@ import jnpp.service.dto.clients.ProfessionalDTO;
 @DiscriminatorValue(value = ClientEntity.Type.Values.PROFESSIONAL)
 @NamedQueries({
     @NamedQuery(
-        name = "find_professional_by_name_identity",
-        query = "SELECT p FROM ProfessionalEntity p "
-                + "WHERE p.name = :name "
-                + "  AND p.owner.gender = :gender "
-                + "  AND p.owner.firstname = :firstname "
-                + "  AND p.owner.lastname = :lastname")})
+            name = "find_professional_by_name_identity",
+            query = "SELECT p FROM ProfessionalEntity p "
+            + "WHERE p.name = :name "
+            + "  AND p.owner.gender = :gender "
+            + "  AND p.owner.firstname = :firstname "
+            + "  AND p.owner.lastname = :lastname")})
 public class ProfessionalEntity extends ClientEntity implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private String name;
-   
+
     @Embedded
     private IdentityEntity owner;
-    
-    public ProfessionalEntity(String login, String password, String name, IdentityEntity.Gender ownerGender, 
-            String ownerFirstname, String ownerLastname, String email, 
-            Integer number, String street, String city, String state, 
+
+    public ProfessionalEntity(String login, String password, String name, IdentityEntity.Gender ownerGender,
+            String ownerFirstname, String ownerLastname, String email,
+            Integer number, String street, String city, String state,
             String phone, Boolean notify, AdvisorEntity advisor) {
         super(login, password, email, number, street, city, state, phone, notify, advisor);
         this.name = name;
         owner = new IdentityEntity(ownerGender, ownerFirstname, ownerLastname);
     }
-    
-    public ProfessionalEntity() {}
-    
+
+    public ProfessionalEntity() {
+    }
+
     @Override
     public Type getType() {
         return ClientEntity.Type.PROFESIONAL;
@@ -59,30 +60,30 @@ public class ProfessionalEntity extends ClientEntity implements Serializable {
                 return false;
             default:
                 return false;
-        }    
+        }
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public IdentityEntity getOwner() {
         return owner;
     }
-    
+
     public void setOwner(IdentityEntity owner) {
         this.owner = owner;
     }
-    
+
     @Override
     public String toString() {
         return "jnpp.dao.entities.ProfessionalEntity[ id=" + getLogin() + " ]";
     }
-    
+
     @Override
     public ProfessionalDTO toDTO() {
         return new ProfessionalDTO(getLogin(), name, owner.toDTO(), getEmail(), getAddress().toDTO(), getPhone());
@@ -92,5 +93,5 @@ public class ProfessionalEntity extends ClientEntity implements Serializable {
     public LoginDTO toLoginDTO() {
         return new LoginDTO(getLogin(), getPassword(), ClientDTO.Type.PROFESIONAL, name, getEmail());
     }
-    
+
 }

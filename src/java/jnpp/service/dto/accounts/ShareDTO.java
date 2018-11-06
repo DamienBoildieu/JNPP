@@ -1,11 +1,11 @@
 package jnpp.service.dto.accounts;
 
 public class ShareDTO {
-    
+
     private String name;
     private Double value;
     private CurrencyDTO currency;
-    
+
     public ShareDTO(String name, Double value, CurrencyDTO currency) {
         this.name = name;
         this.value = value;
@@ -34,5 +34,5 @@ public class ShareDTO {
     public void setCurrency(CurrencyDTO currency) {
         this.currency = currency;
     }
-    
+
 }

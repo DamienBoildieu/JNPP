@@ -13,25 +13,26 @@ public class SaleEntity extends ShareTradeEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public SaleEntity() {}
-    
+    public SaleEntity() {
+    }
+
     public SaleEntity(Date date, String ribFrom, String ribTo, Integer amount, ShareEntity share) {
         super(date, ribFrom, ribTo, amount, share);
     }
-    
+
     @Override
     public Type getType() {
         return MovementEntity.Type.SALE;
     }
-    
+
     @Override
     public String toString() {
         return "jnpp.dao.entities.transactions.SaleEntity[ id=" + getId() + " ]";
     }
-    
+
     @Override
     public SaleDTO toDTO() {
         return new SaleDTO(getDate(), getRibFrom(), getRibTo(), getAmount(), getShare().toDTO());
     }
-    
+
 }

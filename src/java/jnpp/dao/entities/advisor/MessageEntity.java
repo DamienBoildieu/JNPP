@@ -23,23 +23,24 @@ import jnpp.service.dto.advisor.MessageDTO;
 @Entity
 @NamedQueries({
     @NamedQuery(
-        name = "find_all_message_by_login",
-        query = "SELECT m FROM MessageEntity m "
-                + "WHERE m.client.login = :login "
-                + "ORDER BY m.date ASC"),
+            name = "find_all_message_by_login",
+            query = "SELECT m FROM MessageEntity m "
+            + "WHERE m.client.login = :login "
+            + "ORDER BY m.date ASC")
+    ,
     @NamedQuery(
-        name = "find_recent_message_by_login",
-        query = "SELECT m FROM MessageEntity m "
-                + "WHERE m.client.login = :login "
-                + "  AND m.date >= :date "
-                + "ORDER BY m.date ASC")})
+            name = "find_recent_message_by_login",
+            query = "SELECT m FROM MessageEntity m "
+            + "WHERE m.client.login = :login "
+            + "  AND m.date >= :date "
+            + "ORDER BY m.date ASC")})
 public class MessageEntity implements Serializable {
 
     public static enum Direction {
-        
+
         CLIENT_TO_ADVISOR,
         ADVISOR_TO_CLIENT;
-        
+
         public MessageDTO.Direction toDTO() {
             switch (ordinal()) {
                 case 0:
@@ -49,11 +50,11 @@ public class MessageEntity implements Serializable {
             }
             return null;
         }
-        
+
     }
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -66,14 +67,15 @@ public class MessageEntity implements Serializable {
     private AdvisorEntity advisor;
     @Enumerated(EnumType.STRING)
     private Direction direction;
-    
+
     @Temporal(TemporalType.DATE)
     private Date date;
     private String content;
-    
-    public MessageEntity() {}
-    
-    public MessageEntity(ClientEntity client, AdvisorEntity advisor, 
+
+    public MessageEntity() {
+    }
+
+    public MessageEntity(ClientEntity client, AdvisorEntity advisor,
             Direction direction, Date date, String content) {
         this.client = client;
         this.advisor = advisor;
@@ -81,7 +83,7 @@ public class MessageEntity implements Serializable {
         this.date = date;
         this.content = content;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -121,7 +123,7 @@ public class MessageEntity implements Serializable {
     public void setDate(Date date) {
         this.date = date;
     }
-    
+
     public String getContent() {
         return content;
     }
@@ -150,16 +152,18 @@ public class MessageEntity implements Serializable {
     public String toString() {
         return "jnpp.dao.entities.Message[ id=" + id + " ]";
     }
-    
+
     public MessageDTO toDTO() {
         return new MessageDTO(direction.toDTO(), date, content, advisor.toDTO());
     }
-    
+
     public static List<MessageDTO> toDTO(List<MessageEntity> entities) {
         List<MessageDTO> dtos = new ArrayList<MessageDTO>(entities.size());
         Iterator<MessageEntity> it = entities.iterator();
-        while (it.hasNext()) dtos.add(it.next().toDTO());
+        while (it.hasNext()) {
+            dtos.add(it.next().toDTO());
+        }
         return dtos;
     }
-    
+
 }

@@ -3,14 +3,14 @@ package jnpp.service.dto.clients;
 import jnpp.service.dto.AddressDTO;
 
 public abstract class ClientDTO {
-    
+
     public static enum Type {
-    
+
         PRIVATE,
         PROFESIONAL;
-        
+
     }
-    
+
     private String login;
     private String email;
     private AddressDTO address;
@@ -22,7 +22,7 @@ public abstract class ClientDTO {
         this.address = address;
         this.phone = phone;
     }
-             
+
     public abstract Type getType();
 
     public String getLogin() {
@@ -56,5 +56,5 @@ public abstract class ClientDTO {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    
+
 }

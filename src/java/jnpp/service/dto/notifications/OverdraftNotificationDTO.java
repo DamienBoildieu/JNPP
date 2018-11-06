@@ -10,12 +10,12 @@ public class OverdraftNotificationDTO extends NotificationDTO {
         super(id, date, seen);
         this.rib = rib;
     }
-    
+
     @Override
     public Type getType() {
         return NotificationDTO.Type.OVERDRAFT;
     }
-    
+
     public String getRib() {
         return rib;
     }
@@ -23,5 +23,5 @@ public class OverdraftNotificationDTO extends NotificationDTO {
     public void setRib(String rib) {
         this.rib = rib;
     }
-    
+
 }

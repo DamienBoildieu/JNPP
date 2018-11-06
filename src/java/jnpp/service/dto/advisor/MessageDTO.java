@@ -3,17 +3,17 @@ package jnpp.service.dto.advisor;
 import java.util.Date;
 
 public class MessageDTO {
-    
+
     public static enum Direction {
-        
+
         CLIENT_TO_ADVISOR,
         ADVISOR_TO_CLIENT;
-        
+
     }
-        
+
     private Direction direction;
     private Date date;
-    private String content;  
+    private String content;
     private AdvisorDTO advisor;
 
     public MessageDTO(Direction direction, Date date, String content, AdvisorDTO advisor) {
@@ -54,5 +54,5 @@ public class MessageDTO {
     public void setAdvisor(AdvisorDTO advisor) {
         this.advisor = advisor;
     }
-    
+
 }

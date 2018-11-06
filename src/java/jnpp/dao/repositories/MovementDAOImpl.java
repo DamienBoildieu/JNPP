@@ -35,5 +35,5 @@ public class MovementDAOImpl extends GenericDAOImpl<MovementEntity> implements M
         query.setParameter("date", date);
         return query.getResultList();
     }
-    
+
 }

@@ -55,7 +55,6 @@ import jnpp.service.dto.movements.SaleDTO;
 import jnpp.service.dto.movements.TransfertDTO;
 import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 import jnpp.service.exceptions.accounts.NoCurrentAccountException;
-import jnpp.service.exceptions.accounts.NoShareAccountException;
 import jnpp.service.exceptions.advisors.NoAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateSavingbookException;
@@ -69,6 +68,7 @@ import jnpp.service.exceptions.entities.FakeShareTitleException;
 import jnpp.service.exceptions.movements.AccountTypeException;
 import jnpp.service.exceptions.movements.AmountException;
 import jnpp.service.exceptions.movements.DebitAuthorizationException;
+import jnpp.service.exceptions.movements.OverdraftException;
 import org.springframework.stereotype.Service;
 
 @Service("BankerService")
@@ -158,13 +158,13 @@ public class BankerServiceImpl implements BankerService {
         advisor = new AdvisorEntity(IdentityEntity.Gender.toEntity(gender),
                 firstname, lastname, email, phone, number, street, city, state);
         advisor = advisorDAO.save(advisor);
-        
+
         List<ClientEntity> clients = clientDAO.findAllWithoutAdvisor();
         for (ClientEntity client : clients) {
             client.setAdvisor(advisor);
             clientDAO.update(client);
-        }        
-        
+        }
+
         return advisor.toDTO();
     }
 
@@ -286,7 +286,7 @@ public class BankerServiceImpl implements BankerService {
     }
 
     @Override
-    public TransfertDTO transfert(String ribFrom, String ribTo, Double amount, CurrencyDTO currency) throws FakeAccountException, AccountTypeException {
+    public TransfertDTO transfert(String ribFrom, String ribTo, Double amount, CurrencyDTO currency) throws FakeAccountException, AccountTypeException, OverdraftException {
         if (ribFrom == null || ribTo == null || amount == 0 || amount <= 0
                 || currency == null) {
             throw new IllegalArgumentException();
@@ -319,6 +319,10 @@ public class BankerServiceImpl implements BankerService {
 
         moneyAccountFrom.setMoney(moneyAccountFrom.getMoney() - amountFrom);
         moneyAccountTo.setMoney(moneyAccountTo.getMoney() + amountTo);
+
+        if (moneyAccountFrom.getMoney() < 0 && !moneyAccountFrom.canOverdraft()) {
+            throw new OverdraftException();
+        }
 
         moneyAccountFrom = (MoneyAccountEntity) accountDAO.update(moneyAccountFrom);
         moneyAccountTo = (MoneyAccountEntity) accountDAO.update(moneyAccountTo);
@@ -366,7 +370,7 @@ public class BankerServiceImpl implements BankerService {
 
     @Override
     public DebitDTO debit(String ribFrom, String ribTo, Double amount, CurrencyDTO currency)
-            throws FakeAccountException, AccountTypeException, DebitAuthorizationException {
+            throws FakeAccountException, AccountTypeException, DebitAuthorizationException, OverdraftException {
 
         if (ribFrom == null || ribTo == null || amount == null || amount <= 0 || currency == null) {
             throw new IllegalArgumentException();
@@ -399,9 +403,15 @@ public class BankerServiceImpl implements BankerService {
 
         moneyAccountFrom.setMoney(moneyAccountFrom.getMoney() + amountFrom);
         moneyAccountTo.setMoney(moneyAccountTo.getMoney() - amountTo);
+
+        if (moneyAccountTo.getMoney() < 0 && !moneyAccountTo.canOverdraft()) {
+            throw new OverdraftException();
+        }
+
         moneyAccountFrom = (MoneyAccountEntity) accountDAO.update(moneyAccountFrom);
-        accountFrom = moneyAccountFrom;
         moneyAccountTo = (MoneyAccountEntity) accountDAO.update(moneyAccountTo);
+
+        accountFrom = moneyAccountFrom;
         accountTo = moneyAccountTo;
 
         Date now = Date.from(Instant.now());
@@ -436,30 +446,40 @@ public class BankerServiceImpl implements BankerService {
     }
 
     @Override
-    public PurchaseDTO purchase(String rib, String name, Integer amount) 
+    public PurchaseDTO purchase(String rib, String name, Integer amount)
             throws FakeAccountException, FakeShareException, NoCurrentAccountException, AccountTypeException {
-        
-        if (rib == null || name == null || amount == null || amount <= 0)
+
+        if (rib == null || name == null || amount == null || amount <= 0) {
             throw new IllegalArgumentException();
+        }
 
         AccountEntity account = accountDAO.find(rib);
-        if (account == null)  throw new FakeAccountException();
+        if (account == null) {
+            throw new FakeAccountException();
+        }
 
         ShareEntity share = shareDAO.findByName(name);
-        if (share == null) throw new FakeShareException();
-        
-        if (!account.canEmit(MovementEntity.Type.PURCHASE)) throw new AccountTypeException();
+        if (share == null) {
+            throw new FakeShareException();
+        }
+
+        if (!account.canEmit(MovementEntity.Type.PURCHASE)) {
+            throw new AccountTypeException();
+        }
         ShareAccountEntity shareAccount = (ShareAccountEntity) account;
-        
-        if (account.getClients().size() != 1)
+
+        if (account.getClients().size() != 1) {
             throw new IllegalStateException("Un compte d'actions n'a pas un unique proprietaire.");
+        }
         ClientEntity client = account.getClients().get(0);
-        
+
         CurrentAccountEntity currentAccount = accountDAO.findCurrentByLogin(client.getLogin());
-        if (currentAccount == null) throw new NoCurrentAccountException();
-        
+        if (currentAccount == null) {
+            throw new NoCurrentAccountException();
+        }
+
         Date now = Date.from(Instant.now());
-        
+
         ShareTitleEntity shareTitle = shareTitleDAO.findByRibName(rib, name);
         if (shareTitle == null) {
             shareTitle = new ShareTitleEntity(amount, share, shareAccount);
@@ -468,58 +488,68 @@ public class BankerServiceImpl implements BankerService {
             shareTitle.setAmount(shareTitle.getAmount() + amount);
             shareTitle = shareTitleDAO.update(shareTitle);
         }
-        
+
         double cost = amount * currentAccount.getCurrency()
                 .convert(share.getValue(), share.getCurrency());
         currentAccount.setMoney(currentAccount.getMoney() - cost);
         currentAccount = (CurrentAccountEntity) accountDAO.update(currentAccount);
-        
+
         PurchaseEntity purchase = new PurchaseEntity(now, rib, rib, amount, share);
         purchase = (PurchaseEntity) movementDAO.save(purchase);
-        
+
         if (client.getNotify()) {
-            
-            MovementNotificationEntity movementNotification =
-                    new MovementNotificationEntity(client, now, false, purchase);
+
+            MovementNotificationEntity movementNotification
+                    = new MovementNotificationEntity(client, now, false, purchase);
             notificationDAO.save(movementNotification);
-            
+
             if (currentAccount.getMoney() < 0) {
-            
-                OverdraftNotificationEntity overdraftNotification =
-                        new OverdraftNotificationEntity(client, now, false, currentAccount);
+
+                OverdraftNotificationEntity overdraftNotification
+                        = new OverdraftNotificationEntity(client, now, false, currentAccount);
                 notificationDAO.save(overdraftNotification);
             }
         }
-        
+
         return purchase.toDTO();
     }
 
     @Override
-    public SaleDTO sale(String rib, String name, Integer amount) 
-            throws FakeAccountException, FakeShareException, NoCurrentAccountException, 
+    public SaleDTO sale(String rib, String name, Integer amount)
+            throws FakeAccountException, FakeShareException, NoCurrentAccountException,
             AccountTypeException, AmountException, FakeShareTitleException {
-        
-        if (rib == null || name == null || amount == null || amount <= 0)
+
+        if (rib == null || name == null || amount == null || amount <= 0) {
             throw new IllegalArgumentException();
+        }
 
         AccountEntity account = accountDAO.find(rib);
-        if (account == null)  throw new FakeAccountException();
+        if (account == null) {
+            throw new FakeAccountException();
+        }
 
         ShareEntity share = shareDAO.findByName(name);
-        if (share == null) throw new FakeShareException();
-        
-        if (!account.canEmit(MovementEntity.Type.SALE)) throw new AccountTypeException();
+        if (share == null) {
+            throw new FakeShareException();
+        }
+
+        if (!account.canEmit(MovementEntity.Type.SALE)) {
+            throw new AccountTypeException();
+        }
         ShareAccountEntity shareAccount = (ShareAccountEntity) account;
-        
-        if (account.getClients().size() != 1)
+
+        if (account.getClients().size() != 1) {
             throw new IllegalStateException("Un compte d'actions n'a pas un unique proprietaire.");
+        }
         ClientEntity client = account.getClients().get(0);
-        
+
         CurrentAccountEntity currentAccount = accountDAO.findCurrentByLogin(client.getLogin());
-        if (currentAccount == null) throw new NoCurrentAccountException();
-        
+        if (currentAccount == null) {
+            throw new NoCurrentAccountException();
+        }
+
         Date now = Date.from(Instant.now());
-        
+
         ShareTitleEntity shareTitle = shareTitleDAO.findByRibName(rib, name);
         if (shareTitle == null) {
             throw new FakeShareTitleException();
@@ -534,23 +564,23 @@ public class BankerServiceImpl implements BankerService {
                 shareTitle = shareTitleDAO.update(shareTitle);
             }
         }
-        
+
         double cost = amount * currentAccount.getCurrency()
                 .convert(share.getValue(), share.getCurrency());
         currentAccount.setMoney(currentAccount.getMoney() + cost);
         currentAccount = (CurrentAccountEntity) accountDAO.update(currentAccount);
-        
+
         SaleEntity sale = new SaleEntity(now, rib, rib, amount, share);
         sale = (SaleEntity) movementDAO.save(sale);
-        
+
         if (client.getNotify()) {
-            
-            MovementNotificationEntity movementNotification =
-                    new MovementNotificationEntity(client, now, false, sale);
+
+            MovementNotificationEntity movementNotification
+                    = new MovementNotificationEntity(client, now, false, sale);
             notificationDAO.save(movementNotification);
         }
-        
+
         return sale.toDTO();
     }
-    
+
 }

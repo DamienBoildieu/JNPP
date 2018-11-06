@@ -14,30 +14,31 @@ import jnpp.dao.entities.clients.PrivateEntity;
 @Entity
 @NamedQueries({
     @NamedQuery(
-        name = "find_closerequest_by_rib",
-        query = "SELECT c FROM CloseRequestEntity c WHERE c.account.rib = :rib")})
+            name = "find_closerequest_by_rib",
+            query = "SELECT c FROM CloseRequestEntity c WHERE c.account.rib = :rib")})
 public class CloseRequestEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @ManyToOne
-    @JoinColumn(name="client_fk")
+    @JoinColumn(name = "client_fk")
     private PrivateEntity client;
     @ManyToOne
-    @JoinColumn(name="account_fk")
+    @JoinColumn(name = "account_fk")
     private JointAccountEntity account;
-    
-    public CloseRequestEntity() {}
-    
+
+    public CloseRequestEntity() {
+    }
+
     public CloseRequestEntity(PrivateEntity client, JointAccountEntity account) {
         this.client = client;
         this.account = account;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -61,7 +62,7 @@ public class CloseRequestEntity implements Serializable {
     public void setAccount(JointAccountEntity account) {
         this.account = account;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -82,5 +83,5 @@ public class CloseRequestEntity implements Serializable {
     public String toString() {
         return "jnpp.dao.entities.accounts.ClotureRequest[ id=" + id + " ]";
     }
-    
+
 }

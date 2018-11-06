@@ -9,45 +9,45 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class NotificationDAOImpl extends GenericDAOImpl<NotificationEntity> implements NotificationDAO {
-    
+
     @Transactional(readOnly = true)
     @Override
     public List<NotificationEntity> findAllByLogin(String login) {
-        Query q = getEm().createNamedQuery("find_all_notification_by_login", 
+        Query q = getEm().createNamedQuery("find_all_notification_by_login",
                 NotificationEntity.class);
         q.setParameter("login", login);
         return q.getResultList();
     }
-    
+
     @Transactional(readOnly = true)
     @Override
     public List<NotificationEntity> findUnseenByLogin(String login) {
-        Query q = getEm().createNamedQuery("find_unseen_notification_by_login", 
+        Query q = getEm().createNamedQuery("find_unseen_notification_by_login",
                 NotificationEntity.class);
         q.setParameter("login", login);
         return q.getResultList();
     }
-    
+
     @Transactional(readOnly = true)
     @Override
     public List<NotificationEntity> findNUnseenByLogin(String login, int n) {
-        Query q = getEm().createNamedQuery("find_unseen_notification_by_login", 
+        Query q = getEm().createNamedQuery("find_unseen_notification_by_login",
                 NotificationEntity.class);
         q.setParameter("login", login);
         q.setMaxResults(n);
         return q.getResultList();
     }
-    
+
     @Transactional(readOnly = true)
     @Override
     public List<NotificationEntity> findUnseenRecentByLogin(String login, Date date) {
-        Query q = getEm().createNamedQuery("find_unseen_recent_notification_by_login", 
+        Query q = getEm().createNamedQuery("find_unseen_recent_notification_by_login",
                 NotificationEntity.class);
         q.setParameter("login", login);
         q.setParameter("date", date);
         return q.getResultList();
     }
-            
+
     @Transactional(readOnly = true)
     @Override
     public void setAllSeenByLogin(String login) {
@@ -55,5 +55,5 @@ public class NotificationDAOImpl extends GenericDAOImpl<NotificationEntity> impl
         q.setParameter("login", login);
         q.executeUpdate();
     }
-    
+
 }

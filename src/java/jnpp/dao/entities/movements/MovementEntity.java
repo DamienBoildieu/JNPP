@@ -13,13 +13,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.service.dto.movements.MovementDTO;
 
 @Entity
@@ -27,22 +24,23 @@ import jnpp.service.dto.movements.MovementDTO;
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
     @NamedQuery(
-        name = "find_all_movement_by_rib",
-        query = "SELECT m FROM MovementEntity m "
-                + "WHERE (m.ribFrom = :rib "
-                + "      OR TREAT(m AS TradeEntity).ribTo = :rib) "
-                + "ORDER BY m.date DESC"),
+            name = "find_all_movement_by_rib",
+            query = "SELECT m FROM MovementEntity m "
+            + "WHERE (m.ribFrom = :rib "
+            + "      OR TREAT(m AS TradeEntity).ribTo = :rib) "
+            + "ORDER BY m.date DESC")
+    ,
     @NamedQuery(
-        name = "find_recent_movement_by_rib",
-        query = "SELECT m FROM MovementEntity m "
-                + "WHERE (m.ribFrom = :rib "
-                + "      OR TREAT(m AS TradeEntity).ribTo = :rib) "
-                + "  AND m.date >= :date "
-                + "ORDER BY m.date DESC")})
+            name = "find_recent_movement_by_rib",
+            query = "SELECT m FROM MovementEntity m "
+            + "WHERE (m.ribFrom = :rib "
+            + "      OR TREAT(m AS TradeEntity).ribTo = :rib) "
+            + "  AND m.date >= :date "
+            + "ORDER BY m.date DESC")})
 public abstract class MovementEntity implements Serializable {
 
     public static enum Type {
-    
+
         TRANSFERT,
         DEBIT,
         PURCHASE,
@@ -50,7 +48,7 @@ public abstract class MovementEntity implements Serializable {
         WITHDRAW,
         PAYMENT,
         DEPOSIT;
-        
+
         public static class Values {
 
             public static final String TRANSFERT = "TRANSFERT";
@@ -60,30 +58,32 @@ public abstract class MovementEntity implements Serializable {
             public static final String WITHDRAW = "WITHDRAW";
             public static final String PAYMENT = "PAYMENT";
             public static final String DEPOSIT = "DEPOSIT";
-            
-            private Values() {}
+
+            private Values() {
+            }
 
         }
-    
+
     }
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @Temporal(TemporalType.DATE)
     private Date date;
     private String ribFrom;
 
-    public MovementEntity() {}
-    
+    public MovementEntity() {
+    }
+
     public MovementEntity(Date date, String ribFrom) {
         this.date = date;
         this.ribFrom = ribFrom;
     }
-    
+
     public abstract Type getType();
 
     public Long getId() {
@@ -109,7 +109,7 @@ public abstract class MovementEntity implements Serializable {
     public void setRibFrom(String ribFrom) {
         this.ribFrom = ribFrom;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -125,14 +125,16 @@ public abstract class MovementEntity implements Serializable {
         MovementEntity other = (MovementEntity) object;
         return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
-    
+
     public abstract MovementDTO toDTO();
-    
+
     public static List<MovementDTO> toDTO(List<MovementEntity> entities) {
         List<MovementDTO> dtos = new ArrayList<MovementDTO>(entities.size());
         Iterator<MovementEntity> it = entities.iterator();
-        while (it.hasNext()) dtos.add(it.next().toDTO());
+        while (it.hasNext()) {
+            dtos.add(it.next().toDTO());
+        }
         return dtos;
     }
-    
+
 }

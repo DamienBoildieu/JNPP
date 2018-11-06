@@ -18,11 +18,11 @@ public class AddressEntity implements Serializable {
         this.city = city;
         this.state = state;
     }
-    
+
     public AddressEntity() {
         this(null, null, null, null);
     }
-    
+
     public Integer getNumber() {
         return number;
     }
@@ -54,9 +54,9 @@ public class AddressEntity implements Serializable {
     public void setState(String state) {
         this.state = state;
     }
-    
+
     public AddressDTO toDTO() {
         return new AddressDTO(number, street, city, state);
     }
-    
+
 }

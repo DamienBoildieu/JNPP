@@ -10,7 +10,7 @@ import jnpp.service.dto.notifications.AppointmentNotificationDTO;
 
 @Entity
 @DiscriminatorValue(value = NotificationEntity.Type.Values.APPOINTMENT)
-public class AppointmentNotificationEntity extends NotificationEntity 
+public class AppointmentNotificationEntity extends NotificationEntity
         implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,15 +31,15 @@ public class AppointmentNotificationEntity extends NotificationEntity
     public void setAppointment(AppointmentEntity appointment) {
         this.appointment = appointment;
     }
-    
+
     @Override
     public String toString() {
         return "jnpp.dao.entities.notifications.AppointmentNotificationEntity[ id=" + getId() + " ]";
     }
-    
+
     @Override
     public AppointmentNotificationDTO toDTO() {
         return new AppointmentNotificationDTO(getId(), getDate(), getSeen(), appointment.toDTO());
     }
-    
+
 }

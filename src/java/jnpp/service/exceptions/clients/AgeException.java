@@ -2,7 +2,8 @@ package jnpp.service.exceptions.clients;
 
 public class AgeException extends ClientException {
 
-    public AgeException() {}
+    public AgeException() {
+    }
 
     public AgeException(String message) {
         super(message);
@@ -19,5 +20,5 @@ public class AgeException extends ClientException {
     public AgeException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

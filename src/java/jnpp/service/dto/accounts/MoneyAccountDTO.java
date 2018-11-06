@@ -1,7 +1,7 @@
 package jnpp.service.dto.accounts;
 
 public abstract class MoneyAccountDTO extends AccountDTO {
-    
+
     private Double money;
     private CurrencyDTO currency;
 
@@ -26,5 +26,5 @@ public abstract class MoneyAccountDTO extends AccountDTO {
     public void setCurrency(CurrencyDTO currency) {
         this.currency = currency;
     }
-    
+
 }

@@ -2,7 +2,8 @@ package jnpp.service.exceptions.owners;
 
 public class NotificationOwnerException extends OwnerException {
 
-    public NotificationOwnerException() {}
+    public NotificationOwnerException() {
+    }
 
     public NotificationOwnerException(String message) {
         super(message);
@@ -19,7 +20,5 @@ public class NotificationOwnerException extends OwnerException {
     public NotificationOwnerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
-    
-    
+
 }

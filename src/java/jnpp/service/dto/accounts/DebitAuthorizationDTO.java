@@ -1,7 +1,7 @@
 package jnpp.service.dto.accounts;
 
 public class DebitAuthorizationDTO {
-    
+
     private String ribFrom;
     private String ribTo;
 
@@ -24,6 +24,6 @@ public class DebitAuthorizationDTO {
 
     public void setRibTo(String ribTo) {
         this.ribTo = ribTo;
-    }    
-    
+    }
+
 }

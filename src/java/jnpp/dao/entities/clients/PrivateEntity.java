@@ -20,30 +20,31 @@ import jnpp.service.dto.clients.PrivateDTO;
 @DiscriminatorValue(value = ClientEntity.Type.Values.PRIVATE)
 @NamedQueries({
     @NamedQuery(
-        name = "find_private_by_identity",
-        query = "SELECT p FROM PrivateEntity p " 
-                + "WHERE p.identity.gender = :gender "
-                + "  AND p.identity.firstname = :firstname "
-                + "  AND p.identity.lastname = :lastname")})
+            name = "find_private_by_identity",
+            query = "SELECT p FROM PrivateEntity p "
+            + "WHERE p.identity.gender = :gender "
+            + "  AND p.identity.firstname = :firstname "
+            + "  AND p.identity.lastname = :lastname")})
 public class PrivateEntity extends ClientEntity implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @Embedded
     private IdentityEntity identity;
-    
+
     @Temporal(TemporalType.DATE)
     private Date birthday;
-    
+
     public PrivateEntity(String login, String password, IdentityEntity.Gender gender, String firstname, String lastname,
-            Date birthday, String email, Integer number, String street, 
+            Date birthday, String email, Integer number, String street,
             String city, String state, String phone, Boolean notify, AdvisorEntity advisor) {
         super(login, password, email, number, street, city, state, phone, notify, advisor);
         identity = new IdentityEntity(gender, firstname, lastname);
         this.birthday = birthday;
     }
-    
-    public PrivateEntity() {}
+
+    public PrivateEntity() {
+    }
 
     @Override
     public Type getType() {
@@ -54,7 +55,7 @@ public class PrivateEntity extends ClientEntity implements Serializable {
     public boolean canOpen(AccountEntity.Type type) {
         return true;
     }
-    
+
     public IdentityEntity getIdentity() {
         return identity;
     }
@@ -62,7 +63,7 @@ public class PrivateEntity extends ClientEntity implements Serializable {
     public void setIdentity(IdentityEntity identity) {
         this.identity = identity;
     }
-   
+
     public Date getBirthday() {
         return birthday;
     }
@@ -75,7 +76,7 @@ public class PrivateEntity extends ClientEntity implements Serializable {
     public String toString() {
         return "jnpp.dao.entities.PrivateEntity[ id=" + getLogin() + " ]";
     }
-    
+
     @Override
     public PrivateDTO toDTO() {
         return new PrivateDTO(getLogin(), identity.toDTO(), birthday, getEmail(), getAddress().toDTO(), getPhone());
@@ -85,5 +86,5 @@ public class PrivateEntity extends ClientEntity implements Serializable {
     public LoginDTO toLoginDTO() {
         return new LoginDTO(getLogin(), getPassword(), ClientDTO.Type.PRIVATE, identity.toString(), getEmail());
     }
-    
+
 }

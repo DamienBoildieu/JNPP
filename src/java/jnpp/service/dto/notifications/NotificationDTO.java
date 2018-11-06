@@ -3,17 +3,17 @@ package jnpp.service.dto.notifications;
 import java.util.Date;
 
 public abstract class NotificationDTO {
-    
+
     public static enum Type {
-        
+
         APPOINTMENT,
         PAYMENT_MEAN,
         MESSAGE,
         MOVEMENT,
         OVERDRAFT;
-        
+
     }
-    
+
     private Long id;
     private Date date;
     private Boolean seen;
@@ -23,7 +23,7 @@ public abstract class NotificationDTO {
         this.date = date;
         this.seen = seen;
     }
-    
+
     public abstract Type getType();
 
     public Long getId() {
@@ -49,5 +49,5 @@ public abstract class NotificationDTO {
     public void setSeen(Boolean seen) {
         this.seen = seen;
     }
-    
+
 }

@@ -38,6 +38,5 @@ public class AdvisorDAOImpl extends GenericDAOImpl<AdvisorEntity> implements Adv
         query.setParameter("id", id);
         return query.getResultList();
     }
-   
-            
+
 }

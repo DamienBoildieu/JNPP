@@ -1,16 +1,11 @@
 package jnpp.dao.entities.paymentmeans;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -20,7 +15,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.clients.ClientEntity;
-import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 
 @Entity
@@ -28,32 +22,34 @@ import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
     @NamedQuery(
-        name = "find_all_paymentmeans",
-        query = "SELECT p FROM PaymentMeanEntity p"),
+            name = "find_all_paymentmeans",
+            query = "SELECT p FROM PaymentMeanEntity p")
+    ,
     @NamedQuery(
-        name = "find_all_paymentmean_ids",
-        query = "SELECT p.id FROM PaymentMeanEntity p"
+            name = "find_all_paymentmean_ids",
+            query = "SELECT p.id FROM PaymentMeanEntity p"
     )})
 public abstract class PaymentMeanEntity implements Serializable {
 
     public static enum Type {
-        
+
         BANKCARD,
         CHECKBOOK;
-        
+
         public static class Values {
-        
+
             public static final String BANKCARD = "BANKCARD";
             public static final String CHECKBOOK = "CHECKBOOK";
-        
-            private Values() {}
-            
+
+            private Values() {
+            }
+
         }
-        
+
     }
-    
+
     public static enum Status {
-    
+
         ORDERED,
         ARRIVED,
         DELIVERED;
@@ -69,40 +65,41 @@ public abstract class PaymentMeanEntity implements Serializable {
             }
             return null;
         }
-        
+
         public Status next() {
             Status[] status = values();
             return status[(ordinal() + 1) % status.length];
         }
-        
+
     }
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     private String id;
 
     @ManyToOne
-    @JoinColumn(name="client_fk")
+    @JoinColumn(name = "client_fk")
     private ClientEntity client;
     @ManyToOne
-    @JoinColumn(name="account_fk")
+    @JoinColumn(name = "account_fk")
     private AccountEntity account;
-    
+
     @Enumerated(EnumType.STRING)
     private Status status;
-    
-    public PaymentMeanEntity() {}
-    
+
+    public PaymentMeanEntity() {
+    }
+
     public PaymentMeanEntity(String id, ClientEntity client, AccountEntity account, Status status) {
         this.id = id;
         this.client = client;
         this.account = account;
         this.status = status;
     }
-    
-    public abstract Type getType(); 
-    
+
+    public abstract Type getType();
+
     public String getId() {
         return id;
     }
@@ -155,7 +152,7 @@ public abstract class PaymentMeanEntity implements Serializable {
     public String toString() {
         return "jnpp.dao.entities.PaymentMeanEntity[ id=" + id + " ]";
     }
-    
+
     public abstract PaymentMeanDTO toDTO();
-    
+
 }

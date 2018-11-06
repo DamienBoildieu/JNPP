@@ -4,12 +4,12 @@ import jnpp.service.dto.AddressDTO;
 import jnpp.service.dto.IdentityDTO;
 
 public class AdvisorDTO {
-    
+
     private IdentityDTO identity;
     private String email;
     private String phone;
     private AddressDTO officeAddress;
-    
+
     public AdvisorDTO(IdentityDTO identity, String email, String phone, AddressDTO officeAddress) {
         this.identity = identity;
         this.email = email;
@@ -48,5 +48,5 @@ public class AdvisorDTO {
     public void setOfficeAddress(AddressDTO officeAddress) {
         this.officeAddress = officeAddress;
     }
-    
+
 }

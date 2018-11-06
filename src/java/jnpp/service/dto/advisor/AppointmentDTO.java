@@ -3,11 +3,11 @@ package jnpp.service.dto.advisor;
 import java.util.Date;
 
 public class AppointmentDTO {
-    
+
     private Long id;
     private Date date;
     private AdvisorDTO advisor;
-    
+
     public AppointmentDTO(Long id, Date date, AdvisorDTO advisor) {
         this.id = id;
         this.date = date;
@@ -37,5 +37,5 @@ public class AppointmentDTO {
     public void setAdvisor(AdvisorDTO advisor) {
         this.advisor = advisor;
     }
-    
+
 }

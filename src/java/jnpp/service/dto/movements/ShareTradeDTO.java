@@ -4,7 +4,7 @@ import java.util.Date;
 import jnpp.service.dto.accounts.ShareDTO;
 
 public abstract class ShareTradeDTO extends TradeDTO {
-    
+
     private Integer amount;
     private ShareDTO share;
 
@@ -29,5 +29,5 @@ public abstract class ShareTradeDTO extends TradeDTO {
     public void setShare(ShareDTO share) {
         this.share = share;
     }
-  
+
 }

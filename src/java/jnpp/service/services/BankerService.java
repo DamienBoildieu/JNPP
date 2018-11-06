@@ -16,7 +16,6 @@ import jnpp.service.dto.movements.SaleDTO;
 import jnpp.service.dto.movements.TransfertDTO;
 import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 import jnpp.service.exceptions.accounts.NoCurrentAccountException;
-import jnpp.service.exceptions.accounts.NoShareAccountException;
 import jnpp.service.exceptions.advisors.NoAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateSavingbookException;
@@ -30,6 +29,7 @@ import jnpp.service.exceptions.entities.FakeShareTitleException;
 import jnpp.service.exceptions.movements.AccountTypeException;
 import jnpp.service.exceptions.movements.AmountException;
 import jnpp.service.exceptions.movements.DebitAuthorizationException;
+import jnpp.service.exceptions.movements.OverdraftException;
 
 public interface BankerService {
 
@@ -67,15 +67,15 @@ public interface BankerService {
             throws FakeAccountException, AccountTypeException;
 
     TransfertDTO transfert(String ribFrom, String ribTo, Double amount, CurrencyDTO currency)
-            throws FakeAccountException, AccountTypeException;
+            throws FakeAccountException, AccountTypeException, OverdraftException;
 
     DebitDTO debit(String ribFrom, String ribTo, Double amount, CurrencyDTO currency)
-            throws FakeAccountException, AccountTypeException, DebitAuthorizationException;
-    
-    PurchaseDTO purchase(String rib, String name, Integer amount) 
+            throws FakeAccountException, AccountTypeException, DebitAuthorizationException, OverdraftException;
+
+    PurchaseDTO purchase(String rib, String name, Integer amount)
             throws FakeAccountException, FakeShareException, NoCurrentAccountException, AccountTypeException;
- 
-    SaleDTO sale(String rib, String name, Integer amount) 
+
+    SaleDTO sale(String rib, String name, Integer amount)
             throws FakeAccountException, FakeShareException, NoCurrentAccountException, AccountTypeException, AmountException, FakeShareTitleException;
-    
+
 }

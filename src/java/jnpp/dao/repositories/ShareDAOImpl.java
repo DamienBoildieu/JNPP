@@ -14,14 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class ShareDAOImpl extends GenericDAOImpl<ShareEntity> implements ShareDAO {
-    
+
     @Transactional(readOnly = true)
     @Override
     public List<ShareEntity> findAll() {
         Query query = getEm().createNamedQuery("find_all_share");
         return query.getResultList();
     }
-    
+
     @Transactional(readOnly = true)
     @Override
     public ShareEntity findByName(String name) {
@@ -33,5 +33,5 @@ public class ShareDAOImpl extends GenericDAOImpl<ShareEntity> implements ShareDA
             return null;
         }
     }
-    
+
 }
