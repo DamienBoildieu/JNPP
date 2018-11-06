@@ -16,6 +16,7 @@ import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.controller.views.info.ViewInfo;
 import jnpp.service.dto.advisor.AdvisorDTO;
+import jnpp.service.dto.advisor.AppointmentDTO;
 import jnpp.service.dto.advisor.MessageDTO;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.services.AdvisorService;
@@ -66,6 +67,7 @@ public class LinkAdvisorController {
                         alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                         
                     }
+                    return new ModelAndView("redirect:/disconnect.htm");
                 }
             }
             try {
@@ -81,6 +83,7 @@ public class LinkAdvisorController {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);   
                 }
+                return new ModelAndView("redirect:/disconnect.htm");
             }
             
         }
@@ -117,6 +120,7 @@ public class LinkAdvisorController {
                         alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                         rm.addFlashAttribute("alerts", alerts);   
                     }
+                    return new ModelAndView("redirect:/disconnect.htm");
                 }
             }
             try {
@@ -132,8 +136,61 @@ public class LinkAdvisorController {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);   
                 }
+                return new ModelAndView("redirect:/disconnect.htm");
             }
         }
-        return new ModelAndView("redirect:/index.htm");
+        return new ModelAndView("redirect:/disconnect.htm");
+    }
+    /**
+     * Requête sur la vue des renez-vous
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @return Une vue sur les informations du conseiller si l'utilisateur est connecté, une redirection vers l'index sinon
+     * @throws Exception 
+     */
+    @RequestMapping(value = "appoint", method = RequestMethod.GET)
+    protected ModelAndView linkToAppoint(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+            throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (SessionController.isConnected(session)) {
+            Boolean hasNotif = SessionController.getHasNotif(session);
+            if (!hasNotif) {  
+                try {
+                    hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size()>0;
+                    SessionController.setHasNotif(session, hasNotif);
+                } catch (FakeClientException invalidClient) {
+                    if (alerts != null) {
+                        alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    } else {
+                        alerts = new ArrayList<AlertMessage>(); 
+                        alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                        rm.addFlashAttribute("alerts", alerts);   
+                    }
+                    return new ModelAndView("redirect:/disconnect.htm");
+                }
+            }
+            try {
+                List<AppointmentDTO> appoints = advisorService.getAppoinments(SessionController.getClient(session).getLogin());              
+                ModelAndView view = new JNPPModelAndView("advisor/appoint", ViewInfo.createInfo(session, alerts));
+                view.addObject("appoints", appoints);
+                return view;
+            } catch (FakeClientException invalidClient) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    rm.addFlashAttribute("alerts", alerts);   
+                }
+                return new ModelAndView("redirect:/disconnect.htm");
+            }
+        }
+        return new ModelAndView("redirect:/disconnect.htm");
     }
 }

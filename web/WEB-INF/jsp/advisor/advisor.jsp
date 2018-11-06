@@ -34,8 +34,11 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col s12">
+                                            <div class="col s6">
                                                 <a class="white-text hoverable" href="<c:url value='/message.htm' />"><b>Envoyez un message </b><i class="material-icons">message</i></a>
+                                            </div>
+                                            <div class="col s6">
+                                                <a class="white-text hoverable" href="<c:url value='/appoint.htm' />"><b>Vos rendez-vous</b><i class="material-icons">event</i></a>
                                             </div>
                                         </div>
                                     </div>

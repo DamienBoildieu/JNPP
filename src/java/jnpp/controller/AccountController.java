@@ -5,14 +5,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.Translator;
 import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.alerts.AlertMessage;
-import jnpp.controller.views.info.ViewInfo;
-import jnpp.dao.entities.accounts.AccountEntity;
-import jnpp.dao.entities.accounts.CurrentAccountEntity;
-import jnpp.dao.entities.accounts.SavingAccountEntity;
 import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.clients.PrivateDTO;
@@ -20,7 +15,6 @@ import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.accounts.ClientTypeException;
 import jnpp.service.exceptions.accounts.CloseRequestException;
 import jnpp.service.exceptions.accounts.UnknownIdentityException;
-import jnpp.service.exceptions.clients.InformationException;
 import jnpp.service.exceptions.duplicates.DuplicateAccountException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeSavingBookException;
@@ -85,8 +79,9 @@ public class AccountController {
                 } else {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
-                    rm.addFlashAttribute("alerts", alerts);    
+                    rm.addFlashAttribute("alerts", alerts);
                 }
+                return new ModelAndView("redirect:/disconnect.htm");
             } finally {
                 return new ModelAndView("redirect:/resume.htm");
             }
@@ -139,6 +134,7 @@ public class AccountController {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
+                return new ModelAndView("redirect:/disconnect.htm");
             } catch (FakeSavingBookException bookException) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce livret n'existe pas"));
@@ -217,6 +213,7 @@ public class AccountController {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
+                return new ModelAndView("redirect:/disconnect.htm");
             } catch (ClientTypeException typeClient) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne pouvez pas créer de compte joint"));
@@ -284,6 +281,7 @@ public class AccountController {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
+                return new ModelAndView("redirect:/disconnect.htm");
             } finally {
                 return new ModelAndView("redirect:/resume.htm");
             }
@@ -352,6 +350,7 @@ public class AccountController {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
+                return new ModelAndView("redirect:/disconnect.htm");
             }
                 return new ModelAndView("redirect:/resume.htm");
         }

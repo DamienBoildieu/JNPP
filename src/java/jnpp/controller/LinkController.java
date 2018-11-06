@@ -65,6 +65,7 @@ public class LinkController {
                         alerts = new ArrayList<AlertMessage>(); 
                         alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     }
+                    return new ModelAndView("redirect:/disconnect.htm");
                 }
             }
         }
@@ -146,7 +147,7 @@ public class LinkController {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);   
                 }
-                return new ModelAndView("redirect:/index.htm");
+                return new ModelAndView("redirect:/disconnect.htm");
             }
         }
         return new ModelAndView("redirect:/index.htm");

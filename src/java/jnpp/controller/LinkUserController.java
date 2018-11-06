@@ -156,6 +156,7 @@ public class LinkUserController {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 }
+                return new ModelAndView("redirect:/disconnect.htm");
             }
         }
         ModelAndView view = new JNPPModelAndView("manageuser/home", ViewInfo.createInfo(session, alerts));
@@ -191,6 +192,7 @@ public class LinkUserController {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 }
+                return new ModelAndView("redirect:/disconnect.htm");
             }
         }
         ClientDTO client = SessionController.getClient(session);
