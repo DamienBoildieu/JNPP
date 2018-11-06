@@ -99,18 +99,18 @@ public class MovementsController {
             HttpServletResponse response, RedirectAttributes rm) {
         String rib = request.getParameter("rib");
         String amount = request.getParameter("amount");
-        String action = request.getParameter("share");
+        String share = request.getParameter("share");
         String purchase = request.getParameter("purchase");
         String sale = request.getParameter("sale");
         String label = request.getParameter("label");
         if (rib == null || rib.length() == 0 || amount == null || amount.length() == 0 || 
-                action == null || action.length() == 0) {
+                share == null || share.length() == 0) {
             return new ModelAndView("redirect:/banquier/transactions.htm");
         }
         if (label == null) label = "";
         if (purchase != null && purchase.length() > 0) {
             try {
-                bankerService.purchase(rib, sale, Integer.valueOf(amount), label);
+                bankerService.purchase(rib, share, Integer.valueOf(amount), label);
             } catch (FakeAccountException ex) {
             } catch (FakeShareException ex) {
             } catch (NoCurrentAccountException ex) {
@@ -118,7 +118,7 @@ public class MovementsController {
             }
         } else if (sale != null && sale.length() > 0) {
             try {
-                bankerService.sale(rib, sale, Integer.valueOf(amount), label);
+                bankerService.sale(rib, share, Integer.valueOf(amount), label);
             } catch (FakeAccountException ex) {
             } catch (FakeShareException ex) {
             } catch (NoCurrentAccountException ex) {

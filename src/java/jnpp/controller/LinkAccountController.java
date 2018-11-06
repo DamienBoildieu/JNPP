@@ -116,6 +116,11 @@ public class LinkAccountController {
                     case SHARE:                       
                         view = new JNPPModelAndView("accounts/shareaccount", ViewInfo.createInfo(session, alerts));
                         view.addObject("accountsMap", Translator.getInstance().translateAccounts(SessionController.getLanguage(session)));
+                        List<MovementView> movementsShare = new ArrayList<MovementView>();
+                        for (MovementDTO movement : accountService.getMovements(SessionController.getClient(session).getLogin(), id)) {
+                            movementsShare.add(new MovementView(movement, id));
+                        }
+                        view.addObject("movements",movementsShare);
                         break;
                     default:
                         throw new AssertionError(account.getType().name());                    
