@@ -3,7 +3,7 @@ package jnpp.controller.views.info;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
-import jnpp.controller.CSession;
+import jnpp.controller.SessionController;
 import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.clients.PrivateDTO;
@@ -55,8 +55,8 @@ public class ViewInfo {
     }
     
     public static ViewInfo createInfo(HttpSession session) {
-        if (CSession.isConnected(session)) {
-            ClientDTO client = CSession.getClient(session);
+        if (SessionController.isConnected(session)) {
+            ClientDTO client = SessionController.getClient(session);
             String userName = "";
             switch (client.getType()) {
                 case PRIVATE:
@@ -70,14 +70,14 @@ public class ViewInfo {
                 default:
                     throw new AssertionError(client.getType().name());      
             }
-            return new ConnectedInfo(userName, CSession.getHasNotif(session));  
+            return new ConnectedInfo(userName, SessionController.getHasNotif(session));  
         }
         return new UnconnectedInfo();
     }
     
     public static ViewInfo createInfo(HttpSession session, AlertMessage alert) {
-        if (CSession.isConnected(session)) {
-            ClientDTO client = CSession.getClient(session);
+        if (SessionController.isConnected(session)) {
+            ClientDTO client = SessionController.getClient(session);
             String userName = "";
             switch (client.getType()) {
                 case PRIVATE:
@@ -91,14 +91,14 @@ public class ViewInfo {
                 default:
                     throw new AssertionError(client.getType().name());      
             }
-            return new ConnectedInfo(userName, alert, CSession.getHasNotif(session));
+            return new ConnectedInfo(userName, alert, SessionController.getHasNotif(session));
         }
         return new UnconnectedInfo(alert);
     }
     
     public static ViewInfo createInfo(HttpSession session, List<AlertMessage> alerts) {
-        if (CSession.isConnected(session)) {
-            ClientDTO client = CSession.getClient(session);
+        if (SessionController.isConnected(session)) {
+            ClientDTO client = SessionController.getClient(session);
             String userName = "";
             switch (client.getType()) {
                 case PRIVATE:
@@ -112,7 +112,7 @@ public class ViewInfo {
                 default:
                     throw new AssertionError(client.getType().name());      
             }
-            return new ConnectedInfo(userName, alerts, CSession.getHasNotif(session));
+            return new ConnectedInfo(userName, alerts, SessionController.getHasNotif(session));
         }
         return new UnconnectedInfo(alerts);
     }

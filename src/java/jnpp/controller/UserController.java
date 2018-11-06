@@ -33,7 +33,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * Classe contrôlant la gestion des utilisateurs
  */
 @Controller
-public class CUser {
+public class UserController {
     /**
      * Le service des utilisateurs
      */
@@ -58,16 +58,16 @@ public class CUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session)) {
             String id = request.getParameter("account");
             String password = request.getParameter("password");
             ClientDTO client = this.clientService.signIn(id, password);
             if (client!=null) {
                 boolean hasNotif = notifService.receiveUnseenNotifications(client.getLogin()).size()>0;
-                CSession.setHasNotif(session, hasNotif);
-                CSession.setClient(session, client);
+                SessionController.setHasNotif(session, hasNotif);
+                SessionController.setClient(session, client);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Connexion réussie"));
                 } else {
@@ -104,13 +104,13 @@ public class CUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
         //this.userService.signOut(null);
         boolean disconnect = true;
-        if (CSession.isConnected(session)) {
+        if (SessionController.isConnected(session)) {
             if (disconnect) {
-                CSession.clearSession(session);
+                SessionController.clearSession(session);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Déconnexion réussie"));
                 } else {
@@ -147,9 +147,9 @@ public class CUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session)) {
             //Get parameters
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
@@ -234,9 +234,9 @@ public class CUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session)) {
             //Get parameters
             String companyName = request.getParameter("company");
             String firstName = request.getParameter("firstName");
@@ -313,9 +313,9 @@ public class CUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session)) {
             String id = request.getParameter("id");
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
@@ -360,9 +360,9 @@ public class CUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session)) {
             String id = request.getParameter("id");
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
@@ -407,9 +407,9 @@ public class CUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (SessionController.isConnected(session)) {
             String old = request.getParameter("oldpsswd");
             String newp = request.getParameter("newpsswd");
             String confp = request.getParameter("confirmpsswd");
@@ -425,7 +425,7 @@ public class CUser {
                 return new ModelAndView("redirect:/userinfo.htm");
             }
             try {
-                clientService.updatePassword(CSession.getClient(session).getLogin(), old, newp);
+                clientService.updatePassword(SessionController.getClient(session).getLogin(), old, newp);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Mise à jour réussie"));
                 } else {
@@ -463,9 +463,9 @@ public class CUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (SessionController.isConnected(session)) {
             //Get parameters
             String email = request.getParameter("email");
             String streetNbrStr = request.getParameter("streetNbr");
@@ -477,8 +477,8 @@ public class CUser {
             Integer streetNbr = Integer.parseInt(streetNbrStr);
             //Call service
             try {
-                ClientDTO client = clientService.update(CSession.getClient(session).getLogin(), email, streetNbr, street, city, country, phone);
-                CSession.setClient(session, client);
+                ClientDTO client = clientService.update(SessionController.getClient(session).getLogin(), email, streetNbr, street, city, country, phone);
+                SessionController.setClient(session, client);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Mise à jour réussie"));
                 } else {
@@ -524,9 +524,9 @@ public class CUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (SessionController.isConnected(session)) {
             try {
                 String password = request.getParameter("psswd");
                 String confirm = request.getParameter("confirm");
@@ -541,8 +541,8 @@ public class CUser {
                 
                     return new ModelAndView("redirect:/userinfo.htm");
                 }
-                clientService.close(CSession.getClient(session).getLogin(), password);
-                CSession.clearSession(session);
+                clientService.close(SessionController.getClient(session).getLogin(), password);
+                SessionController.clearSession(session);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre compte a bien été cloturé"));
                 } else {

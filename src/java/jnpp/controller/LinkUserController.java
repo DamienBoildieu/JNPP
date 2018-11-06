@@ -30,7 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
-public class CLinkUser {
+public class LinkUserController {
     @Autowired
     private NotificationService notifService;
     /**
@@ -47,9 +47,9 @@ public class CLinkUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session))
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session))
             return new JNPPModelAndView("manageuser/connect", ViewInfo.createInfo(session, alerts));
         return new ModelAndView("redirect:/index.htm");
     }
@@ -67,9 +67,9 @@ public class CLinkUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session))
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session))
             return new JNPPModelAndView("signup/signup", ViewInfo.createInfo(session, alerts));
         return new ModelAndView("redirect:/index.htm");
     }
@@ -88,12 +88,12 @@ public class CLinkUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session)) {
             ModelAndView view = new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
             view.addObject("genders", IdentityDTO.Gender.values());
-            view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
+            view.addObject("gendersMap", Translator.getInstance().translateGenders(SessionController.getLanguage(session)));
             return view;
         }
         return new ModelAndView("redirect:/index.htm");
@@ -113,12 +113,12 @@ public class CLinkUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session)) {
             ModelAndView view = new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
             view.addObject("genders", IdentityDTO.Gender.values());
-            view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
+            view.addObject("gendersMap", Translator.getInstance().translateGenders(SessionController.getLanguage(session)));
             return view;
         }
         return new ModelAndView("redirect:/index.htm");
@@ -137,15 +137,15 @@ public class CLinkUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session))
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session))
             return new ModelAndView("redirect:/index.htm");
-        Boolean hasNotif = CSession.getHasNotif(session);
+        Boolean hasNotif = SessionController.getHasNotif(session);
         if (!hasNotif) {  
             try {
-                hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session).getLogin()).size()>0;
-                CSession.setHasNotif(session, hasNotif);
+                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size()>0;
+                SessionController.setHasNotif(session, hasNotif);
             } catch (FakeClientException invalidClient) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
@@ -172,15 +172,15 @@ public class CLinkUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session))
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session))
             return new ModelAndView("redirect:/index.htm");
-        Boolean hasNotif = CSession.getHasNotif(session);
+        Boolean hasNotif = SessionController.getHasNotif(session);
         if (!hasNotif) {  
             try {
-                hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session).getLogin()).size()>0;
-                CSession.setHasNotif(session, hasNotif);
+                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size()>0;
+                SessionController.setHasNotif(session, hasNotif);
             } catch (FakeClientException invalidClient) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
@@ -190,7 +190,7 @@ public class CLinkUser {
                 }
             }
         }
-        ClientDTO client = CSession.getClient(session);
+        ClientDTO client = SessionController.getClient(session);
         ModelAndView view = null;
         switch (client.getType()) {
             case PRIVATE:
@@ -204,7 +204,7 @@ public class CLinkUser {
             default:
                 throw new AssertionError(client.getType().name());     
         }
-        view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
+        view.addObject("gendersMap", Translator.getInstance().translateGenders(SessionController.getLanguage(session)));
         
         view.addObject("client", client);
         return view;
@@ -224,9 +224,9 @@ public class CLinkUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session))
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session))
             return new JNPPModelAndView("manageuser/password", ViewInfo.createInfo(session, alerts));
         return new ModelAndView("redirect:/index.htm");
     }
@@ -244,9 +244,9 @@ public class CLinkUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session))
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session))
             return new JNPPModelAndView("manageuser/privatepassword", ViewInfo.createInfo(session, alerts));
         return new ModelAndView("redirect:/index.htm");
     }
@@ -264,9 +264,9 @@ public class CLinkUser {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session))
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session))
             return new JNPPModelAndView("manageuser/professionalpassword", ViewInfo.createInfo(session, alerts));
         return new ModelAndView("redirect:/index.htm");
     }

@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class CLinkAccount {
+public class LinkAccountController {
     @Autowired
     private NotificationService notifService;
     @Autowired
@@ -56,15 +56,15 @@ public class CLinkAccount {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session))
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session))
             return new ModelAndView("redirect:/index.htm");
-        Boolean hasNotif = CSession.getHasNotif(session);
+        Boolean hasNotif = SessionController.getHasNotif(session);
         if (!hasNotif) {  
             try {
-                hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session).getLogin()).size()>0;
-                CSession.setHasNotif(session, hasNotif);
+                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size()>0;
+                SessionController.setHasNotif(session, hasNotif);
             } catch (FakeClientException invalidClient) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
@@ -75,7 +75,7 @@ public class CLinkAccount {
             }
         }
         String id = request.getParameter("id");
-        List<AccountDTO> accounts = accountService.getAccounts(CSession.getClient(session).getLogin());
+        List<AccountDTO> accounts = accountService.getAccounts(SessionController.getClient(session).getLogin());
         Iterator<AccountDTO> ite = accounts.iterator();
         AccountDTO account = null;
         ModelAndView view = null;
@@ -85,30 +85,30 @@ public class CLinkAccount {
                 switch (account.getType()) {
                     case CURRENT:
                         view = new JNPPModelAndView("accounts/currentaccount", ViewInfo.createInfo(session, alerts));
-                        view.addObject("accountsMap", Translator.getInstance().translateAccounts(CSession.getLanguage(session)));
-                        view.addObject("currencyMap", Translator.getInstance().translateCurrency(CSession.getLanguage(session)));
+                        view.addObject("accountsMap", Translator.getInstance().translateAccounts(SessionController.getLanguage(session)));
+                        view.addObject("currencyMap", Translator.getInstance().translateCurrency(SessionController.getLanguage(session)));
                         List<MovementView> movementsCurrent = new ArrayList<MovementView>();
-                        for (MovementDTO movement : accountService.getMovements(CSession.getClient(session).getLogin(), id)) {
+                        for (MovementDTO movement : accountService.getMovements(SessionController.getClient(session).getLogin(), id)) {
                             movementsCurrent.add(new MovementView(movement, id));
                         }
                         view.addObject("movements",movementsCurrent);
                         break;
                     case JOINT:
                         view = new JNPPModelAndView("accounts/jointaccount", ViewInfo.createInfo(session, alerts));
-                        view.addObject("accountsMap", Translator.getInstance().translateAccounts(CSession.getLanguage(session)));
-                        view.addObject("currencyMap", Translator.getInstance().translateCurrency(CSession.getLanguage(session)));
+                        view.addObject("accountsMap", Translator.getInstance().translateAccounts(SessionController.getLanguage(session)));
+                        view.addObject("currencyMap", Translator.getInstance().translateCurrency(SessionController.getLanguage(session)));
                         List<MovementView> movementsJoint = new ArrayList<MovementView>();
-                        for (MovementDTO movement : accountService.getMovements(CSession.getClient(session).getLogin(), id)) {
+                        for (MovementDTO movement : accountService.getMovements(SessionController.getClient(session).getLogin(), id)) {
                             movementsJoint.add(new MovementView(movement, id));
                         }
                         view.addObject("movements",movementsJoint);
                         break;
                     case SAVING:
                         view = new JNPPModelAndView("accounts/savingaccount", ViewInfo.createInfo(session, alerts));
-                        view.addObject("accountsMap", Translator.getInstance().translateAccounts(CSession.getLanguage(session)));
-                        view.addObject("currencyMap", Translator.getInstance().translateCurrency(CSession.getLanguage(session)));
+                        view.addObject("accountsMap", Translator.getInstance().translateAccounts(SessionController.getLanguage(session)));
+                        view.addObject("currencyMap", Translator.getInstance().translateCurrency(SessionController.getLanguage(session)));
                         List<MovementView> movementsSaving = new ArrayList<MovementView>();
-                        for (MovementDTO movement : accountService.getMovements(CSession.getClient(session).getLogin(), id)) {
+                        for (MovementDTO movement : accountService.getMovements(SessionController.getClient(session).getLogin(), id)) {
                             movementsSaving.add(new MovementView(movement, id));
                         }
                         view.addObject("movements",movementsSaving);
@@ -141,15 +141,15 @@ public class CLinkAccount {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session))
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session))
             return new ModelAndView("redirect:/index.htm");
-        Boolean hasNotif = CSession.getHasNotif(session);
+        Boolean hasNotif = SessionController.getHasNotif(session);
         if (!hasNotif) {  
             try {
-                hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session).getLogin()).size()>0;
-                CSession.setHasNotif(session, hasNotif);
+                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size()>0;
+                SessionController.setHasNotif(session, hasNotif);
             } catch (FakeClientException invalidClient) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
@@ -159,7 +159,7 @@ public class CLinkAccount {
                 }
             }
         }
-        ClientDTO client = CSession.getClient(session);
+        ClientDTO client = SessionController.getClient(session);
         ModelAndView view = null;
         switch (client.getType()) {
             case PRIVATE:
@@ -176,7 +176,7 @@ public class CLinkAccount {
                 List<SavingBookDTO> books = accountService.getSavingBooks();
                 view.addObject("books", books);
                 view.addObject("genders", IdentityDTO.Gender.values());
-                view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
+                view.addObject("gendersMap", Translator.getInstance().translateGenders(SessionController.getLanguage(session)));
                 break;
             case PROFESIONAL:
                 view = new JNPPModelAndView("accounts/openproaccount", ViewInfo.createInfo(session, alerts));
@@ -200,15 +200,15 @@ public class CLinkAccount {
         HttpSession session = request.getSession();
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session))
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session))
             return new ModelAndView("redirect:/index.htm");
-        Boolean hasNotif = CSession.getHasNotif(session);
+        Boolean hasNotif = SessionController.getHasNotif(session);
         if (!hasNotif) {  
             try {
-                hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session).getLogin()).size()>0;
-                CSession.setHasNotif(session, hasNotif);
+                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size()>0;
+                SessionController.setHasNotif(session, hasNotif);
             } catch (FakeClientException invalidClient) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
@@ -218,11 +218,11 @@ public class CLinkAccount {
                 }
             }
         }
-        List<AccountDTO> accounts = accountService.getAccounts(CSession.getClient(session).getLogin());
+        List<AccountDTO> accounts = accountService.getAccounts(SessionController.getClient(session).getLogin());
         ModelAndView view = new JNPPModelAndView("accounts/resume", ViewInfo.createInfo(session, alerts));
         view.addObject("accounts", accounts);
-        view.addObject("accountsMap", Translator.getInstance().translateAccounts(CSession.getLanguage(session)));
-        view.addObject("currencyMap", Translator.getInstance().translateCurrency(CSession.getLanguage(session)));
+        view.addObject("accountsMap", Translator.getInstance().translateAccounts(SessionController.getLanguage(session)));
+        view.addObject("currencyMap", Translator.getInstance().translateCurrency(SessionController.getLanguage(session)));
         return view;
     }
     
