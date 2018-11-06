@@ -17,40 +17,40 @@
                                 <div class="card blue s12">
                                     <p class="white-text flow-text">Choisissez le type de compte à ouvrir</p>
                                 </div>
-                            </div>
-                            <ul class="collapsible">
-                                <li>
-                                    <div class="collapsible-header">Compte courant</div>
-                                    <div class="collapsible-body">
-                                        <div class="col s12">
-                                            <form method="POST" action="opencurrentaccount.htm">
-                                                <div class="row">
-                                                    <div class="col s12">
-                                                        <input type="submit" value="Compte courant" class="btn blue" />
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="collapsible-header">Compte titres</div>
-                                    <div class="collapsible-body">
-                                        <div class="col s12">
-                                            <form method="POST" action="openshareaccount.htm">
-                                                <div class="row">
-                                                    <div class="col s12">
-                                                        <input type="submit" value="Compte titres" class="btn blue" />
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>                        
+                            </div>                                            
                         </div>
                     </div>
                 </div>
+                <ul class="collapsible">
+                    <li>
+                        <div class="collapsible-header">Compte courant</div>
+                        <div class="collapsible-body white center-align">
+                            <div class="col s12">
+                                <form method="POST" action="opencurrentaccount.htm">
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <input type="submit" value="Compte courant" class="btn blue" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">Compte titres</div>
+                        <div class="collapsible-body white center-align">
+                            <div class="col s12">
+                                <form method="POST" action="openshareaccount.htm">
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <input type="submit" value="Compte titres" class="btn blue" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
             <%@ include file="../include/notif.jsp"%>       
         </main>
