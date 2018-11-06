@@ -32,8 +32,8 @@
                     <tbody>
                         <tr>
                             <td><input type="text" name="name" class="center-align"></td>
-                            <td><input type="number" step=any name="moneyRate" class="center-align"></td>
-                            <td><input type="number" step=any name="timeRate" class="center-align"></td>
+                            <td><input type="number" step=any name="money_rate" class="center-align"></td>
+                            <td><input type="number" step=any name="time_rate" class="center-align"></td>
                         </tr>
                         <tr>
                             <td colspan="3"><input type="submit" value="Ajouter" class="waves-effect waves-light btn-small"></td>

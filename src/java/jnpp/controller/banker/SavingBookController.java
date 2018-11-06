@@ -43,8 +43,8 @@ public class SavingBookController {
             HttpServletResponse response, RedirectAttributes rm) 
             throws Exception {
         String name = request.getParameter("name");
-        String moneyRate = request.getParameter("moneyRate");
-        String timeRate = request.getParameter("timeRate");
+        String moneyRate = request.getParameter("money_rate");
+        String timeRate = request.getParameter("time_rate");
         if (name != null && name.length() > 0 && moneyRate != null && moneyRate.length() > 0 
                 && timeRate != null && timeRate.length() > 0)
             try {
