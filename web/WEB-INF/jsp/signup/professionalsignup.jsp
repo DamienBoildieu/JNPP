@@ -105,6 +105,5 @@
         </footer>
         <%@ include file="../include/javascript.jsp"%>
         <%@ include file="../include/commonscripts.jsp"%>
-        <script src="${pageContext.request.contextPath}/scripts/select.js"></script>
     </body>
 </html>
