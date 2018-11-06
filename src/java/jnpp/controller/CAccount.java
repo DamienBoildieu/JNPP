@@ -16,12 +16,15 @@ import jnpp.dao.entities.accounts.SavingAccountEntity;
 import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.clients.PrivateDTO;
+import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.accounts.ClientTypeException;
+import jnpp.service.exceptions.accounts.CloseRequestException;
 import jnpp.service.exceptions.accounts.UnknownIdentityException;
 import jnpp.service.exceptions.clients.InformationException;
 import jnpp.service.exceptions.duplicates.DuplicateAccountException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeSavingBookException;
+import jnpp.service.exceptions.owners.AccountOwnerException;
 import jnpp.service.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -284,6 +287,73 @@ public class CAccount {
             } finally {
                 return new ModelAndView("redirect:/resume.htm");
             }
+        }
+        return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
+    }
+    /**
+     * Demande de fermeture de comptes
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return La vue des comptes
+     * @throws Exception 
+     */
+    @RequestMapping(value = "closeaccount", method = RequestMethod.POST)
+    private ModelAndView closeAccount(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+            throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (CSession.getLanguage(session)!=Translator.Language.FR)
+            CSession.setLanguage(session,Translator.Language.FR);
+        if (CSession.isConnected(session)) {
+            //Call service
+            try {
+                String rib = request.getParameter("rib");
+                accountService.closeAccount(CSession.getClient(session).getLogin(), rib);
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Le compte a bien été fermé"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Le compte a bien été fermé"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+            } catch (AccountOwnerException ownerException) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous n'êtes pas propriétaire de ce compte"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous n'êtes pas propriétaire de ce compte"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+            } catch (ClosureException closureException) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce compte ne peut pas être fermé"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce compte ne peut pas être fermé"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+            } catch (CloseRequestException requestException) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "La demande de fermeture a été prise en compte, en attente de la demande des autres propriétaires"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "La demande de fermeture a été prise en compte, en attente de la demande des autres propriétaires"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+            } catch (FakeClientException clientException) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
+            }
+                return new ModelAndView("redirect:/resume.htm");
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }

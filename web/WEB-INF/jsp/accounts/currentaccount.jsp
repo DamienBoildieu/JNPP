@@ -16,9 +16,14 @@
                             <a class="btn blue" href="<c:url value='/transaction.htm' />">Faire une transaction</a>
                         </div>
                         <div style="margin-bottom: 5px;"></div>
-                        <div clas="row">
-                            <a class="btn blue" href="<c:url value='/transaction.htm' />">Fermer le compte</a>
-                        </div>
+                        <form method="POST" action="closeaccount.htm">
+                            <input type="hidden" id="rib" name="rib" value=${account.rib}>
+                            <div class="row">
+                                <div class="col s12">
+                                    <input type="submit" value="Fermer le compte" class="btn blue" />
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <div class="container">

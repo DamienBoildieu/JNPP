@@ -17,6 +17,7 @@
                         </div>
                         <div style="margin-bottom: 5px;"></div>                                               
                         <form method="POST" action="closeaccount.htm">
+                            <input type="hidden" id="rib" name="rib" value=${account.rib}>
                             <div class="row">
                                 <div class="col s12">
                                     <input type="submit" value="Fermer le compte" class="btn blue" />
