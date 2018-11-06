@@ -24,19 +24,19 @@
                                         <div class="row">
                                             <div class="input-field col s12">            
                                                 <label>Nom</label>
-                                                <input type="text" value="${client.getIdentity().getLastname()}" readonly>
+                                                <input type="text" value="${client.getOwner().getLastname()}" readonly>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="input-field col s12">            
                                                 <label>Prénom</label>
-                                                <input type="text" value="${client.getIdentity().getFirstname()}" readonly>
+                                                <input type="text" value="${client.getOwner().getFirstname()}" readonly>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="input-field col s12">
                                                 <label>Sexe</label>
-                                                <input type="text" value="${gendersMap[client.getIdentity().getGender()]}" readonly>
+                                                <input type="text" value="${gendersMap[client.getOwner().getGender()]}" readonly>
                                             </div>
                                         </div>                           
                                         <div class="row">
@@ -120,11 +120,6 @@
                                 <div class="row">
                                     <div class="col s12">
                                         <input type="submit" value="Changer mon mot de passe" class="btn blue" />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col s12">
-                                        <input type="submit" value="Supprimer votre compte" class="btn blue" />
                                     </div>
                                 </div>
                             </form>

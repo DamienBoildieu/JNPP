@@ -6,6 +6,7 @@
 package jnpp.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -71,8 +72,39 @@ public class CLinkAccount {
                 }
             }
         }
+        String id = request.getParameter("id");
+        List<AccountDTO> accounts = accountService.getAccounts(CSession.getClient(session).getLogin());
+        Iterator<AccountDTO> ite = accounts.iterator();
+        AccountDTO account = null;
+        ModelAndView view = null;
+        while (ite.hasNext()) {
+            account = ite.next();
+            if (account.getRib().equals(id)) {
+                switch (account.getType()) {
+                    case CURRENT:
+                        view = new JNPPModelAndView("accounts/currentaccount", ViewInfo.createInfo(session, alerts));
+                        view.addObject("accountsMap", Translator.getInstance().translateAccounts(CSession.getLanguage(session)));
+                        view.addObject("currencyMap", Translator.getInstance().translateCurrency(CSession.getLanguage(session)));
+                        view.addObject("movments",accountService.getMovements(CSession.getClient(session).getLogin(), id));
+                        break;
+                    case JOINT:
+                        view = new JNPPModelAndView("accounts/jointaccount", ViewInfo.createInfo(session, alerts));
+                        break;
+                    case SAVING:
+                        view = new JNPPModelAndView("accounts/savingaccount", ViewInfo.createInfo(session, alerts));
+                        break;
+                    case SHARE:
+                        view = new JNPPModelAndView("accounts/shareaccount", ViewInfo.createInfo(session, alerts));
+                        break;
+                    default:
+                        throw new AssertionError(account.getType().name());                    
+                }
+                view.addObject("account", account);
+                return view;
+            }
+        }
 	//resumeService.resumeAccounts("");
-        return new JNPPModelAndView("accounts/account", ViewInfo.createInfo(session, alerts));
+        return new ModelAndView("redirect:/resume.htm");
     }
     
     /**

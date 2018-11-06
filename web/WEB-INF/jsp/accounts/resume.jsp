@@ -15,10 +15,13 @@
                     <div clas="row">
                         <a class="btn blue" href="<c:url value='/openaccount.htm' />">Ouvrir un compte</a>
                     </div>
+                    <div style="margin-bottom: 5px;"></div>
+                    <div clas="row">
+                        <a class="btn blue" href="<c:url value='/transaction.htm' />">Faire une transaction</a>
+                    </div>
                 </div>
             </div>
-            <div class="container">
-                
+            <div class="container">              
                      <div class='col s10 offset-s1 center-align'>
                         <c:forEach items="${accounts}" var="element">
                             <div class="col s12 m4">
@@ -54,7 +57,7 @@
                                         </c:if>                                        
                                         <div class="row">
                                             <div class="col s12">
-                                                <a class="white-text hoverable" href="<c:url value='/account.htm' />"><b>Détails</b></a>
+                                                <a class="white-text hoverable" href="<c:url value='/account.htm' />?id=${element.rib}"><b>Détails</b></a>
                                             </div>
                                         </div>
                                     </div>
