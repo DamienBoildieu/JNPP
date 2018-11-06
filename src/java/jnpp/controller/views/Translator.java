@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.AccountDTO;
+import jnpp.service.dto.accounts.CurrencyDTO;
 import jnpp.service.dto.accounts.SavingBookDTO;
 
 
@@ -22,6 +23,30 @@ public class Translator {
     public static Translator getInstance()
     {
         return TranslatorHolder.instance;
+    }
+    
+    
+    public Map<CurrencyDTO,String> translateCurrency(Language lang) {
+        switch (lang) {
+            case FR:    
+                return currencyToFrench();
+            default:
+                throw new AssertionError(lang.name());
+        }
+    }
+    
+    private Map<CurrencyDTO,String> currencyToFrench() {
+        Map<CurrencyDTO,String> map = new HashMap<CurrencyDTO, String>();
+        for (CurrencyDTO currency : CurrencyDTO.values()) {
+            switch (currency) {
+                case EURO:
+                    map.put(currency, "EUR");
+                    break;
+                default:
+                    throw new AssertionError(currency.name());               
+            }
+        }
+        return map;
     }
     
     public Map<IdentityDTO.Gender,String> translateGenders(Language lang) {
@@ -73,7 +98,7 @@ public class Translator {
                     map.put(type, "Compte dépôt");
                     break;
                 case SHARE:
-                    map.put(type, "Compte titre");
+                    map.put(type, "Compte titres");
                     break;
                 default:
                     throw new AssertionError(type.name());  

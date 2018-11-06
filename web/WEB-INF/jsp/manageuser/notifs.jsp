@@ -9,9 +9,9 @@
         </header>
         <main>
             <%@ include file="../include/alerts.jsp"%>
-            <div class="container" >
+            <div class="container">
                 <div class="row">
-                    <div class='card-panel white col s6 offset-s3 center-align'>
+                    <div class='card-panel white col s6 offset-s3 center-align' style="overflow: auto; max-height: 95vh;">
                         <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
                             <c:forEach items="${notifs}" var="element">
                                 <c:choose>

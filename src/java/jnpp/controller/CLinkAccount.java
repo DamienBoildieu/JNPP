@@ -18,6 +18,7 @@ import jnpp.controller.views.info.ViewInfo;
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.accounts.CurrentAccountEntity;
 import jnpp.dao.entities.accounts.SavingAccountEntity;
+import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.accounts.SavingBookDTO;
 import jnpp.service.dto.clients.ClientDTO;
@@ -111,8 +112,19 @@ public class CLinkAccount {
         switch (client.getType()) {
             case PRIVATE:
                 view = new JNPPModelAndView("accounts/openprivateaccount", ViewInfo.createInfo(session, alerts));
+                String nbClientsStr = request.getParameter("nbClients");
+                Integer nbClients = 1;
+                if (nbClientsStr != null) {
+                    nbClients = Integer.parseInt(nbClientsStr);
+                    if (nbClients < 1) {
+                        nbClients = 1;
+                    }
+                }
+                view.addObject("nbClients", nbClients);
                 List<SavingBookDTO> books = accountService.getSavingBooks();
                 view.addObject("books", books);
+                view.addObject("genders", IdentityDTO.Gender.values());
+                view.addObject("gendersMap", Translator.getInstance().translateGenders(CSession.getLanguage(session)));
                 break;
             case PROFESIONAL:
                 view = new JNPPModelAndView("accounts/openproaccount", ViewInfo.createInfo(session, alerts));
@@ -158,6 +170,7 @@ public class CLinkAccount {
         ModelAndView view = new JNPPModelAndView("accounts/resume", ViewInfo.createInfo(session, alerts));
         view.addObject("accounts", accounts);
         view.addObject("accountsMap", Translator.getInstance().translateAccounts(CSession.getLanguage(session)));
+        view.addObject("currencyMap", Translator.getInstance().translateCurrency(CSession.getLanguage(session)));
         return view;
     }
     

@@ -9,26 +9,41 @@
         </header>
         <main>
             <%@ include file="../include/alerts.jsp"%>
-            <div class="container" style="margin-top: 10%">
+            <div class="container" style="margin-top: 3%">
                 <div class="row">
-                    <div class='card-panel white col s6 offset-s3 center-align'>
+                    <div class='card-panel white col s12 center-align'>
                         <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
                             <div class="row">
                                 <div class="card blue s12">
                                     <p class="white-text flow-text">Choisissez le type de compte à ouvrir</p>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col s12">
-                                    <form method="POST" action="opencurrentaccount.htm">
-                                        <div class="row">
-                                            <div class="col s12">
-                                                <input type="submit" value="Compte courant" class="btn blue" />
-                                            </div>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <div class="col s12">
+                                            <form method="POST" action="opencurrentaccount.htm">
+                                                <div class="row">
+                                                    <div class="col s12">
+                                                        <input type="submit" value="Compte courant" class="btn blue" />
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
-                                    </form>
-                                </div>
-                            </div>
+                                    </tr>
+                                    <tr>
+                                        <div class="col s12">
+                                            <form method="POST" action="openshareaccount.htm">
+                                                <div class="row">
+                                                    <div class="col s12">
+                                                        <input type="submit" value="Compte titres" class="btn blue" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </tr>
+                                </tbody>
+                            </table>                         
                         </div>
                     </div>
                 </div>

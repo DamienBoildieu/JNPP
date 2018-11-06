@@ -39,17 +39,19 @@
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="card white s12">
-                                            <c:choose>
-                                                <c:when test="${element.money>0}">
-                                                    <h4 class="green-text">
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <h4 class="red-text">
-                                                </c:otherwise>
-                                            </c:choose>
-                                            ${element.money}$</h4>
-                                        </div>
+                                        <c:if test="${!(element.type == 'SHARE')}">
+                                            <div class="card white s12">
+                                                <c:choose>
+                                                    <c:when test="${element.money>0}">
+                                                        <h4 class="green-text">
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <h4 class="red-text">
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                ${element.money}${currencyMap[element.currency]} </h4>
+                                            </div>
+                                        </c:if>                                        
                                         <div class="row">
                                             <div class="col s12">
                                                 <a class="white-text hoverable" href="<c:url value='/account.htm' />"><b>Détails</b></a>
