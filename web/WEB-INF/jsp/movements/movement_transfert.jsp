@@ -14,17 +14,17 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <select name="ribFrom" form="transfert">
+                                    <select name="ribFrom" form="transfert" required>
                                         <c:forEach items="${ribMoneyAccount}" var="rib">
                                             <option value="${rib}" selected>${rib}</option>
                                         </c:forEach>
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" name="ribTo" class="center-align">
+                                    <input type="text" name="ribTo" class="center-align" required>
                                 </td>
                                 <td>
-                                    <input type="number" name="amount" class="center-align">
+                                    <input type="number" name="amount" class="center-align" required>
                                 </td>
                             </tr>
                             <tr>

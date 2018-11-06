@@ -21,10 +21,10 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" name="ribTo" class="center-align">
+                                    <input type="text" name="ribTo" class="center-align" required>
                                 </td>
                                 <td>
-                                    <input type="number" name="amount" class="center-align">
+                                    <input type="number" name="amount" class="center-align" required>
                                 </td>
                             </tr>
                             <tr>
@@ -34,7 +34,7 @@
                                             Libelle:
                                         </div>
                                         <div class="col s11">
-                                            <input type="text" name="label" class="right-align">
+                                            <input type="text" name="label" class="right-align" required>
                                         </div>
                                     </div>
                                 </td>
