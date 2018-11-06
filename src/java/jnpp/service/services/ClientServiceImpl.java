@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import jnpp.dao.entities.AddressEntity;
@@ -48,7 +46,7 @@ public class ClientServiceImpl implements ClientService {
     private static final String MAILBOX_PORT = "587";
     private static final String MAILBOX_USERNAME = "jnpp.aaw@gmail.com";
     private static final String MAILBOX_PASSWORD = "jnpp.aaw.2018";
-    
+
     @Resource
     ClientDAO clientDAO;
     @Resource
@@ -57,9 +55,9 @@ public class ClientServiceImpl implements ClientService {
     AdvisorDAO advisorDAO;
 
     private final Random random = new Random();
-    private final Mailbox mailbox = new Mailbox(MAILBOX_HOST, MAILBOX_PORT, 
+    private final Mailbox mailbox = new Mailbox(MAILBOX_HOST, MAILBOX_PORT,
             MAILBOX_USERNAME, MAILBOX_PASSWORD);
-    
+
     @Override
     public ClientDTO signIn(String login, String password) {
         if (login == null || password == null) {
@@ -139,15 +137,24 @@ public class ClientServiceImpl implements ClientService {
     }
 
     private void sendSignupMail(ClientEntity client) {
-        try {
-            String message = ""
-                    + "identifiant: " + client.getLogin() + "\n"
-                    + "mot de passe:" + client.getPassword();
-            mailbox.send(client.getEmail(), "Bienvenue chez JNPP", message);
-        } catch (MessagingException ex) {
-        }
-    }   
-    
+        final String login = client.getLogin();
+        final String password = client.getPassword();
+        final String email = client.getEmail();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String message = ""
+                            + "identifiant:  " + login + "\n"
+                            + "mot de passe: " + password;
+                    mailbox.send(email, "Bienvenue chez JNPP", message);
+                } catch (MessagingException ex) {
+                }
+            }
+        });
+        thread.start();
+    }
+
     @Override
     public ClientDTO update(String login, String email,
             Integer number, String street, String city, String state,
