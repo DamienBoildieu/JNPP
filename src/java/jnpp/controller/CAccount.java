@@ -111,7 +111,7 @@ public class CAccount {
         if (CSession.isConnected(session)) {
             //Call service
             try {
-                String bookName = request.getParameter("book");
+                String bookName = request.getParameter("bookName");
                 accountService.openSavingAccount(CSession.getClient(session).getLogin(), bookName);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre livret est ouvert"));
@@ -152,9 +152,8 @@ public class CAccount {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne pouvez pas créer de livret"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-            } finally {
-                return new ModelAndView("redirect:/resume.htm");
             }
+            return new ModelAndView("redirect:/resume.htm");
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }

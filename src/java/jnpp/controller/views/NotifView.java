@@ -1,12 +1,16 @@
 package jnpp.controller.views;
 
 import java.util.Calendar;
+import java.util.Map;
+import jnpp.controller.CSession;
+import jnpp.controller.views.Translator.Language;
 import jnpp.service.dto.notifications.AppointmentNotificationDTO;
 import jnpp.service.dto.notifications.MessageNotificationDTO;
 import jnpp.service.dto.notifications.MovementNotificationDTO;
 import jnpp.service.dto.notifications.NotificationDTO;
 import jnpp.service.dto.notifications.OverdraftNotificationDTO;
 import jnpp.service.dto.notifications.PaymentMeanNotificationDTO;
+import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 
 /**
  *
@@ -32,20 +36,21 @@ public class NotifView {
                 message = "Vous avez rendez-vous avec conseiller le " + appoint.getAppointment().getDate().toString();
                 break;
             case PAYMENT_MEAN:
-                PaymentMeanNotificationDTO mean = (PaymentMeanNotificationDTO) notif;    
-                message = "PaymentMean";
+                PaymentMeanNotificationDTO mean = (PaymentMeanNotificationDTO) notif;
+                Map<PaymentMeanDTO.Type, String> types = Translator.getInstance().translatePaymentMean(Language.FR);
+                message = "Votre " + types.get(mean.getPaymentMean().getType()) + " est arrivé";
                 break;
             case MESSAGE:
                 MessageNotificationDTO msg = (MessageNotificationDTO) notif;    
                 message = "Vous avez un reçu un nouveau message";
                 break;
             case MOVEMENT:
-                MovementNotificationDTO move = (MovementNotificationDTO) notif;                    
-                message = "movement";
+                MovementNotificationDTO move = (MovementNotificationDTO) notif;
+                message = "Une transaction a eu lieu sur un de vos compte";
                 break;
             case OVERDRAFT:
                 OverdraftNotificationDTO over = (OverdraftNotificationDTO) notif;
-                message = "overdraft";
+                message = "Vous êtes en négatif sur le compte " + over.getRib();
                 break;
             default:
                 throw new AssertionError(notif.getType().name());     

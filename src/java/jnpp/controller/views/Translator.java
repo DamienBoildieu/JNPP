@@ -6,6 +6,7 @@ import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.accounts.CurrencyDTO;
 import jnpp.service.dto.accounts.SavingBookDTO;
+import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 
 
 public class Translator {
@@ -24,7 +25,6 @@ public class Translator {
     {
         return TranslatorHolder.instance;
     }
-    
     
     public Map<CurrencyDTO,String> translateCurrency(Language lang) {
         switch (lang) {
@@ -102,6 +102,32 @@ public class Translator {
                     break;
                 default:
                     throw new AssertionError(type.name());  
+            }
+        }
+        return map;
+    }
+    
+    public Map<PaymentMeanDTO.Type,String> translatePaymentMean(Language lang) {
+        switch (lang) {
+            case FR:    
+                return paymentMeanToFrench();
+            default:
+                throw new AssertionError(lang.name());
+        }
+    }
+    
+    private Map<PaymentMeanDTO.Type, String> paymentMeanToFrench() {
+        Map<PaymentMeanDTO.Type, String> map = new HashMap<PaymentMeanDTO.Type, String>();
+        for (PaymentMeanDTO.Type type : PaymentMeanDTO.Type.values()) {
+            switch (type) {
+                case BANKCARD:
+                    map.put(type, "carte bancaire");
+                    break;
+                case CHECKBOOK:
+                    map.put(type, "chéquier");
+                    break;
+                default:
+                    throw new AssertionError(type.name());                
             }
         }
         return map;

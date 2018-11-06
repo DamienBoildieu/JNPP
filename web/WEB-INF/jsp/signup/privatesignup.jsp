@@ -19,7 +19,7 @@
                             <div class="card blue s12">
                                 <p class="flow-text white-text">Inscrivez-vous</p>
                             </div>
-                            <form method="POST" action="privatesignup.htm">
+                            <form method="POST" id="signup" action="privatesignup.htm">
                                 <div class="row">
                                     <div class="col s6">
                                         <div class="row">
@@ -36,7 +36,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="input-field col s12">
-                                                <select name="gender">
+                                                <select name="gender" form="signup">
                                                     <c:forEach items="${genders}" var="gender">
                                                         <option value="${gender}">${gendersMap[gender]}</option>   
                                                     </c:forEach>

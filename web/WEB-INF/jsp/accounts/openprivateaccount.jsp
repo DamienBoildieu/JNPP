@@ -33,35 +33,28 @@
                                     </tr>
                                     <tr>
                                         <div class="col s12">
-                                            <form method="POST" action="opensavingaccount.htm">
+                                            <form method="POST" id="savingAccount"action="opensavingaccount.htm">                                                   
                                                 <div class="row">
-                                                    <div class="row">
-                                                        <div class="col s12">
-                                                            <input type="submit" value="Livret" class="btn blue" />
-                                                        </div>
+                                                    <div class="input-field col s12">
+                                                        <select name="bookName" form="savingAccount">
+                                                            <c:forEach items="${books}" var="book">
+                                                                <option value="${book.name}">${book.name}</option>        
+                                                            </c:forEach>
+                                                        </select>
+                                                        <label>Nom du livret</label>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="input-field col s12">
-                                                            <select name="book">
-                                                                <c:forEach items="${books}" var="book">
-                                                                    <option value="${book.name}">${book.name}</option>        
-                                                                </c:forEach>
-                                                            </select>
-                                                            <label>Nom du livret</label>
-                                                        </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12">
+                                                        <input type="submit" value="Livret" class="btn blue" />
                                                     </div>
-                                                </div>                                        
+                                                </div>
                                             </form>
                                         </div>
                                     </tr>
                                     <tr>
                                         <div class="col s12">
-                                            <form method="POST" action="openjointaccount.htm">
-                                                <div class="row">
-                                                    <div class="col s12">
-                                                        <input type="submit" value="Compte joint" class="btn blue" />    
-                                                    </div>                                           
-                                                </div>
+                                            <form method="POST" id="jointAccount" action="openjointaccount.htm">                                                
                                                 <input type="hidden" id="nbClients" name="nbClients" value=${nbClients}>
                                                 <c:forEach begin="1" end="${nbClients}" var="index">
                                                     <div class="row">
@@ -74,7 +67,7 @@
                                                                                                               class="validate" name="firstName${index}" id="firstName${index}" required>
                                                         </div>
                                                         <div class="input-field col s4">
-                                                            <select name="gender${index}">
+                                                            <select name="gender${index}" form="jointAccount">
                                                                 <c:forEach items="${genders}" var="gender">
                                                                     <option value="${gender}">${gendersMap[gender]}</option>        
                                                                 </c:forEach>
@@ -90,6 +83,11 @@
                                                     <div class="col s6">
                                                         <a class="btn-floating blue" href="<c:url value='/openaccount.htm' />?nbClients=${nbClients-1}"><i class="material-icons">remove</i></a>
                                                     </div> 
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12">
+                                                        <input type="submit" value="Compte joint" class="btn blue" />    
+                                                    </div>                                           
                                                 </div>
                                             </form>
                                         </div>
