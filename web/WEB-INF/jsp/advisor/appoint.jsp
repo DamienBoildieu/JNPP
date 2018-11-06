@@ -16,16 +16,16 @@
                             <c:forEach items="${appoints}" var="appoint">
                                 <div class="card blue s12">
                                     <div class="row">
-                                        <p class="withe-text">
-                                            ${appoint.day}/${appoint.month}/${appoint.year} ${appoint.hour}h${appoint.minute} avec ${appoint.getAdvisor().getIdentity().getFirstname()} ${appoint.getAdvisor().getIdentity().getLasttname()}
+                                        <p class="white-text">
+                                            ${appoint.day}/${appoint.month}/${appoint.year} ${appoint.hour}h${appoint.minute} avec ${appoint.getAdvisor().getIdentity().getFirstname()} ${appoint.getAdvisor().getIdentity().getLastname()}
                                         </p>
                                     </div>
                                     <div class="row">
-                                        <form method="POST" action="cancel.htm">
+                                        <form method="POST" action="cancelappoint.htm">
                                             <input type="hidden" id="id" name="id" value=${appoint.id}>
                                             <div class="row">
                                                 <div class="col s12">
-                                                    <input type="submit" value="Annuler" class="btn blue" />
+                                                    <input type="submit" value="Annuler" class="btn-small blue" />
                                                 </div>
                                             </div>
                                         </form>      
@@ -33,7 +33,7 @@
                                 </div>
                             </c:forEach>
                             <div class="row">
-                                <form method="POST" action="makeappoint.htm">
+                                <form method="POST" action="makeappoint.htm" class="valign-wrapper">
                                     <input type="hidden" id="id" name="id" value=${appoint.id}>
                                     <div class="col s4">
                                         <label for="date">Jour</label> <input type="date"

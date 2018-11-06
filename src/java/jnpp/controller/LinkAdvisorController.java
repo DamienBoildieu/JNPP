@@ -95,7 +95,7 @@ public class LinkAdvisorController {
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
      * @param response la réponse
-     * @return Une vue sur les informations du conseiller si l'utilisateur est connecté, une redirection vers l'index sinon
+     * @return Une vue sur le chat avec le conseiller
      * @throws Exception 
      */
     @RequestMapping(value = "message", method = RequestMethod.GET)
@@ -143,11 +143,11 @@ public class LinkAdvisorController {
         return new ModelAndView("redirect:/disconnect.htm");
     }
     /**
-     * Requête sur la vue des renez-vous
+     * Requête sur la vue des rendez-vous
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
      * @param response la réponse
-     * @return Une vue sur les informations du conseiller si l'utilisateur est connecté, une redirection vers l'index sinon
+     * @return Une vue sur les rendez-vous du client
      * @throws Exception 
      */
     @RequestMapping(value = "appoint", method = RequestMethod.GET)
