@@ -1,22 +1,26 @@
 <div>
-    <form method="POST" action="/JNPP/banquier/transactions/depot.htm">
+    <form method="POST" action="sale.htm" id="sale">
         <div class="card">
             <div class="row valign-wrapper">
                 <div class="col s10">
-                    <table class="centered">
+                    <table class="centered striped">
                         <thead>
                             <tr>
-                                <th>RIB</th>
-                                <th>Montant</th>
+                                <th>Quantite</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>
-                                    <input type="text" name="rib" class="center-align">
+                                    <input type="number" name="amount" class="center-align">
                                 </td>
                                 <td>
-                                    <input type="number" name="amount" class="center-align">
+                                    <select name="share" form="sale">
+                                        <c:forEach items="${sharesToSale}" var="share">
+                                            <option value="${share}" selected>${share}</option>
+                                        </c:forEach>
+                                    </select>
                                 </td>
                             </tr>
                             <tr>
@@ -36,7 +40,7 @@
                 </div>
                 <div class="col s2">
                     <div class="center-align">
-                        <button class="btn waves-effect waves-light" type="submit">Deposer</button> 
+                        <button class="btn waves-effect blue" type="submit" name="purchase" value="purchase">Vendre</button> 
                     </div>
                 </div>
             </div>

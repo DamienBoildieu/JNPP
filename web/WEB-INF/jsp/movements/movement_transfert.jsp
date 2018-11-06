@@ -1,26 +1,34 @@
 <div>
-    <form method="POST" action="/JNPP/banquier/transactions/depot.htm">
+    <form method="POST" action="transfert.htm" name="transfert">
         <div class="card">
             <div class="row valign-wrapper">
                 <div class="col s10">
-                    <table class="centered">
+                    <table class="centered striped">
                         <thead>
                             <tr>
-                                <th>RIB</th>
+                                <th>RIB orgine</th>
+                                <th>RIB destination</th>
                                 <th>Montant</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>
-                                    <input type="text" name="rib" class="center-align">
+                                    <select name="ribFrom" form="transfert" required>
+                                        <c:forEach items="${ribMoneyAccount}" var="rib">
+                                            <option value="${rib}" selected>${rib}</option>
+                                        </c:forEach>
+                                    </select>
                                 </td>
                                 <td>
-                                    <input type="number" name="amount" class="center-align">
+                                    <input type="text" name="ribTo" class="center-align" required>
+                                </td>
+                                <td>
+                                    <input type="number" name="amount" class="center-align" required>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2">
+                                <td colspan="3">
                                     <div class="row valign-wrapper">
                                         <div class="col s1">
                                             Libelle:
@@ -36,7 +44,7 @@
                 </div>
                 <div class="col s2">
                     <div class="center-align">
-                        <button class="btn waves-effect waves-light" type="submit">Deposer</button> 
+                        <button class="btn waves-effect blue" type="submit">Transferer</button> 
                     </div>
                 </div>
             </div>

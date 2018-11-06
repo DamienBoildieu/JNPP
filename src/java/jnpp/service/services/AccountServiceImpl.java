@@ -113,6 +113,7 @@ public class AccountServiceImpl implements AccountService {
             throw new FakeClientException();
         }
         ShareAccountEntity account = accountDAO.findShareByLogin(login);
+        if (account == null) return null;
         List<ShareTitleEntity> shareTitles = shareTitleDAO.findAllByRib(account.getRib());
         account.setShareTitles(shareTitles);
         return account.toDTO();

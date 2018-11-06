@@ -103,7 +103,7 @@ public class AdvisorServiceImpl implements AdvisorService {
     }
 
     @Override
-    public AppointmentDTO makeAppointment(String login, Date date) throws FakeClientException, DateException, DuplicateAppointmentException, AvailableException {
+    public AppointmentDTO makeAppointment(String login, Date date) throws FakeClientException, DateException, AvailableException {
         if (login == null || date == null) {
             throw new IllegalArgumentException();
         }

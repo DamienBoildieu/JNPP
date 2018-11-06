@@ -28,8 +28,7 @@ public interface AdvisorService {
             throws FakeClientException;
 
     AppointmentDTO makeAppointment(String login, Date date)
-            throws FakeClientException, DateException,
-            DuplicateAppointmentException, AvailableException;
+            throws FakeClientException, DateException, AvailableException;
 
     void cancelAppoint(String login, Long id)
             throws FakeClientException, AppointmentOwnerException, DateException;
