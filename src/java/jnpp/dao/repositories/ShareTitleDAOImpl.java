@@ -1,5 +1,6 @@
 package jnpp.dao.repositories;
 
+import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import jnpp.dao.entities.accounts.ShareTitleEntity;
@@ -20,6 +21,14 @@ public class ShareTitleDAOImpl extends GenericDAOImpl<ShareTitleEntity> implemen
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ShareTitleEntity> findAllByRib(String rib) {
+        Query query = getEm().createNamedQuery("fin_all_sharetitle_by_rib");
+        query.setParameter("rib", rib);
+        return (List<ShareTitleEntity>) query.getResultList();
     }
 
 }
