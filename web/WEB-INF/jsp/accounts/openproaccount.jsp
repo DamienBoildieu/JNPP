@@ -18,9 +18,10 @@
                                     <p class="white-text flow-text">Choisissez le type de compte à ouvrir</p>
                                 </div>
                             </div>
-                            <table>
-                                <tbody>
-                                    <tr>
+                            <ul class="collapsible">
+                                <li>
+                                    <div class="collapsible-header">Compte courant</div>
+                                    <div class="collapsible-body">
                                         <div class="col s12">
                                             <form method="POST" action="opencurrentaccount.htm">
                                                 <div class="row">
@@ -30,8 +31,11 @@
                                                 </div>
                                             </form>
                                         </div>
-                                    </tr>
-                                    <tr>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-header">Compte titres</div>
+                                    <div class="collapsible-body">
                                         <div class="col s12">
                                             <form method="POST" action="openshareaccount.htm">
                                                 <div class="row">
@@ -41,9 +45,9 @@
                                                 </div>
                                             </form>
                                         </div>
-                                    </tr>
-                                </tbody>
-                            </table>                         
+                                    </div>
+                                </li>
+                            </ul>                        
                         </div>
                     </div>
                 </div>

@@ -69,7 +69,8 @@ public class MovementView {
                 break;
             case SALE:
                 SaleDTO sale = (SaleDTO)movement;
-                value = sale.getAmount().toString();
+                Integer saleAmount = -sale.getAmount();
+                value = saleAmount.toString();
                 label = sale.getShare().getName();
                 otherAccount = sale.getRibTo();
                 break;

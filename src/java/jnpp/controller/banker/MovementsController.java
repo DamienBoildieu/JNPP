@@ -38,7 +38,7 @@ public class MovementsController {
     protected ModelAndView movementsGet(Model model, HttpServletRequest request,
             HttpServletResponse response, RedirectAttributes rm) {
         List<ShareDTO> shares = accountService.getShares();
-        ModelAndView mv = new ModelAndView("banker/movements_board");
+        ModelAndView mv = new ModelAndView("banker/movement_board");
         mv.addObject("shares", shares);
         return mv;
     }

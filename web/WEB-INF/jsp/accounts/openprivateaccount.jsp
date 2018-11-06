@@ -17,10 +17,14 @@
                                 <div class="card blue s12">
                                     <p class="white-text flow-text">Choisissez le type de compte à ouvrir</p>
                                 </div>
-                            </div>
-                            <table>
-                                <tbody>
-                                    <tr>
+                            </div>                                       
+                        </div>
+                    </div>
+                </div>
+                 <ul class="collapsible">
+                                <li>
+                                    <div class="collapsible-header">Compte courant</div>
+                                    <div class="collapsible-body white">
                                         <div class="col s12">
                                             <form method="POST" action="opencurrentaccount.htm">
                                                 <div class="row">
@@ -30,8 +34,11 @@
                                                 </div>
                                             </form>
                                         </div>
-                                    </tr>
-                                    <tr>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-header">Livret</div>
+                                    <div class="collapsible-body white">
                                         <div class="col s12">
                                             <form method="POST" id="savingAccount"action="opensavingaccount.htm">                                                   
                                                 <div class="row">
@@ -51,8 +58,11 @@
                                                 </div>
                                             </form>
                                         </div>
-                                    </tr>
-                                    <tr>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-header">Compte joint</div>
+                                    <div class="collapsible-body white">
                                         <div class="col s12">
                                             <form method="POST" id="jointAccount" action="openjointaccount.htm">                                                
                                                 <input type="hidden" id="nbClients" name="nbClients" value=${nbClients}>
@@ -91,8 +101,11 @@
                                                 </div>
                                             </form>
                                         </div>
-                                    </tr>
-                                    <tr>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-header">Compte titres</div>
+                                    <div class="collapsible-body white">
                                         <div class="col s12">
                                             <form method="POST" action="openshareaccount.htm">
                                                 <div class="row">
@@ -102,12 +115,9 @@
                                                 </div>
                                             </form>
                                         </div>
-                                    </tr>
-                                </tbody>
-                            </table>                         
-                        </div>
-                    </div>
-                </div>
+                                    </div>
+                                </li>
+                            </ul>         
             </div>
             <%@ include file="../include/notif.jsp"%>       
         </main>

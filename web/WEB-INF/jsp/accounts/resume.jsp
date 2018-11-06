@@ -17,7 +17,7 @@
                     </div>
                     <div style="margin-bottom: 5px;"></div>
                     <div clas="row">
-                        <a class="btn blue" href="<c:url value='/transaction.htm' />">Faire une transaction</a>
+                        <a class="btn blue" href="<c:url value='/movement.htm' />">Faire une transaction</a>
                     </div>
                 </div>
             </div>

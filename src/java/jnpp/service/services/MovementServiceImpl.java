@@ -303,7 +303,7 @@ public class MovementServiceImpl implements MovementService {
             throw new NoCurrentAccountException();
         }
 
-        ShareEntity share = shareDAO.find(this);
+        ShareEntity share = shareDAO.find(name);
         if (share == null) {
             throw new FakeShareException();
         }

@@ -19,9 +19,14 @@ import jnpp.service.dto.accounts.ShareDTO;
 import jnpp.service.dto.accounts.ShareTitleDTO;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.exceptions.accounts.CurrencyException;
+import jnpp.service.exceptions.accounts.NoCurrentAccountException;
+import jnpp.service.exceptions.accounts.NoShareAccountException;
 import jnpp.service.exceptions.entities.FakeAccountException;
 import jnpp.service.exceptions.entities.FakeClientException;
+import jnpp.service.exceptions.entities.FakeShareException;
+import jnpp.service.exceptions.entities.FakeShareTitleException;
 import jnpp.service.exceptions.movements.AccountTypeException;
+import jnpp.service.exceptions.movements.AmountException;
 import jnpp.service.exceptions.movements.DebitAuthorizationException;
 import jnpp.service.exceptions.movements.OverdraftException;
 import jnpp.service.exceptions.owners.AccountOwnerException;
@@ -75,6 +80,7 @@ public class MovementController {
                     alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 }
+                return new ModelAndView("redirect:/disconnect.htm");
             }
         }
 
@@ -155,6 +161,12 @@ public class MovementController {
                 rm.addFlashAttribute("alerts", alerts);
             }
         } catch (FakeClientException ex) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+            }
             return new ModelAndView("redirect:/disconnect.htm");
         } catch (FakeAccountException ex) {
 
@@ -225,6 +237,12 @@ public class MovementController {
                 rm.addFlashAttribute("alerts", alerts);
             }
         } catch (FakeClientException ex) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+            }
             return new ModelAndView("redirect:/disconnect.htm");
         } catch (FakeAccountException ex) {
 
@@ -282,7 +300,51 @@ public class MovementController {
         if (!SessionController.isConnected(session)) {
             return new ModelAndView("redirect:/index.htm");
         }
-
+        String amountStr = request.getParameter("amount");
+        String share = request.getParameter("share");
+        String label = request.getParameter("label");
+        if (label==null) {
+            label = "";
+        }
+        try {
+            movementService.purchaseShareTitles(SessionController.getClient(session).getLogin(), share, Integer.parseInt(amountStr), label);
+        } catch (FakeClientException ex) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+            }
+            return new ModelAndView("redirect:/disconnect.htm");
+        } catch (NoCurrentAccountException ex) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte courant pour effectuer cette action"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte courant pour effectuer cette action"));
+            }
+        } catch (NoShareAccountException ex) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte titres pour effectuer cette action"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte titres pour effectuer cette action"));
+            }
+        } catch (FakeShareException ex) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Cette action de bourse n'existe pas"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Cette action de bourse n'existe pas"));
+            }
+        } catch (AmountException ex) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne pouvez pas acheter ces actions"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne pouvez pas acheter ces actions"));
+            }
+        }
         return new ModelAndView("redirect:/movement.htm");
     }
 
@@ -290,8 +352,7 @@ public class MovementController {
     private ModelAndView sale(Model model, HttpServletRequest request,
              HttpServletResponse response, RedirectAttributes rm)
             throws Exception {
-
-        HttpSession session = request.getSession();
+HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
         if (session == null) {
             session = request.getSession(true);
@@ -302,10 +363,51 @@ public class MovementController {
         if (!SessionController.isConnected(session)) {
             return new ModelAndView("redirect:/index.htm");
         }
-
+        String amountStr = request.getParameter("amount");
+        String share = request.getParameter("share");
+        String label = request.getParameter("label");
+        if (label==null) {
+            label = "";
+        }
+        try {
+            movementService.saleShareTitles(SessionController.getClient(session).getLogin(), share, Integer.parseInt(amountStr), label);
+        } catch (FakeClientException ex) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+            }
+            return new ModelAndView("redirect:/disconnect.htm");
+        } catch (NoCurrentAccountException ex) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte courant pour effectuer cette action"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte courant pour effectuer cette action"));
+            }
+        } catch (NoShareAccountException ex) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte titres pour effectuer cette action"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte titres pour effectuer cette action"));
+            }
+        } catch (FakeShareTitleException ex) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne possédez pas ces actions"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne possédez pas ces actions"));
+            }
+        } catch (AmountException ex) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne possédez pas assez d'actions"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne possédez pas assez d'actions"));
+            }
+        }
         return new ModelAndView("redirect:/movement.htm");
     }
-
-}
-
 }
