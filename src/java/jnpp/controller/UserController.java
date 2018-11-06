@@ -442,7 +442,7 @@ public class UserController {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new ModelAndView("redirect:/userinfo.htm");
+                return new ModelAndView("redirect:/disconnect.htm");
             }
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas pouvoir arriver
@@ -495,7 +495,7 @@ public class UserController {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new ModelAndView("redirect:/userinfo.htm");
+                return new ModelAndView("redirect:/disconnect.htm");
             } catch (InformationException invalidFormat) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Une erreur est présente dans le formulaire"));
@@ -568,7 +568,7 @@ public class UserController {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);    
                 }
-                return new ModelAndView("redirect:/userinfo.htm");
+                return new ModelAndView("redirect:/disconnect.htm");
             }
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas pouvoir arriver

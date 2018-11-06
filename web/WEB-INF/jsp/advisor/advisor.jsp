@@ -18,19 +18,27 @@
                                 <div class='container' style="margin-bottom: 20px; margin-top: 40px;">
                                     <div class="card-content white-text">
                                         <span class="card-title center-align">${advisor.getIdentity().getFirstname()} ${advisor.getIdentity().getLastname()}</span>
-                                        <%--<div class="row">
+                                        <div class="row">
                                             <div class="col s12">
-                                                <p>${advisor.agency}</p>
+                                                <p>${advisor.officeAddress}</p>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col s12">
                                                 <p>${advisor.phone}</p>
                                             </div>
-                                        </div>--%>
+                                        </div>
                                         <div class="row">
                                             <div class="col s12">
+                                                <p>${advisor.email}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s6">
                                                 <a class="white-text hoverable" href="<c:url value='/message.htm' />"><b>Envoyez un message </b><i class="material-icons">message</i></a>
+                                            </div>
+                                            <div class="col s6">
+                                                <a class="white-text hoverable" href="<c:url value='/appoint.htm' />"><b>Vos rendez-vous</b><i class="material-icons">event</i></a>
                                             </div>
                                         </div>
                                     </div>

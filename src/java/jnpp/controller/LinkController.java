@@ -65,6 +65,7 @@ public class LinkController {
                         alerts = new ArrayList<AlertMessage>(); 
                         alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     }
+                    return new ModelAndView("redirect:/disconnect.htm");
                 }
             }
         }
@@ -88,43 +89,6 @@ public class LinkController {
             SessionController.setLanguage(session,Translator.Language.FR);
         if (!SessionController.isConnected(session))
             return new JNPPModelAndView("signup/signupsuccess", ViewInfo.createInfo(session, alerts));
-        return new ModelAndView("redirect:/index.htm");
-    }
-    /**
-     * Requête sur la vue du conseiller d'un utilisateur
-     * @param model le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param response la réponse
-     * @return Une vue sur les informations du conseiller si l'utilisateur est connecté, une redirection vers l'index sinon
-     * @throws Exception 
-     */
-    @RequestMapping(value = "advisor", method = RequestMethod.GET)
-    protected ModelAndView linkToAdvisor(Model model, HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
-            session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
-        if (SessionController.isConnected(session)) {
-            Boolean hasNotif = SessionController.getHasNotif(session);
-            if (!hasNotif) {  
-                try {
-                    hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size()>0;
-                    SessionController.setHasNotif(session, hasNotif);
-                } catch (FakeClientException invalidClient) {
-                    if (alerts != null) {
-                        alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
-                    } else {
-                        alerts = new ArrayList<AlertMessage>(); 
-                        alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
-                    }
-                }
-            }
-            ModelAndView view =  new JNPPModelAndView("advisor/advisor", ViewInfo.createInfo(session, alerts));
-            return view;
-        }
         return new ModelAndView("redirect:/index.htm");
     }
     /**
@@ -183,7 +147,7 @@ public class LinkController {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);   
                 }
-                return new ModelAndView("redirect:/index.htm");
+                return new ModelAndView("redirect:/disconnect.htm");
             }
         }
         return new ModelAndView("redirect:/index.htm");

@@ -20,6 +20,7 @@ import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.clients.PrivateDTO;
 import jnpp.service.exceptions.entities.FakeClientException;
+import jnpp.service.services.ClientService;
 import jnpp.service.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class LinkUserController {
     @Autowired
     private NotificationService notifService;
+    @Autowired
+    ClientService clientService;
     /**
      * Requête sur la vue de connexion
      * @param model le model contient les alertes si il y a eu un redirect
@@ -153,6 +156,7 @@ public class LinkUserController {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 }
+                return new ModelAndView("redirect:/disconnect.htm");
             }
         }
         ModelAndView view = new JNPPModelAndView("manageuser/home", ViewInfo.createInfo(session, alerts));
@@ -188,6 +192,7 @@ public class LinkUserController {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 }
+                return new ModelAndView("redirect:/disconnect.htm");
             }
         }
         ClientDTO client = SessionController.getClient(session);

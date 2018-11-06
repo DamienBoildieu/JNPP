@@ -74,6 +74,7 @@ public class LinkAccountController {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 }
+                return new ModelAndView("redirect:/disconnect.htm");
             }
         }
         String id = request.getParameter("id");
@@ -173,6 +174,7 @@ public class LinkAccountController {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 }
+                return new ModelAndView("redirect:/disconnect.htm");
             }
         }
         ClientDTO client = SessionController.getClient(session);
@@ -232,6 +234,7 @@ public class LinkAccountController {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 }
+                return new ModelAndView("redirect:/disconnect.htm");
             }
         }
         List<AccountDTO> accounts = accountService.getAccounts(SessionController.getClient(session).getLogin());
