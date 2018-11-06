@@ -113,8 +113,9 @@ public class LinkAccountController {
                         }
                         view.addObject("movements",movementsSaving);
                         break;
-                    case SHARE:
+                    case SHARE:                       
                         view = new JNPPModelAndView("accounts/shareaccount", ViewInfo.createInfo(session, alerts));
+                        view.addObject("accountsMap", Translator.getInstance().translateAccounts(SessionController.getLanguage(session)));
                         break;
                     default:
                         throw new AssertionError(account.getType().name());                    
