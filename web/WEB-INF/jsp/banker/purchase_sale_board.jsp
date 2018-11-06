@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="container">
-    <form method="POST" action="/JNPP/banquier/transactions/achat_vente.htm" id="purchase_sale">
+    <form method="POST" action="/JNPP/banquier/transactions/achat_vente.htm" id="achat_vente">
         <div class="card">
             <div class="row valign-wrapper">
                 <div class="col s10">

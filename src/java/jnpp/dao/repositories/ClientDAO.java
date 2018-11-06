@@ -14,5 +14,5 @@ public interface ClientDAO extends GenericDAO<ClientEntity> {
     ClientEntity findByLoginPassword(String login, String password);
     List<String> findAllLogin();
     List<ClientEntity> findAll();
-    
+    List<ClientEntity> findAllWithoutAdvisor();
 }

@@ -158,6 +158,13 @@ public class BankerServiceImpl implements BankerService {
         advisor = new AdvisorEntity(IdentityEntity.Gender.toEntity(gender),
                 firstname, lastname, email, phone, number, street, city, state);
         advisor = advisorDAO.save(advisor);
+        
+        List<ClientEntity> clients = clientDAO.findAllWithoutAdvisor();
+        for (ClientEntity client : clients) {
+            client.setAdvisor(advisor);
+            clientDAO.update(client);
+        }        
+        
         return advisor.toDTO();
     }
 
