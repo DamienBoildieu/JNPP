@@ -27,76 +27,81 @@ import jnpp.service.dto.notifications.NotificationDTO;
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
     @NamedQuery(
-        name = "find_all_notification_by_login",
-        query = "SELECT n FROM NotificationEntity n "
-                + "WHERE n.client.login = :login "
-                + "ORDER BY n.date DESC"),
+            name = "find_all_notification_by_login",
+            query = "SELECT n FROM NotificationEntity n "
+            + "WHERE n.client.login = :login "
+            + "ORDER BY n.date DESC")
+    ,
     @NamedQuery(
-        name = "find_unseen_notification_by_login",
-        query = "SELECT n FROM NotificationEntity n "
-                + "WHERE n.client.login = :login "
-                + "  AND n.seen = false "
-                + "ORDER BY n.date DESC"),
+            name = "find_unseen_notification_by_login",
+            query = "SELECT n FROM NotificationEntity n "
+            + "WHERE n.client.login = :login "
+            + "  AND n.seen = false "
+            + "ORDER BY n.date DESC")
+    ,
     @NamedQuery(
-        name = "find_unseen_recent_notification_by_login",
-        query = "SELECT n FROM NotificationEntity n "
-                + "WHERE n.client.login = :login "
-                + "  AND n.seen = false"
-                + "  AND n.date >= :date "
-                + "ORDER BY n.date DESC"),
+            name = "find_unseen_recent_notification_by_login",
+            query = "SELECT n FROM NotificationEntity n "
+            + "WHERE n.client.login = :login "
+            + "  AND n.seen = false"
+            + "  AND n.date >= :date "
+            + "ORDER BY n.date DESC")
+    ,
     @NamedQuery(
-        name = "set_all_notification_seen_by_login",
-        query = "UPDATE NotificationEntity n "
-                + "SET n.seen = true "
-                + "WHERE n.client.login = :login")})
+            name = "set_all_notification_seen_by_login",
+            query = "UPDATE NotificationEntity n "
+            + "SET n.seen = true "
+            + "WHERE n.client.login = :login")})
 public abstract class NotificationEntity implements Serializable {
 
     public static enum Type {
-        
+
         APPOINTMENT,
         PAYMENT_MEAN,
         MESSAGE,
         MOVEMENT,
         OVERDRAFT;
-        
+
         public static class Values {
-            
+
             public static final String APPOINTMENT = "APPOINTMENT";
             public static final String PAYMENT_MEAN = "PAYMENT_MEAN";
             public static final String MESSAGE = "MESSAGE";
             public static final String MOVEMENT = "MOVEMENT";
             public static final String OVERDRAFT = "OVERDRAFT";
-                    
-            private Values() {}
-            
+
+            private Values() {
+            }
+
         }
-        
+
     }
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @ManyToOne
     @JoinColumn(name = "client_fk")
     private ClientEntity client;
-    
+
     @Temporal(TemporalType.DATE)
     private Date date;
     private Boolean seen;
-    
-    public NotificationEntity() {}
-    
+
+    public NotificationEntity() {
+    }
+
     public NotificationEntity(ClientEntity client, Date date, Boolean seen) {
         this.client = client;
         this.date = date;
         this.seen = seen;
     }
-    
+
     public abstract Type getType();
-    
+
     public Long getId() {
         return id;
     }
@@ -144,14 +149,16 @@ public abstract class NotificationEntity implements Serializable {
         NotificationEntity other = (NotificationEntity) object;
         return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
-    
+
     public abstract NotificationDTO toDTO();
-    
+
     public static List<NotificationDTO> toDTO(List<NotificationEntity> entities) {
         List<NotificationDTO> dtos = new ArrayList<NotificationDTO>(entities.size());
         Iterator<NotificationEntity> it = entities.iterator();
-        while (it.hasNext()) dtos.add(it.next().toDTO());
+        while (it.hasNext()) {
+            dtos.add(it.next().toDTO());
+        }
         return dtos;
     }
-    
+
 }

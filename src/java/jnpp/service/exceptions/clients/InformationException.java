@@ -2,7 +2,8 @@ package jnpp.service.exceptions.clients;
 
 public class InformationException extends ClientException {
 
-    public InformationException() {}
+    public InformationException() {
+    }
 
     public InformationException(String message) {
         super(message);

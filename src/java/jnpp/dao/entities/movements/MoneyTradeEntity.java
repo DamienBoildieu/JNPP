@@ -7,7 +7,6 @@ import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.accounts.CurrencyEntity;
 
 @Entity
@@ -16,19 +15,20 @@ import jnpp.dao.entities.accounts.CurrencyEntity;
 public abstract class MoneyTradeEntity extends TradeEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private Double money;
     private CurrencyEntity currency;
 
-    public MoneyTradeEntity() {}
-    
-    public MoneyTradeEntity(Date date, String ribFrom, String ribTo, 
+    public MoneyTradeEntity() {
+    }
+
+    public MoneyTradeEntity(Date date, String ribFrom, String ribTo,
             Double money, CurrencyEntity currency) {
         super(date, ribFrom, ribTo);
         this.money = money;
         this.currency = currency;
     }
-    
+
     public Double getMoney() {
         return money;
     }
@@ -44,5 +44,5 @@ public abstract class MoneyTradeEntity extends TradeEntity implements Serializab
     public void setCurrency(CurrencyEntity currency) {
         this.currency = currency;
     }
-    
+
 }

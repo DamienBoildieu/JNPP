@@ -2,7 +2,8 @@ package jnpp.service.exceptions.owners;
 
 public class AppointmentOwnerException extends OwnerException {
 
-    public AppointmentOwnerException() {}
+    public AppointmentOwnerException() {
+    }
 
     public AppointmentOwnerException(String message) {
         super(message);
@@ -19,5 +20,5 @@ public class AppointmentOwnerException extends OwnerException {
     public AppointmentOwnerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

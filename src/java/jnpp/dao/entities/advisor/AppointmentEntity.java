@@ -21,26 +21,28 @@ import jnpp.service.dto.advisor.AppointmentDTO;
 @Entity
 @NamedQueries({
     @NamedQuery(
-        name = "find_all_appointment_by_rib",
-        query = "SELECT a FROM AppointmentEntity a "
-                + "WHERE a.client.login = :login "
-                + "ORDER BY a.date DESC"),
+            name = "find_all_appointment_by_rib",
+            query = "SELECT a FROM AppointmentEntity a "
+            + "WHERE a.client.login = :login "
+            + "ORDER BY a.date DESC")
+    ,
     @NamedQuery(
-        name = "find_recent_appointment_by_rib",
-        query = "SELECT a FROM AppointmentEntity a "
-                + "WHERE a.client.login = :login "
-                + "  AND a.date >= :date "
-                + "ORDER BY a.date DESC"),
+            name = "find_recent_appointment_by_rib",
+            query = "SELECT a FROM AppointmentEntity a "
+            + "WHERE a.client.login = :login "
+            + "  AND a.date >= :date "
+            + "ORDER BY a.date DESC")
+    ,
     @NamedQuery(
-        name = "count_advisor_appointment_in_min_max",
-        query = "SELECT COUNT(a) FROM AppointmentEntity a "
-                + "WHERE a.advisor.id = :id "
-                + "  AND :min <= a.date "
-                + "  AND a.date <= :max")})
+            name = "count_advisor_appointment_in_min_max",
+            query = "SELECT COUNT(a) FROM AppointmentEntity a "
+            + "WHERE a.advisor.id = :id "
+            + "  AND :min <= a.date "
+            + "  AND a.date <= :max")})
 public class AppointmentEntity implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -48,20 +50,21 @@ public class AppointmentEntity implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date;
     @ManyToOne
-    @JoinColumn(name="client_fk")
+    @JoinColumn(name = "client_fk")
     private ClientEntity client;
     @ManyToOne
-    @JoinColumn(name="advisor_fk")
+    @JoinColumn(name = "advisor_fk")
     private AdvisorEntity advisor;
-    
-    public AppointmentEntity() {}
-    
+
+    public AppointmentEntity() {
+    }
+
     public AppointmentEntity(Date date, ClientEntity client, AdvisorEntity advisor) {
         this.date = date;
         this.client = client;
         this.advisor = advisor;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -93,7 +96,7 @@ public class AppointmentEntity implements Serializable {
     public void setAdvisor(AdvisorEntity advisor) {
         this.advisor = advisor;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -114,16 +117,18 @@ public class AppointmentEntity implements Serializable {
     public String toString() {
         return "jnpp.dao.entities.Appointment[ id=" + id + " ]";
     }
-    
+
     public AppointmentDTO toDTO() {
         return new AppointmentDTO(id, date, advisor.toDTO());
     }
-    
+
     public static List<AppointmentDTO> toDTO(List<AppointmentEntity> entities) {
         List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>(entities.size());
         Iterator<AppointmentEntity> it = entities.iterator();
-        while (it.hasNext()) dtos.add(it.next().toDTO());
+        while (it.hasNext()) {
+            dtos.add(it.next().toDTO());
+        }
         return dtos;
     }
-    
+
 }

@@ -18,17 +18,18 @@ import jnpp.service.dto.accounts.ShareTitleDTO;
 @DiscriminatorValue(value = AccountEntity.Type.Values.SHARE)
 @NamedQueries({
     @NamedQuery(
-        name = "has_share_account",
-        query = "SELECT COUNT(a) "
-                + "FROM ShareAccountEntity a "
-                + "INNER JOIN a.clients a_clients "
-                + "WHERE a_clients.login = :login"),
+            name = "has_share_account",
+            query = "SELECT COUNT(a) "
+            + "FROM ShareAccountEntity a "
+            + "INNER JOIN a.clients a_clients "
+            + "WHERE a_clients.login = :login")
+    ,
     @NamedQuery(
-        name = "find_share_account_by_login",
-        query = "SELECT a "
-                + "FROM ShareAccountEntity a "
-                + "INNER JOIN a.clients a_clients "
-                + "WHERE a_clients.login = :login")})
+            name = "find_share_account_by_login",
+            query = "SELECT a "
+            + "FROM ShareAccountEntity a "
+            + "INNER JOIN a.clients a_clients "
+            + "WHERE a_clients.login = :login")})
 public class ShareAccountEntity extends AccountEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,15 +39,16 @@ public class ShareAccountEntity extends AccountEntity implements Serializable {
 
     public ShareAccountEntity(String rib, ClientEntity client) {
         super(rib, client);
-    } 
-    
-    public ShareAccountEntity() {}
-    
+    }
+
+    public ShareAccountEntity() {
+    }
+
     @Override
     public Type getType() {
         return AccountEntity.Type.SHARE;
     }
-    
+
     public List<ShareTitleEntity> getShareTitles() {
         return shareTitles;
     }
@@ -54,17 +56,19 @@ public class ShareAccountEntity extends AccountEntity implements Serializable {
     public void setShareTitles(List<ShareTitleEntity> shareTitles) {
         this.shareTitles = shareTitles;
     }
-       
+
     @Override
     public String toString() {
         return "jnpp.dao.entities.ShareAccount[ id=" + getRib() + " ]";
     }
-    
+
     @Override
     public ShareAccountDTO toDTO() {
         List<ShareTitleDTO> titles = new ArrayList<ShareTitleDTO>(shareTitles.size());
         Iterator<ShareTitleEntity> it = shareTitles.iterator();
-        while (it.hasNext()) titles.add(it.next().toDTO());
+        while (it.hasNext()) {
+            titles.add(it.next().toDTO());
+        }
         return new ShareAccountDTO(getRib(), titles);
     }
 
@@ -89,5 +93,5 @@ public class ShareAccountEntity extends AccountEntity implements Serializable {
                 return false;
         }
     }
-    
+
 }

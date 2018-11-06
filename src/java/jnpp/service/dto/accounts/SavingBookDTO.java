@@ -1,11 +1,11 @@
 package jnpp.service.dto.accounts;
 
 public class SavingBookDTO {
-    
+
     private String name;
     private Double moneyRate;
     private Double timeRate;
-    
+
     public SavingBookDTO(String name, Double moneyRate, Double timeRate) {
         this.name = name;
         this.moneyRate = moneyRate;
@@ -35,5 +35,5 @@ public class SavingBookDTO {
     public void setTimeRate(Double timeRate) {
         this.timeRate = timeRate;
     }
-    
+
 }

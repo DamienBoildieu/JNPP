@@ -1,12 +1,11 @@
-
 package jnpp.service.dto.movements;
 
 import java.util.Date;
 
 public abstract class MovementDTO {
-    
+
     public static enum Type {
-    
+
         TRANSFERT,
         DEBIT,
         PURCHASE,
@@ -14,9 +13,9 @@ public abstract class MovementDTO {
         WITHDRAW,
         PAYMENT,
         DEPOSIT;
-        
+
     }
-    
+
     private Date date;
     private String ribFrom;
 
@@ -24,7 +23,7 @@ public abstract class MovementDTO {
         this.date = date;
         this.ribFrom = ribFrom;
     }
-    
+
     public abstract Type getType();
 
     public Date getDate() {

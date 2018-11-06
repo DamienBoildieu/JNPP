@@ -2,7 +2,8 @@ package jnpp.service.exceptions.accounts;
 
 public class NoCurrentAccountException extends AccountException {
 
-    public NoCurrentAccountException() {}
+    public NoCurrentAccountException() {
+    }
 
     public NoCurrentAccountException(String message) {
         super(message);
@@ -19,5 +20,5 @@ public class NoCurrentAccountException extends AccountException {
     public NoCurrentAccountException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

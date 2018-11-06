@@ -4,7 +4,8 @@ import jnpp.service.exceptions.ServiceException;
 
 public abstract class DuplicateException extends ServiceException {
 
-    public DuplicateException() {}
+    public DuplicateException() {
+    }
 
     public DuplicateException(String message) {
         super(message);
@@ -21,5 +22,5 @@ public abstract class DuplicateException extends ServiceException {
     public DuplicateException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

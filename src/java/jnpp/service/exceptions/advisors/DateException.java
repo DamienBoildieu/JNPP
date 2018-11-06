@@ -2,7 +2,8 @@ package jnpp.service.exceptions.advisors;
 
 public class DateException extends AdvisorException {
 
-    public DateException() {}
+    public DateException() {
+    }
 
     public DateException(String message) {
         super(message);
@@ -19,5 +20,5 @@ public class DateException extends AdvisorException {
     public DateException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

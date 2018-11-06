@@ -10,20 +10,25 @@ import jnpp.service.exceptions.owners.NotificationOwnerException;
 public interface NotificationService {
 
     List<NotificationDTO> receiveNotifications(String login) throws FakeClientException;
+
     List<NotificationDTO> receiveUnseenNotifications(String login)
             throws FakeClientException;
+
     List<NotificationDTO> receiveUnseenNotifications(String login, int n)
             throws FakeClientException;
+
     List<NotificationDTO> receiveUnseenNotifications(String login, Date date)
             throws FakeClientException;
-    
+
     void seeAllNotications(String login)
             throws FakeClientException;
+
     void seeNotification(String login, Long id)
             throws FakeClientException, FakeNotificationException,
             NotificationOwnerException;
+
     void seeNotifications(String login, List<Long> ids)
             throws FakeClientException, FakeNotificationException,
             NotificationOwnerException;
-    
+
 }

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class DebitAuthorizationDAOImpl extends GenericDAOImpl<DebitAuthorizationEntity> 
-        implements DebitAuthorizationDAO{
-    
+public class DebitAuthorizationDAOImpl extends GenericDAOImpl<DebitAuthorizationEntity>
+        implements DebitAuthorizationDAO {
+
     @Transactional(readOnly = true)
     @Override
     public DebitAuthorizationEntity findByRibFromRibTo(String ribFrom, String ribTo) {
@@ -23,14 +23,15 @@ public class DebitAuthorizationDAOImpl extends GenericDAOImpl<DebitAuthorization
             return null;
         }
     }
+
     @Transactional(readOnly = true)
     @Override
     public List<DebitAuthorizationEntity> findAllByLogin(String login) {
         Query query = getEm().createNamedQuery("find_all_debit_authorization_by_login");
         query.setParameter("login", login);
         return query.getResultList();
-    }    
-    
+    }
+
     @Transactional(readOnly = true)
     @Override
     public List<DebitAuthorizationEntity> findAllByLoginRibFrom(String login, String rib) {
@@ -49,5 +50,5 @@ public class DebitAuthorizationDAOImpl extends GenericDAOImpl<DebitAuthorization
         Long count = (Long) query.getSingleResult();
         return count != 0;
     }
-    
+
 }

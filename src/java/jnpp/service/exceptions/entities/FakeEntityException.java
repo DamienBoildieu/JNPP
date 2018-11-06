@@ -4,7 +4,8 @@ import jnpp.service.exceptions.ServiceException;
 
 public abstract class FakeEntityException extends ServiceException {
 
-    public FakeEntityException() {}
+    public FakeEntityException() {
+    }
 
     public FakeEntityException(String message) {
         super(message);
@@ -21,5 +22,5 @@ public abstract class FakeEntityException extends ServiceException {
     public FakeEntityException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

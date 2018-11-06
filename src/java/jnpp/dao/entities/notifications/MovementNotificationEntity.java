@@ -15,18 +15,19 @@ import jnpp.service.dto.notifications.MovementNotificationDTO;
 public class MovementNotificationEntity extends NotificationEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @ManyToOne
     @JoinColumn(name = "movement_fk")
     private MovementEntity movement;
 
-    public MovementNotificationEntity() {}
-    
+    public MovementNotificationEntity() {
+    }
+
     public MovementNotificationEntity(ClientEntity client, Date date, Boolean seen, MovementEntity movement) {
         super(client, date, seen);
         this.movement = movement;
-    }    
-    
+    }
+
     @Override
     public Type getType() {
         return NotificationEntity.Type.MOVEMENT;
@@ -44,10 +45,10 @@ public class MovementNotificationEntity extends NotificationEntity implements Se
     public String toString() {
         return "jnpp.dao.entities.notifications.MovementNotificationEntity[ id=" + getId() + " ]";
     }
-    
+
     @Override
     public MovementNotificationDTO toDTO() {
         return new MovementNotificationDTO(getId(), getDate(), getSeen(), movement.toDTO());
     }
-    
+
 }

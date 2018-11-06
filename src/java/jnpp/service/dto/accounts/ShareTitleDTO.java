@@ -1,10 +1,10 @@
 package jnpp.service.dto.accounts;
 
 public class ShareTitleDTO {
-    
+
     private Integer amount;
     private ShareDTO share;
-    
+
     public ShareTitleDTO(Integer amount, ShareDTO share) {
         this.amount = amount;
         this.share = share;
@@ -25,5 +25,5 @@ public class ShareTitleDTO {
     public void setShare(ShareDTO share) {
         this.share = share;
     }
-    
+
 }

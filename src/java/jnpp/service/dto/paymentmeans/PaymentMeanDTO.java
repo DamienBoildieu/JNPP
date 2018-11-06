@@ -1,27 +1,27 @@
 package jnpp.service.dto.paymentmeans;
 
 public abstract class PaymentMeanDTO {
-    
+
     public static enum Type {
-        
+
         BANKCARD,
         CHECKBOOK;
-        
+
     }
-    
+
     public static enum Status {
-    
+
         ORDERED,
         ARRIVED,
         DELIVERED;
-        
+
         public Status next() {
             Status[] status = values();
             return status[(ordinal() + 1) % status.length];
         }
-        
+
     }
-    
+
     private String id;
     private String login;
     private String rib;
@@ -33,7 +33,7 @@ public abstract class PaymentMeanDTO {
         this.rib = rib;
         this.status = status;
     }
-  
+
     public abstract Type getType();
 
     public String getId() {
@@ -67,5 +67,5 @@ public abstract class PaymentMeanDTO {
     public void setStatus(Status status) {
         this.status = status;
     }
-    
+
 }

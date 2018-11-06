@@ -13,7 +13,7 @@ public class ProfessionalDTO extends ClientDTO {
         this.name = name;
         this.owner = owner;
     }
-        
+
     @Override
     public Type getType() {
         return ClientDTO.Type.PROFESIONAL;
@@ -34,5 +34,5 @@ public class ProfessionalDTO extends ClientDTO {
     public void setOwner(IdentityDTO owner) {
         this.owner = owner;
     }
-    
+
 }

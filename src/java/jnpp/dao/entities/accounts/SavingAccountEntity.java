@@ -15,30 +15,31 @@ import jnpp.service.dto.accounts.SavingAccountDTO;
 @DiscriminatorValue(value = AccountEntity.Type.Values.SAVING)
 @NamedQueries({
     @NamedQuery(
-        name = "has_saving_account",
-        query = "SELECT COUNT(a) "
-                + "FROM SavingAccountEntity a "
-                + "INNER JOIN a.clients a_clients "
-                + "WHERE a_clients.login = :login "
-                + "  AND a.savingBook.id = :savingbook_id")})
+            name = "has_saving_account",
+            query = "SELECT COUNT(a) "
+            + "FROM SavingAccountEntity a "
+            + "INNER JOIN a.clients a_clients "
+            + "WHERE a_clients.login = :login "
+            + "  AND a.savingBook.id = :savingbook_id")})
 public class SavingAccountEntity extends MoneyAccountEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Double money;
     private CurrencyEntity currency;
-    
+
     @ManyToOne
-    @JoinColumn(name="savingbook_fk")
-    private SavingBookEntity savingBook;   
-    
-    public SavingAccountEntity() {}
-    
+    @JoinColumn(name = "savingbook_fk")
+    private SavingBookEntity savingBook;
+
+    public SavingAccountEntity() {
+    }
+
     public SavingAccountEntity(String rib, ClientEntity client, Double money, CurrencyEntity currency, SavingBookEntity savingBook) {
         super(rib, client, money, currency);
         this.savingBook = savingBook;
     }
-    
+
     @Override
     public Type getType() {
         return AccountEntity.Type.SAVING;
@@ -56,7 +57,7 @@ public class SavingAccountEntity extends MoneyAccountEntity implements Serializa
     public String toString() {
         return "jnpp.dao.entities.SavingAccountEntity[ id=" + getRib() + " ]";
     }
-    
+
     @Override
     public SavingAccountDTO toDTO() {
         return new SavingAccountDTO(getRib(), getMoney(), getCurrency().toDTO(), savingBook.toDTO());
@@ -82,5 +83,10 @@ public class SavingAccountEntity extends MoneyAccountEntity implements Serializa
                 return false;
         }
     }
-    
+
+    @Override
+    public boolean canOverdraft() {
+        return false;
+    }
+
 }

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShareAccountDTO extends AccountDTO {
-    
+
     private List<ShareTitleDTO> shareTitles;
-    
+
     public ShareAccountDTO(String rib, List<ShareTitleDTO> shareTitles) {
         super(rib);
         this.shareTitles = new ArrayList<ShareTitleDTO>(shareTitles);
@@ -16,7 +16,7 @@ public class ShareAccountDTO extends AccountDTO {
     public Type getType() {
         return AccountDTO.Type.SHARE;
     }
-    
+
     public List<ShareTitleDTO> getShareTitles() {
         return shareTitles;
     }
@@ -24,5 +24,5 @@ public class ShareAccountDTO extends AccountDTO {
     public void setShareTitles(List<ShareTitleDTO> shareTitles) {
         this.shareTitles = shareTitles;
     }
-    
+
 }

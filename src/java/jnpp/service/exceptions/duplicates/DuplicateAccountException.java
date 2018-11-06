@@ -2,7 +2,8 @@ package jnpp.service.exceptions.duplicates;
 
 public class DuplicateAccountException extends DuplicateException {
 
-    public DuplicateAccountException() {}
+    public DuplicateAccountException() {
+    }
 
     public DuplicateAccountException(String message) {
         super(message);
@@ -19,5 +20,5 @@ public class DuplicateAccountException extends DuplicateException {
     public DuplicateAccountException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

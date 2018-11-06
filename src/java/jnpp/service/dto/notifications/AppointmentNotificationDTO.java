@@ -4,7 +4,7 @@ import java.util.Date;
 import jnpp.service.dto.advisor.AppointmentDTO;
 
 public class AppointmentNotificationDTO extends NotificationDTO {
-    
+
     private AppointmentDTO appointment;
 
     public AppointmentNotificationDTO(Long id, Date date, Boolean seen, AppointmentDTO appointment) {
@@ -24,5 +24,5 @@ public class AppointmentNotificationDTO extends NotificationDTO {
     public void setAppointment(AppointmentDTO appointment) {
         this.appointment = appointment;
     }
-    
+
 }

@@ -16,48 +16,53 @@ import jnpp.service.dto.paymentmeans.CheckbookDTO;
 @DiscriminatorValue(value = PaymentMeanEntity.Type.Values.CHECKBOOK)
 @NamedQueries({
     @NamedQuery(
-        name = "find_checkbook_by_login",
-        query = "SELECT c FROM CheckbookEntity c WHERE c.client.login = :login"),
+            name = "find_checkbook_by_login",
+            query = "SELECT c FROM CheckbookEntity c WHERE c.client.login = :login")
+    ,
     @NamedQuery(
-        name = "find_checkbook_by_login_status",
-        query = "SELECT c FROM CheckbookEntity c "
-                + "WHERE c.client.login = :login "
-                + "  AND c.status = :status"),
+            name = "find_checkbook_by_login_status",
+            query = "SELECT c FROM CheckbookEntity c "
+            + "WHERE c.client.login = :login "
+            + "  AND c.status = :status")
+    ,
     @NamedQuery(
-        name = "find_checkbook_by_login_rib",
-        query = "SELECT c FROM CheckbookEntity c "
-                + "WHERE c.client.login = :login "
-                + "  AND c.account.rib = :rib")})
+            name = "find_checkbook_by_login_rib",
+            query = "SELECT c FROM CheckbookEntity c "
+            + "WHERE c.client.login = :login "
+            + "  AND c.account.rib = :rib")})
 public class CheckbookEntity extends PaymentMeanEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-    public CheckbookEntity() {} 
-    
+
+    public CheckbookEntity() {
+    }
+
     public CheckbookEntity(String id, ClientEntity client, AccountEntity account, Status status) {
         super(id, client, account, status);
-    }           
-    
+    }
+
     @Override
     public Type getType() {
         return PaymentMeanEntity.Type.CHECKBOOK;
     }
-    
+
     @Override
     public String toString() {
         return "jnpp.dao.entities.Checkbook[ id=" + getId() + " ]";
     }
-    
+
     @Override
     public CheckbookDTO toDTO() {
         return new CheckbookDTO(getId(), getClient().getLogin(), getAccount().getRib(), getStatus().toDTO());
     }
-    
+
     public static List<CheckbookDTO> toDTO(List<CheckbookEntity> entities) {
         List<CheckbookDTO> dtos = new ArrayList<CheckbookDTO>(entities.size());
         Iterator<CheckbookEntity> it = entities.iterator();
-        while (it.hasNext()) dtos.add(it.next().toDTO());
+        while (it.hasNext()) {
+            dtos.add(it.next().toDTO());
+        }
         return dtos;
     }
-    
+
 }

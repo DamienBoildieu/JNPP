@@ -15,22 +15,23 @@ import jnpp.service.dto.movements.PaymentDTO;
 public class PaymentEntity extends MoneyMovementEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private String target;
-    
+
     @ManyToOne
-    @JoinColumn(name="paymentmean_fk")
+    @JoinColumn(name = "paymentmean_fk")
     private PaymentMeanEntity paymentMean;
-    
-    public PaymentEntity() {}
-    
-    public PaymentEntity(Date date, String ribFrom, Double money, 
+
+    public PaymentEntity() {
+    }
+
+    public PaymentEntity(Date date, String ribFrom, Double money,
             CurrencyEntity currency, String target, PaymentMeanEntity paymentMean) {
         super(date, ribFrom, money, currency);
         this.target = target;
         this.paymentMean = paymentMean;
     }
-    
+
     @Override
     public Type getType() {
         return MovementEntity.Type.PAYMENT;
@@ -51,15 +52,15 @@ public class PaymentEntity extends MoneyMovementEntity implements Serializable {
     public void setPaymentMean(PaymentMeanEntity paymentMean) {
         this.paymentMean = paymentMean;
     }
-    
+
     @Override
     public String toString() {
         return "jnpp.dao.entities.movements.PaymentEntity[ id=" + getId() + " ]";
     }
-    
+
     @Override
     public PaymentDTO toDTO() {
         return new PaymentDTO(getDate(), getRibFrom(), getMoney(), getCurrency().toDTO(), target);
     }
-    
+
 }

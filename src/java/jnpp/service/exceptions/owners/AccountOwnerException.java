@@ -2,7 +2,8 @@ package jnpp.service.exceptions.owners;
 
 public class AccountOwnerException extends OwnerException {
 
-    public AccountOwnerException() {}
+    public AccountOwnerException() {
+    }
 
     public AccountOwnerException(String message) {
         super(message);
@@ -19,5 +20,5 @@ public class AccountOwnerException extends OwnerException {
     public AccountOwnerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

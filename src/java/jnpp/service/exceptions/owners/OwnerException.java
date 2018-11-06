@@ -4,7 +4,8 @@ import jnpp.service.exceptions.ServiceException;
 
 public abstract class OwnerException extends ServiceException {
 
-    public OwnerException() {}
+    public OwnerException() {
+    }
 
     public OwnerException(String message) {
         super(message);
@@ -21,5 +22,5 @@ public abstract class OwnerException extends ServiceException {
     public OwnerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

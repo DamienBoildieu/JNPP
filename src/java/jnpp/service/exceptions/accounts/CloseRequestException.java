@@ -2,7 +2,8 @@ package jnpp.service.exceptions.accounts;
 
 public class CloseRequestException extends AccountException {
 
-    public CloseRequestException() {}
+    public CloseRequestException() {
+    }
 
     public CloseRequestException(String message) {
         super(message);
@@ -19,5 +20,5 @@ public class CloseRequestException extends AccountException {
     public CloseRequestException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

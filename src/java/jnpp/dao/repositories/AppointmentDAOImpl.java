@@ -36,7 +36,5 @@ public class AppointmentDAOImpl extends GenericDAOImpl<AppointmentEntity> implem
         query.setParameter("max", max);
         return (Long) query.getSingleResult();
     }
-    
-    
-    
+
 }

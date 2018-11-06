@@ -1,7 +1,7 @@
 package jnpp.service.dto;
 
 public class AddressDTO {
-    
+
     private Integer number;
     private String street;
     private String city;
@@ -45,10 +45,10 @@ public class AddressDTO {
     public void setState(String state) {
         this.state = state;
     }
-    
+
     @Override
     public String toString() {
         return number + " " + street + ", " + city + ", " + state;
     }
-    
+
 }

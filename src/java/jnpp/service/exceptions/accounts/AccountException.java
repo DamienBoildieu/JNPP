@@ -4,7 +4,8 @@ import jnpp.service.exceptions.ServiceException;
 
 public abstract class AccountException extends ServiceException {
 
-    public AccountException() {}
+    public AccountException() {
+    }
 
     public AccountException(String message) {
         super(message);
@@ -21,5 +22,5 @@ public abstract class AccountException extends ServiceException {
     public AccountException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

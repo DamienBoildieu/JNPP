@@ -2,7 +2,8 @@ package jnpp.service.exceptions.duplicates;
 
 public class DuplicateShareException extends DuplicateException {
 
-    public DuplicateShareException() {}
+    public DuplicateShareException() {
+    }
 
     public DuplicateShareException(String message) {
         super(message);
@@ -19,5 +20,5 @@ public class DuplicateShareException extends DuplicateException {
     public DuplicateShareException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

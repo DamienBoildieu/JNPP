@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class ClientDAOImpl extends GenericDAOImpl<ClientEntity> implements ClientDAO {
- 
+
     @Transactional(readOnly = true)
     @Override
     public PrivateEntity findPrivateByIdentity(IdentityEntity.Gender gender, String firstname, String lastname) {
@@ -26,7 +26,7 @@ public class ClientDAOImpl extends GenericDAOImpl<ClientEntity> implements Clien
             return null;
         }
     }
-        
+
     @Transactional(readOnly = true)
     @Override
     public ProfessionalEntity findProfessionalByNameIdentity(String name, IdentityEntity.Gender ownerGender, String ownerFirstname, String ownerLastname) {
@@ -36,12 +36,12 @@ public class ClientDAOImpl extends GenericDAOImpl<ClientEntity> implements Clien
         query.setParameter("firstname", ownerFirstname);
         query.setParameter("lastname", ownerLastname);
         try {
-            return (ProfessionalEntity) query.getSingleResult(); 
+            return (ProfessionalEntity) query.getSingleResult();
         } catch (NoResultException e) {
             return null;
-        }   
+        }
     }
-        
+
     @Transactional(readOnly = true)
     @Override
     public ClientEntity findByLoginPassword(String login, String password) {
@@ -52,9 +52,9 @@ public class ClientDAOImpl extends GenericDAOImpl<ClientEntity> implements Clien
             return (ClientEntity) query.getSingleResult();
         } catch (NoResultException e) {
             return null;
-        }   
+        }
     }
-    
+
     @Transactional(readOnly = true)
     @Override
     public List<String> findAllLogin() {
@@ -75,5 +75,5 @@ public class ClientDAOImpl extends GenericDAOImpl<ClientEntity> implements Clien
         Query query = getEm().createNamedQuery("find_client_without_advisor");
         return query.getResultList();
     }
-      
+
 }

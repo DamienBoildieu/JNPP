@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public abstract class GenericDAOImpl<T extends Serializable> implements GenericDAO<T> {
 
-    @PersistenceContext(unitName="JNPPPU")
+    @PersistenceContext(unitName = "JNPPPU")
     private EntityManager em;
 
     private Class<T> type;
@@ -17,16 +17,16 @@ public abstract class GenericDAOImpl<T extends Serializable> implements GenericD
     public GenericDAOImpl() {
         Type t = getClass().getGenericSuperclass();
         type = (Class<T>) ((ParameterizedType) t).getActualTypeArguments()[0];
-    }    
-    
+    }
+
     public EntityManager getEm() {
         return em;
     }
-    
+
     public void setEm(EntityManager em) {
         this.em = em;
     }
-    
+
     @Transactional
     @Override
     public T save(T t) {
@@ -49,10 +49,10 @@ public abstract class GenericDAOImpl<T extends Serializable> implements GenericD
         em.remove(t);
     }
 
-    @Transactional    
+    @Transactional
     @Override
     public T find(Object id) {
         return em.find(type, id);
     }
-    
+
 }

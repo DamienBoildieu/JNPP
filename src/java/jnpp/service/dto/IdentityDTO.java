@@ -1,14 +1,14 @@
 package jnpp.service.dto;
 
 public class IdentityDTO {
-    
+
     public enum Gender {
-        
+
         MALE,
         FEMALE;
-        
-    }   
-   
+
+    }
+
     private IdentityDTO.Gender gender;
     private String firstname;
     private String lastname;
@@ -42,10 +42,10 @@ public class IdentityDTO {
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
-        
+
     @Override
     public String toString() {
         return firstname + " " + lastname;
     }
-    
+
 }

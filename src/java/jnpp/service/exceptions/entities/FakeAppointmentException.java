@@ -1,8 +1,9 @@
 package jnpp.service.exceptions.entities;
 
 public class FakeAppointmentException extends FakeEntityException {
-    
-    public FakeAppointmentException() {}
+
+    public FakeAppointmentException() {
+    }
 
     public FakeAppointmentException(String message) {
         super(message);
@@ -19,5 +20,5 @@ public class FakeAppointmentException extends FakeEntityException {
     public FakeAppointmentException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

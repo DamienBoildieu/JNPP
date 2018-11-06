@@ -9,14 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class SavingBookDAOImpl extends GenericDAOImpl<SavingBookEntity> implements SavingBookDAO {
-        
+
     @Transactional(readOnly = true)
     @Override
     public List<SavingBookEntity> findAll() {
         Query query = getEm().createNamedQuery("find_all_savingbook");
         return query.getResultList();
     }
-    
+
     @Transactional(readOnly = true)
     @Override
     public SavingBookEntity findByName(String name) {
@@ -28,5 +28,5 @@ public class SavingBookDAOImpl extends GenericDAOImpl<SavingBookEntity> implemen
             return null;
         }
     }
-        
+
 }

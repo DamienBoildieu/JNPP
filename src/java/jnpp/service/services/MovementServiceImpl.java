@@ -42,6 +42,7 @@ import jnpp.service.exceptions.entities.FakeShareTitleException;
 import jnpp.service.exceptions.movements.AccountTypeException;
 import jnpp.service.exceptions.movements.AmountException;
 import jnpp.service.exceptions.movements.DebitAuthorizationException;
+import jnpp.service.exceptions.movements.OverdraftException;
 import jnpp.service.exceptions.owners.AccountOwnerException;
 import org.springframework.stereotype.Service;
 
@@ -64,7 +65,8 @@ public class MovementServiceImpl implements MovementService {
     DebitAuthorizationDAO debitAuthorizationDAO;
 
     @Override
-    public TransfertDTO transfertMoney(String login, String ribFrom, String ribTo, Double amount, CurrencyDTO currency) throws FakeClientException, FakeAccountException, AccountOwnerException, AccountTypeException, CurrencyException {
+    public TransfertDTO transfertMoney(String login, String ribFrom, String ribTo, Double amount, CurrencyDTO currency)
+            throws FakeClientException, FakeAccountException, AccountOwnerException, AccountTypeException, CurrencyException, OverdraftException {
         if (login == null || ribFrom == null || ribTo == null || amount == null
                 || amount <= 0 || currency == null || ribFrom.equals(ribTo)) {
             throw new IllegalArgumentException();
@@ -101,6 +103,11 @@ public class MovementServiceImpl implements MovementService {
         Date now = Date.from(Instant.now());
 
         moneyAccountFrom.setMoney(moneyAccountFrom.getMoney() - amount);
+
+        if (moneyAccountFrom.getMoney() < 0 && !moneyAccountFrom.canOverdraft()) {
+            throw new OverdraftException();
+        }
+
         moneyAccountFrom = (MoneyAccountEntity) accountDAO.update(moneyAccountFrom);
         accountFrom = moneyAccountFrom;
 
@@ -165,7 +172,7 @@ public class MovementServiceImpl implements MovementService {
     }
 
     @Override
-    public DebitDTO debitMoney(String login, String ribFrom, String ribTo, Double amount, CurrencyDTO currency) throws FakeClientException, FakeAccountException, AccountOwnerException, AccountTypeException, DebitAuthorizationException, CurrencyException {
+    public DebitDTO debitMoney(String login, String ribFrom, String ribTo, Double amount, CurrencyDTO currency) throws FakeClientException, FakeAccountException, AccountOwnerException, AccountTypeException, DebitAuthorizationException, CurrencyException, OverdraftException {
         if (login == null || ribFrom == null || ribTo == null || amount == null
                 || amount <= 0 || currency == null || ribFrom.equals(ribTo)) {
             throw new IllegalArgumentException();
@@ -201,16 +208,12 @@ public class MovementServiceImpl implements MovementService {
 
         Date now = Date.from(Instant.now());
 
-        moneyAccountFrom.setMoney(moneyAccountFrom.getMoney() + amount);
-        moneyAccountFrom = (MoneyAccountEntity) accountDAO.update(moneyAccountFrom);
-        accountFrom = moneyAccountFrom;
-
         if (accountTo != null) {
 
             if (!debitAuthorizationDAO.canDebit(ribFrom, ribTo)) {
                 throw new DebitAuthorizationException();
             }
-            
+
             if (!(accountTo instanceof MoneyAccountEntity)) {
                 throw new IllegalStateException("Debit d'un compte qui ne derive pas de MoneyAccount.");
             }
@@ -218,10 +221,19 @@ public class MovementServiceImpl implements MovementService {
             MoneyAccountEntity moneyAccountTo = (MoneyAccountEntity) accountTo;
 
             CurrencyEntity currencyTo = moneyAccountTo.getCurrency();
-            moneyAccountTo.setMoney(moneyAccountTo.getMoney() + currencyTo.convert(amount, currencyFrom));
+            moneyAccountTo.setMoney(moneyAccountTo.getMoney() - currencyTo.convert(amount, currencyFrom));
+
+            if (moneyAccountTo.getMoney() < 0 && !moneyAccountTo.canOverdraft()) {
+                throw new OverdraftException();
+            }
+
             moneyAccountTo = (MoneyAccountEntity) accountDAO.update(moneyAccountTo);
             accountTo = moneyAccountTo;
         }
+
+        moneyAccountFrom.setMoney(moneyAccountFrom.getMoney() + amount);
+        moneyAccountFrom = (MoneyAccountEntity) accountDAO.update(moneyAccountFrom);
+        accountFrom = moneyAccountFrom;
 
         DebitEntity debit = new DebitEntity(now, ribFrom, ribTo, amount, currencyFrom);
         debit = (DebitEntity) movementDAO.save(debit);
@@ -381,7 +393,7 @@ public class MovementServiceImpl implements MovementService {
         currentAccount = (CurrentAccountEntity) accountDAO.update(currentAccount);
 
         SaleEntity sale = new SaleEntity(now, shareAccount.getRib(),
-               shareAccount.getRib(), amount, share);
+                shareAccount.getRib(), amount, share);
         sale = (SaleEntity) movementDAO.save(sale);
 
         if (client.getNotify()) {

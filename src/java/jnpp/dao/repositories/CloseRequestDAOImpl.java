@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class CloseRequestDAOImpl extends GenericDAOImpl<CloseRequestEntity> implements CloseRequestDAO {
-    
+
     @Transactional(readOnly = true)
     @Override
     public List<CloseRequestEntity> findAllByRib(String rib) {
@@ -16,5 +16,5 @@ public class CloseRequestDAOImpl extends GenericDAOImpl<CloseRequestEntity> impl
         query.setParameter("rid", rib);
         return query.getResultList();
     }
-    
+
 }

@@ -21,5 +21,5 @@ public class ShareTitleDAOImpl extends GenericDAOImpl<ShareTitleEntity> implemen
             return null;
         }
     }
-    
+
 }

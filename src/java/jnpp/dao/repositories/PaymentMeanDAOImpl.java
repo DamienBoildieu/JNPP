@@ -18,7 +18,7 @@ public class PaymentMeanDAOImpl extends GenericDAOImpl<PaymentMeanEntity> implem
         query.setParameter("login", login);
         return query.getResultList();
     }
-    
+
     @Transactional(readOnly = true)
     @Override
     public List<BankCardEntity> findBankCardByLoginStatus(String login, PaymentMeanEntity.Status status) {
@@ -27,7 +27,7 @@ public class PaymentMeanDAOImpl extends GenericDAOImpl<PaymentMeanEntity> implem
         query.setParameter("status", status);
         return query.getResultList();
     }
-    
+
     @Transactional(readOnly = true)
     @Override
     public List<BankCardEntity> findBankCardByLoginRib(String login, String rib) {
@@ -36,7 +36,7 @@ public class PaymentMeanDAOImpl extends GenericDAOImpl<PaymentMeanEntity> implem
         query.setParameter("rib", rib);
         return query.getResultList();
     }
-    
+
     @Transactional(readOnly = true)
     @Override
     public List<CheckbookEntity> findCheckBookByLogin(String login) {
@@ -44,7 +44,7 @@ public class PaymentMeanDAOImpl extends GenericDAOImpl<PaymentMeanEntity> implem
         query.setParameter("login", login);
         return query.getResultList();
     }
-    
+
     @Transactional(readOnly = true)
     @Override
     public List<CheckbookEntity> findCheckBookByLoginStatus(String login, PaymentMeanEntity.Status status) {
@@ -53,7 +53,7 @@ public class PaymentMeanDAOImpl extends GenericDAOImpl<PaymentMeanEntity> implem
         query.setParameter("status", status);
         return query.getResultList();
     }
-    
+
     @Transactional(readOnly = true)
     @Override
     public List<CheckbookEntity> findCheckBookByLoginRib(String login, String rib) {
@@ -62,7 +62,7 @@ public class PaymentMeanDAOImpl extends GenericDAOImpl<PaymentMeanEntity> implem
         query.setParameter("rib", rib);
         return query.getResultList();
     }
-    
+
     @Transactional(readOnly = true)
     @Override
     public List<PaymentMeanEntity> findAll() {
@@ -75,6 +75,6 @@ public class PaymentMeanDAOImpl extends GenericDAOImpl<PaymentMeanEntity> implem
     public List<String> findAllId() {
         Query query = getEm().createNamedQuery("find_all_paymentmean_ids");
         return query.getResultList();
-    }    
-    
+    }
+
 }

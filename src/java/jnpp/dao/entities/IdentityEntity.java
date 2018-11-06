@@ -8,14 +8,14 @@ import jnpp.service.dto.IdentityDTO;
 
 @Embeddable
 public class IdentityEntity implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     public enum Gender {
-        
+
         MALE,
         FEMALE;
-        
+
         public IdentityDTO.Gender toDTO() {
             switch (ordinal()) {
                 case 0:
@@ -26,7 +26,7 @@ public class IdentityEntity implements Serializable {
                     return null;
             }
         }
-        
+
         public static Gender toEntity(IdentityDTO.Gender gender) {
             switch (gender) {
                 case FEMALE:
@@ -37,9 +37,9 @@ public class IdentityEntity implements Serializable {
                     return null;
             }
         }
-        
-    }    
-    
+
+    }
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private String firstname;
@@ -48,13 +48,13 @@ public class IdentityEntity implements Serializable {
     public IdentityEntity() {
         this(null, null, null);
     }
-    
+
     public IdentityEntity(Gender gender, String firstname, String lastname) {
         this.gender = gender;
         this.firstname = firstname;
         this.lastname = lastname;
     }
-    
+
     public Gender getGender() {
         return gender;
     }
@@ -78,19 +78,19 @@ public class IdentityEntity implements Serializable {
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
-    
+
     public IdentityDTO toDTO() {
         return new IdentityDTO(gender.toDTO(), firstname, lastname);
     }
-    
+
     @Override
     public String toString() {
         return firstname + " " + lastname;
     }
- 
+
     public static IdentityEntity toEntity(IdentityDTO dto) {
-        return new IdentityEntity(Gender.toEntity(dto.getGender()), 
+        return new IdentityEntity(Gender.toEntity(dto.getGender()),
                 dto.getFirstname(), dto.getLastname());
     }
-    
+
 }

@@ -2,7 +2,8 @@ package jnpp.service.exceptions.movements;
 
 public class AmountException extends MovementException {
 
-    public AmountException() {}
+    public AmountException() {
+    }
 
     public AmountException(String message) {
         super(message);
@@ -19,5 +20,5 @@ public class AmountException extends MovementException {
     public AmountException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

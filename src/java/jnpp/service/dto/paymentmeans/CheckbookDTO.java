@@ -10,5 +10,5 @@ public class CheckbookDTO extends PaymentMeanDTO {
     public Type getType() {
         return PaymentMeanDTO.Type.CHECKBOOK;
     }
-    
+
 }

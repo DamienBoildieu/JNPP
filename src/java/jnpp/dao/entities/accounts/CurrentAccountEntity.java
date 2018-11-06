@@ -13,30 +13,32 @@ import jnpp.service.dto.accounts.CurrentAccountDTO;
 @DiscriminatorValue(value = AccountEntity.Type.Values.CURRENT)
 @NamedQueries({
     @NamedQuery(
-        name = "has_current_account",
-        query = "SELECT COUNT(a) "
-                + "FROM CurrentAccountEntity a "
-                + "INNER JOIN a.clients a_clients "
-                + "WHERE a_clients.login = :login"),
+            name = "has_current_account",
+            query = "SELECT COUNT(a) "
+            + "FROM CurrentAccountEntity a "
+            + "INNER JOIN a.clients a_clients "
+            + "WHERE a_clients.login = :login")
+    ,
     @NamedQuery(
-        name = "find_current_account_by_login",
-        query = "SELECT a "
-                + "FROM CurrentAccountEntity a "
-                + "INNER JOIN a.clients a_clients "
-                + "WHERE a_clients.login = :login")})
+            name = "find_current_account_by_login",
+            query = "SELECT a "
+            + "FROM CurrentAccountEntity a "
+            + "INNER JOIN a.clients a_clients "
+            + "WHERE a_clients.login = :login")})
 public class CurrentAccountEntity extends MoneyAccountEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;    
+    private static final long serialVersionUID = 1L;
 
     private Double limit;
-    
-    public CurrentAccountEntity() {}
-    
+
+    public CurrentAccountEntity() {
+    }
+
     public CurrentAccountEntity(String rib, ClientEntity client, Double money, CurrencyEntity currency, Double limit) {
         super(rib, client, money, currency);
         this.limit = limit;
     }
-    
+
     @Override
     public Type getType() {
         return AccountEntity.Type.CURRENT;
@@ -49,7 +51,7 @@ public class CurrentAccountEntity extends MoneyAccountEntity implements Serializ
     public void setLimit(Double limit) {
         this.limit = limit;
     }
-    
+
     @Override
     public String toString() {
         return "jnpp.dao.entities.CurrentAccountEntity[ id=" + getRib() + " ]";
@@ -84,5 +86,10 @@ public class CurrentAccountEntity extends MoneyAccountEntity implements Serializ
                 return false;
         }
     }
-        
+
+    @Override
+    public boolean canOverdraft() {
+        return true;
+    }
+
 }
