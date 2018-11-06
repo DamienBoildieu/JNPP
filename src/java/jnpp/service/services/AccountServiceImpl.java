@@ -257,37 +257,45 @@ public class AccountServiceImpl implements AccountService {
         }
 
         List<ClientEntity> clients = account.getClients();
-        List<CloseRequestEntity> requests = closeRequestDAO.findAllByRib(account.getRib());
+        if (clients.isEmpty()) {
+            throw new IllegalStateException("Probleme de AccountEntity.getClients().");
+        }
 
-        Map<String, Boolean> map = new HashMap<String, Boolean>();
+        Map<ClientEntity, Boolean> map = new HashMap<ClientEntity, Boolean>();
         Iterator<ClientEntity> itc = clients.iterator();
         while (itc.hasNext()) {
-            map.put(itc.next().getLogin(), false);
+            map.put(itc.next(), false);
         }
 
+        List<CloseRequestEntity> requests = closeRequestDAO.findAllByRib(account.getRib());
         Iterator<CloseRequestEntity> itr = requests.iterator();
         while (itr.hasNext()) {
-            String login = itr.next().getClient().getLogin();
-            if (map.get(login) == null) {
+            ClientEntity currentClient = itr.next().getClient();
+            if (map.get(currentClient) == null) {
                 throw new IllegalStateException("Un client non proprietaire d'un compte joint a emis une requete de fermeture sur ce compte joint.");
             } else {
-                map.put(login, true);
+                map.put(currentClient, true);
             }
         }
-        map.put(client.getLogin(), true);
 
         if (map.containsValue(false)) {
-            if (!map.get(client.getLogin())) {
-                closeRequestDAO.save(new CloseRequestEntity(client, account));
+
+            if (map.get(client)) {
+                throw new CloseRequestException();
+            } else {
+                map.put(client, true);
+                if (map.containsValue(false)) {
+                    closeRequestDAO.save(new CloseRequestEntity(client, account));
+                    throw new CloseRequestException();
+                }
             }
-            throw new CloseRequestException();
-        } else {
-            itr = requests.iterator();
-            while (itr.hasNext()) {
-                closeRequestDAO.delete(itr.next());
-            }
-            accountDAO.delete(account);
         }
+        
+        itr = requests.iterator();
+        while (itr.hasNext()) {
+            closeRequestDAO.delete(itr.next());
+        }
+        accountDAO.delete(account);
     }
 
     private void closeAccount(SavingAccountEntity account) throws ClosureException {
