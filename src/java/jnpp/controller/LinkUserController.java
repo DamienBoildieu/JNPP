@@ -20,6 +20,7 @@ import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.clients.PrivateDTO;
 import jnpp.service.exceptions.entities.FakeClientException;
+import jnpp.service.services.ClientService;
 import jnpp.service.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class LinkUserController {
     @Autowired
     private NotificationService notifService;
+    @Autowired
+    ClientService clientService;
     /**
      * Requête sur la vue de connexion
      * @param model le model contient les alertes si il y a eu un redirect
