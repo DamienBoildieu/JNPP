@@ -28,6 +28,8 @@ public interface AccountService {
 
     List<AccountDTO> getAccounts(String login) throws FakeClientException;
 
+    ShareAccountDTO getShareAccount(String login) throws FakeClientException;
+    
     CurrentAccountDTO openCurrentAccount(String login) throws DuplicateAccountException, FakeClientException;
 
     JointAccountDTO openJointAccount(String login, List<IdentityDTO> identities) throws FakeClientException, UnknownIdentityException, ClientTypeException;

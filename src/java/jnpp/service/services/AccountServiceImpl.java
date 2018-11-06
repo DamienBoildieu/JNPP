@@ -20,6 +20,7 @@ import jnpp.dao.entities.accounts.SavingAccountEntity;
 import jnpp.dao.entities.accounts.SavingBookEntity;
 import jnpp.dao.entities.accounts.ShareAccountEntity;
 import jnpp.dao.entities.accounts.ShareEntity;
+import jnpp.dao.entities.accounts.ShareTitleEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.clients.PrivateEntity;
 import jnpp.dao.entities.movements.MovementEntity;
@@ -29,6 +30,7 @@ import jnpp.dao.repositories.CloseRequestDAO;
 import jnpp.dao.repositories.MovementDAO;
 import jnpp.dao.repositories.SavingBookDAO;
 import jnpp.dao.repositories.ShareDAO;
+import jnpp.dao.repositories.ShareTitleDAO;
 import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.accounts.CurrentAccountDTO;
@@ -71,6 +73,8 @@ public class AccountServiceImpl implements AccountService {
     ShareDAO shareDAO;
     @Resource
     MovementDAO movementDAO;
+    @Resource
+    ShareTitleDAO shareTitleDAO;
 
     private final Random random = new Random();
 
@@ -99,6 +103,21 @@ public class AccountServiceImpl implements AccountService {
         return AccountEntity.toDTO(accounts);
     }
 
+    @Override
+    public ShareAccountDTO getShareAccount(String login) throws FakeClientException {
+        if (login == null) {
+            throw new IllegalArgumentException();
+        }
+        ClientEntity client = clientDAO.find(login);
+        if (client == null) {
+            throw new FakeClientException();
+        }
+        ShareAccountEntity account = accountDAO.findShareByLogin(login);
+        List<ShareTitleEntity> shareTitles = shareTitleDAO.findAllByRib(account.getRib());
+        account.setShareTitles(shareTitles);
+        return account.toDTO();
+    }
+    
     @Override
     public CurrentAccountDTO openCurrentAccount(String login) throws DuplicateAccountException, FakeClientException {
         if (login == null) {

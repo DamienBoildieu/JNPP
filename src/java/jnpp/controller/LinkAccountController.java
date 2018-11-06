@@ -23,11 +23,13 @@ import jnpp.dao.entities.accounts.SavingAccountEntity;
 import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.accounts.SavingBookDTO;
+import jnpp.service.dto.accounts.ShareAccountDTO;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.movements.MovementDTO;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.services.AccountService;
 import jnpp.service.services.NotificationService;
+import org.eclipse.persistence.core.sessions.CoreSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -113,7 +115,12 @@ public class LinkAccountController {
                         }
                         view.addObject("movements",movementsSaving);
                         break;
-                    case SHARE:                       
+                    case SHARE:   
+                        
+                        ShareAccountDTO accountDTO = accountService
+                                .getShareAccount(SessionController.getClient(session).getLogin());
+                        
+                        
                         view = new JNPPModelAndView("accounts/shareaccount", ViewInfo.createInfo(session, alerts));
                         view.addObject("accountsMap", Translator.getInstance().translateAccounts(SessionController.getLanguage(session)));
                         List<MovementView> movementsShare = new ArrayList<MovementView>();
@@ -121,11 +128,14 @@ public class LinkAccountController {
                             movementsShare.add(new MovementView(movement, id));
                         }
                         view.addObject("movements",movementsShare);
+                        view.addObject("account", accountDTO);
                         break;
                     default:
                         throw new AssertionError(account.getType().name());                    
                 }
-                view.addObject("account", account);
+                if (account.getType()!=AccountDTO.Type.SHARE)
+                    view.addObject("account", account);
+                
                 return view;
             }
         }

@@ -40,6 +40,8 @@
                                         </div>
                                     </div>
                                     <div class="card white s12">
+                                        
+                                        <h1>size=${account.shareTitles.size()}</h1>
                                         <c:forEach items="${account.shareTitles}" var="shareTitle">
                                             <div class="card blue s12">
                                                 <h4 class="white-text">

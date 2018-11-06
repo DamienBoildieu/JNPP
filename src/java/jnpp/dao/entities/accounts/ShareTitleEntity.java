@@ -1,6 +1,9 @@
 package jnpp.dao.entities.accounts;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import jnpp.service.dto.accounts.ShareDTO;
 import jnpp.service.dto.accounts.ShareTitleDTO;
 
 @Entity
@@ -18,7 +22,11 @@ import jnpp.service.dto.accounts.ShareTitleDTO;
             name = "find_sharetitle_by_rib_name",
             query = "SELECT s FROM ShareTitleEntity s "
             + "WHERE s.shareAccount.rib = :rib "
-            + "  AND s.share.name = :name")})
+            + "  AND s.share.name = :name"),
+    @NamedQuery(
+            name = "fin_all_sharetitle_by_rib",
+            query = "SELECT s FROM ShareTitleEntity s "
+            + "WHERE s.shareAccount.rib = :rib")})
 public class ShareTitleEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -102,6 +110,15 @@ public class ShareTitleEntity implements Serializable {
 
     public ShareTitleDTO toDTO() {
         return new ShareTitleDTO(amount, share.toDTO());
+    }
+
+    public static List<ShareTitleDTO> toDTO(List<ShareTitleEntity> entities) {
+        List<ShareTitleDTO> dtos = new ArrayList<ShareTitleDTO>(entities.size());
+        Iterator<ShareTitleEntity> it = entities.iterator();
+        while (it.hasNext()) {
+            dtos.add(it.next().toDTO());
+        }
+        return dtos;
     }
 
 }

@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -34,7 +35,7 @@ public class ShareAccountEntity extends AccountEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @OneToMany(mappedBy = "shareAccount")
+    @OneToMany(mappedBy = "shareAccount", fetch = FetchType.EAGER)
     private List<ShareTitleEntity> shareTitles = new ArrayList<ShareTitleEntity>();
 
     public ShareAccountEntity(String rib, ClientEntity client) {
@@ -64,12 +65,7 @@ public class ShareAccountEntity extends AccountEntity implements Serializable {
 
     @Override
     public ShareAccountDTO toDTO() {
-        List<ShareTitleDTO> titles = new ArrayList<ShareTitleDTO>(shareTitles.size());
-        Iterator<ShareTitleEntity> it = shareTitles.iterator();
-        while (it.hasNext()) {
-            titles.add(it.next().toDTO());
-        }
-        return new ShareAccountDTO(getRib(), titles);
+        return new ShareAccountDTO(getRib(), ShareTitleEntity.toDTO(shareTitles));
     }
 
     @Override
