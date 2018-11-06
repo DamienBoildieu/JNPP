@@ -39,14 +39,12 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <div class="card white s12">
-                                        
-                                        <h1>size=${account.shareTitles.size()}</h1>
+                                    <div class="card white s12">                                        
                                         <c:forEach items="${account.shareTitles}" var="shareTitle">
                                             <div class="card blue s12">
-                                                <h4 class="white-text">
-                                                    ${shareTitle.getShare().getName()} ${shareTitle.amount}
-                                                </h4>
+                                                <p class="white-text">
+                                                    ${shareTitle.getShare().getName()} : ${shareTitle.amount}
+                                                </p>
                                             </div>
                                         </c:forEach>
                                     </div>

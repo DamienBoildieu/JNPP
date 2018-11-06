@@ -10,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import jnpp.controller.views.AppointView;
 import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.Translator;
 import jnpp.controller.views.alerts.AlertEnum;
@@ -176,7 +177,10 @@ public class LinkAdvisorController {
                 }
             }
             try {
-                List<AppointmentDTO> appoints = advisorService.getAppoinments(SessionController.getClient(session).getLogin());              
+                List<AppointView> appoints = new ArrayList<AppointView>();
+                for (AppointmentDTO appoint : advisorService.getAppoinments(SessionController.getClient(session).getLogin())) {
+                    appoints.add(new AppointView(appoint));
+                }
                 ModelAndView view = new JNPPModelAndView("advisor/appoint", ViewInfo.createInfo(session, alerts));
                 view.addObject("appoints", appoints);
                 return view;
