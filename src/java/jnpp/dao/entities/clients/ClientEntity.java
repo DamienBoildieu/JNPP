@@ -37,7 +37,10 @@ import jnpp.service.dto.clients.LoginDTO;
         query = "SELECT c.login FROM ClientEntity c"),
     @NamedQuery(
         name = "find_all_clients",
-        query = "SELECT c FROM ClientEntity c")})
+        query = "SELECT c FROM ClientEntity c"),
+    @NamedQuery(
+        name = "find_client_without_advisor",
+        query = "SELECT c FROM ClientEntity c WHERE c.advisor IS NULL")})
 public abstract class ClientEntity implements Serializable {
 
     public static enum Type {
