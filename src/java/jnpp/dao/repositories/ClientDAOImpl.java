@@ -62,6 +62,7 @@ public class ClientDAOImpl extends GenericDAOImpl<ClientEntity> implements Clien
         return query.getResultList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ClientEntity> findAll() {
         Query query = getEm().createNamedQuery("find_all_clients");

@@ -28,9 +28,9 @@
                 </div>
                 <div class="col s2">
                     <div class="center-align">
-                        <button class="btn waves-effect waves-light" type="submit" value="transfert">Transferer</button> 
+                        <button class="btn waves-effect waves-light" type="submit" name="transfert" value="transfert">Transferer</button> 
                         <div style="margin-bottom: 5px;"></div>
-                        <button class="btn waves-effect waves-light" type="submit" value="debit">Debiter</button> 
+                        <button class="btn waves-effect waves-light" type="submit" name="debit" value="debit">Debiter</button> 
                     </div>
                 </div>
             </div>

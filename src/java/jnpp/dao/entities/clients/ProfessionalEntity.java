@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import jnpp.dao.entities.IdentityEntity;
+import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.advisor.AdvisorEntity;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.clients.LoginDTO;
@@ -45,6 +46,20 @@ public class ProfessionalEntity extends ClientEntity implements Serializable {
     @Override
     public Type getType() {
         return ClientEntity.Type.PROFESIONAL;
+    }
+
+    @Override
+    public boolean canOpen(AccountEntity.Type type) {
+        switch (type) {
+            case CURRENT:
+            case SHARE:
+                return true;
+            case JOINT:
+            case SAVING:
+                return false;
+            default:
+                return false;
+        }    
     }
     
     public String getName() {

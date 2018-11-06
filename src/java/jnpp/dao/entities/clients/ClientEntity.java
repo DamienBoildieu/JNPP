@@ -93,6 +93,8 @@ public abstract class ClientEntity implements Serializable {
     
     public abstract Type getType();
     
+    public abstract boolean canOpen(AccountEntity.Type type);
+    
     public String getLogin() {
         return login;
     }

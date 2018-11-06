@@ -76,6 +76,7 @@ public class SavingAccountEntity extends MoneyAccountEntity implements Serializa
     public boolean canReceive(MovementEntity.Type movement) {
         switch (movement) {
             case TRANSFERT:
+            case DEPOSIT:
                 return true;
             default:
                 return false;

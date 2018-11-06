@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="container">
-    <form method="POST" action="/JNPP/banquier/transactions/purchase_sale.htm" id="purchase_sale">
+    <form method="POST" action="/JNPP/banquier/transactions/achat_vente.htm" id="purchase_sale">
         <div class="card">
             <div class="row valign-wrapper">
                 <div class="col s10">
@@ -21,7 +21,7 @@
                                     <input type="number" name="amount" class="center-align">
                                 </td>
                                 <td>
-                                    <select name="action" form="purchase_sale">
+                                    <select name="share" form="achat_vente">
                                         <c:forEach items="${shares}" var="share">
                                         <option value="${share.name}" selected>${share.name}</option>
                                         </c:forEach>
@@ -33,9 +33,9 @@
                 </div>
                 <div class="col s2">
                     <div class="center-align">
-                        <button class="btn waves-effect waves-light" type="submit" value="purchase">Acheter</button> 
+                        <button class="btn waves-effect waves-light" type="submit" name="purchase" value="purchase">Acheter</button> 
                         <div style="margin-bottom: 5px;"></div>
-                        <button class="btn waves-effect waves-light" type="submit" value="sale">Vendre</button> 
+                        <button class="btn waves-effect waves-light" type="submit" name="sale" value="sale">Vendre</button> 
                     </div>
                 </div>
             </div>

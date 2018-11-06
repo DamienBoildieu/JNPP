@@ -34,7 +34,13 @@ import jnpp.service.dto.accounts.DebitAuthorizationDTO;
                 + "FROM DebitAuthorizationEntity d "
                 + "INNER JOIN d.from.clients d_from_clients "
                 + "WHERE d.from.rib = :rib "
-                + "  AND d_from_clients.login = :login")})
+                + "  AND d_from_clients.login = :login"),
+    @NamedQuery(
+        name = "can_debit",
+        query = "SELECT COUNT(d) "
+                + "FROM DebitAuthorizationEntity d "
+                + "WHERE d.from.rib = :rib_to "
+                + "  AND d.ribTo = :rib_from")})
 public class DebitAuthorizationEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -113,7 +113,7 @@ public class AccountServiceImpl implements AccountService {
         if (login == null || identities == null || identities.size() < 2) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
-        if (client.getType() != ClientEntity.Type.PRIVATE) throw new ClientTypeException();
+        if (!client.canOpen(AccountEntity.Type.JOINT)) throw new ClientTypeException();
         List<ClientEntity> clients = new ArrayList<ClientEntity>();
         boolean clientFound = false;
         Iterator<IdentityDTO> ite = identities.iterator();
@@ -136,7 +136,7 @@ public class AccountServiceImpl implements AccountService {
         if (login == null || name == null) throw new IllegalArgumentException();
         ClientEntity client = clientDAO.find(login);
         if (client == null) throw new FakeClientException();
-        if (client.getType() != ClientEntity.Type.PRIVATE) throw new ClientTypeException();
+        if (!client.canOpen(AccountEntity.Type.SAVING)) throw new ClientTypeException();
         SavingBookEntity savingBook = savingBookDAO.findByName(name);
         if (savingBook == null) throw new FakeSavingBookException();
         if (accountDAO.hasSavingAccount(login, savingBook.getId())) throw new DuplicateAccountException();

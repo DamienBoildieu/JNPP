@@ -4,10 +4,12 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import jnpp.dao.entities.accounts.ShareTitleEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class ShareTitleDAOImpl extends GenericDAOImpl<ShareTitleEntity> implements ShareTitleDAO {
 
+    @Transactional(readOnly = true)
     @Override
     public ShareTitleEntity findByRibName(String rib, String name) {
         Query query = getEm().createNamedQuery("find_sharetitle_by_rib_name");

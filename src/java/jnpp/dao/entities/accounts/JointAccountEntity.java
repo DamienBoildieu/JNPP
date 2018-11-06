@@ -66,6 +66,7 @@ public class JointAccountEntity extends MoneyAccountEntity implements Serializab
         switch (movement) {
             case DEBIT:
             case TRANSFERT:
+            case DEPOSIT:
                 return true;
             default:
                 return false;

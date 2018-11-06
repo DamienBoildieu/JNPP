@@ -8,5 +8,6 @@ public interface DebitAuthorizationDAO extends GenericDAO<DebitAuthorizationEnti
     DebitAuthorizationEntity findByRibFromRibTo(String ribFrom, String ribTo);
     List<DebitAuthorizationEntity> findAllByLogin(String login);
     List<DebitAuthorizationEntity> findAllByLoginRibFrom(String login, String rib);
+    boolean canDebit(String ribFrom, String ribTo);
     
 }

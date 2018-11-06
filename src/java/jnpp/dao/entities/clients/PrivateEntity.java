@@ -10,6 +10,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import jnpp.dao.entities.IdentityEntity;
+import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.advisor.AdvisorEntity;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.clients.LoginDTO;
@@ -47,6 +48,11 @@ public class PrivateEntity extends ClientEntity implements Serializable {
     @Override
     public Type getType() {
         return ClientEntity.Type.PRIVATE;
+    }
+
+    @Override
+    public boolean canOpen(AccountEntity.Type type) {
+        return true;
     }
     
     public IdentityEntity getIdentity() {

@@ -39,4 +39,15 @@ public class DebitAuthorizationDAOImpl extends GenericDAOImpl<DebitAuthorization
         query.setParameter("rib", rib);
         return query.getResultList();
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean canDebit(String ribFrom, String ribTo) {
+        Query query = getEm().createNamedQuery("can_debit", Long.class);
+        query.setParameter("rib_from", ribFrom);
+        query.setParameter("rib_to", ribTo);
+        Long count = (Long) query.getSingleResult();
+        return count != 0;
+    }
+    
 }

@@ -18,6 +18,7 @@ public class AppointmentDAOImpl extends GenericDAOImpl<AppointmentEntity> implem
         return query.getResultList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<AppointmentEntity> findRecentByLogin(String login, Date date) {
         Query query = getEm().createNamedQuery("find_recent_appointment_by_rib");
@@ -26,6 +27,7 @@ public class AppointmentDAOImpl extends GenericDAOImpl<AppointmentEntity> implem
         return query.getResultList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Long countByAdvisorIdInMinMax(Long id, Date min, Date max) {
         Query query = getEm().createNamedQuery("count_advisor_appointment_in_min_max", Long.class);

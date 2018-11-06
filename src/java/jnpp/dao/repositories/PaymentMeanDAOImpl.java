@@ -70,6 +70,7 @@ public class PaymentMeanDAOImpl extends GenericDAOImpl<PaymentMeanEntity> implem
         return query.getResultList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<String> findAllId() {
         Query query = getEm().createNamedQuery("find_all_paymentmean_ids");

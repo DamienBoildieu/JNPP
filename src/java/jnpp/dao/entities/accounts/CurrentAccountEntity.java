@@ -78,6 +78,7 @@ public class CurrentAccountEntity extends MoneyAccountEntity implements Serializ
         switch (movement) {
             case DEBIT:
             case TRANSFERT:
+            case DEPOSIT:
                 return true;
             default:
                 return false;
