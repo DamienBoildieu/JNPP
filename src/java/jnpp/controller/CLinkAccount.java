@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import jnpp.controller.views.JNPPModelAndView;
+import jnpp.controller.views.MovementView;
 import jnpp.controller.views.Translator;
 import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.alerts.AlertMessage;
@@ -23,6 +24,7 @@ import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.accounts.SavingBookDTO;
 import jnpp.service.dto.clients.ClientDTO;
+import jnpp.service.dto.movements.MovementDTO;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.services.AccountService;
 import jnpp.service.services.NotificationService;
@@ -85,13 +87,31 @@ public class CLinkAccount {
                         view = new JNPPModelAndView("accounts/currentaccount", ViewInfo.createInfo(session, alerts));
                         view.addObject("accountsMap", Translator.getInstance().translateAccounts(CSession.getLanguage(session)));
                         view.addObject("currencyMap", Translator.getInstance().translateCurrency(CSession.getLanguage(session)));
-                        view.addObject("movments",accountService.getMovements(CSession.getClient(session).getLogin(), id));
+                        List<MovementView> movementsCurrent = new ArrayList<MovementView>();
+                        for (MovementDTO movement : accountService.getMovements(CSession.getClient(session).getLogin(), id)) {
+                            movementsCurrent.add(new MovementView(movement, id));
+                        }
+                        view.addObject("movements",movementsCurrent);
                         break;
                     case JOINT:
                         view = new JNPPModelAndView("accounts/jointaccount", ViewInfo.createInfo(session, alerts));
+                        view.addObject("accountsMap", Translator.getInstance().translateAccounts(CSession.getLanguage(session)));
+                        view.addObject("currencyMap", Translator.getInstance().translateCurrency(CSession.getLanguage(session)));
+                        List<MovementView> movementsJoint = new ArrayList<MovementView>();
+                        for (MovementDTO movement : accountService.getMovements(CSession.getClient(session).getLogin(), id)) {
+                            movementsJoint.add(new MovementView(movement, id));
+                        }
+                        view.addObject("movements",movementsJoint);
                         break;
                     case SAVING:
                         view = new JNPPModelAndView("accounts/savingaccount", ViewInfo.createInfo(session, alerts));
+                        view.addObject("accountsMap", Translator.getInstance().translateAccounts(CSession.getLanguage(session)));
+                        view.addObject("currencyMap", Translator.getInstance().translateCurrency(CSession.getLanguage(session)));
+                        List<MovementView> movementsSaving = new ArrayList<MovementView>();
+                        for (MovementDTO movement : accountService.getMovements(CSession.getClient(session).getLogin(), id)) {
+                            movementsSaving.add(new MovementView(movement, id));
+                        }
+                        view.addObject("movements",movementsSaving);
                         break;
                     case SHARE:
                         view = new JNPPModelAndView("accounts/shareaccount", ViewInfo.createInfo(session, alerts));
