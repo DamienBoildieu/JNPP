@@ -17,8 +17,8 @@ public class DebitEntity extends MoneyTradeEntity implements Serializable {
     }
 
     public DebitEntity(Date date, String ribFrom, String ribTo,
-            Double money, CurrencyEntity currency) {
-        super(date, ribFrom, ribTo, money, currency);
+            Double money, CurrencyEntity currency, String label) {
+        super(date, ribFrom, ribTo, money, currency, label);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class DebitEntity extends MoneyTradeEntity implements Serializable {
 
     @Override
     public DebitDTO toDTO() {
-        return new DebitDTO(getDate(), getRibFrom(), getRibTo(), getMoney(), getCurrency().toDTO());
+        return new DebitDTO(getDate(), getRibFrom(), getRibTo(), getMoney(), getCurrency().toDTO(), getLabel());
     }
 
 }

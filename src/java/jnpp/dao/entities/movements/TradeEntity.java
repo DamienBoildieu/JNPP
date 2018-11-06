@@ -20,8 +20,8 @@ public abstract class TradeEntity extends MovementEntity implements Serializable
     public TradeEntity() {
     }
 
-    public TradeEntity(Date date, String ribFrom, String ribTo) {
-        super(date, ribFrom);
+    public TradeEntity(Date date, String ribFrom, String ribTo, String label) {
+        super(date, ribFrom, label);
         this.ribTo = ribTo;
     }
 

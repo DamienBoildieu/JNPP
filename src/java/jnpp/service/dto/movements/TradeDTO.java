@@ -6,8 +6,8 @@ public abstract class TradeDTO extends MovementDTO {
 
     private String ribTo;
 
-    public TradeDTO(Date date, String ribFrom, String ribTo) {
-        super(date, ribFrom);
+    public TradeDTO(Date date, String ribFrom, String ribTo, String label) {
+        super(date, ribFrom, label);
         this.ribTo = ribTo;
     }
 

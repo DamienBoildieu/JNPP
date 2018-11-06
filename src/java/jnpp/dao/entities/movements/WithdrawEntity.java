@@ -17,8 +17,8 @@ public class WithdrawEntity extends MoneyMovementEntity implements Serializable 
     }
 
     public WithdrawEntity(Date date, String ribFrom, Double money,
-            CurrencyEntity currency) {
-        super(date, ribFrom, money, currency);
+            CurrencyEntity currency, String label) {
+        super(date, ribFrom, money, currency, label);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class WithdrawEntity extends MoneyMovementEntity implements Serializable 
 
     @Override
     public WithdrawDTO toDTO() {
-        return new WithdrawDTO(getDate(), getRibFrom(), getMoney(), getCurrency().toDTO());
+        return new WithdrawDTO(getDate(), getRibFrom(), getMoney(), getCurrency().toDTO(), getLabel());
     }
 
 }

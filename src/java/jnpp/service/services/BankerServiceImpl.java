@@ -257,7 +257,7 @@ public class BankerServiceImpl implements BankerService {
     }
 
     @Override
-    public DepositDTO deposit(String rib, Double amount, CurrencyDTO currency) throws FakeAccountException, AccountTypeException {
+    public DepositDTO deposit(String rib, Double amount, CurrencyDTO currency, String label) throws FakeAccountException, AccountTypeException {
         if (rib == null || amount == null || currency == null || amount <= 0) {
             throw new IllegalArgumentException();
         }
@@ -274,7 +274,7 @@ public class BankerServiceImpl implements BankerService {
         moneyAccount = (MoneyAccountEntity) accountDAO.update(moneyAccount);
         account = moneyAccount;
         Date now = Date.from(Instant.now());
-        DepositEntity deposit = new DepositEntity(now, rib, amount, CurrencyEntity.toEntity(currency));
+        DepositEntity deposit = new DepositEntity(now, rib, amount, CurrencyEntity.toEntity(currency), label);
         deposit = (DepositEntity) movementDAO.save(deposit);
         for (ClientEntity client : account.getClients()) {
             if (client.getNotify()) {
@@ -286,7 +286,7 @@ public class BankerServiceImpl implements BankerService {
     }
 
     @Override
-    public TransfertDTO transfert(String ribFrom, String ribTo, Double amount, CurrencyDTO currency) throws FakeAccountException, AccountTypeException, OverdraftException {
+    public TransfertDTO transfert(String ribFrom, String ribTo, Double amount, CurrencyDTO currency, String label) throws FakeAccountException, AccountTypeException, OverdraftException {
         if (ribFrom == null || ribTo == null || amount == 0 || amount <= 0
                 || currency == null) {
             throw new IllegalArgumentException();
@@ -333,7 +333,7 @@ public class BankerServiceImpl implements BankerService {
         Date now = Date.from(Instant.now());
 
         TransfertEntity transfert
-                = new TransfertEntity(now, ribFrom, ribTo, amount, currencyTransfert);
+                = new TransfertEntity(now, ribFrom, ribTo, amount, currencyTransfert, label);
         transfert = (TransfertEntity) movementDAO.save(transfert);
 
         boolean isOverdraft = moneyAccountFrom.getMoney() < 0;
@@ -369,7 +369,7 @@ public class BankerServiceImpl implements BankerService {
     }
 
     @Override
-    public DebitDTO debit(String ribFrom, String ribTo, Double amount, CurrencyDTO currency)
+    public DebitDTO debit(String ribFrom, String ribTo, Double amount, CurrencyDTO currency, String label)
             throws FakeAccountException, AccountTypeException, DebitAuthorizationException, OverdraftException {
 
         if (ribFrom == null || ribTo == null || amount == null || amount <= 0 || currency == null) {
@@ -416,7 +416,7 @@ public class BankerServiceImpl implements BankerService {
 
         Date now = Date.from(Instant.now());
 
-        DebitEntity debit = new DebitEntity(now, ribFrom, ribTo, amount, currencyDebit);
+        DebitEntity debit = new DebitEntity(now, ribFrom, ribTo, amount, currencyDebit, label);
         debit = (DebitEntity) movementDAO.save(debit);
 
         boolean isOverdraft = moneyAccountTo.getMoney() < 0;
@@ -446,7 +446,7 @@ public class BankerServiceImpl implements BankerService {
     }
 
     @Override
-    public PurchaseDTO purchase(String rib, String name, Integer amount)
+    public PurchaseDTO purchase(String rib, String name, Integer amount, String label)
             throws FakeAccountException, FakeShareException, NoCurrentAccountException, AccountTypeException {
 
         if (rib == null || name == null || amount == null || amount <= 0) {
@@ -494,7 +494,7 @@ public class BankerServiceImpl implements BankerService {
         currentAccount.setMoney(currentAccount.getMoney() - cost);
         currentAccount = (CurrentAccountEntity) accountDAO.update(currentAccount);
 
-        PurchaseEntity purchase = new PurchaseEntity(now, rib, rib, amount, share);
+        PurchaseEntity purchase = new PurchaseEntity(now, rib, rib, amount, share, label);
         purchase = (PurchaseEntity) movementDAO.save(purchase);
 
         if (client.getNotify()) {
@@ -515,7 +515,7 @@ public class BankerServiceImpl implements BankerService {
     }
 
     @Override
-    public SaleDTO sale(String rib, String name, Integer amount)
+    public SaleDTO sale(String rib, String name, Integer amount, String label)
             throws FakeAccountException, FakeShareException, NoCurrentAccountException,
             AccountTypeException, AmountException, FakeShareTitleException {
 
@@ -570,7 +570,7 @@ public class BankerServiceImpl implements BankerService {
         currentAccount.setMoney(currentAccount.getMoney() + cost);
         currentAccount = (CurrentAccountEntity) accountDAO.update(currentAccount);
 
-        SaleEntity sale = new SaleEntity(now, rib, rib, amount, share);
+        SaleEntity sale = new SaleEntity(now, rib, rib, amount, share, label);
         sale = (SaleEntity) movementDAO.save(sale);
 
         if (client.getNotify()) {

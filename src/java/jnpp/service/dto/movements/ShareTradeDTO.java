@@ -8,8 +8,8 @@ public abstract class ShareTradeDTO extends TradeDTO {
     private Integer amount;
     private ShareDTO share;
 
-    public ShareTradeDTO(Date date, String ribFrom, String ribTo, Integer amount, ShareDTO share) {
-        super(date, ribFrom, ribTo);
+    public ShareTradeDTO(Date date, String ribFrom, String ribTo, Integer amount, ShareDTO share, String label) {
+        super(date, ribFrom, ribTo, label);
         this.amount = amount;
         this.share = share;
     }

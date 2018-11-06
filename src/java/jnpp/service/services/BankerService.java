@@ -63,19 +63,19 @@ public interface BankerService {
 
     List<AccountDTO> getAccounts();
 
-    DepositDTO deposit(String rib, Double amount, CurrencyDTO currency)
+    DepositDTO deposit(String rib, Double amount, CurrencyDTO currency, String label)
             throws FakeAccountException, AccountTypeException;
 
-    TransfertDTO transfert(String ribFrom, String ribTo, Double amount, CurrencyDTO currency)
+    TransfertDTO transfert(String ribFrom, String ribTo, Double amount, CurrencyDTO currency, String label)
             throws FakeAccountException, AccountTypeException, OverdraftException;
 
-    DebitDTO debit(String ribFrom, String ribTo, Double amount, CurrencyDTO currency)
+    DebitDTO debit(String ribFrom, String ribTo, Double amount, CurrencyDTO currency, String label)
             throws FakeAccountException, AccountTypeException, DebitAuthorizationException, OverdraftException;
 
-    PurchaseDTO purchase(String rib, String name, Integer amount)
+    PurchaseDTO purchase(String rib, String name, Integer amount, String label)
             throws FakeAccountException, FakeShareException, NoCurrentAccountException, AccountTypeException;
 
-    SaleDTO sale(String rib, String name, Integer amount)
+    SaleDTO sale(String rib, String name, Integer amount, String label)
             throws FakeAccountException, FakeShareException, NoCurrentAccountException, AccountTypeException, AmountException, FakeShareTitleException;
 
 }

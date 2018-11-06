@@ -48,11 +48,13 @@ public class MovementsController {
             HttpServletResponse response, RedirectAttributes rm) {
         String rib = request.getParameter("rib");
         String amount = request.getParameter("amount");
+        String label = request.getParameter("label");
         if (rib == null || rib.length() == 0 || amount == null || amount.length() == 0) {
             return new ModelAndView("redirect:/banquier/transactions.htm");
         }
+        if (label == null) label = "";
         try {
-            bankerService.deposit(rib, Double.valueOf(amount), DEFAULT_CURRENCY);
+            bankerService.deposit(rib, Double.valueOf(amount), DEFAULT_CURRENCY, label);
         } catch (FakeAccountException ex) {
         } catch (AccountTypeException ex) {
         }
@@ -67,20 +69,22 @@ public class MovementsController {
         String amount = request.getParameter(("amount"));
         String transfert = request.getParameter("transfert");
         String debit = request.getParameter("debit");
+        String label = request.getParameter("label");
         if (ribFrom == null || ribFrom.length() == 0 || ribTo == null
                 || ribTo.length() == 0 || amount == null || amount.length() == 0) {
             return new ModelAndView("redirect:/banquier/transactions.htm");
         }
+        if (label == null) label = "";
         if (transfert != null && transfert.length() > 0) {
             try {
-                bankerService.transfert(ribFrom, ribTo, Double.valueOf(amount), DEFAULT_CURRENCY);
+                bankerService.transfert(ribFrom, ribTo, Double.valueOf(amount), DEFAULT_CURRENCY, label);
             } catch (FakeAccountException ex) {
             } catch (AccountTypeException ex) {
             } catch (OverdraftException ex) {
             }
         } else if (debit != null && debit.length() > 0) {
             try {
-                bankerService.debit(ribFrom, ribTo, Double.valueOf(amount), DEFAULT_CURRENCY);
+                bankerService.debit(ribFrom, ribTo, Double.valueOf(amount), DEFAULT_CURRENCY, label);
             } catch (FakeAccountException ex) {
             } catch (AccountTypeException ex) {
             } catch (DebitAuthorizationException ex) {
@@ -98,13 +102,15 @@ public class MovementsController {
         String action = request.getParameter("share");
         String purchase = request.getParameter("purchase");
         String sale = request.getParameter("sale");
+        String label = request.getParameter("label");
         if (rib == null || rib.length() == 0 || amount == null || amount.length() == 0 || 
                 action == null || action.length() == 0) {
             return new ModelAndView("redirect:/banquier/transactions.htm");
         }
+        if (label == null) label = "";
         if (purchase != null && purchase.length() > 0) {
             try {
-                bankerService.purchase(rib, sale, Integer.valueOf(amount));
+                bankerService.purchase(rib, sale, Integer.valueOf(amount), label);
             } catch (FakeAccountException ex) {
             } catch (FakeShareException ex) {
             } catch (NoCurrentAccountException ex) {
@@ -112,7 +118,7 @@ public class MovementsController {
             }
         } else if (sale != null && sale.length() > 0) {
             try {
-                bankerService.sale(rib, sale, Integer.valueOf(amount));
+                bankerService.sale(rib, sale, Integer.valueOf(amount), label);
             } catch (FakeAccountException ex) {
             } catch (FakeShareException ex) {
             } catch (NoCurrentAccountException ex) {

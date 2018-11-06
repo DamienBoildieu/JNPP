@@ -26,8 +26,9 @@ public class PaymentEntity extends MoneyMovementEntity implements Serializable {
     }
 
     public PaymentEntity(Date date, String ribFrom, Double money,
-            CurrencyEntity currency, String target, PaymentMeanEntity paymentMean) {
-        super(date, ribFrom, money, currency);
+            CurrencyEntity currency, String target, PaymentMeanEntity paymentMean, 
+            String label) {
+        super(date, ribFrom, money, currency, label);
         this.target = target;
         this.paymentMean = paymentMean;
     }
@@ -60,7 +61,7 @@ public class PaymentEntity extends MoneyMovementEntity implements Serializable {
 
     @Override
     public PaymentDTO toDTO() {
-        return new PaymentDTO(getDate(), getRibFrom(), getMoney(), getCurrency().toDTO(), target);
+        return new PaymentDTO(getDate(), getRibFrom(), getMoney(), getCurrency().toDTO(), target, getLabel());
     }
 
 }

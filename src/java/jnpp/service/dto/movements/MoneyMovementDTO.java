@@ -8,8 +8,8 @@ public abstract class MoneyMovementDTO extends MovementDTO {
     private Double money;
     private CurrencyDTO currency;
 
-    public MoneyMovementDTO(Date date, String ribFrom, Double money, CurrencyDTO currency) {
-        super(date, ribFrom);
+    public MoneyMovementDTO(Date date, String ribFrom, Double money, CurrencyDTO currency, String label) {
+        super(date, ribFrom, label);
         this.money = money;
         this.currency = currency;
     }

@@ -13,7 +13,7 @@ public class CloseRequestDAOImpl extends GenericDAOImpl<CloseRequestEntity> impl
     @Override
     public List<CloseRequestEntity> findAllByRib(String rib) {
         Query query = getEm().createNamedQuery("find_closerequest_by_rib");
-        query.setParameter("rid", rib);
+        query.setParameter("rib", rib);
         return query.getResultList();
     }
 

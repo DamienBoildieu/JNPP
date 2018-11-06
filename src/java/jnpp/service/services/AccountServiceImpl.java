@@ -274,6 +274,7 @@ public class AccountServiceImpl implements AccountService {
                 map.put(login, true);
             }
         }
+        map.put(client.getLogin(), true);
 
         if (map.containsValue(false)) {
             if (!map.get(client.getLogin())) {

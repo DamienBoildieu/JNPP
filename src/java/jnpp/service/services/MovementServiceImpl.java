@@ -65,10 +65,11 @@ public class MovementServiceImpl implements MovementService {
     DebitAuthorizationDAO debitAuthorizationDAO;
 
     @Override
-    public TransfertDTO transfertMoney(String login, String ribFrom, String ribTo, Double amount, CurrencyDTO currency)
+    public TransfertDTO transfertMoney(String login, String ribFrom, String ribTo, Double amount, CurrencyDTO currency, String label)
             throws FakeClientException, FakeAccountException, AccountOwnerException, AccountTypeException, CurrencyException, OverdraftException {
         if (login == null || ribFrom == null || ribTo == null || amount == null
-                || amount <= 0 || currency == null || ribFrom.equals(ribTo)) {
+                || amount <= 0 || currency == null || ribFrom.equals(ribTo) 
+                || label == null) {
             throw new IllegalArgumentException();
         }
 
@@ -125,7 +126,7 @@ public class MovementServiceImpl implements MovementService {
             accountTo = moneyAccountTo;
         }
 
-        TransfertEntity transfert = new TransfertEntity(now, ribFrom, ribTo, amount, currencyFrom);
+        TransfertEntity transfert = new TransfertEntity(now, ribFrom, ribTo, amount, currencyFrom, label);
         transfert = (TransfertEntity) movementDAO.save(transfert);
 
         boolean isOverdraft = moneyAccountFrom.getMoney() < 0;
@@ -172,9 +173,9 @@ public class MovementServiceImpl implements MovementService {
     }
 
     @Override
-    public DebitDTO debitMoney(String login, String ribFrom, String ribTo, Double amount, CurrencyDTO currency) throws FakeClientException, FakeAccountException, AccountOwnerException, AccountTypeException, DebitAuthorizationException, CurrencyException, OverdraftException {
+    public DebitDTO debitMoney(String login, String ribFrom, String ribTo, Double amount, CurrencyDTO currency, String label) throws FakeClientException, FakeAccountException, AccountOwnerException, AccountTypeException, DebitAuthorizationException, CurrencyException, OverdraftException {
         if (login == null || ribFrom == null || ribTo == null || amount == null
-                || amount <= 0 || currency == null || ribFrom.equals(ribTo)) {
+                || amount <= 0 || currency == null || ribFrom.equals(ribTo) || label == null) {
             throw new IllegalArgumentException();
         }
 
@@ -235,7 +236,7 @@ public class MovementServiceImpl implements MovementService {
         moneyAccountFrom = (MoneyAccountEntity) accountDAO.update(moneyAccountFrom);
         accountFrom = moneyAccountFrom;
 
-        DebitEntity debit = new DebitEntity(now, ribFrom, ribTo, amount, currencyFrom);
+        DebitEntity debit = new DebitEntity(now, ribFrom, ribTo, amount, currencyFrom, label);
         debit = (DebitEntity) movementDAO.save(debit);
 
         List<ClientEntity> clientFroms = accountFrom.getClients();
@@ -282,8 +283,8 @@ public class MovementServiceImpl implements MovementService {
     }
 
     @Override
-    public PurchaseDTO purchaseShareTitles(String login, String name, Integer amount) throws FakeClientException, NoCurrentAccountException, NoShareAccountException, FakeShareException, AmountException {
-        if (login == null || name == null || amount == null || amount <= 1) {
+    public PurchaseDTO purchaseShareTitles(String login, String name, Integer amount, String label) throws FakeClientException, NoCurrentAccountException, NoShareAccountException, FakeShareException, AmountException {
+        if (login == null || name == null || amount == null || amount <= 1 || label == null) {
             throw new IllegalArgumentException();
         }
 
@@ -326,7 +327,7 @@ public class MovementServiceImpl implements MovementService {
         currentAccount = (CurrentAccountEntity) accountDAO.update(currentAccount);
 
         PurchaseEntity purchase = new PurchaseEntity(now, shareAccount.getRib(),
-                shareAccount.getRib(), amount, share);
+                shareAccount.getRib(), amount, share, label);
         purchase = (PurchaseEntity) movementDAO.save(purchase);
 
         if (client.getNotify()) {
@@ -347,8 +348,8 @@ public class MovementServiceImpl implements MovementService {
     }
 
     @Override
-    public SaleDTO saleShareTitles(String login, String name, Integer amount) throws FakeClientException, NoCurrentAccountException, NoShareAccountException, FakeShareTitleException, AmountException {
-        if (login == null || name == null || amount == null || amount <= 1) {
+    public SaleDTO saleShareTitles(String login, String name, Integer amount, String label) throws FakeClientException, NoCurrentAccountException, NoShareAccountException, FakeShareTitleException, AmountException {
+        if (login == null || name == null || amount == null || amount <= 1 || label == null) {
             throw new IllegalArgumentException();
         }
 
@@ -393,7 +394,7 @@ public class MovementServiceImpl implements MovementService {
         currentAccount = (CurrentAccountEntity) accountDAO.update(currentAccount);
 
         SaleEntity sale = new SaleEntity(now, shareAccount.getRib(),
-                shareAccount.getRib(), amount, share);
+                shareAccount.getRib(), amount, share, label);
         sale = (SaleEntity) movementDAO.save(sale);
 
         if (client.getNotify()) {

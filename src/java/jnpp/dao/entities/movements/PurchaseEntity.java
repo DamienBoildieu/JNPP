@@ -16,8 +16,9 @@ public class PurchaseEntity extends ShareTradeEntity implements Serializable {
     public PurchaseEntity() {
     }
 
-    public PurchaseEntity(Date date, String ribFrom, String ribTo, Integer amount, ShareEntity share) {
-        super(date, ribFrom, ribTo, amount, share);
+    public PurchaseEntity(Date date, String ribFrom, String ribTo, 
+            Integer amount, ShareEntity share, String label) {
+        super(date, ribFrom, ribTo, amount, share, label);
     }
 
     @Override
@@ -32,7 +33,7 @@ public class PurchaseEntity extends ShareTradeEntity implements Serializable {
 
     @Override
     public PurchaseDTO toDTO() {
-        return new PurchaseDTO(getDate(), getRibFrom(), getRibTo(), getAmount(), getShare().toDTO());
+        return new PurchaseDTO(getDate(), getRibFrom(), getRibTo(), getAmount(), getShare().toDTO(), getLabel());
     }
 
 }

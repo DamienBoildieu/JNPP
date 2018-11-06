@@ -23,8 +23,8 @@ public abstract class MoneyTradeEntity extends TradeEntity implements Serializab
     }
 
     public MoneyTradeEntity(Date date, String ribFrom, String ribTo,
-            Double money, CurrencyEntity currency) {
-        super(date, ribFrom, ribTo);
+            Double money, CurrencyEntity currency, String label) {
+        super(date, ribFrom, ribTo, label);
         this.money = money;
         this.currency = currency;
     }

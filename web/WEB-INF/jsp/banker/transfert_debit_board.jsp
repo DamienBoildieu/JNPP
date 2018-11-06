@@ -1,4 +1,4 @@
-<div class="container">
+<div>
     <form method="POST" action="/JNPP/banquier/transactions/transfert_debit.htm">
         <div class="card">
             <div class="row valign-wrapper">
@@ -21,6 +21,18 @@
                                 </td>
                                 <td>
                                     <input type="number" name="amount" class="center-align">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <div class="row valign-wrapper">
+                                        <div class="col s1">
+                                            Libelle:
+                                        </div>
+                                        <div class="col s11">
+                                            <input type="text" name="label" class="right-align">
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>

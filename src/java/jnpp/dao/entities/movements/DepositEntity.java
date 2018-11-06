@@ -17,8 +17,8 @@ public class DepositEntity extends MoneyMovementEntity implements Serializable {
     }
 
     public DepositEntity(Date date, String ribFrom, Double money,
-            CurrencyEntity currency) {
-        super(date, ribFrom, money, currency);
+            CurrencyEntity currency, String label) {
+        super(date, ribFrom, money, currency, label);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class DepositEntity extends MoneyMovementEntity implements Serializable {
 
     @Override
     public DepositDTO toDTO() {
-        return new DepositDTO(getDate(), getRibFrom(), getMoney(), getCurrency().toDTO());
+        return new DepositDTO(getDate(), getRibFrom(), getMoney(), getCurrency().toDTO(), getLabel());
     }
 
 }

@@ -5,8 +5,8 @@ import jnpp.service.dto.accounts.CurrencyDTO;
 
 public class DebitDTO extends MoneyTradeDTO {
 
-    public DebitDTO(Date date, String ribFrom, String ribTo, Double money, CurrencyDTO currency) {
-        super(date, ribFrom, ribTo, money, currency);
+    public DebitDTO(Date date, String ribFrom, String ribTo, Double money, CurrencyDTO currency, String label) {
+        super(date, ribFrom, ribTo, money, currency, label);
     }
 
     @Override

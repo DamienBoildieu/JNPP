@@ -23,8 +23,8 @@ public abstract class MoneyMovementEntity extends MovementEntity implements Seri
     }
 
     public MoneyMovementEntity(Date date, String ribFrom, Double money,
-            CurrencyEntity currency) {
-        super(date, ribFrom);
+            CurrencyEntity currency, String label) {
+        super(date, ribFrom, label);
         this.money = money;
         this.currency = currency;
     }

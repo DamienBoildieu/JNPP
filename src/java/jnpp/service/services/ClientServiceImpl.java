@@ -8,7 +8,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
+import javax.mail.MessagingException;
 import jnpp.dao.entities.AddressEntity;
 import jnpp.dao.entities.IdentityEntity;
 import jnpp.dao.entities.advisor.AdvisorEntity;
@@ -41,6 +44,11 @@ public class ClientServiceImpl implements ClientService {
     private static final String PASSWORD_SALT
             = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
+    private static final String MAILBOX_HOST = "smtp.gmail.com";
+    private static final String MAILBOX_PORT = "587";
+    private static final String MAILBOX_USERNAME = "jnpp.aaw@gmail.com";
+    private static final String MAILBOX_PASSWORD = "jnpp.aaw.2018";
+    
     @Resource
     ClientDAO clientDAO;
     @Resource
@@ -49,7 +57,9 @@ public class ClientServiceImpl implements ClientService {
     AdvisorDAO advisorDAO;
 
     private final Random random = new Random();
-
+    private final Mailbox mailbox = new Mailbox(MAILBOX_HOST, MAILBOX_PORT, 
+            MAILBOX_USERNAME, MAILBOX_PASSWORD);
+    
     @Override
     public ClientDTO signIn(String login, String password) {
         if (login == null || password == null) {
@@ -96,6 +106,7 @@ public class ClientServiceImpl implements ClientService {
         PrivateEntity client = new PrivateEntity(login, password, IdentityEntity.Gender.toEntity(gender), firstname,
                 lastname, birthday, email, number, street, city, state, phone,
                 DEFAULT_NOTIFY, advisor);
+        sendSignupMail(client);
         clientDAO.save(client);
     }
 
@@ -123,9 +134,20 @@ public class ClientServiceImpl implements ClientService {
         ProfessionalEntity client = new ProfessionalEntity(login, password, name, IdentityEntity.Gender.toEntity(ownerGender),
                 ownerFirstname, ownerLastname, email, number, street, city,
                 state, phone, DEFAULT_NOTIFY, advisor);
+        sendSignupMail(client);
         clientDAO.save(client);
     }
 
+    private void sendSignupMail(ClientEntity client) {
+        try {
+            String message = ""
+                    + "identifiant: " + client.getLogin() + "\n"
+                    + "mot de passe:" + client.getPassword();
+            mailbox.send(client.getEmail(), "Bienvenue chez JNPP", message);
+        } catch (MessagingException ex) {
+        }
+    }   
+    
     @Override
     public ClientDTO update(String login, String email,
             Integer number, String street, String city, String state,

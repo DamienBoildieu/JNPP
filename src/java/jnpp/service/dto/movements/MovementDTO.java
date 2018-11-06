@@ -18,10 +18,12 @@ public abstract class MovementDTO {
 
     private Date date;
     private String ribFrom;
+    private String label;
 
-    public MovementDTO(Date date, String ribFrom) {
+    public MovementDTO(Date date, String ribFrom, String label) {
         this.date = date;
         this.ribFrom = ribFrom;
+        this.label = label;
     }
 
     public abstract Type getType();
@@ -41,4 +43,13 @@ public abstract class MovementDTO {
     public void setRibFrom(String ribFrom) {
         this.ribFrom = ribFrom;
     }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+    
 }

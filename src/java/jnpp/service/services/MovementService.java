@@ -21,22 +21,22 @@ import jnpp.service.exceptions.owners.AccountOwnerException;
 public interface MovementService {
 
     TransfertDTO transfertMoney(String login, String ribFrom, String ribTo,
-            Double amount, CurrencyDTO currency)
+            Double amount, CurrencyDTO currency, String label)
             throws FakeClientException, FakeAccountException, AccountOwnerException,
             AccountTypeException, CurrencyException, OverdraftException;
 
     DebitDTO debitMoney(String login, String ribFrom, String ribTo,
-            Double amount, CurrencyDTO currency)
+            Double amount, CurrencyDTO currency, String label)
             throws FakeClientException, FakeAccountException, AccountOwnerException,
             AccountTypeException, DebitAuthorizationException, CurrencyException, OverdraftException;
 
     PurchaseDTO purchaseShareTitles(String login, String name,
-            Integer amount)
+            Integer amount, String label)
             throws FakeClientException, NoCurrentAccountException,
             NoShareAccountException, FakeShareException, AmountException;
 
     SaleDTO saleShareTitles(String login, String name,
-            Integer amount)
+            Integer amount, String label)
             throws FakeClientException, NoCurrentAccountException,
             NoShareAccountException, FakeShareTitleException, AmountException;
 

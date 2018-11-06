@@ -1,5 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<div class="container">
+<div>
     <form method="POST" action="/JNPP/banquier/transactions/achat_vente.htm" id="achat_vente">
         <div class="card">
             <div class="row valign-wrapper">
@@ -23,9 +22,21 @@
                                 <td>
                                     <select name="share" form="achat_vente">
                                         <c:forEach items="${shares}" var="share">
-                                        <option value="${share.name}" selected>${share.name}</option>
+                                            <option value="${share.name}" selected>${share.name}</option>
                                         </c:forEach>
                                     </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <div class="row valign-wrapper">
+                                        <div class="col s1">
+                                            Libelle:
+                                        </div>
+                                        <div class="col s11">
+                                            <input type="text" name="label" class="right-align">
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
