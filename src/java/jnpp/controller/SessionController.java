@@ -9,17 +9,17 @@ import jnpp.service.dto.clients.ClientDTO;
 /**
  * Classe permettant de gérer les HttpSession
  */
-public class CSession {
+public class SessionController {
     /**
      * Constructeur private
      */
-    private CSession() {}
+    private SessionController() {}
     /**
      * Supprime les attributs ajoutés par l'application
      * @param session la session que l'on veut supprimer
      */
     public static void clearSession(HttpSession session) throws UnconnectedException {
-        if (CSession.isConnected(session)) {
+        if (SessionController.isConnected(session)) {
             session.removeAttribute("client");
             session.removeAttribute("hasNotif");
         } else {

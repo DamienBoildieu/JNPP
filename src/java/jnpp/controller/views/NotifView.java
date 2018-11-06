@@ -2,7 +2,7 @@ package jnpp.controller.views;
 
 import java.util.Calendar;
 import java.util.Map;
-import jnpp.controller.CSession;
+import jnpp.controller.SessionController;
 import jnpp.controller.views.Translator.Language;
 import jnpp.service.dto.notifications.AppointmentNotificationDTO;
 import jnpp.service.dto.notifications.MessageNotificationDTO;

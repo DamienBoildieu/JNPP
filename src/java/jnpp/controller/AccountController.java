@@ -38,7 +38,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * Classe de contrôleur des requêtes sur des comptes
  */
 @Controller
-public class CAccount {
+public class AccountController {
     @Autowired
     private AccountService accountService;
      
@@ -58,12 +58,12 @@ public class CAccount {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (SessionController.isConnected(session)) {
             //Call service
             try {
-                accountService.openCurrentAccount(CSession.getClient(session).getLogin());
+                accountService.openCurrentAccount(SessionController.getClient(session).getLogin());
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre compte courant est ouvert"));
                 } else {
@@ -109,13 +109,13 @@ public class CAccount {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (SessionController.isConnected(session)) {
             //Call service
             try {
                 String bookName = request.getParameter("bookName");
-                accountService.openSavingAccount(CSession.getClient(session).getLogin(), bookName);
+                accountService.openSavingAccount(SessionController.getClient(session).getLogin(), bookName);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre livret est ouvert"));
                 } else {
@@ -176,13 +176,13 @@ public class CAccount {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (SessionController.isConnected(session)) {
             //Call service
             try {
                 List<IdentityDTO> identities = new ArrayList<IdentityDTO>();
-                ClientDTO  client = CSession.getClient(session);
+                ClientDTO  client = SessionController.getClient(session);
                 if (client.getType()==ClientDTO.Type.PROFESIONAL) {
                     throw new ClientTypeException();
                 }
@@ -201,7 +201,7 @@ public class CAccount {
                     }
                     identities.add(new IdentityDTO(gender, firstName, lastName));
                 }
-                accountService.openJointAccount(CSession.getClient(session).getLogin(), identities);
+                accountService.openJointAccount(SessionController.getClient(session).getLogin(), identities);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre compte joint est ouvert"));
                 } else {
@@ -255,12 +255,12 @@ public class CAccount {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (SessionController.isConnected(session)) {
             //Call service
             try {
-                accountService.openShareAccount(CSession.getClient(session).getLogin());
+                accountService.openShareAccount(SessionController.getClient(session).getLogin());
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre compte titres est ouvert"));
                 } else {
@@ -306,13 +306,13 @@ public class CAccount {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (SessionController.isConnected(session)) {
             //Call service
             try {
                 String rib = request.getParameter("rib");
-                accountService.closeAccount(CSession.getClient(session).getLogin(), rib);
+                accountService.closeAccount(SessionController.getClient(session).getLogin(), rib);
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Le compte a bien été fermé"));
                 } else {

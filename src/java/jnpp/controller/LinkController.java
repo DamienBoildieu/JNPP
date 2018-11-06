@@ -33,7 +33,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * Classe contrôlant les différents liens qui ne requièrent pas de traitement particulier
  */
 @Controller
-public class CLink {
+public class LinkController {
     @Autowired
     private NotificationService notifService;
     /**
@@ -50,14 +50,14 @@ public class CLink {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (CSession.isConnected(session)) {
-            Boolean hasNotif = CSession.getHasNotif(session);
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (SessionController.isConnected(session)) {
+            Boolean hasNotif = SessionController.getHasNotif(session);
             if (!hasNotif) {  
                 try {
-                    hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session).getLogin()).size()>0;
-                    CSession.setHasNotif(session, hasNotif);
+                    hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size()>0;
+                    SessionController.setHasNotif(session, hasNotif);
                 } catch (FakeClientException invalidClient) {
                     if (alerts != null) {
                         alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
@@ -84,9 +84,9 @@ public class CLink {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session))
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session))
             return new JNPPModelAndView("signup/signupsuccess", ViewInfo.createInfo(session, alerts));
         return new ModelAndView("redirect:/index.htm");
     }
@@ -105,14 +105,14 @@ public class CLink {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (CSession.isConnected(session)) {
-            Boolean hasNotif = CSession.getHasNotif(session);
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (SessionController.isConnected(session)) {
+            Boolean hasNotif = SessionController.getHasNotif(session);
             if (!hasNotif) {  
                 try {
-                    hasNotif = notifService.receiveUnseenNotifications(CSession.getClient(session).getLogin()).size()>0;
-                    CSession.setHasNotif(session, hasNotif);
+                    hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size()>0;
+                    SessionController.setHasNotif(session, hasNotif);
                 } catch (FakeClientException invalidClient) {
                     if (alerts != null) {
                         alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
@@ -141,9 +141,9 @@ public class CLink {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (!CSession.isConnected(session))
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session))
             return new JNPPModelAndView("manageuser/passwordsuccess", ViewInfo.createInfo(session, alerts));
         return new ModelAndView("redirect:/index.htm");
     }
@@ -161,17 +161,17 @@ public class CLink {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
-        if (CSession.getLanguage(session)!=Translator.Language.FR)
-            CSession.setLanguage(session,Translator.Language.FR);
-        if (CSession.isConnected(session)) {
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (SessionController.isConnected(session)) {
             try {
-                List<NotificationDTO> notifs = notifService.receiveNotifications(CSession.getClient(session).getLogin());
+                List<NotificationDTO> notifs = notifService.receiveNotifications(SessionController.getClient(session).getLogin());
                 List<NotifView> notifsView = new ArrayList<NotifView>();
                 for (NotificationDTO notif : notifs) {
                     notifsView.add(new NotifView(notif));
                 }
-                notifService.seeAllNotications(CSession.getClient(session).getLogin());
-                CSession.setHasNotif(session, false);
+                notifService.seeAllNotications(SessionController.getClient(session).getLogin());
+                SessionController.setHasNotif(session, false);
                 ModelAndView view = new JNPPModelAndView("manageuser/notifs", ViewInfo.createInfo(session, alerts));
                 view.addObject("notifs", notifsView);
                 return view;
