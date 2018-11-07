@@ -7,6 +7,7 @@ import jnpp.service.dto.advisor.AppointmentDTO;
 import jnpp.service.dto.advisor.MessageDTO;
 import jnpp.service.exceptions.advisors.AvailableException;
 import jnpp.service.exceptions.advisors.DateException;
+import jnpp.service.exceptions.advisors.NoAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateAppointmentException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.owners.AppointmentOwnerException;
@@ -16,7 +17,7 @@ public interface AdvisorService {
     AdvisorDTO getAdvisor(String login) throws FakeClientException;
 
     MessageDTO sendMessage(String login, String message)
-            throws FakeClientException;
+            throws FakeClientException, NoAdvisorException;
 
     List<MessageDTO> receiveMessages(String login)
             throws FakeClientException;
@@ -28,7 +29,7 @@ public interface AdvisorService {
             throws FakeClientException;
 
     AppointmentDTO makeAppointment(String login, Date date)
-            throws FakeClientException, DateException, AvailableException;
+            throws FakeClientException, DateException, AvailableException, NoAdvisorException;
 
     void cancelAppoint(String login, Long id)
             throws FakeClientException, AppointmentOwnerException, DateException;

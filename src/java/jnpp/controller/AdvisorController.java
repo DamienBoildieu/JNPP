@@ -17,6 +17,7 @@ import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.service.exceptions.advisors.AvailableException;
 import jnpp.service.exceptions.advisors.DateException;
+import jnpp.service.exceptions.advisors.NoAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateAppointmentException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.owners.AppointmentOwnerException;
@@ -74,6 +75,14 @@ public class AdvisorController {
                     rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new ModelAndView("redirect:/disconnect.htm");
+            } catch (NoAdvisorException e) {
+                                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Nous n'avez pas de conseiller."));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Nous n'avez pas de conseiller."));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }
             } finally {
                 return new ModelAndView("redirect:/message.htm");
             }
@@ -136,6 +145,14 @@ public class AdvisorController {
                     rm.addFlashAttribute("alerts", alerts);    
                 }
                 return new ModelAndView("redirect:/disconnect.htm");
+            } catch (NoAdvisorException e) {
+                if (alerts != null) {
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Nous n'avez pas de conseiller."));
+                } else {
+                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Nous n'avez pas de conseiller."));
+                    rm.addFlashAttribute("alerts", alerts);    
+                }   
             } finally {
                 return new ModelAndView("redirect:/appoint.htm");
             }

@@ -16,6 +16,7 @@ import jnpp.service.dto.advisor.AppointmentDTO;
 import jnpp.service.dto.advisor.MessageDTO;
 import jnpp.service.exceptions.advisors.AvailableException;
 import jnpp.service.exceptions.advisors.DateException;
+import jnpp.service.exceptions.advisors.NoAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateAppointmentException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.owners.AppointmentOwnerException;
@@ -49,13 +50,16 @@ public class AdvisorServiceImpl implements AdvisorService {
     }
 
     @Override
-    public MessageDTO sendMessage(String login, String message) throws FakeClientException {
+    public MessageDTO sendMessage(String login, String message) throws FakeClientException, NoAdvisorException {
         if (login == null || message == null || message.length() == 0) {
             throw new IllegalArgumentException();
         }
         ClientEntity client = clientDAO.find(login);
         if (client == null) {
             throw new FakeClientException();
+        }
+        if (client.getAdvisor() == null) {
+            throw new NoAdvisorException();
         }
         MessageEntity entity = new MessageEntity(client, client.getAdvisor(),
                 MessageEntity.Direction.CLIENT_TO_ADVISOR, Date.from(Instant.now()), message);
@@ -103,13 +107,16 @@ public class AdvisorServiceImpl implements AdvisorService {
     }
 
     @Override
-    public AppointmentDTO makeAppointment(String login, Date date) throws FakeClientException, DateException, AvailableException {
+    public AppointmentDTO makeAppointment(String login, Date date) throws FakeClientException, DateException, AvailableException, NoAdvisorException {
         if (login == null || date == null) {
             throw new IllegalArgumentException();
         }
         ClientEntity client = clientDAO.find(login);
         if (client == null) {
             throw new FakeClientException();
+        }
+        if (client.getAdvisor() == null) {
+            throw new NoAdvisorException();
         }
         Date limit = Date.from(Instant.now().plusSeconds(MAKE_APPOINTMENT_DELTA));
         if (date.before(limit)) {
