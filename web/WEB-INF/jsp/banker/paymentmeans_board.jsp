@@ -34,7 +34,7 @@
                                     ${paymentmean.status.next()}
                                     <i class="material-icons right">send</i>
                                 </button>
-                                </form>
+                            </form>
                             </c:if>
                         </td>
                     </tr>

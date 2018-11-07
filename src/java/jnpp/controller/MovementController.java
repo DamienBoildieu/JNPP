@@ -410,4 +410,5 @@ HttpSession session = request.getSession();
         }
         return new ModelAndView("redirect:/movement.htm");
     }
+
 }
