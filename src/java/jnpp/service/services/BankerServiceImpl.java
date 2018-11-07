@@ -55,6 +55,7 @@ import jnpp.service.dto.movements.SaleDTO;
 import jnpp.service.dto.movements.TransfertDTO;
 import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 import jnpp.service.exceptions.accounts.NoCurrentAccountException;
+import jnpp.service.exceptions.accounts.NoShareAccountException;
 import jnpp.service.exceptions.advisors.NoAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateAdvisorException;
 import jnpp.service.exceptions.duplicates.DuplicateSavingbookException;

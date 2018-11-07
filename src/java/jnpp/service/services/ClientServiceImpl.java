@@ -136,25 +136,6 @@ public class ClientServiceImpl implements ClientService {
         clientDAO.save(client);
     }
 
-    private void sendSignupMail(ClientEntity client) {
-        final String login = client.getLogin();
-        final String password = client.getPassword();
-        final String email = client.getEmail();
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String message = ""
-                            + "identifiant:  " + login + "\n"
-                            + "mot de passe: " + password;
-                    mailbox.send(email, "Bienvenue chez JNPP", message);
-                } catch (MessagingException ex) {
-                }
-            }
-        });
-        thread.start();
-    }
-
     @Override
     public ClientDTO update(String login, String email,
             Integer number, String street, String city, String state,
@@ -253,7 +234,8 @@ public class ClientServiceImpl implements ClientService {
         }
         String password = generateRandomPassword();
         client.setPassword(password);
-        clientDAO.update(client);
+        client = clientDAO.update(client);
+        sendResetMail(client);
         return true;
     }
 
@@ -287,7 +269,8 @@ public class ClientServiceImpl implements ClientService {
         }
         String password = generateRandomPassword();
         client.setPassword(password);
-        clientDAO.update(client);
+        client = clientDAO.update(client);
+        sendResetMail(client);
         return true;
     }
 
@@ -337,6 +320,30 @@ public class ClientServiceImpl implements ClientService {
     private static boolean isOfAge(Date birthday) {
         return Period.between(birthday.toInstant().atZone(ZoneId.systemDefault()).
                 toLocalDate(), LocalDate.now()).getYears() >= OF_AGE;
+    }
+
+    private void sendSignupMail(ClientEntity client) {
+        sendMail(client.getEmail(), "Bienvenue chez JNPP",
+                "identifiant:  " + client.getLogin() + "\n"
+                + "mot de passe: " + client.getPassword());
+    }
+
+    private void sendResetMail(ClientEntity client) {
+        sendMail(client.getEmail(), "Reset de votre mot de passe",
+                "mot de passe: " + client.getPassword());
+    }
+
+    private void sendMail(final String email, final String title, final String message) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mailbox.send(email, title, message);
+                } catch (MessagingException ex) {
+                }
+            }
+        });
+        thread.start();
     }
 
 }

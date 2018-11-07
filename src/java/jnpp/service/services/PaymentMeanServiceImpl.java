@@ -108,7 +108,7 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
     }
 
     @Override
-    public List<BankCardDTO> getBankCards(String login, String rib) throws FakeClientException, FakeAccountException, AccountOwnerException {
+    public List<BankCardDTO> getBankCards(String login, String rib) throws FakeClientException, AccountOwnerException {
         if (login == null || rib == null) {
             throw new IllegalArgumentException();
         }
@@ -117,10 +117,7 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
             throw new FakeClientException();
         }
         AccountEntity account = accountDAO.find(rib);
-        if (account == null) {
-            throw new FakeAccountException();
-        }
-        if (!account.isOwnBy(client)) {
+        if (account == null || !account.isOwnBy(client)) {
             throw new AccountOwnerException();
         }
         List<BankCardEntity> bankcards = paymentMeanDAO.findBankCardByLoginRib(login, rib);

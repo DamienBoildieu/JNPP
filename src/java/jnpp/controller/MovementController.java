@@ -344,14 +344,6 @@ public class MovementController {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Cette action de bourse n'existe pas"));
                 rm.addFlashAttribute("alerts", alerts);
             }
-        } catch (AmountException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne pouvez pas acheter ces actions"));
-            } else {
-                alerts = new ArrayList<AlertMessage>(); 
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne pouvez pas acheter ces actions"));
-                rm.addFlashAttribute("alerts", alerts);
-            }
         }
         return new ModelAndView("redirect:/movement.htm");
     }

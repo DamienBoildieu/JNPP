@@ -283,7 +283,7 @@ public class MovementServiceImpl implements MovementService {
     }
 
     @Override
-    public PurchaseDTO purchaseShareTitles(String login, String name, Integer amount, String label) throws FakeClientException, NoCurrentAccountException, NoShareAccountException, FakeShareException, AmountException {
+    public PurchaseDTO purchaseShareTitles(String login, String name, Integer amount, String label) throws FakeClientException, NoCurrentAccountException, NoShareAccountException, FakeShareException {
         if (login == null || name == null || amount == null || amount <= 1 || label == null) {
             throw new IllegalArgumentException();
         }
