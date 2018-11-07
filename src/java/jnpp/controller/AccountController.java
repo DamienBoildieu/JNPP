@@ -1,4 +1,4 @@
-package jnpp.controller;
+    package jnpp.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +26,19 @@ import jnpp.service.exceptions.accounts.UnknownIdentityException;
 import jnpp.service.exceptions.duplicates.DuplicateAccountException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeSavingBookException;
+<<<<<<< HEAD
 import jnpp.service.exceptions.entities.FakeShareTitleException;
 import jnpp.service.exceptions.movements.AmountException;
 import jnpp.service.exceptions.owners.AccountOwnerException;
 import jnpp.service.services.AccountService;
 import jnpp.service.services.DebitAuthorizationService;
 import jnpp.service.services.NotificationService;
+=======
+import jnpp.service.exceptions.movements.AccountTypeException;
+import jnpp.service.exceptions.owners.AccountOwnerException;
+import jnpp.service.services.AccountService;
+import jnpp.service.services.PaymentMeanService;
+>>>>>>> 23b486be5a8c0ad5a7a072b7596013c6a8a9d6bc
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,11 +55,17 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+<<<<<<< HEAD
     @Autowired
     NotificationService notifService;
     @Autowired
     DebitAuthorizationService authorizationService;
 
+=======
+    @Autowired 
+    private PaymentMeanService paymentMeanService;
+    
+>>>>>>> 23b486be5a8c0ad5a7a072b7596013c6a8a9d6bc
     /**
      * Demande d'ouverture de compte courant
      *
@@ -485,6 +498,129 @@ public class AccountController {
         
 
         return new ModelAndView("redirect:/authorization.htm");
+    }
+
+    /**
+     * Commande de carte bancaire
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return La vue du compte qui a commande la carte
+     * @throws Exception 
+     */
+    @RequestMapping(value = "commandcard", method = RequestMethod.POST)
+    private ModelAndView commandCard(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+            throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session)) {
+            return new ModelAndView("redirect:/index.htm");
+        }
+        String rib = request.getParameter("rib");
+        //Call service
+        try {
+            paymentMeanService.commandBankCard(SessionController.getClient(session).getLogin(), rib);
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre carte est commandé"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre carte est commandé"));
+                rm.addFlashAttribute("alerts", alerts);    
+            }
+        } catch (AccountTypeException accountException) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce compte ne peut pas être lié à une carte"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce compte ne peut pas être lié à une carte"));
+                rm.addFlashAttribute("alerts", alerts);    
+            }
+        } catch (AccountOwnerException ownerException) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous n'avez pas les droits nécessaires pour cette action"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous n'avez pas les droits nécessaires pour cette action"));
+                rm.addFlashAttribute("alerts", alerts);    
+            }
+        } catch (FakeClientException clientException) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                rm.addFlashAttribute("alerts", alerts);
+            }
+            return new ModelAndView("redirect:/disconnect.htm");
+        } 
+            return new ModelAndView("redirect:/account.htm?id="+rib);
+        
+    }
+    /**
+     * Commande de chéquier
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return La vue du compte qui a commande la carte
+     * @throws Exception 
+     */
+    @RequestMapping(value = "commandcheckbook", method = RequestMethod.POST)
+    private ModelAndView commandCheckBook(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+            throws Exception {
+        HttpSession session = request.getSession();
+        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        if (session==null)
+            session = request.getSession(true);
+        if (SessionController.getLanguage(session)!=Translator.Language.FR)
+            SessionController.setLanguage(session,Translator.Language.FR);
+        if (!SessionController.isConnected(session)) {
+            return new ModelAndView("redirect:/index.htm");
+        }
+        String rib = request.getParameter("rib");
+        //Call service
+        try {
+            paymentMeanService.commandCheckbook(SessionController.getClient(session).getLogin(), rib);
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre carte est commandé"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre carte est commandé"));
+                rm.addFlashAttribute("alerts", alerts);    
+            }
+        } catch (AccountTypeException accountException) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce compte ne peut pas être lié à une carte"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce compte ne peut pas être lié à une carte"));
+                rm.addFlashAttribute("alerts", alerts);    
+            }
+        } catch (AccountOwnerException ownerException) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous n'avez pas les droits nécessaires pour cette action"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous n'avez pas les droits nécessaires pour cette action"));
+                rm.addFlashAttribute("alerts", alerts);    
+            }
+        } catch (FakeClientException clientException) {
+            if (alerts != null) {
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+            } else {
+                alerts = new ArrayList<AlertMessage>(); 
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                rm.addFlashAttribute("alerts", alerts);
+            }
+            return new ModelAndView("redirect:/disconnect.htm");
+        } finally {
+            return new ModelAndView("redirect:/account.htm?id="+rib);
+        }
     }
 
 }

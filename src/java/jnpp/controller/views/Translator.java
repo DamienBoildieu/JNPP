@@ -132,4 +132,33 @@ public class Translator {
         }
         return map;
     }
+    
+    public Map<PaymentMeanDTO.Status, String> translatePaymentMeanStatus(Language lang) {
+        switch (lang) {
+            case FR:    
+                return paymentMeanStatusToFrench();
+            default:
+                throw new AssertionError(lang.name());
+        } 
+    }
+    
+    private Map<PaymentMeanDTO.Status, String> paymentMeanStatusToFrench() {
+        Map<PaymentMeanDTO.Status, String> map = new HashMap<PaymentMeanDTO.Status, String>();
+        for (PaymentMeanDTO.Status status : PaymentMeanDTO.Status.values()) {
+            switch (status) {
+                case ORDERED:
+                    map.put(status,"Commandé");
+                    break;
+                case ARRIVED:
+                    map.put(status,"Arrivé");
+                    break;
+                case DELIVERED:
+                    map.put(status,"Récupéré");
+                    break;
+                default:
+                    throw new AssertionError(status.name());
+}
+        }
+        return map;
+    }
 }

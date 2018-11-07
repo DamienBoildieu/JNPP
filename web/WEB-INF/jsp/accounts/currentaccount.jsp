@@ -25,6 +25,42 @@
                             </div>
                         </form>
                     </div>
+                    <div class="card-panel blue">
+                        <div clas="row">
+                            <p class="white-text"> Cartes : </p>
+                        </div>
+                        <c:forEach items="${cards}" var="card">
+                            <div clas="row">
+                                <p class="white-text"> ${card.id} ${statusMap[card.status]} </p>
+                            </div>
+                        </c:forEach>
+                        <form method="POST" action="commandcard.htm">
+                            <input type="hidden" id="rib" name="rib" value=${account.rib}>
+                            <div class="row">
+                                <div class="col s12">
+                                    <input type="submit" value="Commander" class="btn blue" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-panel blue">
+                        <div clas="row">
+                            <p class="white-text"> Chéquiers : </p>
+                        </div>
+                        <c:forEach items="${checkbooks}" var="checkbook">
+                            <div clas="row">
+                                <p class="white-text"> ${checkbook.id} ${statusMap[checkbook.status]} </p>
+                            </div>
+                        </c:forEach>
+                        <form method="POST" action="commandcheckbook.htm">
+                            <input type="hidden" id="rib" name="rib" value=${account.rib}>
+                            <div class="row">
+                                <div class="col s12">
+                                    <input type="submit" value="Commander" class="btn blue" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 <div class="container">
                     <div class="row">
