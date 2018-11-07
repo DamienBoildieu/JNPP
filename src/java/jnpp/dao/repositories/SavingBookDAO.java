@@ -7,12 +7,14 @@ public interface SavingBookDAO extends GenericDAO<SavingBookEntity> {
 
     /**
      * Retourne tous les livrets.
+     *
      * @return Liste d'entites de livrets.
      */
     List<SavingBookEntity> findAll();
 
     /**
      * Retourne un livret par son nom.
+     *
      * @param name Nom de livret
      * @return Entite du livret si trouve, null sinon.
      */

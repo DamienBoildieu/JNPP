@@ -15,7 +15,6 @@ import jnpp.dao.repositories.ClientDAO;
 import jnpp.dao.repositories.PaymentMeanDAO;
 import jnpp.service.dto.paymentmeans.BankCardDTO;
 import jnpp.service.dto.paymentmeans.CheckbookDTO;
-import jnpp.service.exceptions.entities.FakeAccountException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.movements.AccountTypeException;
 import jnpp.service.exceptions.owners.AccountOwnerException;

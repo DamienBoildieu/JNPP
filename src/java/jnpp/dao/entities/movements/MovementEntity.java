@@ -77,7 +77,7 @@ public abstract class MovementEntity implements Serializable {
     private String ribFrom;
 
     private String label;
-    
+
     public MovementEntity() {
     }
 

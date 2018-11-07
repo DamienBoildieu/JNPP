@@ -19,10 +19,10 @@ import jnpp.service.exceptions.duplicates.DuplicateDebitAuthorizationException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeDebitAuthorizationException;
 import jnpp.service.exceptions.entities.FakeSavingBookException;
-import jnpp.service.services.DebitAuthorizationService;
 import jnpp.service.exceptions.movements.AccountTypeException;
 import jnpp.service.exceptions.owners.AccountOwnerException;
 import jnpp.service.services.AccountService;
+import jnpp.service.services.DebitAuthorizationService;
 import jnpp.service.services.PaymentMeanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,6 +37,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 public class AccountController {
+
     /**
      * Service de gestion des comptes utilisateurs
      */
@@ -50,8 +51,9 @@ public class AccountController {
     /**
      * Service de moyens de paiement
      */
-    @Autowired 
+    @Autowired
     private PaymentMeanService paymentMeanService;
+
     /**
      * Demande d'ouverture de compte courant
      *
@@ -107,6 +109,7 @@ public class AccountController {
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }
+
     /**
      * Demande d'ouverture de livret
      *
@@ -178,6 +181,7 @@ public class AccountController {
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }
+
     /**
      * Demande d'ouverture de compte joint
      *
@@ -261,6 +265,7 @@ public class AccountController {
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }
+
     /**
      * Demande d'ouverture de compte d'actions
      *
@@ -316,6 +321,7 @@ public class AccountController {
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }
+
     /**
      * Demande de fermeture de comptes
      *
@@ -387,6 +393,7 @@ public class AccountController {
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }
+
     /**
      * Suppression d'une autorisation de débit
      *
@@ -400,8 +407,8 @@ public class AccountController {
     @RequestMapping(value = "deleteDebitAuthorization", method = RequestMethod.POST)
     private ModelAndView deleteDebitAuthorization(Model model, HttpServletRequest request,
             RedirectAttributes rm)
-        throws Exception {
-        
+            throws Exception {
+
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
         if (session == null) {
@@ -413,52 +420,53 @@ public class AccountController {
         if (!SessionController.isConnected(session)) {
             return new ModelAndView("redirect:/index.htm");
         }
-        
+
         ClientDTO client = SessionController.getClient(session);
-        
+
         String ribFrom = request.getParameter("ribFrom");
         String ribTo = request.getParameter("ribTo");
-        
+
         try {
-            authorizationService.deleteDebitAuthorization(client.getLogin(), ribFrom, ribTo);   
-           if (alerts != null) {
+            authorizationService.deleteDebitAuthorization(client.getLogin(), ribFrom, ribTo);
+            if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Autorisation supprimée."));
             } else {
                 alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Autorisation supprimée."));
                 rm.addFlashAttribute("alerts", alerts);
             }
-           
+
         } catch (FakeClientException ex) {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 rm.addFlashAttribute("alerts", alerts);
             }
             return new ModelAndView("redirect:/disconnect.htm");
-            
-        } catch (FakeDebitAuthorizationException ex) {         
+
+        } catch (FakeDebitAuthorizationException ex) {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur avec vos autorisations."));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur avec vos autorisations."));
                 rm.addFlashAttribute("alerts", alerts);
             }
-        } catch (AccountOwnerException ex) {         
+        } catch (AccountOwnerException ex) {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez être proprietaire du compte autorisé à être debité."));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez être proprietaire du compte autorisé à être debité."));
                 rm.addFlashAttribute("alerts", alerts);
             }
         }
-        
+
         return new ModelAndView("redirect:/authorization.htm");
     }
+
     /**
      * Ajout d'une autorisation de débit
      *
@@ -472,8 +480,8 @@ public class AccountController {
     @RequestMapping(value = "addDebitAuthorization", method = RequestMethod.POST)
     private ModelAndView addDebitAuthorization(Model model, HttpServletRequest request,
             RedirectAttributes rm)
-    throws Exception {
-        
+            throws Exception {
+
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
         if (session == null) {
@@ -485,80 +493,84 @@ public class AccountController {
         if (!SessionController.isConnected(session)) {
             return new ModelAndView("redirect:/index.htm");
         }
-        
+
         ClientDTO client = SessionController.getClient(session);
-        
+
         String ribFrom = request.getParameter("ribFrom");
         String ribTo = request.getParameter("ribTo");
 
         try {
-            authorizationService.createDebitAuthorization(client.getLogin(), ribFrom, ribTo);   
-           if (alerts != null) {
+            authorizationService.createDebitAuthorization(client.getLogin(), ribFrom, ribTo);
+            if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Autorisation accreptée."));
             } else {
                 alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Autorisation accreptée."));
                 rm.addFlashAttribute("alerts", alerts);
             }
-           
+
         } catch (FakeClientException ex) {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 rm.addFlashAttribute("alerts", alerts);
             }
             return new ModelAndView("redirect:/disconnect.htm");
-            
-        } catch (AccountOwnerException ex) {            
+
+        } catch (AccountOwnerException ex) {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez être proprietaire du compte autorisé à être debité."));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez être proprietaire du compte autorisé à être debité."));
                 rm.addFlashAttribute("alerts", alerts);
             }
-            
-        } catch (DuplicateDebitAuthorizationException ex) {            
+
+        } catch (DuplicateDebitAuthorizationException ex) {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous avez deja autorisé ce compte à debiter votre compte."));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous avez deja autorisé ce compte à debiter votre compte."));
                 rm.addFlashAttribute("alerts", alerts);
             }
-            
-        } catch (AccountTypeException ex) {         
+
+        } catch (AccountTypeException ex) {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Votre compte n'est pas debitable ou le compte cible ne peut etre debiteur."));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Votre compte n'est pas debitable ou le compte cible ne peut etre debiteur."));
                 rm.addFlashAttribute("alerts", alerts);
             }
         }
-        
+
         return new ModelAndView("redirect:/authorization.htm");
     }
 
     /**
      * Commande de carte bancaire
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
      * @return La vue du compte qui a commande la carte
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "commandcard", method = RequestMethod.POST)
     private ModelAndView commandCard(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
         if (!SessionController.isConnected(session)) {
             return new ModelAndView("redirect:/index.htm");
         }
@@ -569,56 +581,61 @@ public class AccountController {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre carte est commandé"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre carte est commandé"));
-                rm.addFlashAttribute("alerts", alerts);    
+                rm.addFlashAttribute("alerts", alerts);
             }
         } catch (AccountTypeException accountException) {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce compte ne peut pas être lié à une carte"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce compte ne peut pas être lié à une carte"));
-                rm.addFlashAttribute("alerts", alerts);    
+                rm.addFlashAttribute("alerts", alerts);
             }
         } catch (AccountOwnerException ownerException) {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous n'avez pas les droits nécessaires pour cette action"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous n'avez pas les droits nécessaires pour cette action"));
-                rm.addFlashAttribute("alerts", alerts);    
+                rm.addFlashAttribute("alerts", alerts);
             }
         } catch (FakeClientException clientException) {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 rm.addFlashAttribute("alerts", alerts);
             }
             return new ModelAndView("redirect:/disconnect.htm");
-        } 
-            return new ModelAndView("redirect:/account.htm?id="+rib);
-        
+        }
+        return new ModelAndView("redirect:/account.htm?id=" + rib);
+
     }
+
     /**
      * Commande de chéquier
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
      * @return La vue du compte qui a commande la carte
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "commandcheckbook", method = RequestMethod.POST)
     private ModelAndView commandCheckBook(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
         if (!SessionController.isConnected(session)) {
             return new ModelAndView("redirect:/index.htm");
         }
@@ -629,37 +646,37 @@ public class AccountController {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre carte est commandé"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Votre carte est commandé"));
-                rm.addFlashAttribute("alerts", alerts);    
+                rm.addFlashAttribute("alerts", alerts);
             }
         } catch (AccountTypeException accountException) {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce compte ne peut pas être lié à une carte"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce compte ne peut pas être lié à une carte"));
-                rm.addFlashAttribute("alerts", alerts);    
+                rm.addFlashAttribute("alerts", alerts);
             }
         } catch (AccountOwnerException ownerException) {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous n'avez pas les droits nécessaires pour cette action"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous n'avez pas les droits nécessaires pour cette action"));
-                rm.addFlashAttribute("alerts", alerts);    
+                rm.addFlashAttribute("alerts", alerts);
             }
         } catch (FakeClientException clientException) {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 rm.addFlashAttribute("alerts", alerts);
             }
             return new ModelAndView("redirect:/disconnect.htm");
         } finally {
-            return new ModelAndView("redirect:/account.htm?id="+rib);
+            return new ModelAndView("redirect:/account.htm?id=" + rib);
         }
     }
 

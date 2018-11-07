@@ -4,7 +4,7 @@ public class ShareTitleDTO {
 
     private Integer amount;
     private ShareDTO share;
-    
+
     public ShareTitleDTO(Integer amount, ShareDTO share) {
         this.amount = amount;
         this.share = share;

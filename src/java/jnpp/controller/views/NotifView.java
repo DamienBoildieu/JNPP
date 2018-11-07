@@ -15,6 +15,7 @@ import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
  * Vue des notifications
  */
 public class NotifView {
+
     /**
      * L'année de la notification
      */
@@ -35,15 +36,17 @@ public class NotifView {
      * Indique si la notification a été vue
      */
     private final boolean seen;
+
     /**
      * Constructeur
-     * @param notif la notification 
+     *
+     * @param notif la notification
      */
     public NotifView(NotificationDTO notif) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(notif.getDate());
         year = cal.get(Calendar.YEAR);
-        month = (cal.get(Calendar.MONTH)+1);
+        month = (cal.get(Calendar.MONTH) + 1);
         day = cal.get(Calendar.DAY_OF_MONTH);
         seen = notif.getSeen();
         switch (notif.getType()) {
@@ -65,11 +68,11 @@ public class NotifView {
                         message = "Vous avez récupéré votre " + types.get(mean.getPaymentMean().getType());
                         break;
                     default:
-                        throw new AssertionError(mean.getPaymentMean().getStatus().name());                 
+                        throw new AssertionError(mean.getPaymentMean().getStatus().name());
                 }
                 break;
             case MESSAGE:
-                MessageNotificationDTO msg = (MessageNotificationDTO) notif;    
+                MessageNotificationDTO msg = (MessageNotificationDTO) notif;
                 message = "Vous avez un reçu un nouveau message";
                 break;
             case MOVEMENT:
@@ -81,7 +84,7 @@ public class NotifView {
                 message = "Vous êtes en négatif sur le compte " + over.getRib();
                 break;
             default:
-                throw new AssertionError(notif.getType().name());     
+                throw new AssertionError(notif.getType().name());
         }
     }
 

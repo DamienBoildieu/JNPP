@@ -14,6 +14,7 @@ import jnpp.service.dto.movements.WithdrawDTO;
  * Vue d'une transaction
  */
 public class MovementView {
+
     /**
      * Le type de transaction
      */
@@ -42,26 +43,29 @@ public class MovementView {
      * Le libéllé de la transaction
      */
     private final String label;
+
     /**
      * Constructeur
+     *
      * @param movement La transaction
-     * @param accountRib Le compte de l'utilisateur connecté impliqué dans la transaction
+     * @param accountRib Le compte de l'utilisateur connecté impliqué dans la
+     * transaction
      */
     public MovementView(MovementDTO movement, String accountRib) {
         type = movement.getType();
         Calendar cal = Calendar.getInstance();
         cal.setTime(movement.getDate());
         year = cal.get(Calendar.YEAR);
-        month = (cal.get(Calendar.MONTH)+1);
+        month = (cal.get(Calendar.MONTH) + 1);
         day = cal.get(Calendar.DAY_OF_MONTH);
         switch (movement.getType()) {
             case TRANSFERT:
-                TransfertDTO transfert = (TransfertDTO)movement;
+                TransfertDTO transfert = (TransfertDTO) movement;
                 Double amountTransfert = transfert.getMoney();
                 if (transfert.getRibFrom().equals(accountRib)) {
                     otherAccount = transfert.getRibTo();
                     amountTransfert = -amountTransfert;
-                    
+
                 } else {
                     otherAccount = transfert.getRibFrom();
                 }
@@ -69,10 +73,10 @@ public class MovementView {
                 label = "Transfert";
                 break;
             case DEBIT:
-                DebitDTO debit = (DebitDTO)movement;
+                DebitDTO debit = (DebitDTO) movement;
                 Double amountDebit = debit.getMoney();
                 if (debit.getRibFrom().equals(accountRib)) {
-                    otherAccount = debit.getRibTo();                    
+                    otherAccount = debit.getRibTo();
                 } else {
                     otherAccount = debit.getRibFrom();
                     amountDebit = -amountDebit;
@@ -81,32 +85,32 @@ public class MovementView {
                 label = "Débit";
                 break;
             case PURCHASE:
-                PurchaseDTO purchase = (PurchaseDTO)movement;
+                PurchaseDTO purchase = (PurchaseDTO) movement;
                 value = purchase.getAmount().toString();
                 otherAccount = purchase.getRibFrom();
                 label = purchase.getShare().getName();
                 break;
             case SALE:
-                SaleDTO sale = (SaleDTO)movement;
+                SaleDTO sale = (SaleDTO) movement;
                 Integer saleAmount = -sale.getAmount();
                 value = saleAmount.toString();
                 label = sale.getShare().getName();
                 otherAccount = sale.getRibTo();
                 break;
             case WITHDRAW:
-                WithdrawDTO withdraw = (WithdrawDTO)movement;
+                WithdrawDTO withdraw = (WithdrawDTO) movement;
                 value = withdraw.getMoney().toString() + Translator.getInstance().translateCurrency(Translator.Language.FR).get(withdraw.getCurrency());
                 label = "Retrait";
                 otherAccount = "Distributeur";
                 break;
             case PAYMENT:
-                PaymentDTO payment = (PaymentDTO)movement;
+                PaymentDTO payment = (PaymentDTO) movement;
                 otherAccount = payment.getTarget();
                 value = payment.getMoney().toString() + Translator.getInstance().translateCurrency(Translator.Language.FR).get(payment.getCurrency());
                 label = "Paiement";
                 break;
             case DEPOSIT:
-                DepositDTO deposit = (DepositDTO)movement;
+                DepositDTO deposit = (DepositDTO) movement;
                 otherAccount = "JNPP";
                 value = deposit.getMoney().toString() + Translator.getInstance().translateCurrency(Translator.Language.FR).get(deposit.getCurrency());
                 label = "Dépôt";
@@ -144,5 +148,4 @@ public class MovementView {
         return label;
     }
 
-    
 }

@@ -16,13 +16,16 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class AdvisorClientsController {
+
     /**
      * Le service banquier
      */
     @Autowired
     BankerService bankerService;
+
     /**
      * Vue de la liste des clients d'un conseiller
+     *
      * @param request la requête
      * @return La vue des clients d'un conseiller
      */
@@ -30,19 +33,21 @@ public class AdvisorClientsController {
     protected ModelAndView advisorClientsGet(HttpServletRequest request) {
         String firstname = request.getParameter("prenom");
         String lastname = request.getParameter("nom");
-        if (firstname == null || firstname.length() == 0 || lastname == null  
-                || lastname.length() == 0) 
-            return new ModelAndView("redirect:/banquier/conseillers.htm"); 
+        if (firstname == null || firstname.length() == 0 || lastname == null
+                || lastname.length() == 0) {
+            return new ModelAndView("redirect:/banquier/conseillers.htm");
+        }
         try {
             List<LoginDTO> clients = bankerService.getAdvisorLogins(firstname, lastname);
             ModelAndView mv = new ModelAndView("banker/advisor_clients_board");
             mv.addObject("advisor_firstname", firstname);
             mv.addObject("advisor_lastname", lastname);
             mv.addObject("clients", clients);
-            return mv;  
+            return mv;
         } catch (FakeAdvisorException e) {
-        } catch (IllegalArgumentException e) {}
-        return new ModelAndView("redirect:/banquier/conseillers.htm");       
+        } catch (IllegalArgumentException e) {
+        }
+        return new ModelAndView("redirect:/banquier/conseillers.htm");
     }
-    
+
 }

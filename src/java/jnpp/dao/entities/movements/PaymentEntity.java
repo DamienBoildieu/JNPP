@@ -26,7 +26,7 @@ public class PaymentEntity extends MoneyMovementEntity implements Serializable {
     }
 
     public PaymentEntity(Date date, String ribFrom, Double money,
-            CurrencyEntity currency, String target, PaymentMeanEntity paymentMean, 
+            CurrencyEntity currency, String target, PaymentMeanEntity paymentMean,
             String label) {
         super(date, ribFrom, money, currency, label);
         this.target = target;

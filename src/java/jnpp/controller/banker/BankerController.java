@@ -10,16 +10,18 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class BankerController {
+
     /**
      * Vue accueil des banquiers
+     *
      * @return la vue accueil des banquiers
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "banquier", method = RequestMethod.GET)
-    protected ModelAndView bankerGet() 
+    protected ModelAndView bankerGet()
             throws Exception {
         ModelAndView mv = new ModelAndView("banker/banker_home");
-        return mv;          
+        return mv;
     }
-    
+
 }

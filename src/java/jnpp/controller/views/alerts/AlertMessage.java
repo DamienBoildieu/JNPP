@@ -1,8 +1,10 @@
 package jnpp.controller.views.alerts;
+
 /**
  * Classe de message d'alerte qui peuvent être affichées sur le site web
  */
 public class AlertMessage {
+
     /**
      * Le type d'alerte
      */
@@ -11,8 +13,10 @@ public class AlertMessage {
      * Le message à afficher
      */
     private String message;
+
     /**
      * Constructeur
+     *
      * @param alertType le type d'alerte
      * @param message le message d'alerte
      */

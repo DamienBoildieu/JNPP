@@ -4,9 +4,11 @@ import java.util.List;
 import jnpp.controller.views.alerts.AlertMessage;
 
 /**
- * Classe contenant les informations dont a besoin la vue si un utilisateur est connecté
+ * Classe contenant les informations dont a besoin la vue si un utilisateur est
+ * connecté
  */
 public class ConnectedInfo extends ViewInfo {
+
     /**
      * Indique si l'utilisateur a de nouvelles notifications
      */
@@ -15,8 +17,10 @@ public class ConnectedInfo extends ViewInfo {
      * Le nom de l'utilisateur connecté
      */
     private final String userName;
+
     /**
      * Constructeur
+     *
      * @param name le nom de l'utilisateur
      */
     public ConnectedInfo(String name) {
@@ -24,8 +28,10 @@ public class ConnectedInfo extends ViewInfo {
         hasNotif = false;
         userName = name;
     }
+
     /**
      * Constructeur
+     *
      * @param name le nom de l'utilisateur
      * @param notif indicateur de notification
      */
@@ -34,26 +40,32 @@ public class ConnectedInfo extends ViewInfo {
         hasNotif = notif;
         userName = name;
     }
+
     /**
      * Constructeur avec une alerte
+     *
      * @param alert une alerte
      */
     public ConnectedInfo(String name, AlertMessage alert) {
-	super(true, alert);
+        super(true, alert);
         hasNotif = false;
         userName = name;
     }
+
     /**
      * Constructeur avec une liste d'alertes
+     *
      * @param alerts les alertes
      */
     public ConnectedInfo(String name, List<AlertMessage> alerts) {
-	super(true, alerts);
+        super(true, alerts);
         hasNotif = false;
         userName = name;
     }
+
     /**
      * Constructeur avec indicateur de notification
+     *
      * @param alerts les alertes
      * @param notif indique si il y a de nouvelles notifications
      */
@@ -61,9 +73,11 @@ public class ConnectedInfo extends ViewInfo {
         super(true, alerts);
         hasNotif = notif;
         userName = name;
-    }  
+    }
+
     /**
      * Constructeur avec indicateur de notification
+     *
      * @param alerts les alertes
      * @param notif indique si il y a de nouvelles notifications
      */

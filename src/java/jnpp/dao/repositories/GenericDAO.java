@@ -6,6 +6,7 @@ public interface GenericDAO<T extends Serializable> {
 
     /**
      * Sauvegarde l'entite t et retourne l'entite sauvegardee.
+     *
      * @param t Entite a sauvegarder.
      * @return Entite sauvegarder
      */
@@ -13,6 +14,7 @@ public interface GenericDAO<T extends Serializable> {
 
     /**
      * Met a jour une entite.
+     *
      * @param t Entite a mettre a jour.
      * @return Entite mise a jour.
      */
@@ -20,12 +22,14 @@ public interface GenericDAO<T extends Serializable> {
 
     /**
      * Supprime une entite.
+     *
      * @param t Entite a supprimer.
      */
     void delete(T t);
 
     /**
      * Retourne une entite trouvee par sa cle primaire.
+     *
      * @param id Cle primaire.
      * @return L'entite si elle a ete trouvee, null sinon.
      */

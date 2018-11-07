@@ -2,7 +2,6 @@ package jnpp.dao.entities.accounts;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -13,7 +12,6 @@ import javax.persistence.OneToMany;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.movements.MovementEntity;
 import jnpp.service.dto.accounts.ShareAccountDTO;
-import jnpp.service.dto.accounts.ShareTitleDTO;
 
 @Entity
 @DiscriminatorValue(value = AccountEntity.Type.Values.SHARE)

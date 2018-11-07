@@ -30,65 +30,83 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 public class LinkUserController {
+
     /**
      * Le service de notifications
      */
     @Autowired
     private NotificationService notifService;
+
     /**
      * Requête sur la vue de connexion
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @return Une vue sur la connexion si l'utilisateur n'est pas connecté, redirection vers l'index sinon
-     * @throws Exception 
+     * @return Une vue sur la connexion si l'utilisateur n'est pas connecté,
+     * redirection vers l'index sinon
+     * @throws Exception
      */
     @RequestMapping(value = "connect", method = RequestMethod.GET)
     protected ModelAndView linkToConnect(Model model, HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
-        if (!SessionController.isConnected(session))
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
+        if (!SessionController.isConnected(session)) {
             return new JNPPModelAndView("manageuser/connect", ViewInfo.createInfo(session, alerts));
+        }
         return new ModelAndView("redirect:/index.htm");
     }
+
     /**
      * Requête sur la vue d'inscription
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @return Une vue sur les différentes inscriptions possibles si l'utilisateur n'est pas connecté, redirection vers l'index sinon
-     * @throws Exception 
+     * @return Une vue sur les différentes inscriptions possibles si
+     * l'utilisateur n'est pas connecté, redirection vers l'index sinon
+     * @throws Exception
      */
     @RequestMapping(value = "signup", method = RequestMethod.GET)
     protected ModelAndView linkToSignUp(Model model, HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
-        if (!SessionController.isConnected(session))
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
+        if (!SessionController.isConnected(session)) {
             return new JNPPModelAndView("signup/signup", ViewInfo.createInfo(session, alerts));
+        }
         return new ModelAndView("redirect:/index.htm");
     }
+
     /**
      * Requête sur la vue d'inscription d'un particulier
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @return Une vue sur l'inscription d'un particulier si l'utilisateur n'est pas connecté, redirection vers l'index sinon
-     * @throws Exception 
+     * @return Une vue sur l'inscription d'un particulier si l'utilisateur n'est
+     * pas connecté, redirection vers l'index sinon
+     * @throws Exception
      */
     @RequestMapping(value = "privatesignup", method = RequestMethod.GET)
     protected ModelAndView linkToPersonalSignUp(Model model, HttpServletRequest request)
             throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
         if (!SessionController.isConnected(session)) {
             ModelAndView view = new JNPPModelAndView("signup/privatesignup", ViewInfo.createInfo(session, alerts));
             view.addObject("genders", IdentityDTO.Gender.values());
@@ -97,22 +115,27 @@ public class LinkUserController {
         }
         return new ModelAndView("redirect:/index.htm");
     }
+
     /**
      * Requête sur la vue d'inscription d'un professionnel
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @return Une vue sur l'inscription d'un professionnel si l'utilisateur n'est pas connecté, redirection vers l'index sinon
-     * @throws Exception 
+     * @return Une vue sur l'inscription d'un professionnel si l'utilisateur
+     * n'est pas connecté, redirection vers l'index sinon
+     * @throws Exception
      */
     @RequestMapping(value = "professionalsignup", method = RequestMethod.GET)
     protected ModelAndView linkToProfessionalSignUp(Model model, HttpServletRequest request)
             throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
         if (!SessionController.isConnected(session)) {
             ModelAndView view = new JNPPModelAndView("signup/professionalsignup", ViewInfo.createInfo(session, alerts));
             view.addObject("genders", IdentityDTO.Gender.values());
@@ -121,34 +144,41 @@ public class LinkUserController {
         }
         return new ModelAndView("redirect:/index.htm");
     }
+
     /**
      * Requête sur la vue du menu d'un utilisateur connecté
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
-     * @return Une vue sur le menu de l'utilisateur si il est connecté, redirection vers l'index sinon
-     * @throws Exception 
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
+     * @return Une vue sur le menu de l'utilisateur si il est connecté,
+     * redirection vers l'index sinon
+     * @throws Exception
      */
     @RequestMapping(value = "home", method = RequestMethod.GET)
     protected ModelAndView linkToResume(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
-        if (!SessionController.isConnected(session))
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
+        if (!SessionController.isConnected(session)) {
             return new ModelAndView("redirect:/index.htm");
+        }
         Boolean hasNotif = SessionController.getHasNotif(session);
-        if (!hasNotif) {  
+        if (!hasNotif) {
             try {
-                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size()>0;
+                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size() > 0;
                 SessionController.setHasNotif(session, hasNotif);
             } catch (FakeClientException invalidClient) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);
                 }
@@ -158,34 +188,41 @@ public class LinkUserController {
         ModelAndView view = new JNPPModelAndView("manageuser/home", ViewInfo.createInfo(session, alerts));
         return view;
     }
+
     /**
      * Requête sur la vue des informations de l'utilisateur
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
-     * @return Une vue sur les informations de l'utilisateur si il est connecté, redirection vers l'index sinon
-     * @throws Exception 
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
+     * @return Une vue sur les informations de l'utilisateur si il est connecté,
+     * redirection vers l'index sinon
+     * @throws Exception
      */
     @RequestMapping(value = "userinfo", method = RequestMethod.GET)
     protected ModelAndView linkToUserInfo(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
-        if (!SessionController.isConnected(session))
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
+        if (!SessionController.isConnected(session)) {
             return new ModelAndView("redirect:/index.htm");
+        }
         Boolean hasNotif = SessionController.getHasNotif(session);
-        if (!hasNotif) {  
+        if (!hasNotif) {
             try {
-                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size()>0;
+                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size() > 0;
                 SessionController.setHasNotif(session, hasNotif);
             } catch (FakeClientException invalidClient) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);
                 }
@@ -197,94 +234,119 @@ public class LinkUserController {
         switch (client.getType()) {
             case PRIVATE:
                 view = new JNPPModelAndView("manageuser/privateinfo", ViewInfo.createInfo(session, alerts));
-                String birthday = new SimpleDateFormat("yyyy-MM-dd").format(((PrivateDTO)client).getBirthday());
+                String birthday = new SimpleDateFormat("yyyy-MM-dd").format(((PrivateDTO) client).getBirthday());
                 view.addObject("birthday", birthday);
                 break;
             case PROFESIONAL:
                 view = new JNPPModelAndView("manageuser/professionalinfo", ViewInfo.createInfo(session, alerts));
                 break;
             default:
-                throw new AssertionError(client.getType().name());     
+                throw new AssertionError(client.getType().name());
         }
         view.addObject("gendersMap", Translator.getInstance().translateGenders(SessionController.getLanguage(session)));
-        
+
         view.addObject("client", client);
         return view;
     }
-    
+
     /**
      * Requête sur la vue de perte de mot de passe
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @return Une vue sur le formulaire de choix de mot passe si l'utilisateur n'est pas connecté, redirection vers l'index sinon
-     * @throws Exception 
+     * @return Une vue sur le formulaire de choix de mot passe si l'utilisateur
+     * n'est pas connecté, redirection vers l'index sinon
+     * @throws Exception
      */
     @RequestMapping(value = "password", method = RequestMethod.GET)
     protected ModelAndView linkToPassword(Model model, HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
-        if (!SessionController.isConnected(session))
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
+        if (!SessionController.isConnected(session)) {
             return new JNPPModelAndView("manageuser/password", ViewInfo.createInfo(session, alerts));
+        }
         return new ModelAndView("redirect:/index.htm");
     }
+
     /**
      * Requête sur la vue de perte de mot de passe pour les particuliers
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @return Une vue sur le formulaire de regénération de mot de passe pour les particuliers si l'utilisateur n'est pas connecté, redirection vers l'index sinon
-     * @throws Exception 
+     * @return Une vue sur le formulaire de regénération de mot de passe pour
+     * les particuliers si l'utilisateur n'est pas connecté, redirection vers
+     * l'index sinon
+     * @throws Exception
      */
     @RequestMapping(value = "privatepassword", method = RequestMethod.GET)
     protected ModelAndView linkToPrivatePassword(Model model, HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
-        if (!SessionController.isConnected(session))
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
+        if (!SessionController.isConnected(session)) {
             return new JNPPModelAndView("manageuser/privatepassword", ViewInfo.createInfo(session, alerts));
+        }
         return new ModelAndView("redirect:/index.htm");
     }
+
     /**
      * Requête sur la vue de perte de mot de passe pour les professionnels
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @return Une vue sur le formulaire de regénération de mot de passe pour les particuliers si l'utilisateur n'est pas connecté, redirection vers l'index sinon
-     * @throws Exception 
+     * @return Une vue sur le formulaire de regénération de mot de passe pour
+     * les particuliers si l'utilisateur n'est pas connecté, redirection vers
+     * l'index sinon
+     * @throws Exception
      */
     @RequestMapping(value = "professionalpassword", method = RequestMethod.GET)
     protected ModelAndView linkToProfessionalPassword(Model model, HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
-        if (!SessionController.isConnected(session))
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
+        if (!SessionController.isConnected(session)) {
             return new JNPPModelAndView("manageuser/professionalpassword", ViewInfo.createInfo(session, alerts));
+        }
         return new ModelAndView("redirect:/index.htm");
     }
+
     /**
      * Requête sur la vue des notifications
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
-     * @return Une vue sur la liste des notifications si l'utilisateur est connecté, redirection vers l'index sinon
-     * @throws Exception 
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
+     * @return Une vue sur la liste des notifications si l'utilisateur est
+     * connecté, redirection vers l'index sinon
+     * @throws Exception
      */
     @RequestMapping(value = "notifs", method = RequestMethod.GET)
     protected ModelAndView linkToNotifs(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
         if (SessionController.isConnected(session)) {
             try {
                 List<NotificationDTO> notifs = notifService.receiveNotifications(SessionController.getClient(session).getLogin());
@@ -301,9 +363,9 @@ public class LinkUserController {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
-                    rm.addFlashAttribute("alerts", alerts);   
+                    rm.addFlashAttribute("alerts", alerts);
                 }
                 return new ModelAndView("redirect:/disconnect.htm");
             }

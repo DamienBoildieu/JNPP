@@ -14,13 +14,16 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class LoginsController {
+
     /**
      * Service banquier
      */
     @Autowired
     BankerService bankerService;
+
     /**
      * Vue des identifiants des clients de la banque
+     *
      * @return la vue des identifiants des clients
      */
     @RequestMapping(value = "banquier/identifiants", method = RequestMethod.GET)
@@ -28,7 +31,7 @@ public class LoginsController {
         List<LoginDTO> logins = bankerService.getClientLogins();
         ModelAndView mv = new ModelAndView("banker/logins_board");
         mv.addObject("logins", logins);
-        return mv;            
+        return mv;
     }
-    
+
 }

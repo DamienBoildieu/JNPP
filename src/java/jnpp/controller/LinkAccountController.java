@@ -38,6 +38,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 public class LinkAccountController {
+
     /**
      * Le service de notifications
      */
@@ -58,34 +59,41 @@ public class LinkAccountController {
      */
     @Autowired
     private DebitAuthorizationService authorizationService;
+
     /**
      * Requête sur la vue d'un compte
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
-     * @return Une vue sur un compte de l'utilisateur si il est connecté, redirection vers l'index sinon
-     * @throws Exception 
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
+     * @return Une vue sur un compte de l'utilisateur si il est connecté,
+     * redirection vers l'index sinon
+     * @throws Exception
      */
     @RequestMapping(value = "account", method = RequestMethod.GET)
     protected ModelAndView linktoAccount(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
-        if (!SessionController.isConnected(session))
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
+        if (!SessionController.isConnected(session)) {
             return new ModelAndView("redirect:/index.htm");
+        }
         Boolean hasNotif = SessionController.getHasNotif(session);
-        if (!hasNotif) {  
+        if (!hasNotif) {
             try {
-                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size()>0;
+                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size() > 0;
                 SessionController.setHasNotif(session, hasNotif);
             } catch (FakeClientException invalidClient) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);
                 }
@@ -109,7 +117,7 @@ public class LinkAccountController {
                         for (MovementDTO movement : accountService.getMovements(SessionController.getClient(session).getLogin(), id)) {
                             movementsCurrent.add(new MovementView(movement, id));
                         }
-                        view.addObject("movements",movementsCurrent);
+                        view.addObject("movements", movementsCurrent);
                         try {
                             List<BankCardDTO> cards = paymentMeanService.getBankCards(SessionController.getClient(session).getLogin(), id);
                             view.addObject("cards", cards);
@@ -120,7 +128,7 @@ public class LinkAccountController {
                             if (alerts != null) {
                                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                             } else {
-                                alerts = new ArrayList<AlertMessage>(); 
+                                alerts = new ArrayList<AlertMessage>();
                                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                                 rm.addFlashAttribute("alerts", alerts);
                             }
@@ -135,7 +143,7 @@ public class LinkAccountController {
                         for (MovementDTO movement : accountService.getMovements(SessionController.getClient(session).getLogin(), id)) {
                             movementsJoint.add(new MovementView(movement, id));
                         }
-                        view.addObject("movements",movementsJoint);
+                        view.addObject("movements", movementsJoint);
                         try {
                             List<BankCardDTO> cards = paymentMeanService.getBankCards(SessionController.getClient(session).getLogin(), id);
                             view.addObject("cards", cards);
@@ -146,7 +154,7 @@ public class LinkAccountController {
                             if (alerts != null) {
                                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                             } else {
-                                alerts = new ArrayList<AlertMessage>(); 
+                                alerts = new ArrayList<AlertMessage>();
                                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                                 rm.addFlashAttribute("alerts", alerts);
                             }
@@ -161,63 +169,69 @@ public class LinkAccountController {
                         for (MovementDTO movement : accountService.getMovements(SessionController.getClient(session).getLogin(), id)) {
                             movementsSaving.add(new MovementView(movement, id));
                         }
-                        view.addObject("movements",movementsSaving);
+                        view.addObject("movements", movementsSaving);
                         break;
-                    case SHARE:   
-                        
+                    case SHARE:
+
                         ShareAccountDTO accountDTO = accountService
                                 .getShareAccount(SessionController.getClient(session).getLogin());
-                        
-                        
+
                         view = new JNPPModelAndView("accounts/shareaccount", ViewInfo.createInfo(session, alerts));
                         view.addObject("accountsMap", Translator.getInstance().translateAccounts(SessionController.getLanguage(session)));
                         List<MovementView> movementsShare = new ArrayList<MovementView>();
                         for (MovementDTO movement : accountService.getMovements(SessionController.getClient(session).getLogin(), id)) {
                             movementsShare.add(new MovementView(movement, id));
                         }
-                        view.addObject("movements",movementsShare);
+                        view.addObject("movements", movementsShare);
                         view.addObject("account", accountDTO);
                         break;
                     default:
-                        throw new AssertionError(account.getType().name());                    
+                        throw new AssertionError(account.getType().name());
                 }
-                if (account.getType()!=AccountDTO.Type.SHARE)
+                if (account.getType() != AccountDTO.Type.SHARE) {
                     view.addObject("account", account);
-                
+                }
+
                 return view;
             }
         }
         return new ModelAndView("redirect:/resume.htm");
     }
-    
+
     /**
      * Requête sur la vue d'un compte
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
-     * @return Une vue sur un compte de l'utilisateur si il est connecté, redirection vers l'index sinon
-     * @throws Exception 
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
+     * @return Une vue sur un compte de l'utilisateur si il est connecté,
+     * redirection vers l'index sinon
+     * @throws Exception
      */
     @RequestMapping(value = "openaccount", method = RequestMethod.GET)
     protected ModelAndView linktoOpenAccount(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
-        if (!SessionController.isConnected(session))
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
+        if (!SessionController.isConnected(session)) {
             return new ModelAndView("redirect:/index.htm");
+        }
         Boolean hasNotif = SessionController.getHasNotif(session);
-        if (!hasNotif) {  
+        if (!hasNotif) {
             try {
-                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size()>0;
+                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size() > 0;
                 SessionController.setHasNotif(session, hasNotif);
             } catch (FakeClientException invalidClient) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);
                 }
@@ -248,37 +262,44 @@ public class LinkAccountController {
                 break;
             default:
                 throw new AssertionError(client.getType().name());
-        }       
+        }
         return view;
     }
+
     /**
      * Requête sur la vue de la liste des comptes
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
-     * @return Une vue sur la liste des comptes de l'utilisateur si il est connecté, redirection vers l'index sinon
-     * @throws Exception 
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
+     * @return Une vue sur la liste des comptes de l'utilisateur si il est
+     * connecté, redirection vers l'index sinon
+     * @throws Exception
      */
     @RequestMapping(value = "resume", method = RequestMethod.GET)
     protected ModelAndView linktoResume(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
         HttpSession session = request.getSession();
-        if (session==null)
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
-        if (!SessionController.isConnected(session))
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
+        if (!SessionController.isConnected(session)) {
             return new ModelAndView("redirect:/index.htm");
+        }
         Boolean hasNotif = SessionController.getHasNotif(session);
-        if (!hasNotif) {  
+        if (!hasNotif) {
             try {
-                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size()>0;
+                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size() > 0;
                 SessionController.setHasNotif(session, hasNotif);
             } catch (FakeClientException invalidClient) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);
                 }
@@ -292,13 +313,16 @@ public class LinkAccountController {
         view.addObject("currencyMap", Translator.getInstance().translateCurrency(SessionController.getLanguage(session)));
         return view;
     }
+
     /**
      * Requête sur la vue des autorisations de débit
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
      * @return Une vue sur la liste des autorisations de débits
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "authorization", method = RequestMethod.GET)
     private ModelAndView linkToAuthorization(Model model, HttpServletRequest request, RedirectAttributes rm) {

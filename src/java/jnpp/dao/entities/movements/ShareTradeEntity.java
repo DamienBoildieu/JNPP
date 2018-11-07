@@ -26,7 +26,7 @@ public abstract class ShareTradeEntity extends TradeEntity implements Serializab
     public ShareTradeEntity() {
     }
 
-    public ShareTradeEntity(Date date, String ribFrom, String ribTo, 
+    public ShareTradeEntity(Date date, String ribFrom, String ribTo,
             Integer amount, ShareEntity share, String label) {
         super(date, ribFrom, ribTo, label);
         this.amount = amount;

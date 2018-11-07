@@ -17,7 +17,6 @@ import jnpp.service.dto.advisor.MessageDTO;
 import jnpp.service.exceptions.advisors.AvailableException;
 import jnpp.service.exceptions.advisors.DateException;
 import jnpp.service.exceptions.advisors.NoAdvisorException;
-import jnpp.service.exceptions.duplicates.DuplicateAppointmentException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.owners.AppointmentOwnerException;
 import org.springframework.stereotype.Service;

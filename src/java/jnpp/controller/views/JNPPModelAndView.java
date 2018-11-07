@@ -7,12 +7,15 @@ import org.springframework.web.servlet.ModelAndView;
  * Classe de ModelAndView de l'application
  */
 public class JNPPModelAndView extends ModelAndView {
+
     /**
      * les informations de la vue
      */
     private final ViewInfo info;
+
     /**
      * Constructeur
+     *
      * @param viewName le nom de la vue
      * @param viewInfo les informations de la vue
      */

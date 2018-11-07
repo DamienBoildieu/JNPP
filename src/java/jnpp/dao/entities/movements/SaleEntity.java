@@ -16,7 +16,7 @@ public class SaleEntity extends ShareTradeEntity implements Serializable {
     public SaleEntity() {
     }
 
-    public SaleEntity(Date date, String ribFrom, String ribTo, Integer amount, 
+    public SaleEntity(Date date, String ribFrom, String ribTo, Integer amount,
             ShareEntity share, String label) {
         super(date, ribFrom, ribTo, amount, share, label);
     }

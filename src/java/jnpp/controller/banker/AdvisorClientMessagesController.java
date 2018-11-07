@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class AdvisorClientMessagesController {
+
     /**
      * Le service du conseiller
      */
@@ -30,16 +31,19 @@ public class AdvisorClientMessagesController {
      */
     @Autowired
     BankerService bankerService;
+
     /**
      * Vue sur les messages d'un conseiller
+     *
      * @param request la requête
      * @return la vue des messages d'un conseiller
      */
     @RequestMapping(value = "banquier/conseiller/client/messages", method = RequestMethod.GET)
     protected ModelAndView advisorClientMessagesGet(HttpServletRequest request) {
         String login = request.getParameter("login");
-        if (login == null || login.length() == 0)
-            return new ModelAndView("redirect:/conseillers.htm");   
+        if (login == null || login.length() == 0) {
+            return new ModelAndView("redirect:/conseillers.htm");
+        }
         try {
             AdvisorDTO advisor = advisorService.getAdvisor(login);
             LoginDTO client = bankerService.getLogin(login);
@@ -52,10 +56,12 @@ public class AdvisorClientMessagesController {
         } catch (FakeClientException e) {
         } catch (IllegalArgumentException e) {
         }
-        return new ModelAndView("redirect:/conseillers.htm");  
+        return new ModelAndView("redirect:/conseillers.htm");
     }
+
     /**
      * Requête d'envoie d'un message par un conseiller
+     *
      * @param request la requête
      * @return la vue des messages d'un conseiller
      */
@@ -63,16 +69,17 @@ public class AdvisorClientMessagesController {
     protected ModelAndView advisorClientMessagesPost(HttpServletRequest request) {
         String login = request.getParameter("login");
         String content = request.getParameter("content");
-        if (login == null || login.length() == 0 || content == null 
-                || content.length() == 0)
-            return new ModelAndView("redirect:/banquier/conseiller/client/messages.htm?login=" + login); 
+        if (login == null || login.length() == 0 || content == null
+                || content.length() == 0) {
+            return new ModelAndView("redirect:/banquier/conseiller/client/messages.htm?login=" + login);
+        }
         try {
             bankerService.sendMessage(login, content);
-            return new ModelAndView("redirect:/banquier/conseiller/client/messages.htm?login=" + login); 
+            return new ModelAndView("redirect:/banquier/conseiller/client/messages.htm?login=" + login);
         } catch (FakeClientException ex) {
         } catch (NoAdvisorException ex) {
         }
-        return new ModelAndView("redirect:/banquier/conseillers.htm"); 
+        return new ModelAndView("redirect:/banquier/conseillers.htm");
     }
-    
+
 }

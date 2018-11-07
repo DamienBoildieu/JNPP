@@ -43,6 +43,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 public class MovementController {
+
     /**
      * La monnaie par défaut
      */
@@ -62,13 +63,16 @@ public class MovementController {
      */
     @Autowired
     private NotificationService notifService;
+
     /**
      * Requête vers la vue des transactions
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
      * @return La vue des transactions
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "movement", method = RequestMethod.GET)
     private ModelAndView movement(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -142,13 +146,16 @@ public class MovementController {
 
         return mv;
     }
+
     /**
      * Requête des transferts
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
      * @return La vue des transactions
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "transfert", method = RequestMethod.POST)
     private ModelAndView transfert(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -189,7 +196,7 @@ public class MovementController {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 rm.addFlashAttribute("alerts", alerts);
             }
@@ -222,22 +229,25 @@ public class MovementController {
                 rm.addFlashAttribute("alerts", alerts);
             }
         }
-        
+
         return new ModelAndView("redirect:/movement.htm");
     }
+
     /**
      * Requête des débits
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
      * @return La vue des transactions
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "debit", method = RequestMethod.POST)
     private ModelAndView debit(Model model, HttpServletRequest request, RedirectAttributes rm)
-            throws Exception     {
+            throws Exception {
 
-     HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
         if (session == null) {
             session = request.getSession(true);
@@ -272,7 +282,7 @@ public class MovementController {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 rm.addFlashAttribute("alerts", alerts);
             }
@@ -313,16 +323,19 @@ public class MovementController {
                 rm.addFlashAttribute("alerts", alerts);
             }
         }
-        
+
         return new ModelAndView("redirect:/movement.htm");
     }
+
     /**
      * Requête des achats d'actions
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
      * @return La vue des transactions
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "purchase", method = RequestMethod.POST)
     private ModelAndView purchase(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -342,7 +355,7 @@ public class MovementController {
         String amountStr = request.getParameter("amount");
         String share = request.getParameter("share");
         String label = request.getParameter("label");
-        if (label==null) {
+        if (label == null) {
             label = "";
         }
         try {
@@ -352,7 +365,7 @@ public class MovementController {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 rm.addFlashAttribute("alerts", alerts);
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
             }
             return new ModelAndView("redirect:/disconnect.htm");
@@ -360,7 +373,7 @@ public class MovementController {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte courant pour effectuer cette action"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte courant pour effectuer cette action"));
                 rm.addFlashAttribute("alerts", alerts);
             }
@@ -368,28 +381,31 @@ public class MovementController {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte titres pour effectuer cette action"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte titres pour effectuer cette action"));
                 rm.addFlashAttribute("alerts", alerts);
             }
         } catch (FakeShareException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Cette action de bourse n'existe pas"));                
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Cette action de bourse n'existe pas"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Cette action de bourse n'existe pas"));
                 rm.addFlashAttribute("alerts", alerts);
             }
         }
         return new ModelAndView("redirect:/movement.htm");
     }
+
     /**
      * Requête des ventes d'actions
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
      * @return La vue des transactions
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "sale", method = RequestMethod.POST)
     private ModelAndView sale(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -408,7 +424,7 @@ public class MovementController {
         String amountStr = request.getParameter("amount");
         String share = request.getParameter("share");
         String label = request.getParameter("label");
-        if (label==null) {
+        if (label == null) {
             label = "";
         }
         try {
@@ -417,7 +433,7 @@ public class MovementController {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 rm.addFlashAttribute("alerts", alerts);
             }
@@ -426,7 +442,7 @@ public class MovementController {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte courant pour effectuer cette action"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte courant pour effectuer cette action"));
                 rm.addFlashAttribute("alerts", alerts);
             }
@@ -434,7 +450,7 @@ public class MovementController {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte titres pour effectuer cette action"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte titres pour effectuer cette action"));
                 rm.addFlashAttribute("alerts", alerts);
             }
@@ -442,7 +458,7 @@ public class MovementController {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne possédez pas ces actions"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne possédez pas ces actions"));
                 rm.addFlashAttribute("alerts", alerts);
             }
@@ -450,7 +466,7 @@ public class MovementController {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne possédez pas assez d'actions"));
             } else {
-                alerts = new ArrayList<AlertMessage>(); 
+                alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne possédez pas assez d'actions"));
                 rm.addFlashAttribute("alerts", alerts);
             }

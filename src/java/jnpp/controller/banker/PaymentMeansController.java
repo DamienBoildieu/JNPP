@@ -16,13 +16,16 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class PaymentMeansController {
+
     /**
      * Service banquer
      */
     @Autowired
     BankerService bankerService;
+
     /**
      * Vue des commandes
+     *
      * @return la vue des commandes
      */
     @RequestMapping(value = "banquier/commandes", method = RequestMethod.GET)
@@ -32,8 +35,10 @@ public class PaymentMeansController {
         mv.addObject("paymentmeans", paymentmeans);
         return mv;
     }
+
     /**
      * Changement de statut d'une commande
+     *
      * @param request la requête
      * @return La vue des commandes
      */
@@ -44,9 +49,9 @@ public class PaymentMeansController {
             try {
                 bankerService.upgradePaymentMean(id);
             } catch (FakePaymentMeanException e) {
-            }            
+            }
         }
         return new ModelAndView("redirect:/banquier/commandes.htm");
-    }  
-    
+    }
+
 }

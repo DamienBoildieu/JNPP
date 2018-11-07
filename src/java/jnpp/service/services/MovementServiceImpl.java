@@ -68,7 +68,7 @@ public class MovementServiceImpl implements MovementService {
     public TransfertDTO transfertMoney(String login, String ribFrom, String ribTo, Double amount, CurrencyDTO currency, String label)
             throws FakeClientException, FakeAccountException, AccountOwnerException, AccountTypeException, CurrencyException, OverdraftException {
         if (login == null || ribFrom == null || ribTo == null || amount == null
-                || amount <= 0 || currency == null || ribFrom.equals(ribTo) 
+                || amount <= 0 || currency == null || ribFrom.equals(ribTo)
                 || label == null) {
             throw new IllegalArgumentException();
         }

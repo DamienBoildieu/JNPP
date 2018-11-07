@@ -51,5 +51,5 @@ public abstract class MovementDTO {
     public void setLabel(String label) {
         this.label = label;
     }
-    
+
 }

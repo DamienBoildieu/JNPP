@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class SavingBookController {
+
     /**
      * Service des comptes bancaire
      */
@@ -27,38 +28,44 @@ public class SavingBookController {
      */
     @Autowired
     BankerService bankerService;
+
     /**
      * Vue sur le formulaire de création de livrets
+     *
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "banquier/livrets", method = RequestMethod.GET)
-    protected ModelAndView savingBookGet() 
+    protected ModelAndView savingBookGet()
             throws Exception {
         List<SavingBookDTO> savingbooks = accountService.getSavingBooks();
         ModelAndView mv = new ModelAndView("banker/savingbooks_board");
         mv.addObject("savingbooks", savingbooks);
-        return mv;       
+        return mv;
     }
+
     /**
      * Création d'un livret
+     *
      * @param request la requête
      * @return Le formulaire de créations de livrets
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "banquier/livrets", method = RequestMethod.POST)
-    protected ModelAndView savingBookPost(HttpServletRequest request) 
+    protected ModelAndView savingBookPost(HttpServletRequest request)
             throws Exception {
         String name = request.getParameter("name");
         String moneyRate = request.getParameter("money_rate");
         String timeRate = request.getParameter("time_rate");
-        if (name != null && name.length() > 0 && moneyRate != null && moneyRate.length() > 0 
-                && timeRate != null && timeRate.length() > 0)
+        if (name != null && name.length() > 0 && moneyRate != null && moneyRate.length() > 0
+                && timeRate != null && timeRate.length() > 0) {
             try {
                 bankerService.addSavingbook(name, Double.valueOf(moneyRate), Double.valueOf(timeRate));
             } catch (IllegalArgumentException e) {
-            } catch (DuplicateSavingbookException e) {}
+            } catch (DuplicateSavingbookException e) {
+            }
+        }
         return new ModelAndView("redirect:/banquier/livrets.htm");
     }
-    
+
 }

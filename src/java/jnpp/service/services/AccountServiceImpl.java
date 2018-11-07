@@ -113,12 +113,14 @@ public class AccountServiceImpl implements AccountService {
             throw new FakeClientException();
         }
         ShareAccountEntity account = accountDAO.findShareByLogin(login);
-        if (account == null) return null;
+        if (account == null) {
+            return null;
+        }
         List<ShareTitleEntity> shareTitles = shareTitleDAO.findAllByRib(account.getRib());
         account.setShareTitles(shareTitles);
         return account.toDTO();
     }
-    
+
     @Override
     public CurrentAccountDTO openCurrentAccount(String login) throws DuplicateAccountException, FakeClientException {
         if (login == null) {
@@ -310,7 +312,7 @@ public class AccountServiceImpl implements AccountService {
                 }
             }
         }
-        
+
         itr = requests.iterator();
         while (itr.hasNext()) {
             closeRequestDAO.delete(itr.next());

@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class SharesController {
+
     /**
      * Devie par défaut
      */
@@ -32,36 +33,42 @@ public class SharesController {
      */
     @Autowired
     BankerService bankerService;
+
     /**
      * Vue du formulaire de création d'actions
+     *
      * @return Le formulaire de création d'actions
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "banquier/actions", method = RequestMethod.GET)
-    protected ModelAndView sharesGet() 
+    protected ModelAndView sharesGet()
             throws Exception {
         List<ShareDTO> shares = accountService.getShares();
         ModelAndView mv = new ModelAndView("banker/shares_board");
         mv.addObject("shares", shares);
-        return mv;       
+        return mv;
     }
+
     /**
      * Requête de création d'une action
+     *
      * @param request la requête
      * @return La vue des actions
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "banquier/actions", method = RequestMethod.POST)
-    protected ModelAndView sharesPost(HttpServletRequest request) 
+    protected ModelAndView sharesPost(HttpServletRequest request)
             throws Exception {
         String name = request.getParameter("name");
         String value = request.getParameter("value");
-        if (name != null && name.length() > 0 && value != null && value.length() > 0)
+        if (name != null && name.length() > 0 && value != null && value.length() > 0) {
             try {
-                bankerService.addShare(name,  Double.valueOf(value), DEFAULT_CURRENCY);
+                bankerService.addShare(name, Double.valueOf(value), DEFAULT_CURRENCY);
             } catch (IllegalArgumentException e) {
-            } catch (DuplicateShareException e) {}
+            } catch (DuplicateShareException e) {
+            }
+        }
         return new ModelAndView("redirect:/banquier/actions.htm");
     }
-    
+
 }

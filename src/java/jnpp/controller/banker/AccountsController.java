@@ -14,13 +14,16 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class AccountsController {
+
     /**
      * Le service des banquiers
      */
     @Autowired
     BankerService bankerService;
+
     /**
      * Vue sur les comptes ouvert dans la banque
+     *
      * @return La vue des comptes
      */
     @RequestMapping(value = "banquier/comptes", method = RequestMethod.GET)
@@ -28,7 +31,7 @@ public class AccountsController {
         List<AccountDTO> accounts = bankerService.getAccounts();
         ModelAndView mv = new ModelAndView("banker/accounts_board");
         mv.addObject("accounts", accounts);
-        return mv;   
+        return mv;
     }
-    
+
 }

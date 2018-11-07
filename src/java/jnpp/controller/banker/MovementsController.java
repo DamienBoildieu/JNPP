@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class MovementsController {
+
     /**
      * La devise par défaut
      */
@@ -39,8 +40,10 @@ public class MovementsController {
      */
     @Autowired
     BankerService bankerService;
+
     /**
      * Vue des transactions
+     *
      * @return la vue des transactions
      */
     @RequestMapping(value = "banquier/transactions", method = RequestMethod.GET)
@@ -50,8 +53,10 @@ public class MovementsController {
         mv.addObject("shares", shares);
         return mv;
     }
+
     /**
      * Requête des débits
+     *
      * @param request la requête
      * @return la vue des transactions
      */
@@ -63,7 +68,9 @@ public class MovementsController {
         if (rib == null || rib.length() == 0 || amount == null || amount.length() == 0) {
             return new ModelAndView("redirect:/banquier/transactions.htm");
         }
-        if (label == null) label = "";
+        if (label == null) {
+            label = "";
+        }
         try {
             bankerService.deposit(rib, Double.valueOf(amount), DEFAULT_CURRENCY, label);
         } catch (FakeAccountException ex) {
@@ -71,8 +78,10 @@ public class MovementsController {
         }
         return new ModelAndView("redirect:/banquier/transactions.htm");
     }
+
     /**
      * requêtes des transferts
+     *
      * @param request la requête
      * @return la vue des transactions
      */
@@ -88,7 +97,9 @@ public class MovementsController {
                 || ribTo.length() == 0 || amount == null || amount.length() == 0) {
             return new ModelAndView("redirect:/banquier/transactions.htm");
         }
-        if (label == null) label = "";
+        if (label == null) {
+            label = "";
+        }
         if (transfert != null && transfert.length() > 0) {
             try {
                 bankerService.transfert(ribFrom, ribTo, Double.valueOf(amount), DEFAULT_CURRENCY, label);
@@ -107,8 +118,10 @@ public class MovementsController {
         }
         return new ModelAndView("redirect:/banquier/transactions.htm");
     }
+
     /**
      * Requête des achats et ventes d'actions
+     *
      * @param request la requête
      * @return la vue des transactions
      */
@@ -120,11 +133,13 @@ public class MovementsController {
         String purchase = request.getParameter("purchase");
         String sale = request.getParameter("sale");
         String label = request.getParameter("label");
-        if (rib == null || rib.length() == 0 || amount == null || amount.length() == 0 || 
-                share == null || share.length() == 0) {
+        if (rib == null || rib.length() == 0 || amount == null || amount.length() == 0
+                || share == null || share.length() == 0) {
             return new ModelAndView("redirect:/banquier/transactions.htm");
         }
-        if (label == null) label = "";
+        if (label == null) {
+            label = "";
+        }
         if (purchase != null && purchase.length() > 0) {
             try {
                 bankerService.purchase(rib, share, Integer.valueOf(amount), label);

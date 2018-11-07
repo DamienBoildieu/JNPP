@@ -28,27 +28,33 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 public class AdvisorController {
+
     /**
      * Le service du conseiller
      */
     @Autowired
-    private AdvisorService advisorService;   
+    private AdvisorService advisorService;
+
     /**
      * Requête du formulaire d'envoie de message
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
      * @return Une redirection vers la vue de message
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "message", method = RequestMethod.POST)
     protected ModelAndView sendMessage(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
         if (SessionController.isConnected(session)) {
             try {
                 String message = request.getParameter("content");
@@ -56,26 +62,26 @@ public class AdvisorController {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Le message a bien été envoyé"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Le message a bien été envoyé"));
-                    rm.addFlashAttribute("alerts", alerts);    
+                    rm.addFlashAttribute("alerts", alerts);
                 }
             } catch (FakeClientException clientException) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
-                    rm.addFlashAttribute("alerts", alerts);    
+                    rm.addFlashAttribute("alerts", alerts);
                 }
                 return new ModelAndView("redirect:/disconnect.htm");
             } catch (NoAdvisorException e) {
-                                if (alerts != null) {
+                if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Nous n'avez pas de conseiller."));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Nous n'avez pas de conseiller."));
-                    rm.addFlashAttribute("alerts", alerts);    
+                    rm.addFlashAttribute("alerts", alerts);
                 }
             } finally {
                 return new ModelAndView("redirect:/message.htm");
@@ -83,22 +89,27 @@ public class AdvisorController {
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }
+
     /**
      * Requête du formulaire de prise de rendez-vous
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
      * @return Une redirection vers la vue de rendez-vous
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "makeappoint", method = RequestMethod.POST)
     protected ModelAndView makeAppoint(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
         if (SessionController.isConnected(session)) {
             try {
                 String date = request.getParameter("date");
@@ -109,65 +120,70 @@ public class AdvisorController {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Le message a bien été envoyé"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Le message a bien été envoyé"));
-                    rm.addFlashAttribute("alerts", alerts);    
+                    rm.addFlashAttribute("alerts", alerts);
                 }
             } catch (DateException dateException) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "La date indiquée n'est pas valable"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "La date indiquée n'est pas valable"));
-                    rm.addFlashAttribute("alerts", alerts);    
+                    rm.addFlashAttribute("alerts", alerts);
                 }
             } catch (AvailableException availableException) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Votre conseiller n'est pas disponible sur ce créneau"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Votre conseiller n'est pas disponible sur ce créneau"));
-                    rm.addFlashAttribute("alerts", alerts);    
+                    rm.addFlashAttribute("alerts", alerts);
                 }
             } catch (FakeClientException clientException) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
-                    rm.addFlashAttribute("alerts", alerts);    
+                    rm.addFlashAttribute("alerts", alerts);
                 }
                 return new ModelAndView("redirect:/disconnect.htm");
             } catch (NoAdvisorException e) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Nous n'avez pas de conseiller."));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Nous n'avez pas de conseiller."));
-                    rm.addFlashAttribute("alerts", alerts);    
-                }   
+                    rm.addFlashAttribute("alerts", alerts);
+                }
             } finally {
                 return new ModelAndView("redirect:/appoint.htm");
             }
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }
+
     /**
      * Requête du formulaire d'annulation de rendez-vous
+     *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
      * @return Une redirection vers la vue des rendez-vous
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "cancelappoint", method = RequestMethod.POST)
     protected ModelAndView cancelAppoint(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
-        if (session==null)
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        if (session == null) {
             session = request.getSession(true);
-        if (SessionController.getLanguage(session)!=Translator.Language.FR)
-            SessionController.setLanguage(session,Translator.Language.FR);
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
         if (SessionController.isConnected(session)) {
             try {
                 String idStr = request.getParameter("id");
@@ -175,33 +191,33 @@ public class AdvisorController {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Le rendez-vous a été annulé"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Le rendez-vous a été annulé"));
-                    rm.addFlashAttribute("alerts", alerts);    
+                    rm.addFlashAttribute("alerts", alerts);
                 }
             } catch (DateException dateException) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "La date indiquée n'est pas valable"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "La date indiquée n'est pas valable"));
-                    rm.addFlashAttribute("alerts", alerts);    
+                    rm.addFlashAttribute("alerts", alerts);
                 }
             } catch (AppointmentOwnerException ownerException) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "La date indiquée n'est pas valable"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "La date indiquée n'est pas valable"));
-                    rm.addFlashAttribute("alerts", alerts);    
+                    rm.addFlashAttribute("alerts", alerts);
                 }
             } catch (FakeClientException clientException) {
                 if (alerts != null) {
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce rendez-vous n'est pas le votre"));
                 } else {
-                    alerts = new ArrayList<AlertMessage>(); 
+                    alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce rendez-vous n'est pas le votre"));
-                    rm.addFlashAttribute("alerts", alerts);    
+                    rm.addFlashAttribute("alerts", alerts);
                 }
                 return new ModelAndView("redirect:/disconnect.htm");
             } finally {
