@@ -11,14 +11,14 @@ public class UnconnectedInfo extends ViewInfo {
      * Constructeur
      */
     public UnconnectedInfo() {
-	super(false);
+        super(false);
     }
     /**
      * Constructeur avec une alerte
      * @param alert l'alerte
      */
     public UnconnectedInfo(AlertMessage alert) {
-	super(false, alert);
+        super(false, alert);
     }
     /**
      * Constructeur avec une liste d'alertes

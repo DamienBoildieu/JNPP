@@ -2,10 +2,7 @@ package jnpp.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.Translator;
@@ -41,20 +38,40 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Le contrôleur des transactions
+ */
 @Controller
 public class MovementController {
-
+    /**
+     * La monnaie par défaut
+     */
     private static CurrencyDTO DEFAULT_CURRENCY = CurrencyDTO.EURO;
-
+    /**
+     * Le service des comptes bancaire
+     */
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
+    /**
+     * Le service des transactions
+     */
     @Autowired
-    MovementService movementService;
+    private MovementService movementService;
+    /**
+     * Le service des notifications
+     */
     @Autowired
-    NotificationService notifService;
-
+    private NotificationService notifService;
+    /**
+     * Requête vers la vue des transactions
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return La vue des transactions
+     * @throws Exception 
+     */
     @RequestMapping(value = "movement", method = RequestMethod.GET)
-    private ModelAndView movement(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+    private ModelAndView movement(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
 
         HttpSession session = request.getSession();
@@ -125,9 +142,16 @@ public class MovementController {
 
         return mv;
     }
-
+    /**
+     * Requête des transferts
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return La vue des transactions
+     * @throws Exception 
+     */
     @RequestMapping(value = "transfert", method = RequestMethod.POST)
-    private ModelAndView transfert(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+    private ModelAndView transfert(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
 
         HttpSession session = request.getSession();
@@ -201,10 +225,16 @@ public class MovementController {
         
         return new ModelAndView("redirect:/movement.htm");
     }
-
+    /**
+     * Requête des débits
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return La vue des transactions
+     * @throws Exception 
+     */
     @RequestMapping(value = "debit", method = RequestMethod.POST)
-    private ModelAndView debit(Model model, HttpServletRequest request,
-             HttpServletResponse response, RedirectAttributes rm)
+    private ModelAndView debit(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception     {
 
      HttpSession session = request.getSession();
@@ -286,10 +316,16 @@ public class MovementController {
         
         return new ModelAndView("redirect:/movement.htm");
     }
-
+    /**
+     * Requête des achats d'actions
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return La vue des transactions
+     * @throws Exception 
+     */
     @RequestMapping(value = "purchase", method = RequestMethod.POST)
-    private ModelAndView purchase(Model model, HttpServletRequest request,
-             HttpServletResponse response, RedirectAttributes rm)
+    private ModelAndView purchase(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
 
         HttpSession session = request.getSession();
@@ -347,12 +383,18 @@ public class MovementController {
         }
         return new ModelAndView("redirect:/movement.htm");
     }
-
+    /**
+     * Requête des ventes d'actions
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return La vue des transactions
+     * @throws Exception 
+     */
     @RequestMapping(value = "sale", method = RequestMethod.POST)
-    private ModelAndView sale(Model model, HttpServletRequest request,
-             HttpServletResponse response, RedirectAttributes rm)
+    private ModelAndView sale(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
-HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
         if (session == null) {
             session = request.getSession(true);

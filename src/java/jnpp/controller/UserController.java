@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.Translator;
@@ -38,22 +37,23 @@ public class UserController {
      * Le service des utilisateurs
      */
     @Autowired
-    ClientService clientService;
-    
+    private ClientService clientService;
+    /**
+     * Le service de notifications
+     */
     @Autowired
-    NotificationService notifService;
+    private NotificationService notifService;
     /**
      * Requête du formulaire de connexion, essaie de connecter l'utilisateur
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return Une redirection vers le menu utilisateur si la connexion a réussie, une redirection vers le formulaire de connexion si elle a échouée,
      * une redireciton vers l'index si l'utilisateur était déjà connecté
      * @throws Exception 
      */
     @RequestMapping(value = "connect", method = RequestMethod.POST)
-    protected ModelAndView connect(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
+    protected ModelAndView connect(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
@@ -93,20 +93,18 @@ public class UserController {
      * Requête de déconnexion
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return Déconnecte si l'utilisateur était connecté, redirige toujours vers l'index
      * @throws Exception 
      */
     @RequestMapping(value = "disconnect", method = RequestMethod.GET)
-    ModelAndView disconnect(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
+    ModelAndView disconnect(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
             session = request.getSession(true);
         if (SessionController.getLanguage(session)!=Translator.Language.FR)
             SessionController.setLanguage(session,Translator.Language.FR);
-        //this.userService.signOut(null);
         boolean disconnect = true;
         if (SessionController.isConnected(session)) {
             if (disconnect) {
@@ -134,14 +132,13 @@ public class UserController {
      * Requête du formulaire d'inscription d'un particulier
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return Une redirection vers l'index si l'inscription a réussit ou si l'utilisateur était connecté,
      * reste sur la page d'inscription si elle a échouée,
      * @throws Exception 
      */
     @RequestMapping(value = "privatesignup", method = RequestMethod.POST)
-    protected ModelAndView validatePersonalSignUp(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+    protected ModelAndView validatePersonalSignUp(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
@@ -221,14 +218,13 @@ public class UserController {
      * Requête du formulaire d'inscription d'un professionnel
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return Une redirection vers l'index si l'inscription a réussit ou si l'utilisateur était connecté,
      * reste sur la page d'inscription si elle a échouée,
      * @throws Exception 
      */
     @RequestMapping(value = "professionalsignup", method = RequestMethod.POST)
-    protected ModelAndView validateProfessionalSignUp(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+    protected ModelAndView validateProfessionalSignUp(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
@@ -301,14 +297,13 @@ public class UserController {
      * Requête du formulaire de perte de mot de passe d'un particulier
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return Une redirection vers le menu utilisateur si la demande a réussie, une redirection vers le formulaire de mot de passe si elle a échouée,
      * une redireciton vers l'index si l'utilisateur était déjà connecté
      * @throws Exception 
      */
     @RequestMapping(value = "privatepassword", method = RequestMethod.POST)
-    protected ModelAndView privateResetPassword(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
+    protected ModelAndView privateResetPassword(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
@@ -320,7 +315,6 @@ public class UserController {
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
             String email = request.getParameter("email");
-            //TODO add gender to session et remplacer id par login
             IdentityDTO.Gender TODO_gender = IdentityDTO.Gender.MALE;
             if (clientService.resetPassword(id, TODO_gender, firstName, lastName, email)) {
                 if (alerts != null) {
@@ -348,14 +342,13 @@ public class UserController {
      * Requête du formulaire de perte de mot de passe d'un professionnel
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return Une redirection vers le menu utilisateur si la demande a réussie, une redirection vers le formulaire de mot de passe si elle a échouée,
      * une redireciton vers l'index si l'utilisateur était déjà connecté
      * @throws Exception 
      */
     @RequestMapping(value = "professionalpassword", method = RequestMethod.POST)
-    protected ModelAndView professionalResetPassword(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
+    protected ModelAndView professionalResetPassword(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
@@ -368,7 +361,6 @@ public class UserController {
             String lastName = request.getParameter("lastName");
             String company = request.getParameter("company");
             String email = request.getParameter("email");
-            //TODO add gender to session
             IdentityDTO.Gender TODO_gender = IdentityDTO.Gender.MALE;
             if (clientService.resetPassword(id, company, TODO_gender, firstName, lastName, email)) {
                 if (alerts != null) {
@@ -396,13 +388,12 @@ public class UserController {
      * Requête de changement de mot de passe
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return La vue d'information client
      * @throws Exception 
      */
     @RequestMapping(value = "changepassword", method = RequestMethod.POST)
-    protected ModelAndView changePassword(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm) throws Exception {
+    protected ModelAndView changePassword(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
@@ -451,13 +442,12 @@ public class UserController {
      * Requête du formulaire de changement d'information d'un utilisateur
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return La vue d'information client
      * @throws Exception 
      */
     @RequestMapping(value = "editinfo", method = RequestMethod.POST)
-    private ModelAndView validateInfo(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+    private ModelAndView validateInfo(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
@@ -513,13 +503,12 @@ public class UserController {
      * Requête de fermeture de compte client
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return L'index si réussite, la vue userInfo sinon
      * @throws Exception 
      */
     @RequestMapping(value = "closeuser", method = RequestMethod.POST)
-    protected ModelAndView closeUser(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm, String view) throws Exception {
+    protected ModelAndView closeUser(Model model, HttpServletRequest request, RedirectAttributes rm, String view) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)

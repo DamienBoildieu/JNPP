@@ -1,14 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package jnpp.controller;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import jnpp.controller.views.AppointView;
 import jnpp.controller.views.JNPPModelAndView;
@@ -30,23 +24,31 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
+/**
+ * Classe des liens vers les pages du conseiller d'un client
+ */
 @Controller
 public class LinkAdvisorController {
+    /**
+     * Le service des notifications
+     */
     @Autowired
-    NotificationService notifService;
+    private NotificationService notifService;
+    /**
+     * Le service du conseiller
+     */
     @Autowired
-    AdvisorService advisorService;
+    private AdvisorService advisorService;
     /**
      * Requête sur la vue du conseiller d'un utilisateur
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return Une vue sur les informations du conseiller si l'utilisateur est connecté, une redirection vers l'index sinon
      * @throws Exception 
      */
     @RequestMapping(value = "advisor", method = RequestMethod.GET)
-    protected ModelAndView linkToAdvisor(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+    protected ModelAndView linkToAdvisor(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
@@ -94,12 +96,12 @@ public class LinkAdvisorController {
      * Requête sur la vue du chat avec un conseiller
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return Une vue sur le chat avec le conseiller
      * @throws Exception 
      */
     @RequestMapping(value = "message", method = RequestMethod.GET)
-    protected ModelAndView linkToMessage(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+    protected ModelAndView linkToMessage(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
@@ -146,12 +148,12 @@ public class LinkAdvisorController {
      * Requête sur la vue des rendez-vous
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return Une vue sur les rendez-vous du client
      * @throws Exception 
      */
     @RequestMapping(value = "appoint", method = RequestMethod.GET)
-    protected ModelAndView linkToAppoint(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+    protected ModelAndView linkToAppoint(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");

@@ -1,39 +1,25 @@
-    package jnpp.controller;
+package jnpp.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.Translator;
 import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.alerts.AlertMessage;
-import jnpp.controller.views.info.ViewInfo;
 import jnpp.service.dto.IdentityDTO;
-import jnpp.service.dto.accounts.AccountDTO;
-import jnpp.service.dto.accounts.DebitAuthorizationDTO;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.clients.PrivateDTO;
 import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.accounts.ClientTypeException;
 import jnpp.service.exceptions.accounts.CloseRequestException;
-import jnpp.service.exceptions.accounts.NoCurrentAccountException;
-import jnpp.service.exceptions.accounts.NoShareAccountException;
 import jnpp.service.exceptions.accounts.UnknownIdentityException;
 import jnpp.service.exceptions.duplicates.DuplicateAccountException;
 import jnpp.service.exceptions.duplicates.DuplicateDebitAuthorizationException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeDebitAuthorizationException;
 import jnpp.service.exceptions.entities.FakeSavingBookException;
-import jnpp.service.exceptions.entities.FakeShareTitleException;
-import jnpp.service.exceptions.movements.AmountException;
-import jnpp.service.exceptions.owners.AccountOwnerException;
-import jnpp.service.services.AccountService;
 import jnpp.service.services.DebitAuthorizationService;
-import jnpp.service.services.NotificationService;
 import jnpp.service.exceptions.movements.AccountTypeException;
 import jnpp.service.exceptions.owners.AccountOwnerException;
 import jnpp.service.services.AccountService;
@@ -51,14 +37,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 public class AccountController {
-
+    /**
+     * Service de gestion des comptes utilisateurs
+     */
     @Autowired
     private AccountService accountService;
+    /**
+     * Service d'autorisation de prélèvements
+     */
     @Autowired
-    NotificationService notifService;
-    @Autowired
-    DebitAuthorizationService authorizationService;
-
+    private DebitAuthorizationService authorizationService;
+    /**
+     * Service de moyens de paiement
+     */
     @Autowired 
     private PaymentMeanService paymentMeanService;
     /**
@@ -66,14 +57,13 @@ public class AccountController {
      *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue des comptes
      * @throws Exception
      */
     @RequestMapping(value = "opencurrentaccount", method = RequestMethod.POST)
-    private ModelAndView openCurrentAccount(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+    private ModelAndView openCurrentAccount(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
@@ -117,20 +107,18 @@ public class AccountController {
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }
-
     /**
      * Demande d'ouverture de livret
      *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue des comptes
      * @throws Exception
      */
     @RequestMapping(value = "opensavingaccount", method = RequestMethod.POST)
-    private ModelAndView openSavingAccount(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+    private ModelAndView openSavingAccount(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
@@ -190,20 +178,18 @@ public class AccountController {
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }
-
     /**
      * Demande d'ouverture de compte joint
      *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue des comptes
      * @throws Exception
      */
     @RequestMapping(value = "openjointaccount", method = RequestMethod.POST)
-    private ModelAndView openJointAccount(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+    private ModelAndView openJointAccount(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
@@ -275,20 +261,18 @@ public class AccountController {
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }
-
     /**
      * Demande d'ouverture de compte d'actions
      *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue des comptes
      * @throws Exception
      */
     @RequestMapping(value = "openshareaccount", method = RequestMethod.POST)
-    private ModelAndView openShareAccount(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+    private ModelAndView openShareAccount(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
@@ -332,20 +316,18 @@ public class AccountController {
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }
-
     /**
      * Demande de fermeture de comptes
      *
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue des comptes
      * @throws Exception
      */
     @RequestMapping(value = "closeaccount", method = RequestMethod.POST)
-    private ModelAndView closeAccount(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+    private ModelAndView closeAccount(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
@@ -405,10 +387,19 @@ public class AccountController {
         }
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }
-
+    /**
+     * Suppression d'une autorisation de débit
+     *
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
+     * @return La vue d'autorisations de débit
+     * @throws Exception
+     */
     @RequestMapping(value = "deleteDebitAuthorization", method = RequestMethod.POST)
     private ModelAndView deleteDebitAuthorization(Model model, HttpServletRequest request,
-            HttpServletResponse response, RedirectAttributes rm)
+            RedirectAttributes rm)
         throws Exception {
         
         HttpSession session = request.getSession();
@@ -444,6 +435,7 @@ public class AccountController {
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                rm.addFlashAttribute("alerts", alerts);
             }
             return new ModelAndView("redirect:/disconnect.htm");
             
@@ -453,6 +445,7 @@ public class AccountController {
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur avec vos autorisations."));
+                rm.addFlashAttribute("alerts", alerts);
             }
         } catch (AccountOwnerException ex) {         
             if (alerts != null) {
@@ -460,15 +453,25 @@ public class AccountController {
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez être proprietaire du compte autorisé à être debité."));
+                rm.addFlashAttribute("alerts", alerts);
             }
         }
         
         return new ModelAndView("redirect:/authorization.htm");
     }
-
+    /**
+     * Ajout d'une autorisation de débit
+     *
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
+     * transiter lors des redirections
+     * @return La vue d'autorisations de débit
+     * @throws Exception
+     */
     @RequestMapping(value = "addDebitAuthorization", method = RequestMethod.POST)
     private ModelAndView addDebitAuthorization(Model model, HttpServletRequest request,
-            HttpServletResponse response, RedirectAttributes rm)
+            RedirectAttributes rm)
     throws Exception {
         
         HttpSession session = request.getSession();
@@ -543,13 +546,12 @@ public class AccountController {
      * Commande de carte bancaire
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return La vue du compte qui a commande la carte
      * @throws Exception 
      */
     @RequestMapping(value = "commandcard", method = RequestMethod.POST)
-    private ModelAndView commandCard(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+    private ModelAndView commandCard(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
@@ -604,13 +606,12 @@ public class AccountController {
      * Commande de chéquier
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return La vue du compte qui a commande la carte
      * @throws Exception 
      */
     @RequestMapping(value = "commandcheckbook", method = RequestMethod.POST)
-    private ModelAndView commandCheckBook(Model model, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rm)
+    private ModelAndView commandCheckBook(Model model, HttpServletRequest request, RedirectAttributes rm)
             throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");

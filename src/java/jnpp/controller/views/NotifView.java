@@ -2,7 +2,6 @@ package jnpp.controller.views;
 
 import java.util.Calendar;
 import java.util.Map;
-import jnpp.controller.SessionController;
 import jnpp.controller.views.Translator.Language;
 import jnpp.service.dto.notifications.AppointmentNotificationDTO;
 import jnpp.service.dto.notifications.MessageNotificationDTO;
@@ -13,16 +12,33 @@ import jnpp.service.dto.notifications.PaymentMeanNotificationDTO;
 import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 
 /**
- *
- * @author Damien
+ * Vue des notifications
  */
 public class NotifView {
+    /**
+     * L'année de la notification
+     */
     private final int year;
+    /**
+     * Le mois de la notification
+     */
     private final int month;
+    /**
+     * Le jour de la notification
+     */
     private final int day;
+    /**
+     * Le message de la notification
+     */
     private final String message;
+    /**
+     * Indique si la notification a été vue
+     */
     private final boolean seen;
-    
+    /**
+     * Constructeur
+     * @param notif la notification 
+     */
     public NotifView(NotificationDTO notif) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(notif.getDate());
@@ -38,7 +54,19 @@ public class NotifView {
             case PAYMENT_MEAN:
                 PaymentMeanNotificationDTO mean = (PaymentMeanNotificationDTO) notif;
                 Map<PaymentMeanDTO.Type, String> types = Translator.getInstance().translatePaymentMean(Language.FR);
-                message = "Votre " + types.get(mean.getPaymentMean().getType()) + " est arrivé";
+                switch (mean.getPaymentMean().getStatus()) {
+                    case ORDERED:
+                        message = "Votre " + types.get(mean.getPaymentMean().getType()) + " est commandé";
+                        break;
+                    case ARRIVED:
+                        message = "Votre " + types.get(mean.getPaymentMean().getType()) + " est arrivé";
+                        break;
+                    case DELIVERED:
+                        message = "Vous avez récupéré votre " + types.get(mean.getPaymentMean().getType());
+                        break;
+                    default:
+                        throw new AssertionError(mean.getPaymentMean().getStatus().name());                 
+                }
                 break;
             case MESSAGE:
                 MessageNotificationDTO msg = (MessageNotificationDTO) notif;    

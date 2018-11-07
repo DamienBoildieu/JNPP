@@ -11,15 +11,24 @@ public class ConnectedInfo extends ViewInfo {
      * Indique si l'utilisateur a de nouvelles notifications
      */
     private final boolean hasNotif;
-  
+    /**
+     * Le nom de l'utilisateur connecté
+     */
     private final String userName;
-    
+    /**
+     * Constructeur
+     * @param name le nom de l'utilisateur
+     */
     public ConnectedInfo(String name) {
         super(true);
         hasNotif = false;
         userName = name;
     }
-    
+    /**
+     * Constructeur
+     * @param name le nom de l'utilisateur
+     * @param notif indicateur de notification
+     */
     public ConnectedInfo(String name, boolean notif) {
         super(true);
         hasNotif = notif;
@@ -63,10 +72,7 @@ public class ConnectedInfo extends ViewInfo {
         hasNotif = notif;
         userName = name;
     }
-    /**
-     * Accesseur sur l'indicateur de notification
-     * @return true si il y a de nouvelles notifications, fales sinon
-     */
+
     public boolean isHasNotif() {
         return hasNotif;
     }

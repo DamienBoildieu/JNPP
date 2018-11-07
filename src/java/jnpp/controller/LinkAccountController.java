@@ -1,15 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package jnpp.controller;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.MovementView;
@@ -17,9 +11,6 @@ import jnpp.controller.views.Translator;
 import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.controller.views.info.ViewInfo;
-import jnpp.dao.entities.accounts.AccountEntity;
-import jnpp.dao.entities.accounts.CurrentAccountEntity;
-import jnpp.dao.entities.accounts.SavingAccountEntity;
 import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.accounts.DebitAuthorizationDTO;
@@ -34,7 +25,6 @@ import jnpp.service.services.AccountService;
 import jnpp.service.services.DebitAuthorizationService;
 import jnpp.service.services.NotificationService;
 import jnpp.service.services.PaymentMeanService;
-import org.eclipse.persistence.core.sessions.CoreSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,26 +33,41 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Le contrôleur des liens vers les pages de gestion des comptes utilisateur
+ */
 @Controller
 public class LinkAccountController {
+    /**
+     * Le service de notifications
+     */
     @Autowired
     private NotificationService notifService;
+    /**
+     * Le service des comptes utilisateur
+     */
     @Autowired
-     private AccountService accountService;
+    private AccountService accountService;
+    /**
+     * Le service des moyens de paiement
+     */
     @Autowired
     private PaymentMeanService paymentMeanService;
+    /**
+     * Le service des autorisations de débits
+     */
     @Autowired
     private DebitAuthorizationService authorizationService;
     /**
      * Requête sur la vue d'un compte
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return Une vue sur un compte de l'utilisateur si il est connecté, redirection vers l'index sinon
      * @throws Exception 
      */
     @RequestMapping(value = "account", method = RequestMethod.GET)
-    protected ModelAndView linktoAccount(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    protected ModelAndView linktoAccount(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
@@ -82,6 +87,7 @@ public class LinkAccountController {
                 } else {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    rm.addFlashAttribute("alerts", alerts);
                 }
                 return new ModelAndView("redirect:/disconnect.htm");
             }
@@ -116,6 +122,7 @@ public class LinkAccountController {
                             } else {
                                 alerts = new ArrayList<AlertMessage>(); 
                                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                                rm.addFlashAttribute("alerts", alerts);
                             }
                             return new ModelAndView("redirect:/disconnect.htm");
                         }
@@ -141,6 +148,7 @@ public class LinkAccountController {
                             } else {
                                 alerts = new ArrayList<AlertMessage>(); 
                                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                                rm.addFlashAttribute("alerts", alerts);
                             }
                             return new ModelAndView("redirect:/disconnect.htm");
                         }
@@ -179,7 +187,6 @@ public class LinkAccountController {
                 return view;
             }
         }
-	//resumeService.resumeAccounts("");
         return new ModelAndView("redirect:/resume.htm");
     }
     
@@ -187,12 +194,12 @@ public class LinkAccountController {
      * Requête sur la vue d'un compte
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return Une vue sur un compte de l'utilisateur si il est connecté, redirection vers l'index sinon
      * @throws Exception 
      */
     @RequestMapping(value = "openaccount", method = RequestMethod.GET)
-    protected ModelAndView linktoOpenAccount(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    protected ModelAndView linktoOpenAccount(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         if (session==null)
@@ -212,6 +219,7 @@ public class LinkAccountController {
                 } else {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    rm.addFlashAttribute("alerts", alerts);
                 }
                 return new ModelAndView("redirect:/disconnect.htm");
             }
@@ -247,12 +255,12 @@ public class LinkAccountController {
      * Requête sur la vue de la liste des comptes
      * @param model le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param response la réponse
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
      * @return Une vue sur la liste des comptes de l'utilisateur si il est connecté, redirection vers l'index sinon
      * @throws Exception 
      */
     @RequestMapping(value = "resume", method = RequestMethod.GET)
-    protected ModelAndView linktoResume(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    protected ModelAndView linktoResume(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
         List<AlertMessage> alerts = (List<AlertMessage>)model.asMap().get("alerts");
         HttpSession session = request.getSession();
         if (session==null)
@@ -272,6 +280,7 @@ public class LinkAccountController {
                 } else {
                     alerts = new ArrayList<AlertMessage>(); 
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    rm.addFlashAttribute("alerts", alerts);
                 }
                 return new ModelAndView("redirect:/disconnect.htm");
             }
@@ -283,10 +292,16 @@ public class LinkAccountController {
         view.addObject("currencyMap", Translator.getInstance().translateCurrency(SessionController.getLanguage(session)));
         return view;
     }
-    
+    /**
+     * Requête sur la vue des autorisations de débit
+     * @param model le model contient les alertes si il y a eu un redirect
+     * @param request la requête
+     * @param rm objet dans lequel on ajoute les informations que l'on veut voir transiter lors des redirections
+     * @return Une vue sur la liste des autorisations de débits
+     * @throws Exception 
+     */
     @RequestMapping(value = "authorization", method = RequestMethod.GET)
-    private ModelAndView linkToAuthorization(Model model, HttpServletRequest request,
-            HttpServletResponse response, RedirectAttributes rm) {
+    private ModelAndView linkToAuthorization(Model model, HttpServletRequest request, RedirectAttributes rm) {
 
         HttpSession session = request.getSession();
         List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
@@ -310,6 +325,7 @@ public class LinkAccountController {
                 } else {
                     alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    rm.addFlashAttribute("alerts", alerts);
                 }
                 return new ModelAndView("redirect:/disconnect.htm");
             }
@@ -338,6 +354,7 @@ public class LinkAccountController {
             } else {
                 alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                rm.addFlashAttribute("alerts", alerts);
             }
             return new ModelAndView("redirect:/disconnect.htm");
         }

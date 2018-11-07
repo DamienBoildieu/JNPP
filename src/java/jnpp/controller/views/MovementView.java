@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package jnpp.controller.views;
 
 import java.util.Calendar;
@@ -16,18 +11,42 @@ import jnpp.service.dto.movements.TransfertDTO;
 import jnpp.service.dto.movements.WithdrawDTO;
 
 /**
- *
- * @author damien
+ * Vue d'une transaction
  */
 public class MovementView {
+    /**
+     * Le type de transaction
+     */
     private final MovementDTO.Type type;
+    /**
+     * L'année de la transaction
+     */
     private final int year;
+    /**
+     * Le mois de la transaction
+     */
     private final int month;
+    /**
+     * Le jour de la transaction
+     */
     private final int day;
+    /**
+     * Le deuxième compte impliqué dans la transaction
+     */
     private final String otherAccount;
+    /**
+     * Le montant de la transaction
+     */
     private final String value;
+    /**
+     * Le libéllé de la transaction
+     */
     private final String label;
-    
+    /**
+     * Constructeur
+     * @param movement La transaction
+     * @param accountRib Le compte de l'utilisateur connecté impliqué dans la transaction
+     */
     public MovementView(MovementDTO movement, String accountRib) {
         type = movement.getType();
         Calendar cal = Calendar.getInstance();
