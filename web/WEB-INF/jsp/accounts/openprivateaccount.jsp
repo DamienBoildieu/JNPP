@@ -88,11 +88,11 @@
                                     </c:forEach>
                                     <div class="row">
                                         <div class="col s6">
-                                            <a class="btn-floating blue" href="<c:url value='/openaccount.htm' />?nbClients=${nbClients+1}"><i class="material-icons">add</i></a>
-                                        </div>
-                                        <div class="col s6">
                                             <a class="btn-floating blue" href="<c:url value='/openaccount.htm' />?nbClients=${nbClients-1}"><i class="material-icons">remove</i></a>
                                         </div> 
+                                        <div class="col s6">
+                                            <a class="btn-floating blue" href="<c:url value='/openaccount.htm' />?nbClients=${nbClients+1}"><i class="material-icons">add</i></a>
+                                        </div>                                       
                                     </div>
                                     <div class="row">
                                         <div class="col s12">
