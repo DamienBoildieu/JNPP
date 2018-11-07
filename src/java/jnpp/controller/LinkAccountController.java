@@ -26,9 +26,12 @@ import jnpp.service.dto.accounts.SavingBookDTO;
 import jnpp.service.dto.accounts.ShareAccountDTO;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.movements.MovementDTO;
+import jnpp.service.dto.paymentmeans.BankCardDTO;
+import jnpp.service.dto.paymentmeans.CheckbookDTO;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.services.AccountService;
 import jnpp.service.services.NotificationService;
+import jnpp.service.services.PaymentMeanService;
 import org.eclipse.persistence.core.sessions.CoreSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,6 +46,8 @@ public class LinkAccountController {
     private NotificationService notifService;
     @Autowired
      private AccountService accountService;
+    @Autowired
+    private PaymentMeanService paymentMeanService;
     
     /**
      * Requête sur la vue d'un compte
@@ -95,6 +100,21 @@ public class LinkAccountController {
                             movementsCurrent.add(new MovementView(movement, id));
                         }
                         view.addObject("movements",movementsCurrent);
+                        try {
+                            List<BankCardDTO> cards = paymentMeanService.getBankCards(SessionController.getClient(session).getLogin(), id);
+                            view.addObject("cards", cards);
+                            List<CheckbookDTO> checkbooks = paymentMeanService.getCheckBooks(SessionController.getClient(session).getLogin(), id);
+                            view.addObject("checkbooks", checkbooks);
+                            view.addObject("statusMap", Translator.getInstance().translatePaymentMeanStatus(SessionController.getLanguage(session)));
+                        } catch (FakeClientException invalidClient) {
+                            if (alerts != null) {
+                                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                            } else {
+                                alerts = new ArrayList<AlertMessage>(); 
+                                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                            }
+                            return new ModelAndView("redirect:/disconnect.htm");
+                        }
                         break;
                     case JOINT:
                         view = new JNPPModelAndView("accounts/jointaccount", ViewInfo.createInfo(session, alerts));
@@ -105,6 +125,21 @@ public class LinkAccountController {
                             movementsJoint.add(new MovementView(movement, id));
                         }
                         view.addObject("movements",movementsJoint);
+                        try {
+                            List<BankCardDTO> cards = paymentMeanService.getBankCards(SessionController.getClient(session).getLogin(), id);
+                            view.addObject("cards", cards);
+                            List<CheckbookDTO> checkbooks = paymentMeanService.getCheckBooks(SessionController.getClient(session).getLogin(), id);
+                            view.addObject("checkbooks", checkbooks);
+                            view.addObject("statusMap", Translator.getInstance().translatePaymentMeanStatus(SessionController.getLanguage(session)));
+                        } catch (FakeClientException invalidClient) {
+                            if (alerts != null) {
+                                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                            } else {
+                                alerts = new ArrayList<AlertMessage>(); 
+                                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                            }
+                            return new ModelAndView("redirect:/disconnect.htm");
+                        }
                         break;
                     case SAVING:
                         view = new JNPPModelAndView("accounts/savingaccount", ViewInfo.createInfo(session, alerts));
