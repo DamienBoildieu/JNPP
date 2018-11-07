@@ -92,7 +92,7 @@ public class MovementServiceImpl implements MovementService {
         MoneyAccountEntity moneyAccountFrom = (MoneyAccountEntity) accountFrom;
 
         AccountEntity accountTo = accountDAO.find(ribTo);
-        if (accountTo != null && accountTo.canReceive(MovementEntity.Type.TRANSFERT)) {
+        if (accountTo != null && !accountTo.canReceive(MovementEntity.Type.TRANSFERT)) {
             throw new AccountTypeException();
         }
 
@@ -198,7 +198,7 @@ public class MovementServiceImpl implements MovementService {
         MoneyAccountEntity moneyAccountFrom = (MoneyAccountEntity) accountFrom;
 
         AccountEntity accountTo = accountDAO.find(ribTo);
-        if (accountTo != null && accountTo.canReceive(MovementEntity.Type.DEBIT)) {
+        if (accountTo != null && !accountTo.canReceive(MovementEntity.Type.DEBIT)) {
             throw new AccountTypeException();
         }
 

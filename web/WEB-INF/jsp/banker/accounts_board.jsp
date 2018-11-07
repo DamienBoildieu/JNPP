@@ -23,6 +23,8 @@
                 </c:forEach>
                 </tbody>    
             </table>
-        </div>
+        </div>        
+        <%@ include file="../include/javascript.jsp"%>
+        <%@ include file="../include/commonscripts.jsp"%>
     </body>
 </html>

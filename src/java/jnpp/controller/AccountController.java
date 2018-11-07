@@ -406,73 +406,6 @@ public class AccountController {
         return new ModelAndView("redirect:/index.htm"); //ne devrait pas arriver
     }
 
-    @RequestMapping(value = "authorization", method = RequestMethod.GET)
-    private ModelAndView authorizationGet(Model model, HttpServletRequest request,
-            HttpServletResponse response, RedirectAttributes rm) {
-
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (!SessionController.isConnected(session)) {
-            return new ModelAndView("redirect:/index.htm");
-        }
-        Boolean hasNotif = SessionController.getHasNotif(session);
-        if (!hasNotif) {
-            try {
-                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size() > 0;
-                SessionController.setHasNotif(session, hasNotif);
-            } catch (FakeClientException invalidClient) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
-                }
-                return new ModelAndView("redirect:/disconnect.htm");
-            }
-        }
-
-        ClientDTO client = SessionController.getClient(session);
-
-        List<DebitAuthorizationDTO> authorizations;
-        List<String> ribs = new ArrayList<String>();
-
-        try {
-            authorizations = authorizationService
-                    .getDebitAuthorizations(client.getLogin());
-
-            List<AccountDTO> accounts = accountService.getAccounts(client.getLogin());
-            for (AccountDTO account : accounts) {
-                if (account.getType() == AccountDTO.Type.CURRENT
-                        || account.getType() == AccountDTO.Type.JOINT) {
-                    ribs.add(account.getRib());
-                }
-            }
-
-        } catch (FakeClientException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
-            }
-            return new ModelAndView("redirect:/disconnect.htm");
-        }
-
-        ModelAndView mv = new JNPPModelAndView("accounts/authorization",
-                ViewInfo.createInfo(session, alerts));
-
-        mv.addObject("authorizations", authorizations);
-        mv.addObject("ribs", ribs);
-
-        return mv;
-    }
-
     @RequestMapping(value = "deleteDebitAuthorization", method = RequestMethod.POST)
     private ModelAndView deleteDebitAuthorization(Model model, HttpServletRequest request,
             HttpServletResponse response, RedirectAttributes rm)
@@ -571,6 +504,7 @@ public class AccountController {
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                rm.addFlashAttribute("alerts", alerts);
             }
             return new ModelAndView("redirect:/disconnect.htm");
             
@@ -580,6 +514,7 @@ public class AccountController {
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez être proprietaire du compte autorisé à être debité."));
+                rm.addFlashAttribute("alerts", alerts);
             }
             
         } catch (DuplicateDebitAuthorizationException ex) {            
@@ -588,6 +523,7 @@ public class AccountController {
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous avez deja autorisé ce compte à debiter votre compte."));
+                rm.addFlashAttribute("alerts", alerts);
             }
             
         } catch (AccountTypeException ex) {         
@@ -596,6 +532,7 @@ public class AccountController {
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Votre compte n'est pas debitable ou le compte cible ne peut etre debiteur."));
+                rm.addFlashAttribute("alerts", alerts);
             }
         }
         

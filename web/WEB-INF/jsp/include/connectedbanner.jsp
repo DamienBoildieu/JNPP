@@ -9,8 +9,8 @@
             </div>
             <ul class="left hide-on-med-and-down">
                 <li><a href="<c:url value='/home.htm' />">Accueil</a></li>
-                                    <li><a href="<c:url value='/resume.htm' />">Mes comptes</a></li>
-
+                <li><a href="<c:url value='/resume.htm' />">Mes comptes</a></li>
+                <li><a href="<c:url value='/authorization.htm' />">Mes autorisations</a></li>
             </ul>
             <ul class="right hide-on-med-and-down">
                 <li><a href="<c:url value='/userinfo.htm' />">Mes informations</a></li>
@@ -23,6 +23,7 @@
 <ul class="sidenav" id="side">
     <li><a href="<c:url value='/home.htm' />">Accueil</a></li>
     <li><a href="<c:url value='/resume.htm' />">Mes comptes</a></li>
+    <li><a href="<c:url value='/authorization.htm' />">Mes autorisations de débit</a></li>
     <li><a href="<c:url value='/userinfo.htm' />">Mes informations</a></li>
     <li><a href="<c:url value='/advisor.htm' />">Mon conseiller</a></li>
     <li><a href="<c:url value='/disconnect.htm' />">Déconnexion</a></li>

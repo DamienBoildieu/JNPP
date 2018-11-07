@@ -72,22 +72,22 @@ public class ShareAccountEntity extends AccountEntity implements Serializable {
     public boolean canEmit(MovementEntity.Type movement) {
         switch (movement) {
             case PURCHASE:
+                return false;
             case SALE:
                 return true;
-            default:
-                return false;
         }
+        return false;
     }
 
     @Override
     public boolean canReceive(MovementEntity.Type movement) {
         switch (movement) {
             case PURCHASE:
+                return true;
             case SALE:
                 return true;
-            default:
-                return false;
         }
+        return false;
     }
 
 }

@@ -1,5 +1,5 @@
 <div>
-    <form method="POST" action="debit.htm" name="debit">
+    <form method="POST" action="debit.htm" id="debit">
         <div class="card">
             <div class="row valign-wrapper">
                 <div class="col s10">

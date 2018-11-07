@@ -66,25 +66,28 @@ public class CurrentAccountEntity extends MoneyAccountEntity implements Serializ
     public boolean canEmit(MovementEntity.Type movement) {
         switch (movement) {
             case DEBIT:
+                return true;
             case PAYMENT:
+                return true;
             case TRANSFERT:
+                return true;
             case WITHDRAW:
                 return true;
-            default:
-                return false;
         }
+        return false;
     }
 
     @Override
     public boolean canReceive(MovementEntity.Type movement) {
         switch (movement) {
             case DEBIT:
+                return true;
             case TRANSFERT:
+                return true;
             case DEPOSIT:
                 return true;
-            default:
-                return false;
         }
+        return false;
     }
 
     @Override

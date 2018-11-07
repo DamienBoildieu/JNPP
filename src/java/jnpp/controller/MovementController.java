@@ -79,6 +79,7 @@ public class MovementController {
                 } else {
                     alerts = new ArrayList<AlertMessage>();
                     alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    rm.addFlashAttribute("alerts", alerts);
                 }
                 return new ModelAndView("redirect:/disconnect.htm");
             }
@@ -166,6 +167,7 @@ public class MovementController {
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                rm.addFlashAttribute("alerts", alerts);
             }
             return new ModelAndView("redirect:/disconnect.htm");
         } catch (FakeAccountException ex) {
@@ -242,6 +244,7 @@ public class MovementController {
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                rm.addFlashAttribute("alerts", alerts);
             }
             return new ModelAndView("redirect:/disconnect.htm");
         } catch (FakeAccountException ex) {
@@ -311,6 +314,7 @@ public class MovementController {
         } catch (FakeClientException ex) {
             if (alerts != null) {
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                rm.addFlashAttribute("alerts", alerts);
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
@@ -322,6 +326,7 @@ public class MovementController {
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte courant pour effectuer cette action"));
+                rm.addFlashAttribute("alerts", alerts);
             }
         } catch (NoShareAccountException ex) {
             if (alerts != null) {
@@ -329,13 +334,15 @@ public class MovementController {
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte titres pour effectuer cette action"));
+                rm.addFlashAttribute("alerts", alerts);
             }
         } catch (FakeShareException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Cette action de bourse n'existe pas"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR, "Cette action de bourse n'existe pas"));                
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Cette action de bourse n'existe pas"));
+                rm.addFlashAttribute("alerts", alerts);
             }
         } catch (AmountException ex) {
             if (alerts != null) {
@@ -343,6 +350,7 @@ public class MovementController {
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne pouvez pas acheter ces actions"));
+                rm.addFlashAttribute("alerts", alerts);
             }
         }
         return new ModelAndView("redirect:/movement.htm");
@@ -377,6 +385,7 @@ HttpSession session = request.getSession();
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                rm.addFlashAttribute("alerts", alerts);
             }
             return new ModelAndView("redirect:/disconnect.htm");
         } catch (NoCurrentAccountException ex) {
@@ -385,6 +394,7 @@ HttpSession session = request.getSession();
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte courant pour effectuer cette action"));
+                rm.addFlashAttribute("alerts", alerts);
             }
         } catch (NoShareAccountException ex) {
             if (alerts != null) {
@@ -392,6 +402,7 @@ HttpSession session = request.getSession();
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte titres pour effectuer cette action"));
+                rm.addFlashAttribute("alerts", alerts);
             }
         } catch (FakeShareTitleException ex) {
             if (alerts != null) {
@@ -399,6 +410,7 @@ HttpSession session = request.getSession();
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne possédez pas ces actions"));
+                rm.addFlashAttribute("alerts", alerts);
             }
         } catch (AmountException ex) {
             if (alerts != null) {
@@ -406,6 +418,7 @@ HttpSession session = request.getSession();
             } else {
                 alerts = new ArrayList<AlertMessage>(); 
                 alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne possédez pas assez d'actions"));
+                rm.addFlashAttribute("alerts", alerts);
             }
         }
         return new ModelAndView("redirect:/movement.htm");
