@@ -13,7 +13,7 @@
                 <td>${authorization.ribFrom}</td>
                 <td>${authorization.ribTo}</td>
                 <td>
-                    <form method="POST" action="deleteDebitAuthorization.htm" name="deleteDebitAuthorization">
+                    <form method="POST" action="deleteDebitAuthorization.htm" id="deleteDebitAuthorization">
                         <input type="hidden" name="ribFrom" value="${authorization.ribFrom}">
                         <input type="hidden" name="ribTo" value="${authorization.ribTo}">
                         <button class="btn waves-effect blue" type="submit" name="deleteDebitAuthorization">
@@ -27,18 +27,18 @@
     </table>
 </div>
 <div class="container">
-    <form method="POST" action="addDebitAuthorization.htm" class="card" name="addDebitAuthorization">
+    <form method="POST" action="addDebitAuthorization.htm" class="card" id="addDebitAuthorization">
         <table class="responsive-table centered striped card">
             <tbody>
                 <tr>
                     <td>                              
                         <select name="ribFrom" form="addDebitAuthorization" required>
                             <c:forEach items="${ribs}" var="rib">
-                                <option value="${rib}" selected>${rib}</option>
+                                <option value="${rib}">${rib}</option>
                             </c:forEach>
                         </select>
                     </td>
-                    <td><input type="text" name="ribTo" class="center-align"></td>
+                    <td><input type="text" name="ribTo" class="center-align" required></td>
                     <td>                        
                         <button class="btn waves-effect blue" type="submit" name="addDebitAuthorization">
                             Ajouter
