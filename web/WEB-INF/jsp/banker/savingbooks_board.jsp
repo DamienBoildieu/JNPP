@@ -36,7 +36,7 @@
                             <td><input type="number" step=any name="time_rate" class="center-align"></td>
                         </tr>
                         <tr>
-                            <td colspan="3"><input type="submit" value="Ajouter" class="waves-effect waves-light btn-small"></td>
+                            <td colspan="3"><input type="submit" value="Ajouter" class="waves-effect blue btn-small"></td>
                         </tr>
                     </tbody>
                 </table>

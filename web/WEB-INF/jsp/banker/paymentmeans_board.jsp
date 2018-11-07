@@ -30,7 +30,7 @@
                             <c:if test="${paymentmean.status ne 'DELIVERED'}">
                             <form method="POST" action="/JNPP/banquier/commandes.htm">
                                 <input type="hidden" name="id" value="${paymentmean.id}">
-                                <button class="btn waves-effect waves-light" type="submit" name="action">
+                                <button class="btn waves-effect blue" type="submit" name="action">
                                     ${paymentmean.status.next()}
                                     <i class="material-icons right">send</i>
                                 </button>

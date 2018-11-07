@@ -45,7 +45,7 @@ public class AdvisorServiceImpl implements AdvisorService {
             throw new FakeClientException();
         }
         AdvisorEntity advisor = client.getAdvisor();
-        return advisor.toDTO();
+        return (advisor != null) ? advisor.toDTO() : null;
     }
 
     @Override

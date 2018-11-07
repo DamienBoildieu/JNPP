@@ -26,7 +26,7 @@
                         <td>${advisor.email}</td>
                         <td>${advisor.phone}</td>
                         <td>${advisor.officeAddress}</td>
-                        <td><a class="waves-effect waves-light btn" 
+                        <td><a class="waves-effect blue btn" 
                                href="<c:url value='/banquier/conseiller/clients.htm' />?nom=${advisor.identity.lastname}&prenom=${advisor.identity.firstname}">Clients</a></td>
                     </tr>
                     </c:forEach>
@@ -45,7 +45,7 @@
                             <td><input type="text" name="office_address" value='${default_advisor.officeAddress}' class="center-align"></td>
                         </tr>
                         <tr>
-                            <td colspan="5"><input type="submit" value="Ajouter" class="waves-effect waves-light btn-small"></td>
+                            <td colspan="5"><input type="submit" value="Ajouter" class="waves-effect blue btn-small"></td>
                         </tr>
                     </tbody>
                 </table>

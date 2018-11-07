@@ -33,7 +33,7 @@
                             <td><input type="number" step=any name="value" class="center-align"></td>
                         </tr>
                         <tr>
-                            <td colspan="2"><input type="submit" value="Ajouter" class="waves-effect waves-light btn-small"></td>
+                            <td colspan="2"><input type="submit" value="Ajouter" class="waves-effect blue btn-small"></td>
                         </tr>
                     </tbody>
                 </table>

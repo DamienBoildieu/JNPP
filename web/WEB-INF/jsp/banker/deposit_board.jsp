@@ -3,7 +3,7 @@
         <div class="card">
             <div class="row valign-wrapper">
                 <div class="col s10">
-                    <table class="centered">
+                    <table class="centered striped">
                         <thead>
                             <tr>
                                 <th>RIB</th>
@@ -36,7 +36,7 @@
                 </div>
                 <div class="col s2">
                     <div class="center-align">
-                        <button class="btn waves-effect waves-light" type="submit">Deposer</button> 
+                        <button class="btn waves-effect blue" type="submit">Deposer</button> 
                     </div>
                 </div>
             </div>

@@ -44,9 +44,9 @@
                 </div>
                 <div class="col s2">
                     <div class="center-align">
-                        <button class="btn waves-effect waves-light" type="submit" name="purchase" value="purchase">Acheter</button> 
+                        <button class="btn waves-effect blue" type="submit" name="purchase" value="purchase">Acheter</button> 
                         <div style="margin-bottom: 5px;"></div>
-                        <button class="btn waves-effect waves-light" type="submit" name="sale" value="sale">Vendre</button> 
+                        <button class="btn waves-effect blue" type="submit" name="sale" value="sale">Vendre</button> 
                     </div>
                 </div>
             </div>
