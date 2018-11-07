@@ -26,19 +26,16 @@ import jnpp.service.exceptions.accounts.UnknownIdentityException;
 import jnpp.service.exceptions.duplicates.DuplicateAccountException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeSavingBookException;
-<<<<<<< HEAD
 import jnpp.service.exceptions.entities.FakeShareTitleException;
 import jnpp.service.exceptions.movements.AmountException;
 import jnpp.service.exceptions.owners.AccountOwnerException;
 import jnpp.service.services.AccountService;
 import jnpp.service.services.DebitAuthorizationService;
 import jnpp.service.services.NotificationService;
-=======
 import jnpp.service.exceptions.movements.AccountTypeException;
 import jnpp.service.exceptions.owners.AccountOwnerException;
 import jnpp.service.services.AccountService;
 import jnpp.service.services.PaymentMeanService;
->>>>>>> 23b486be5a8c0ad5a7a072b7596013c6a8a9d6bc
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,17 +52,13 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
-<<<<<<< HEAD
     @Autowired
     NotificationService notifService;
     @Autowired
     DebitAuthorizationService authorizationService;
 
-=======
     @Autowired 
     private PaymentMeanService paymentMeanService;
-    
->>>>>>> 23b486be5a8c0ad5a7a072b7596013c6a8a9d6bc
     /**
      * Demande d'ouverture de compte courant
      *
