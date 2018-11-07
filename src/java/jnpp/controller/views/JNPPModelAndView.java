@@ -17,8 +17,8 @@ public class JNPPModelAndView extends ModelAndView {
      * @param viewInfo les informations de la vue
      */
     public JNPPModelAndView(String viewName, ViewInfo viewInfo) {
-	super(viewName);
-	this.info = viewInfo;
-	this.addObject("info", this.info);
+        super(viewName);
+        this.info = viewInfo;
+        this.addObject("info", this.info);
     }
 }

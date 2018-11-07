@@ -17,6 +17,7 @@ public class SessionController {
     /**
      * Supprime les attributs ajoutés par l'application
      * @param session la session que l'on veut supprimer
+     * @throws UnconnectedException si l'utilisateur n'est pas connecté
      */
     public static void clearSession(HttpSession session) throws UnconnectedException {
         if (SessionController.isConnected(session)) {
@@ -26,13 +27,17 @@ public class SessionController {
             throw new UnconnectedException();
         }
     }
-    
+    /**
+     * Invalide la session
+     * @param session la session a supprimer
+     * @throws NullSessionException si la session vaut null
+     */
     public static void deleteSession(HttpSession session) throws NullSessionException {
         if (session==null)
             throw new NullSessionException();
         session.invalidate();
     }
-    
+  
     public static void setClient(HttpSession session, ClientDTO client) throws NullSessionException {
         if (session == null)
             throw new NullSessionException();

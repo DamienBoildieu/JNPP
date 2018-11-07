@@ -2,41 +2,52 @@ package jnpp.controller.banker;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import jnpp.service.dto.accounts.SavingBookDTO;
 import jnpp.service.exceptions.duplicates.DuplicateSavingbookException;
 import jnpp.service.services.AccountService;
 import jnpp.service.services.BankerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Contrôleur de la vue de création de livrets
+ */
 @Controller
 public class SavingBookController {
-        
+    /**
+     * Service des comptes bancaire
+     */
     @Autowired
     AccountService accountService;
-    
+    /**
+     * Service banquier
+     */
     @Autowired
     BankerService bankerService;
-    
+    /**
+     * Vue sur le formulaire de création de livrets
+     * @return
+     * @throws Exception 
+     */
     @RequestMapping(value = "banquier/livrets", method = RequestMethod.GET)
-    protected ModelAndView savingBookGet(Model model, HttpServletRequest request, 
-            HttpServletResponse response, RedirectAttributes rm) 
+    protected ModelAndView savingBookGet() 
             throws Exception {
         List<SavingBookDTO> savingbooks = accountService.getSavingBooks();
         ModelAndView mv = new ModelAndView("banker/savingbooks_board");
         mv.addObject("savingbooks", savingbooks);
         return mv;       
     }
-    
+    /**
+     * Création d'un livret
+     * @param request la requête
+     * @return Le formulaire de créations de livrets
+     * @throws Exception 
+     */
     @RequestMapping(value = "banquier/livrets", method = RequestMethod.POST)
-    protected ModelAndView savingBookPost(Model model, HttpServletRequest request,
-            HttpServletResponse response, RedirectAttributes rm) 
+    protected ModelAndView savingBookPost(HttpServletRequest request) 
             throws Exception {
         String name = request.getParameter("name");
         String moneyRate = request.getParameter("money_rate");

@@ -53,7 +53,11 @@ public class ViewInfo {
            this.alerts = new ArrayList<AlertMessage>();
         }
     }
-    
+    /**
+     * Factory de ViewInfo
+     * @param session la HttpSession
+     * @return la ViewInfo correspondant à la HttpSession
+     */
     public static ViewInfo createInfo(HttpSession session) {
         if (SessionController.isConnected(session)) {
             ClientDTO client = SessionController.getClient(session);
@@ -74,7 +78,12 @@ public class ViewInfo {
         }
         return new UnconnectedInfo();
     }
-    
+    /**
+     * Factory de ViewInfo avec une alerte
+     * @param session la HttpSession
+     * @param alert l'alerte
+     * @return la ViewInfo correspondant à la HttpSession
+     */
     public static ViewInfo createInfo(HttpSession session, AlertMessage alert) {
         if (SessionController.isConnected(session)) {
             ClientDTO client = SessionController.getClient(session);
@@ -95,7 +104,12 @@ public class ViewInfo {
         }
         return new UnconnectedInfo(alert);
     }
-    
+    /**
+     * Factory de ViewInfo avec une liste d'alertes
+     * @param session la HttpSession
+     * @param alerts les alertes
+     * @return la ViewInfo correspondant à la HttpSession
+     */
     public static ViewInfo createInfo(HttpSession session, List<AlertMessage> alerts) {
         if (SessionController.isConnected(session)) {
             ClientDTO client = SessionController.getClient(session);
@@ -117,17 +131,10 @@ public class ViewInfo {
         return new UnconnectedInfo(alerts);
     }
     
-    /**
-     * Accesseur sur le booléen de connexion
-     * @return true si l'utilisateur est connecté, false sinon
-     */
     public boolean isConnected() {
-	return this.connected;
+        return this.connected;
     }
-    /**
-     * Accesseur sur la liste d'alertes
-     * @return la liste d'alertes
-     */
+
     public List<AlertMessage> getAlerts() {
         return alerts;
     }

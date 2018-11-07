@@ -20,31 +20,19 @@ public class AlertMessage {
         this.alertType = alertType;
         this.message = message;
     }
-    /**
-     * Mutateur du type d'alerte
-     * @param alertType le nouveau type d'alerte
-     */
+
     public void setAlertType(AlertEnum alertType) {
         this.alertType = alertType;
     }
-    /**
-     * Mutateur du message
-     * @param message le nouveau message
-     */
+
     public void setMessage(String message) {
         this.message = message;
     }
-    /**
-     * Accesseur sur le type d'alerte
-     * @return le type d'alerte
-     */
+
     public AlertEnum getAlertType() {
         return alertType;
     }
-    /**
-     * Accesseur sur le message de l'alerte
-     * @return le message
-     */
+
     public String getMessage() {
         return message;
     }
