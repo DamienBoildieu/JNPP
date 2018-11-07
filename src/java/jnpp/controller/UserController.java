@@ -56,7 +56,7 @@ public class UserController {
      * réussie, une redirection vers le formulaire de connexion si elle a
      * échouée, une redireciton vers l'index si l'utilisateur était déjà
      * connecté
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "connect", method = RequestMethod.POST)
     protected ModelAndView connect(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
@@ -107,7 +107,7 @@ public class UserController {
      * transiter lors des redirections
      * @return Déconnecte si l'utilisateur était connecté, redirige toujours
      * vers l'index
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "disconnect", method = RequestMethod.GET)
     ModelAndView disconnect(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
@@ -153,7 +153,7 @@ public class UserController {
      * @return Une redirection vers l'index si l'inscription a réussit ou si
      * l'utilisateur était connecté, reste sur la page d'inscription si elle a
      * échouée,
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "privatesignup", method = RequestMethod.POST)
     protected ModelAndView validatePersonalSignUp(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -245,7 +245,7 @@ public class UserController {
      * @return Une redirection vers l'index si l'inscription a réussit ou si
      * l'utilisateur était connecté, reste sur la page d'inscription si elle a
      * échouée,
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "professionalsignup", method = RequestMethod.POST)
     protected ModelAndView validateProfessionalSignUp(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -329,7 +329,7 @@ public class UserController {
      * @return Une redirection vers le menu utilisateur si la demande a réussie,
      * une redirection vers le formulaire de mot de passe si elle a échouée, une
      * redireciton vers l'index si l'utilisateur était déjà connecté
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "privatepassword", method = RequestMethod.POST)
     protected ModelAndView privateResetPassword(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
@@ -380,7 +380,7 @@ public class UserController {
      * @return Une redirection vers le menu utilisateur si la demande a réussie,
      * une redirection vers le formulaire de mot de passe si elle a échouée, une
      * redireciton vers l'index si l'utilisateur était déjà connecté
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "professionalpassword", method = RequestMethod.POST)
     protected ModelAndView professionalResetPassword(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
@@ -430,7 +430,7 @@ public class UserController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue d'information client
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "changepassword", method = RequestMethod.POST)
     protected ModelAndView changePassword(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
@@ -489,7 +489,7 @@ public class UserController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue d'information client
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "editinfo", method = RequestMethod.POST)
     private ModelAndView validateInfo(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -554,8 +554,9 @@ public class UserController {
      * @param request la requête
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
+     * @param view Nom de vue.
      * @return L'index si réussite, la vue userInfo sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "closeuser", method = RequestMethod.POST)
     protected ModelAndView closeUser(Model model, HttpServletRequest request, RedirectAttributes rm, String view) throws Exception {

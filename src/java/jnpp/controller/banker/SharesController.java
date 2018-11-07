@@ -38,7 +38,7 @@ public class SharesController {
      * Vue du formulaire de création d'actions
      *
      * @return Le formulaire de création d'actions
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "banquier/actions", method = RequestMethod.GET)
     protected ModelAndView sharesGet()
@@ -54,7 +54,7 @@ public class SharesController {
      *
      * @param request la requête
      * @return La vue des actions
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "banquier/actions", method = RequestMethod.POST)
     protected ModelAndView sharesPost(HttpServletRequest request)

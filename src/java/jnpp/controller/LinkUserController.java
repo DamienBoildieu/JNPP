@@ -44,7 +44,7 @@ public class LinkUserController {
      * @param request la requête
      * @return Une vue sur la connexion si l'utilisateur n'est pas connecté,
      * redirection vers l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "connect", method = RequestMethod.GET)
     protected ModelAndView linkToConnect(Model model, HttpServletRequest request) throws Exception {
@@ -69,7 +69,7 @@ public class LinkUserController {
      * @param request la requête
      * @return Une vue sur les différentes inscriptions possibles si
      * l'utilisateur n'est pas connecté, redirection vers l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "signup", method = RequestMethod.GET)
     protected ModelAndView linkToSignUp(Model model, HttpServletRequest request) throws Exception {
@@ -94,7 +94,7 @@ public class LinkUserController {
      * @param request la requête
      * @return Une vue sur l'inscription d'un particulier si l'utilisateur n'est
      * pas connecté, redirection vers l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "privatesignup", method = RequestMethod.GET)
     protected ModelAndView linkToPersonalSignUp(Model model, HttpServletRequest request)
@@ -123,7 +123,7 @@ public class LinkUserController {
      * @param request la requête
      * @return Une vue sur l'inscription d'un professionnel si l'utilisateur
      * n'est pas connecté, redirection vers l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "professionalsignup", method = RequestMethod.GET)
     protected ModelAndView linkToProfessionalSignUp(Model model, HttpServletRequest request)
@@ -154,7 +154,7 @@ public class LinkUserController {
      * transiter lors des redirections
      * @return Une vue sur le menu de l'utilisateur si il est connecté,
      * redirection vers l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "home", method = RequestMethod.GET)
     protected ModelAndView linkToResume(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
@@ -198,7 +198,7 @@ public class LinkUserController {
      * transiter lors des redirections
      * @return Une vue sur les informations de l'utilisateur si il est connecté,
      * redirection vers l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "userinfo", method = RequestMethod.GET)
     protected ModelAndView linkToUserInfo(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
@@ -256,7 +256,7 @@ public class LinkUserController {
      * @param request la requête
      * @return Une vue sur le formulaire de choix de mot passe si l'utilisateur
      * n'est pas connecté, redirection vers l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "password", method = RequestMethod.GET)
     protected ModelAndView linkToPassword(Model model, HttpServletRequest request) throws Exception {
@@ -282,7 +282,7 @@ public class LinkUserController {
      * @return Une vue sur le formulaire de regénération de mot de passe pour
      * les particuliers si l'utilisateur n'est pas connecté, redirection vers
      * l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "privatepassword", method = RequestMethod.GET)
     protected ModelAndView linkToPrivatePassword(Model model, HttpServletRequest request) throws Exception {
@@ -308,7 +308,7 @@ public class LinkUserController {
      * @return Une vue sur le formulaire de regénération de mot de passe pour
      * les particuliers si l'utilisateur n'est pas connecté, redirection vers
      * l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "professionalpassword", method = RequestMethod.GET)
     protected ModelAndView linkToProfessionalPassword(Model model, HttpServletRequest request) throws Exception {
@@ -335,7 +335,7 @@ public class LinkUserController {
      * transiter lors des redirections
      * @return Une vue sur la liste des notifications si l'utilisateur est
      * connecté, redirection vers l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "notifs", method = RequestMethod.GET)
     protected ModelAndView linkToNotifs(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {

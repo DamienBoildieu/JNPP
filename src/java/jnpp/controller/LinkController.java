@@ -40,7 +40,7 @@ public class LinkController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return Une vue sur l'index
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "index", method = RequestMethod.GET)
     protected ModelAndView linkToIndex(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
@@ -80,7 +80,7 @@ public class LinkController {
      * @param request la requête
      * @return Une vue sur la validation d'inscription si l'utilisateur n'est
      * pas connecté, redirection vers l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "signupsuccess", method = RequestMethod.GET)
     protected ModelAndView linkToSignUpSuccess(Model model, HttpServletRequest request) throws Exception {
@@ -105,7 +105,7 @@ public class LinkController {
      * @param request la requête
      * @return La vue de validation de regénération de mot de passe si
      * l'utilisateur n'est pas connecté, redirection vers l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "passwordsuccess", method = RequestMethod.GET)
     protected ModelAndView linkToPasswordSuccess(Model model, HttpServletRequest request) throws Exception {

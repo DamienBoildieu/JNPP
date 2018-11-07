@@ -69,7 +69,7 @@ public class LinkAccountController {
      * transiter lors des redirections
      * @return Une vue sur un compte de l'utilisateur si il est connecté,
      * redirection vers l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "account", method = RequestMethod.GET)
     protected ModelAndView linktoAccount(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
@@ -207,7 +207,7 @@ public class LinkAccountController {
      * transiter lors des redirections
      * @return Une vue sur un compte de l'utilisateur si il est connecté,
      * redirection vers l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "openaccount", method = RequestMethod.GET)
     protected ModelAndView linktoOpenAccount(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
@@ -275,7 +275,7 @@ public class LinkAccountController {
      * transiter lors des redirections
      * @return Une vue sur la liste des comptes de l'utilisateur si il est
      * connecté, redirection vers l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "resume", method = RequestMethod.GET)
     protected ModelAndView linktoResume(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
@@ -322,7 +322,7 @@ public class LinkAccountController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return Une vue sur la liste des autorisations de débits
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "authorization", method = RequestMethod.GET)
     private ModelAndView linkToAuthorization(Model model, HttpServletRequest request, RedirectAttributes rm) {

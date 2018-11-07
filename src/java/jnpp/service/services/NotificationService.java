@@ -89,7 +89,8 @@ public interface NotificationService {
      * reference a un client existant.
      * @throws FakeNotificationException Exception levee si l'id ne fait pas
      * reference a une notification existante.
-     * @throws NotificationOwnerException
+     * @throws NotificationOwnerException Exception leve si le client n'est pas
+     * proprietaire de la notification.
      */
     void seeNotifications(String login, List<Long> ids)
             throws FakeClientException, FakeNotificationException,

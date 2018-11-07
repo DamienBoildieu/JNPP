@@ -32,8 +32,8 @@ public class SavingBookController {
     /**
      * Vue sur le formulaire de création de livrets
      *
-     * @return
-     * @throws Exception
+     * @return Vue.
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "banquier/livrets", method = RequestMethod.GET)
     protected ModelAndView savingBookGet()
@@ -49,7 +49,7 @@ public class SavingBookController {
      *
      * @param request la requête
      * @return Le formulaire de créations de livrets
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "banquier/livrets", method = RequestMethod.POST)
     protected ModelAndView savingBookPost(HttpServletRequest request)

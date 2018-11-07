@@ -15,7 +15,7 @@ public class BankerController {
      * Vue accueil des banquiers
      *
      * @return la vue accueil des banquiers
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "banquier", method = RequestMethod.GET)
     protected ModelAndView bankerGet()

@@ -62,7 +62,7 @@ public class AccountController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue des comptes
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "opencurrentaccount", method = RequestMethod.POST)
     private ModelAndView openCurrentAccount(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -118,7 +118,7 @@ public class AccountController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue des comptes
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "opensavingaccount", method = RequestMethod.POST)
     private ModelAndView openSavingAccount(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -190,7 +190,7 @@ public class AccountController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue des comptes
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "openjointaccount", method = RequestMethod.POST)
     private ModelAndView openJointAccount(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -274,7 +274,7 @@ public class AccountController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue des comptes
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "openshareaccount", method = RequestMethod.POST)
     private ModelAndView openShareAccount(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -330,7 +330,7 @@ public class AccountController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue des comptes
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "closeaccount", method = RequestMethod.POST)
     private ModelAndView closeAccount(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -402,7 +402,7 @@ public class AccountController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue d'autorisations de débit
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "deleteDebitAuthorization", method = RequestMethod.POST)
     private ModelAndView deleteDebitAuthorization(Model model, HttpServletRequest request,
@@ -475,7 +475,7 @@ public class AccountController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue d'autorisations de débit
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "addDebitAuthorization", method = RequestMethod.POST)
     private ModelAndView addDebitAuthorization(Model model, HttpServletRequest request,
@@ -558,7 +558,7 @@ public class AccountController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue du compte qui a commande la carte
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "commandcard", method = RequestMethod.POST)
     private ModelAndView commandCard(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -623,7 +623,7 @@ public class AccountController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue du compte qui a commande la carte
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "commandcheckbook", method = RequestMethod.POST)
     private ModelAndView commandCheckBook(Model model, HttpServletRequest request, RedirectAttributes rm)

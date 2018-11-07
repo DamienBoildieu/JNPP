@@ -50,7 +50,7 @@ public class LinkAdvisorController {
      * transiter lors des redirections
      * @return Une vue sur les informations du conseiller si l'utilisateur est
      * connecté, une redirection vers l'index sinon
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "advisor", method = RequestMethod.GET)
     protected ModelAndView linkToAdvisor(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -108,7 +108,7 @@ public class LinkAdvisorController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return Une vue sur le chat avec le conseiller
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "message", method = RequestMethod.GET)
     protected ModelAndView linkToMessage(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -165,7 +165,7 @@ public class LinkAdvisorController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return Une vue sur les rendez-vous du client
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "appoint", method = RequestMethod.GET)
     protected ModelAndView linkToAppoint(Model model, HttpServletRequest request, RedirectAttributes rm)

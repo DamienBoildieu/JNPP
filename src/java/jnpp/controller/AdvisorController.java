@@ -43,7 +43,7 @@ public class AdvisorController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return Une redirection vers la vue de message
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "message", method = RequestMethod.POST)
     protected ModelAndView sendMessage(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
@@ -98,7 +98,7 @@ public class AdvisorController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return Une redirection vers la vue de rendez-vous
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "makeappoint", method = RequestMethod.POST)
     protected ModelAndView makeAppoint(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {
@@ -172,7 +172,7 @@ public class AdvisorController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return Une redirection vers la vue des rendez-vous
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "cancelappoint", method = RequestMethod.POST)
     protected ModelAndView cancelAppoint(Model model, HttpServletRequest request, RedirectAttributes rm) throws Exception {

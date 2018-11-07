@@ -72,7 +72,7 @@ public class MovementController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue des transactions
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "movement", method = RequestMethod.GET)
     private ModelAndView movement(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -155,7 +155,7 @@ public class MovementController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue des transactions
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "transfert", method = RequestMethod.POST)
     private ModelAndView transfert(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -241,7 +241,7 @@ public class MovementController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue des transactions
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "debit", method = RequestMethod.POST)
     private ModelAndView debit(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -335,7 +335,7 @@ public class MovementController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue des transactions
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "purchase", method = RequestMethod.POST)
     private ModelAndView purchase(Model model, HttpServletRequest request, RedirectAttributes rm)
@@ -405,7 +405,7 @@ public class MovementController {
      * @param rm objet dans lequel on ajoute les informations que l'on veut voir
      * transiter lors des redirections
      * @return La vue des transactions
-     * @throws Exception
+     * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "sale", method = RequestMethod.POST)
     private ModelAndView sale(Model model, HttpServletRequest request, RedirectAttributes rm)
