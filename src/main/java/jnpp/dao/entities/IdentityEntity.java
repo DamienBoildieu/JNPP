@@ -1,9 +1,11 @@
 package jnpp.dao.entities;
 
 import java.io.Serializable;
+
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+
 import jnpp.service.dto.IdentityDTO;
 
 @Embeddable
@@ -13,28 +15,27 @@ public class IdentityEntity implements Serializable {
 
     public enum Gender {
 
-        MALE,
-        FEMALE;
+        MALE, FEMALE;
 
         public IdentityDTO.Gender toDTO() {
             switch (ordinal()) {
-                case 0:
-                    return IdentityDTO.Gender.MALE;
-                case 1:
-                    return IdentityDTO.Gender.FEMALE;
-                default:
-                    return null;
+            case 0:
+                return IdentityDTO.Gender.MALE;
+            case 1:
+                return IdentityDTO.Gender.FEMALE;
+            default:
+                return null;
             }
         }
 
         public static Gender toEntity(IdentityDTO.Gender gender) {
             switch (gender) {
-                case FEMALE:
-                    return FEMALE;
-                case MALE:
-                    return MALE;
-                default:
-                    return null;
+            case FEMALE:
+                return FEMALE;
+            case MALE:
+                return MALE;
+            default:
+                return null;
             }
         }
 

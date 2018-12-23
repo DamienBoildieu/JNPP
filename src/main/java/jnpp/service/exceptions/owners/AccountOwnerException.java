@@ -17,7 +17,8 @@ public class AccountOwnerException extends OwnerException {
         super(cause);
     }
 
-    public AccountOwnerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public AccountOwnerException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

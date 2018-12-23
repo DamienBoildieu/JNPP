@@ -1,15 +1,19 @@
 package jnpp.dao.repositories;
 
 import java.util.List;
+
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import jnpp.dao.entities.advisor.AdvisorEntity;
-import jnpp.dao.entities.clients.ClientEntity;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import jnpp.dao.entities.advisor.AdvisorEntity;
+import jnpp.dao.entities.clients.ClientEntity;
+
 @Repository
-public class AdvisorDAOImpl extends GenericDAOImpl<AdvisorEntity> implements AdvisorDAO {
+public class AdvisorDAOImpl extends GenericDAOImpl<AdvisorEntity>
+        implements AdvisorDAO {
 
     @Transactional(readOnly = true)
     @Override

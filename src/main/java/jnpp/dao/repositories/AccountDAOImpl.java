@@ -1,16 +1,20 @@
 package jnpp.dao.repositories;
 
 import java.util.List;
+
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import jnpp.dao.entities.accounts.AccountEntity;
-import jnpp.dao.entities.accounts.CurrentAccountEntity;
-import jnpp.dao.entities.accounts.ShareAccountEntity;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import jnpp.dao.entities.accounts.AccountEntity;
+import jnpp.dao.entities.accounts.CurrentAccountEntity;
+import jnpp.dao.entities.accounts.ShareAccountEntity;
+
 @Repository
-public class AccountDAOImpl extends GenericDAOImpl<AccountEntity> implements AccountDAO {
+public class AccountDAOImpl extends GenericDAOImpl<AccountEntity>
+        implements AccountDAO {
 
     @Transactional(readOnly = true)
     @Override
@@ -24,7 +28,8 @@ public class AccountDAOImpl extends GenericDAOImpl<AccountEntity> implements Acc
     @Transactional(readOnly = true)
     @Override
     public boolean hasCurrentAccount(String login) {
-        Query query = getEm().createNamedQuery("has_current_account", Long.class);
+        Query query = getEm().createNamedQuery("has_current_account",
+                Long.class);
         query.setParameter("login", login);
         Long count = (Long) query.getSingleResult();
         return count != 0;
@@ -33,7 +38,8 @@ public class AccountDAOImpl extends GenericDAOImpl<AccountEntity> implements Acc
     @Transactional(readOnly = true)
     @Override
     public boolean hasSavingAccount(String login, Long savingBookId) {
-        Query query = getEm().createNamedQuery("has_saving_account", Long.class);
+        Query query = getEm().createNamedQuery("has_saving_account",
+                Long.class);
         query.setParameter("login", login);
         query.setParameter("savingbook_id", savingBookId);
         Long count = (Long) query.getSingleResult();

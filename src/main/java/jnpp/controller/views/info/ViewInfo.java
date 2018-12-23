@@ -2,7 +2,9 @@ package jnpp.controller.views.info;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.http.HttpSession;
+
 import jnpp.controller.SessionController;
 import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.service.dto.clients.ClientDTO;
@@ -37,7 +39,7 @@ public class ViewInfo {
      * Constructeur avec une alerte
      *
      * @param isConnected indique si l'utilisateur est connecté
-     * @param alert l'alerte
+     * @param alert       l'alerte
      */
     protected ViewInfo(boolean isConnected, AlertMessage alert) {
         this.connected = isConnected;
@@ -49,7 +51,7 @@ public class ViewInfo {
      * Constructeur avec une liste d'alertes
      *
      * @param isConnected indique si l'utilisateur est connecté
-     * @param alerts la liste d'alertes
+     * @param alerts      la liste d'alertes
      */
     protected ViewInfo(boolean isConnected, List<AlertMessage> alerts) {
         this.connected = isConnected;
@@ -71,18 +73,20 @@ public class ViewInfo {
             ClientDTO client = SessionController.getClient(session);
             String userName = "";
             switch (client.getType()) {
-                case PRIVATE:
-                    PrivateDTO priv = (PrivateDTO) client;
-                    userName = priv.getIdentity().getFirstname() + " " + priv.getIdentity().getLastname();
-                    break;
-                case PROFESIONAL:
-                    ProfessionalDTO pro = (ProfessionalDTO) client;
-                    userName = pro.getName();
-                    break;
-                default:
-                    throw new AssertionError(client.getType().name());
+            case PRIVATE:
+                PrivateDTO priv = (PrivateDTO) client;
+                userName = priv.getIdentity().getFirstname() + " "
+                        + priv.getIdentity().getLastname();
+                break;
+            case PROFESIONAL:
+                ProfessionalDTO pro = (ProfessionalDTO) client;
+                userName = pro.getName();
+                break;
+            default:
+                throw new AssertionError(client.getType().name());
             }
-            return new ConnectedInfo(userName, SessionController.getHasNotif(session));
+            return new ConnectedInfo(userName,
+                    SessionController.getHasNotif(session));
         }
         return new UnconnectedInfo();
     }
@@ -91,7 +95,7 @@ public class ViewInfo {
      * Factory de ViewInfo avec une alerte
      *
      * @param session la HttpSession
-     * @param alert l'alerte
+     * @param alert   l'alerte
      * @return la ViewInfo correspondant à la HttpSession
      */
     public static ViewInfo createInfo(HttpSession session, AlertMessage alert) {
@@ -99,18 +103,20 @@ public class ViewInfo {
             ClientDTO client = SessionController.getClient(session);
             String userName = "";
             switch (client.getType()) {
-                case PRIVATE:
-                    PrivateDTO priv = (PrivateDTO) client;
-                    userName = priv.getIdentity().getFirstname() + " " + priv.getIdentity().getLastname();
-                    break;
-                case PROFESIONAL:
-                    ProfessionalDTO pro = (ProfessionalDTO) client;
-                    userName = pro.getName();
-                    break;
-                default:
-                    throw new AssertionError(client.getType().name());
+            case PRIVATE:
+                PrivateDTO priv = (PrivateDTO) client;
+                userName = priv.getIdentity().getFirstname() + " "
+                        + priv.getIdentity().getLastname();
+                break;
+            case PROFESIONAL:
+                ProfessionalDTO pro = (ProfessionalDTO) client;
+                userName = pro.getName();
+                break;
+            default:
+                throw new AssertionError(client.getType().name());
             }
-            return new ConnectedInfo(userName, alert, SessionController.getHasNotif(session));
+            return new ConnectedInfo(userName, alert,
+                    SessionController.getHasNotif(session));
         }
         return new UnconnectedInfo(alert);
     }
@@ -119,26 +125,29 @@ public class ViewInfo {
      * Factory de ViewInfo avec une liste d'alertes
      *
      * @param session la HttpSession
-     * @param alerts les alertes
+     * @param alerts  les alertes
      * @return la ViewInfo correspondant à la HttpSession
      */
-    public static ViewInfo createInfo(HttpSession session, List<AlertMessage> alerts) {
+    public static ViewInfo createInfo(HttpSession session,
+            List<AlertMessage> alerts) {
         if (SessionController.isConnected(session)) {
             ClientDTO client = SessionController.getClient(session);
             String userName = "";
             switch (client.getType()) {
-                case PRIVATE:
-                    PrivateDTO priv = (PrivateDTO) client;
-                    userName = priv.getIdentity().getFirstname() + " " + priv.getIdentity().getLastname();
-                    break;
-                case PROFESIONAL:
-                    ProfessionalDTO pro = (ProfessionalDTO) client;
-                    userName = pro.getName();
-                    break;
-                default:
-                    throw new AssertionError(client.getType().name());
+            case PRIVATE:
+                PrivateDTO priv = (PrivateDTO) client;
+                userName = priv.getIdentity().getFirstname() + " "
+                        + priv.getIdentity().getLastname();
+                break;
+            case PROFESIONAL:
+                ProfessionalDTO pro = (ProfessionalDTO) client;
+                userName = pro.getName();
+                break;
+            default:
+                throw new AssertionError(client.getType().name());
             }
-            return new ConnectedInfo(userName, alerts, SessionController.getHasNotif(session));
+            return new ConnectedInfo(userName, alerts,
+                    SessionController.getHasNotif(session));
         }
         return new UnconnectedInfo(alerts);
     }

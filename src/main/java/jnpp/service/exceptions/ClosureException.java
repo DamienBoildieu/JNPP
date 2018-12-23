@@ -17,7 +17,8 @@ public class ClosureException extends ServiceException {
         super(cause);
     }
 
-    public ClosureException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public ClosureException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

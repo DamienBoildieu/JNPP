@@ -1,16 +1,19 @@
 package jnpp.controller.banker;
 
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
-import jnpp.service.dto.accounts.SavingBookDTO;
-import jnpp.service.exceptions.duplicates.DuplicateSavingbookException;
-import jnpp.service.services.AccountService;
-import jnpp.service.services.BankerService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import jnpp.service.dto.accounts.SavingBookDTO;
+import jnpp.service.exceptions.duplicates.DuplicateSavingbookException;
+import jnpp.service.services.AccountService;
+import jnpp.service.services.BankerService;
 
 /**
  * Contrôleur de la vue de création de livrets
@@ -36,8 +39,7 @@ public class SavingBookController {
      * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "banquier/livrets", method = RequestMethod.GET)
-    protected ModelAndView savingBookGet()
-            throws Exception {
+    protected ModelAndView savingBookGet() throws Exception {
         List<SavingBookDTO> savingbooks = accountService.getSavingBooks();
         ModelAndView mv = new ModelAndView("banker/savingbooks_board");
         mv.addObject("savingbooks", savingbooks);
@@ -57,10 +59,12 @@ public class SavingBookController {
         String name = request.getParameter("name");
         String moneyRate = request.getParameter("money_rate");
         String timeRate = request.getParameter("time_rate");
-        if (name != null && name.length() > 0 && moneyRate != null && moneyRate.length() > 0
-                && timeRate != null && timeRate.length() > 0) {
+        if (name != null && name.length() > 0 && moneyRate != null
+                && moneyRate.length() > 0 && timeRate != null
+                && timeRate.length() > 0) {
             try {
-                bankerService.addSavingbook(name, Double.valueOf(moneyRate), Double.valueOf(timeRate));
+                bankerService.addSavingbook(name, Double.valueOf(moneyRate),
+                        Double.valueOf(timeRate));
             } catch (IllegalArgumentException e) {
             } catch (DuplicateSavingbookException e) {
             }

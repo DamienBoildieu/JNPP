@@ -19,7 +19,8 @@ public abstract class AdvisorException extends ServiceException {
         super(cause);
     }
 
-    public AdvisorException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public AdvisorException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

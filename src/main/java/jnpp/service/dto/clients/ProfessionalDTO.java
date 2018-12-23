@@ -8,7 +8,8 @@ public class ProfessionalDTO extends ClientDTO {
     private String name;
     private IdentityDTO owner;
 
-    public ProfessionalDTO(String login, String name, IdentityDTO owner, String email, AddressDTO address, String phone) {
+    public ProfessionalDTO(String login, String name, IdentityDTO owner,
+            String email, AddressDTO address, String phone) {
         super(login, email, address, phone);
         this.name = name;
         this.owner = owner;

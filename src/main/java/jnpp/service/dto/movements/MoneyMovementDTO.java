@@ -1,6 +1,7 @@
 package jnpp.service.dto.movements;
 
 import java.util.Date;
+
 import jnpp.service.dto.accounts.CurrencyDTO;
 
 public abstract class MoneyMovementDTO extends MovementDTO {
@@ -8,7 +9,8 @@ public abstract class MoneyMovementDTO extends MovementDTO {
     private Double money;
     private CurrencyDTO currency;
 
-    public MoneyMovementDTO(Date date, String ribFrom, Double money, CurrencyDTO currency, String label) {
+    public MoneyMovementDTO(Date date, String ribFrom, Double money,
+            CurrencyDTO currency, String label) {
         super(date, ribFrom, label);
         this.money = money;
         this.currency = currency;

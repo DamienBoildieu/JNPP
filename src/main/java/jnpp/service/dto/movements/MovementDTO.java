@@ -6,13 +6,7 @@ public abstract class MovementDTO {
 
     public static enum Type {
 
-        TRANSFERT,
-        DEBIT,
-        PURCHASE,
-        SALE,
-        WITHDRAW,
-        PAYMENT,
-        DEPOSIT;
+        TRANSFERT, DEBIT, PURCHASE, SALE, WITHDRAW, PAYMENT, DEPOSIT;
 
     }
 

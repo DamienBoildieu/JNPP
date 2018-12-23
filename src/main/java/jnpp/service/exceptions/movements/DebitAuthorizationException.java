@@ -19,7 +19,8 @@ public class DebitAuthorizationException extends AccountException {
         super(cause);
     }
 
-    public DebitAuthorizationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public DebitAuthorizationException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

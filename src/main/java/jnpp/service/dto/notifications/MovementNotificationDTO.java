@@ -1,13 +1,15 @@
 package jnpp.service.dto.notifications;
 
 import java.util.Date;
+
 import jnpp.service.dto.movements.MovementDTO;
 
 public class MovementNotificationDTO extends NotificationDTO {
 
     private MovementDTO movement;
 
-    public MovementNotificationDTO(Long id, Date date, Boolean seen, MovementDTO movement) {
+    public MovementNotificationDTO(Long id, Date date, Boolean seen,
+            MovementDTO movement) {
         super(id, date, seen);
         this.movement = movement;
     }

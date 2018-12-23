@@ -17,7 +17,8 @@ public class FakeShareException extends FakeEntityException {
         super(cause);
     }
 
-    public FakeShareException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public FakeShareException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

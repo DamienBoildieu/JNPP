@@ -17,7 +17,8 @@ public class InformationException extends ClientException {
         super(cause);
     }
 
-    public InformationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public InformationException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

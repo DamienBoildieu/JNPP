@@ -4,7 +4,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+
 import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.paymentmeans.BankCardEntity;
@@ -18,7 +22,6 @@ import jnpp.service.dto.paymentmeans.CheckbookDTO;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.movements.AccountTypeException;
 import jnpp.service.exceptions.owners.AccountOwnerException;
-import org.springframework.stereotype.Service;
 
 @Service("PaymentMeanService")
 public class PaymentMeanServiceImpl implements PaymentMeanService {
@@ -37,7 +40,9 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
     private final Random random = new Random();
 
     @Override
-    public BankCardDTO commandBankCard(String login, String rib) throws FakeClientException, AccountTypeException, AccountOwnerException {
+    public BankCardDTO commandBankCard(String login, String rib)
+            throws FakeClientException, AccountTypeException,
+            AccountOwnerException {
         if (login == null || rib == null) {
             throw new IllegalArgumentException();
         }
@@ -53,13 +58,16 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
             throw new AccountTypeException();
         }
         String id = generateNewId();
-        BankCardEntity bankcard = new BankCardEntity(id, client, account, PaymentMeanEntity.Status.ORDERED);
+        BankCardEntity bankcard = new BankCardEntity(id, client, account,
+                PaymentMeanEntity.Status.ORDERED);
         bankcard = (BankCardEntity) paymentMeanDAO.save(bankcard);
         return bankcard.toDTO();
     }
 
     @Override
-    public CheckbookDTO commandCheckbook(String login, String rib) throws FakeClientException, AccountTypeException, AccountOwnerException {
+    public CheckbookDTO commandCheckbook(String login, String rib)
+            throws FakeClientException, AccountTypeException,
+            AccountOwnerException {
         if (login == null || rib == null) {
             throw new IllegalArgumentException();
         }
@@ -75,13 +83,15 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
             throw new AccountTypeException();
         }
         String id = generateNewId();
-        CheckbookEntity checkbook = new CheckbookEntity(id, client, account, PaymentMeanEntity.Status.ORDERED);
+        CheckbookEntity checkbook = new CheckbookEntity(id, client, account,
+                PaymentMeanEntity.Status.ORDERED);
         checkbook = (CheckbookEntity) paymentMeanDAO.save(checkbook);
         return checkbook.toDTO();
     }
 
     @Override
-    public List<BankCardDTO> getBankCards(String login) throws FakeClientException {
+    public List<BankCardDTO> getBankCards(String login)
+            throws FakeClientException {
         if (login == null) {
             throw new IllegalArgumentException();
         }
@@ -89,12 +99,14 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
         if (client == null) {
             throw new FakeClientException();
         }
-        List<BankCardEntity> bankcards = paymentMeanDAO.findBankCardByLogin(login);
+        List<BankCardEntity> bankcards = paymentMeanDAO
+                .findBankCardByLogin(login);
         return BankCardEntity.toDTO(bankcards);
     }
 
     @Override
-    public List<BankCardDTO> getBankCards(String login, PaymentMeanEntity.Status status) throws FakeClientException {
+    public List<BankCardDTO> getBankCards(String login,
+            PaymentMeanEntity.Status status) throws FakeClientException {
         if (login == null || status == null) {
             throw new IllegalArgumentException();
         }
@@ -102,12 +114,14 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
         if (client == null) {
             throw new FakeClientException();
         }
-        List<BankCardEntity> bankcards = paymentMeanDAO.findBankCardByLoginStatus(login, status);
+        List<BankCardEntity> bankcards = paymentMeanDAO
+                .findBankCardByLoginStatus(login, status);
         return BankCardEntity.toDTO(bankcards);
     }
 
     @Override
-    public List<BankCardDTO> getBankCards(String login, String rib) throws FakeClientException, AccountOwnerException {
+    public List<BankCardDTO> getBankCards(String login, String rib)
+            throws FakeClientException, AccountOwnerException {
         if (login == null || rib == null) {
             throw new IllegalArgumentException();
         }
@@ -119,12 +133,14 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
         if (account == null || !account.isOwnBy(client)) {
             throw new AccountOwnerException();
         }
-        List<BankCardEntity> bankcards = paymentMeanDAO.findBankCardByLoginRib(login, rib);
+        List<BankCardEntity> bankcards = paymentMeanDAO
+                .findBankCardByLoginRib(login, rib);
         return BankCardEntity.toDTO(bankcards);
     }
 
     @Override
-    public List<CheckbookDTO> getCheckBooks(String login) throws FakeClientException {
+    public List<CheckbookDTO> getCheckBooks(String login)
+            throws FakeClientException {
         if (login == null) {
             throw new IllegalArgumentException();
         }
@@ -132,12 +148,14 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
         if (client == null) {
             throw new FakeClientException();
         }
-        List<CheckbookEntity> checkbooks = paymentMeanDAO.findCheckBookByLogin(login);
+        List<CheckbookEntity> checkbooks = paymentMeanDAO
+                .findCheckBookByLogin(login);
         return (List<CheckbookDTO>) CheckbookEntity.toDTO(checkbooks);
     }
 
     @Override
-    public List<CheckbookDTO> getCheckBooks(String login, PaymentMeanEntity.Status status) throws FakeClientException {
+    public List<CheckbookDTO> getCheckBooks(String login,
+            PaymentMeanEntity.Status status) throws FakeClientException {
         if (login == null || status == null) {
             throw new IllegalArgumentException();
         }
@@ -145,12 +163,14 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
         if (client == null) {
             throw new FakeClientException();
         }
-        List<CheckbookEntity> checkbooks = paymentMeanDAO.findCheckBookByLoginStatus(login, status);
+        List<CheckbookEntity> checkbooks = paymentMeanDAO
+                .findCheckBookByLoginStatus(login, status);
         return CheckbookEntity.toDTO(checkbooks);
     }
 
     @Override
-    public List<CheckbookDTO> getCheckBooks(String login, String rib) throws FakeClientException, AccountOwnerException {
+    public List<CheckbookDTO> getCheckBooks(String login, String rib)
+            throws FakeClientException, AccountOwnerException {
         if (login == null || rib == null) {
             throw new IllegalArgumentException();
         }
@@ -162,7 +182,8 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
         if (account == null || !account.isOwnBy(client)) {
             throw new AccountOwnerException();
         }
-        List<CheckbookEntity> checkbooks = paymentMeanDAO.findCheckBookByLoginRib(login, rib);
+        List<CheckbookEntity> checkbooks = paymentMeanDAO
+                .findCheckBookByLoginRib(login, rib);
         return CheckbookEntity.toDTO(checkbooks);
     }
 
@@ -181,24 +202,24 @@ public class PaymentMeanServiceImpl implements PaymentMeanService {
 
     private static boolean canBindToBanckCard(AccountEntity account) {
         switch (account.getType()) {
-            case CURRENT:
-            case JOINT:
-                return true;
-            case SAVING:
-            case SHARE:
-                return false;
+        case CURRENT:
+        case JOINT:
+            return true;
+        case SAVING:
+        case SHARE:
+            return false;
         }
         return false;
     }
 
     private static boolean canBindToCheckbook(AccountEntity account) {
         switch (account.getType()) {
-            case CURRENT:
-            case JOINT:
-                return true;
-            case SAVING:
-            case SHARE:
-                return false;
+        case CURRENT:
+        case JOINT:
+            return true;
+        case SAVING:
+        case SHARE:
+            return false;
         }
         return false;
     }

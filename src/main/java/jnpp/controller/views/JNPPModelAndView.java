@@ -1,7 +1,8 @@
 package jnpp.controller.views;
 
-import jnpp.controller.views.info.ViewInfo;
 import org.springframework.web.servlet.ModelAndView;
+
+import jnpp.controller.views.info.ViewInfo;
 
 /**
  * Classe de ModelAndView de l'application

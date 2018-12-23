@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,17 +12,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+
 import jnpp.service.dto.accounts.ShareDTO;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(
-            name = "find_share_by_name",
-            query = "SELECT s FROM ShareEntity s WHERE s.name = :name")
-    ,
-    @NamedQuery(
-            name = "find_all_share",
-            query = "SELECT s FROM ShareEntity s")})
+        @NamedQuery(name = "find_share_by_name", query = "SELECT s FROM ShareEntity s WHERE s.name = :name"),
+        @NamedQuery(name = "find_all_share", query = "SELECT s FROM ShareEntity s") })
 public class ShareEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -81,7 +78,8 @@ public class ShareEntity implements Serializable {
             return false;
         }
         ShareEntity other = (ShareEntity) object;
-        return !((this.name == null && other.name != null) || (this.name != null && !this.name.equals(other.name)));
+        return !((this.name == null && other.name != null)
+                || (this.name != null && !this.name.equals(other.name)));
     }
 
     @Override

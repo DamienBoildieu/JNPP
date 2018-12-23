@@ -17,7 +17,8 @@ public class AppointmentOwnerException extends OwnerException {
         super(cause);
     }
 
-    public AppointmentOwnerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public AppointmentOwnerException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

@@ -6,14 +6,18 @@
 package jnpp.dao.repositories;
 
 import java.util.List;
+
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import jnpp.dao.entities.accounts.ShareEntity;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import jnpp.dao.entities.accounts.ShareEntity;
+
 @Repository
-public class ShareDAOImpl extends GenericDAOImpl<ShareEntity> implements ShareDAO {
+public class ShareDAOImpl extends GenericDAOImpl<ShareEntity>
+        implements ShareDAO {
 
     @Transactional(readOnly = true)
     @Override

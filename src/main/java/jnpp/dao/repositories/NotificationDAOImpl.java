@@ -2,13 +2,17 @@ package jnpp.dao.repositories;
 
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Query;
-import jnpp.dao.entities.notifications.NotificationEntity;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import jnpp.dao.entities.notifications.NotificationEntity;
+
 @Repository
-public class NotificationDAOImpl extends GenericDAOImpl<NotificationEntity> implements NotificationDAO {
+public class NotificationDAOImpl extends GenericDAOImpl<NotificationEntity>
+        implements NotificationDAO {
 
     @Transactional(readOnly = true)
     @Override
@@ -40,8 +44,10 @@ public class NotificationDAOImpl extends GenericDAOImpl<NotificationEntity> impl
 
     @Transactional(readOnly = true)
     @Override
-    public List<NotificationEntity> findUnseenRecentByLogin(String login, Date date) {
-        Query q = getEm().createNamedQuery("find_unseen_recent_notification_by_login",
+    public List<NotificationEntity> findUnseenRecentByLogin(String login,
+            Date date) {
+        Query q = getEm().createNamedQuery(
+                "find_unseen_recent_notification_by_login",
                 NotificationEntity.class);
         q.setParameter("login", login);
         q.setParameter("date", date);
@@ -51,7 +57,8 @@ public class NotificationDAOImpl extends GenericDAOImpl<NotificationEntity> impl
     @Transactional(readOnly = true)
     @Override
     public void setAllSeenByLogin(String login) {
-        Query q = getEm().createNamedQuery("set_all_notification_seen_by_login");
+        Query q = getEm()
+                .createNamedQuery("set_all_notification_seen_by_login");
         q.setParameter("login", login);
         q.executeUpdate();
     }

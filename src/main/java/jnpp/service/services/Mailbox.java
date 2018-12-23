@@ -2,6 +2,7 @@ package jnpp.service.services;
 
 import java.util.Date;
 import java.util.Properties;
+
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -18,8 +19,8 @@ public class Mailbox {
     private Properties properties;
     private Authenticator authenticator;
 
-    public Mailbox(String host, String port,
-            final String username, final String password) {
+    public Mailbox(String host, String port, final String username,
+            final String password) {
 
         this.username = username;
 
@@ -45,7 +46,7 @@ public class Mailbox {
         Message msg = new MimeMessage(session);
 
         msg.setFrom(new InternetAddress(username));
-        InternetAddress[] toAddresses = {new InternetAddress(address)};
+        InternetAddress[] toAddresses = { new InternetAddress(address) };
         msg.setRecipients(Message.RecipientType.TO, toAddresses);
 
         msg.setSubject(subject);

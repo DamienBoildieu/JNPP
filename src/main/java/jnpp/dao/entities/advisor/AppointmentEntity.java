@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,30 +16,20 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.service.dto.advisor.AppointmentDTO;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(
-            name = "find_all_appointment_by_rib",
-            query = "SELECT a FROM AppointmentEntity a "
-            + "WHERE a.client.login = :login "
-            + "ORDER BY a.date DESC")
-    ,
-    @NamedQuery(
-            name = "find_recent_appointment_by_rib",
-            query = "SELECT a FROM AppointmentEntity a "
-            + "WHERE a.client.login = :login "
-            + "  AND a.date >= :date "
-            + "ORDER BY a.date DESC")
-    ,
-    @NamedQuery(
-            name = "count_advisor_appointment_in_min_max",
-            query = "SELECT COUNT(a) FROM AppointmentEntity a "
-            + "WHERE a.advisor.id = :id "
-            + "  AND :min <= a.date "
-            + "  AND a.date <= :max")})
+        @NamedQuery(name = "find_all_appointment_by_rib", query = "SELECT a FROM AppointmentEntity a "
+                + "WHERE a.client.login = :login " + "ORDER BY a.date DESC"),
+        @NamedQuery(name = "find_recent_appointment_by_rib", query = "SELECT a FROM AppointmentEntity a "
+                + "WHERE a.client.login = :login " + "  AND a.date >= :date "
+                + "ORDER BY a.date DESC"),
+        @NamedQuery(name = "count_advisor_appointment_in_min_max", query = "SELECT COUNT(a) FROM AppointmentEntity a "
+                + "WHERE a.advisor.id = :id " + "  AND :min <= a.date "
+                + "  AND a.date <= :max") })
 public class AppointmentEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,7 +50,8 @@ public class AppointmentEntity implements Serializable {
     public AppointmentEntity() {
     }
 
-    public AppointmentEntity(Date date, ClientEntity client, AdvisorEntity advisor) {
+    public AppointmentEntity(Date date, ClientEntity client,
+            AdvisorEntity advisor) {
         this.date = date;
         this.client = client;
         this.advisor = advisor;
@@ -110,7 +102,8 @@ public class AppointmentEntity implements Serializable {
             return false;
         }
         AppointmentEntity other = (AppointmentEntity) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        return !((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override
@@ -123,7 +116,8 @@ public class AppointmentEntity implements Serializable {
     }
 
     public static List<AppointmentDTO> toDTO(List<AppointmentEntity> entities) {
-        List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>(entities.size());
+        List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>(
+                entities.size());
         Iterator<AppointmentEntity> it = entities.iterator();
         while (it.hasNext()) {
             dtos.add(it.next().toDTO());

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,20 +14,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+
 import jnpp.service.dto.accounts.ShareTitleDTO;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(
-            name = "find_sharetitle_by_rib_name",
-            query = "SELECT s FROM ShareTitleEntity s "
-            + "WHERE s.shareAccount.rib = :rib "
-            + "  AND s.share.name = :name")
-    ,
-    @NamedQuery(
-            name = "fin_all_sharetitle_by_rib",
-            query = "SELECT s FROM ShareTitleEntity s "
-            + "WHERE s.shareAccount.rib = :rib")})
+        @NamedQuery(name = "find_sharetitle_by_rib_name", query = "SELECT s FROM ShareTitleEntity s "
+                + "WHERE s.shareAccount.rib = :rib "
+                + "  AND s.share.name = :name"),
+        @NamedQuery(name = "fin_all_sharetitle_by_rib", query = "SELECT s FROM ShareTitleEntity s "
+                + "WHERE s.shareAccount.rib = :rib") })
 public class ShareTitleEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,7 +46,8 @@ public class ShareTitleEntity implements Serializable {
     public ShareTitleEntity() {
     }
 
-    public ShareTitleEntity(Integer amount, ShareEntity share, ShareAccountEntity shareAccount) {
+    public ShareTitleEntity(Integer amount, ShareEntity share,
+            ShareAccountEntity shareAccount) {
         this.amount = amount;
         this.share = share;
         this.shareAccount = shareAccount;
@@ -100,7 +98,8 @@ public class ShareTitleEntity implements Serializable {
             return false;
         }
         ShareTitleEntity other = (ShareTitleEntity) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        return !((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override
@@ -113,7 +112,8 @@ public class ShareTitleEntity implements Serializable {
     }
 
     public static List<ShareTitleDTO> toDTO(List<ShareTitleEntity> entities) {
-        List<ShareTitleDTO> dtos = new ArrayList<ShareTitleDTO>(entities.size());
+        List<ShareTitleDTO> dtos = new ArrayList<ShareTitleDTO>(
+                entities.size());
         Iterator<ShareTitleEntity> it = entities.iterator();
         while (it.hasNext()) {
             dtos.add(it.next().toDTO());

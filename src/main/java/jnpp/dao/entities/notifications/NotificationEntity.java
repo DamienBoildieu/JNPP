@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -19,6 +20,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.service.dto.notifications.NotificationDTO;
 
@@ -26,41 +28,21 @@ import jnpp.service.dto.notifications.NotificationDTO;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
-    @NamedQuery(
-            name = "find_all_notification_by_login",
-            query = "SELECT n FROM NotificationEntity n "
-            + "WHERE n.client.login = :login "
-            + "ORDER BY n.date DESC")
-    ,
-    @NamedQuery(
-            name = "find_unseen_notification_by_login",
-            query = "SELECT n FROM NotificationEntity n "
-            + "WHERE n.client.login = :login "
-            + "  AND n.seen = false "
-            + "ORDER BY n.date DESC")
-    ,
-    @NamedQuery(
-            name = "find_unseen_recent_notification_by_login",
-            query = "SELECT n FROM NotificationEntity n "
-            + "WHERE n.client.login = :login "
-            + "  AND n.seen = false"
-            + "  AND n.date >= :date "
-            + "ORDER BY n.date DESC")
-    ,
-    @NamedQuery(
-            name = "set_all_notification_seen_by_login",
-            query = "UPDATE NotificationEntity n "
-            + "SET n.seen = true "
-            + "WHERE n.client.login = :login")})
+        @NamedQuery(name = "find_all_notification_by_login", query = "SELECT n FROM NotificationEntity n "
+                + "WHERE n.client.login = :login " + "ORDER BY n.date DESC"),
+        @NamedQuery(name = "find_unseen_notification_by_login", query = "SELECT n FROM NotificationEntity n "
+                + "WHERE n.client.login = :login " + "  AND n.seen = false "
+                + "ORDER BY n.date DESC"),
+        @NamedQuery(name = "find_unseen_recent_notification_by_login", query = "SELECT n FROM NotificationEntity n "
+                + "WHERE n.client.login = :login " + "  AND n.seen = false"
+                + "  AND n.date >= :date " + "ORDER BY n.date DESC"),
+        @NamedQuery(name = "set_all_notification_seen_by_login", query = "UPDATE NotificationEntity n "
+                + "SET n.seen = true " + "WHERE n.client.login = :login") })
 public abstract class NotificationEntity implements Serializable {
 
     public static enum Type {
 
-        APPOINTMENT,
-        PAYMENT_MEAN,
-        MESSAGE,
-        MOVEMENT,
-        OVERDRAFT;
+        APPOINTMENT, PAYMENT_MEAN, MESSAGE, MOVEMENT, OVERDRAFT;
 
         public static class Values {
 
@@ -147,13 +129,16 @@ public abstract class NotificationEntity implements Serializable {
             return false;
         }
         NotificationEntity other = (NotificationEntity) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        return !((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id)));
     }
 
     public abstract NotificationDTO toDTO();
 
-    public static List<NotificationDTO> toDTO(List<NotificationEntity> entities) {
-        List<NotificationDTO> dtos = new ArrayList<NotificationDTO>(entities.size());
+    public static List<NotificationDTO> toDTO(
+            List<NotificationEntity> entities) {
+        List<NotificationDTO> dtos = new ArrayList<NotificationDTO>(
+                entities.size());
         Iterator<NotificationEntity> it = entities.iterator();
         while (it.hasNext()) {
             dtos.add(it.next().toDTO());

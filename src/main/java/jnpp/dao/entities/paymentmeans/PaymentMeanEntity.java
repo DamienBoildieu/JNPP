@@ -1,6 +1,7 @@
 package jnpp.dao.entities.paymentmeans;
 
 import java.io.Serializable;
+
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
@@ -21,20 +23,13 @@ import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
-    @NamedQuery(
-            name = "find_all_paymentmeans",
-            query = "SELECT p FROM PaymentMeanEntity p")
-    ,
-    @NamedQuery(
-            name = "find_all_paymentmean_ids",
-            query = "SELECT p.id FROM PaymentMeanEntity p"
-    )})
+        @NamedQuery(name = "find_all_paymentmeans", query = "SELECT p FROM PaymentMeanEntity p"),
+        @NamedQuery(name = "find_all_paymentmean_ids", query = "SELECT p.id FROM PaymentMeanEntity p") })
 public abstract class PaymentMeanEntity implements Serializable {
 
     public static enum Type {
 
-        BANKCARD,
-        CHECKBOOK;
+        BANKCARD, CHECKBOOK;
 
         public static class Values {
 
@@ -50,18 +45,16 @@ public abstract class PaymentMeanEntity implements Serializable {
 
     public static enum Status {
 
-        ORDERED,
-        ARRIVED,
-        DELIVERED;
+        ORDERED, ARRIVED, DELIVERED;
 
         public PaymentMeanDTO.Status toDTO() {
             switch (this) {
-                case ORDERED:
-                    return PaymentMeanDTO.Status.ORDERED;
-                case ARRIVED:
-                    return PaymentMeanDTO.Status.ARRIVED;
-                case DELIVERED:
-                    return PaymentMeanDTO.Status.DELIVERED;
+            case ORDERED:
+                return PaymentMeanDTO.Status.ORDERED;
+            case ARRIVED:
+                return PaymentMeanDTO.Status.ARRIVED;
+            case DELIVERED:
+                return PaymentMeanDTO.Status.DELIVERED;
             }
             return null;
         }
@@ -91,7 +84,8 @@ public abstract class PaymentMeanEntity implements Serializable {
     public PaymentMeanEntity() {
     }
 
-    public PaymentMeanEntity(String id, ClientEntity client, AccountEntity account, Status status) {
+    public PaymentMeanEntity(String id, ClientEntity client,
+            AccountEntity account, Status status) {
         this.id = id;
         this.client = client;
         this.account = account;
@@ -145,7 +139,8 @@ public abstract class PaymentMeanEntity implements Serializable {
             return false;
         }
         PaymentMeanEntity other = (PaymentMeanEntity) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        return !((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

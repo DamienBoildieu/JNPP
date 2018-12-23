@@ -5,7 +5,5 @@ package jnpp.controller.views.alerts;
  * certaines actions ont réussies
  */
 public enum AlertEnum {
-    SUCCESS,
-    ERROR,
-    NONE
+    SUCCESS, ERROR, NONE
 }

@@ -17,7 +17,8 @@ public class NoShareAccountException extends AccountException {
         super(cause);
     }
 
-    public NoShareAccountException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public NoShareAccountException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

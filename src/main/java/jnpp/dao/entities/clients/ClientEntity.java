@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -16,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+
 import jnpp.dao.entities.AddressEntity;
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.advisor.AdvisorEntity;
@@ -26,29 +28,16 @@ import jnpp.service.dto.clients.LoginDTO;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
-    @NamedQuery(
-            name = "find_client_by_login_password",
-            query = "SELECT c FROM ClientEntity c "
-            + "WHERE c.login = :login "
-            + "  AND c.password = :password")
-    ,
-    @NamedQuery(
-            name = "find_all_login",
-            query = "SELECT c.login FROM ClientEntity c")
-    ,
-    @NamedQuery(
-            name = "find_all_clients",
-            query = "SELECT c FROM ClientEntity c")
-    ,
-    @NamedQuery(
-            name = "find_client_without_advisor",
-            query = "SELECT c FROM ClientEntity c WHERE c.advisor IS NULL")})
+        @NamedQuery(name = "find_client_by_login_password", query = "SELECT c FROM ClientEntity c "
+                + "WHERE c.login = :login " + "  AND c.password = :password"),
+        @NamedQuery(name = "find_all_login", query = "SELECT c.login FROM ClientEntity c"),
+        @NamedQuery(name = "find_all_clients", query = "SELECT c FROM ClientEntity c"),
+        @NamedQuery(name = "find_client_without_advisor", query = "SELECT c FROM ClientEntity c WHERE c.advisor IS NULL") })
 public abstract class ClientEntity implements Serializable {
 
     public static enum Type {
 
-        PRIVATE,
-        PROFESIONAL;
+        PRIVATE, PROFESIONAL;
 
         public static class Values {
 
@@ -84,8 +73,9 @@ public abstract class ClientEntity implements Serializable {
     @JoinColumn(name = "advisor_fk")
     private AdvisorEntity advisor;
 
-    public ClientEntity(String login, String password, String email, Integer number, String street, String city,
-            String state, String phone, Boolean notify, AdvisorEntity advisor) {
+    public ClientEntity(String login, String password, String email,
+            Integer number, String street, String city, String state,
+            String phone, Boolean notify, AdvisorEntity advisor) {
         this.login = login;
         this.password = password;
         this.email = email;

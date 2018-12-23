@@ -17,7 +17,8 @@ public class FakePaymentMeanException extends FakeEntityException {
         super(cause);
     }
 
-    public FakePaymentMeanException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public FakePaymentMeanException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

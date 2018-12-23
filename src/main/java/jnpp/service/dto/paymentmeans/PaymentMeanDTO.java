@@ -4,16 +4,13 @@ public abstract class PaymentMeanDTO {
 
     public static enum Type {
 
-        BANKCARD,
-        CHECKBOOK;
+        BANKCARD, CHECKBOOK;
 
     }
 
     public static enum Status {
 
-        ORDERED,
-        ARRIVED,
-        DELIVERED;
+        ORDERED, ARRIVED, DELIVERED;
 
         public Status next() {
             Status[] status = values();

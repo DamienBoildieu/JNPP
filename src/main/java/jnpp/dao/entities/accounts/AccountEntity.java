@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.movements.MovementEntity;
 import jnpp.service.dto.accounts.AccountDTO;
@@ -23,35 +25,19 @@ import jnpp.service.dto.accounts.AccountDTO;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
-    @NamedQuery(
-            name = "find_all_rib",
-            query = "SELECT a.rib FROM AccountEntity a")
-    ,
-    @NamedQuery(
-            name = "find_all_account_by_login",
-            query = "SELECT a "
-            + "FROM AccountEntity a "
-            + "INNER JOIN a.clients a_clients "
-            + "WHERE a_clients.login = :login")
-    ,
-    @NamedQuery(
-            name = "has_account",
-            query = "SELECT COUNT(a) "
-            + "FROM AccountEntity a "
-            + "INNER JOIN a.clients a_clients "
-            + "WHERE a_clients.login = :login")
-    ,
-    @NamedQuery(
-            name = "find_all_account",
-            query = "SELECT a FROM AccountEntity a")})
+        @NamedQuery(name = "find_all_rib", query = "SELECT a.rib FROM AccountEntity a"),
+        @NamedQuery(name = "find_all_account_by_login", query = "SELECT a "
+                + "FROM AccountEntity a " + "INNER JOIN a.clients a_clients "
+                + "WHERE a_clients.login = :login"),
+        @NamedQuery(name = "has_account", query = "SELECT COUNT(a) "
+                + "FROM AccountEntity a " + "INNER JOIN a.clients a_clients "
+                + "WHERE a_clients.login = :login"),
+        @NamedQuery(name = "find_all_account", query = "SELECT a FROM AccountEntity a") })
 public abstract class AccountEntity implements Serializable {
 
     public static enum Type {
 
-        CURRENT,
-        JOINT,
-        SAVING,
-        SHARE;
+        CURRENT, JOINT, SAVING, SHARE;
 
         public static class Values {
 
@@ -72,10 +58,7 @@ public abstract class AccountEntity implements Serializable {
     @Id
     private String rib;
 
-    @JoinTable(
-            name = "account_client",
-            joinColumns = @JoinColumn(name = "account_rib"),
-            inverseJoinColumns = @JoinColumn(name = "client_login"))
+    @JoinTable(name = "account_client", joinColumns = @JoinColumn(name = "account_rib"), inverseJoinColumns = @JoinColumn(name = "client_login"))
     @ManyToMany
     private List<ClientEntity> clients = new ArrayList<ClientEntity>();
 
@@ -135,7 +118,8 @@ public abstract class AccountEntity implements Serializable {
             return false;
         }
         AccountEntity other = (AccountEntity) object;
-        return !((this.rib == null && other.rib != null) || (this.rib != null && !this.rib.equals(other.rib)));
+        return !((this.rib == null && other.rib != null)
+                || (this.rib != null && !this.rib.equals(other.rib)));
     }
 
     public abstract AccountDTO toDTO();

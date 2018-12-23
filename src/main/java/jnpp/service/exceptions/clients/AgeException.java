@@ -17,7 +17,8 @@ public class AgeException extends ClientException {
         super(cause);
     }
 
-    public AgeException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public AgeException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

@@ -2,10 +2,12 @@ package jnpp.dao.entities.movements;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
 import jnpp.dao.entities.accounts.CurrencyEntity;
 import jnpp.dao.entities.paymentmeans.PaymentMeanEntity;
 import jnpp.service.dto.movements.PaymentDTO;
@@ -26,8 +28,8 @@ public class PaymentEntity extends MoneyMovementEntity implements Serializable {
     }
 
     public PaymentEntity(Date date, String ribFrom, Double money,
-            CurrencyEntity currency, String target, PaymentMeanEntity paymentMean,
-            String label) {
+            CurrencyEntity currency, String target,
+            PaymentMeanEntity paymentMean, String label) {
         super(date, ribFrom, money, currency, label);
         this.target = target;
         this.paymentMean = paymentMean;
@@ -56,12 +58,14 @@ public class PaymentEntity extends MoneyMovementEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "jnpp.dao.entities.movements.PaymentEntity[ id=" + getId() + " ]";
+        return "jnpp.dao.entities.movements.PaymentEntity[ id=" + getId()
+                + " ]";
     }
 
     @Override
     public PaymentDTO toDTO() {
-        return new PaymentDTO(getDate(), getRibFrom(), getMoney(), getCurrency().toDTO(), target, getLabel());
+        return new PaymentDTO(getDate(), getRibFrom(), getMoney(),
+                getCurrency().toDTO(), target, getLabel());
     }
 
 }

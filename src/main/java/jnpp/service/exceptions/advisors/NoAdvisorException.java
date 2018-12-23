@@ -17,7 +17,8 @@ public class NoAdvisorException extends AdvisorException {
         super(cause);
     }
 
-    public NoAdvisorException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public NoAdvisorException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

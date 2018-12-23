@@ -17,7 +17,8 @@ public class FakeNotificationException extends FakeEntityException {
         super(cause);
     }
 
-    public FakeNotificationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public FakeNotificationException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

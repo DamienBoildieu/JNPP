@@ -1,6 +1,7 @@
 package jnpp.controller.views.info;
 
 import java.util.List;
+
 import jnpp.controller.views.alerts.AlertMessage;
 
 /**
@@ -32,7 +33,7 @@ public class ConnectedInfo extends ViewInfo {
     /**
      * Constructeur
      *
-     * @param name le nom de l'utilisateur
+     * @param name  le nom de l'utilisateur
      * @param notif indicateur de notification
      */
     public ConnectedInfo(String name, boolean notif) {
@@ -44,7 +45,7 @@ public class ConnectedInfo extends ViewInfo {
     /**
      * Constructeur avec une alerte
      *
-     * @param name Nom du client.
+     * @param name  Nom du client.
      * @param alert une alerte
      */
     public ConnectedInfo(String name, AlertMessage alert) {
@@ -56,7 +57,7 @@ public class ConnectedInfo extends ViewInfo {
     /**
      * Constructeur avec une liste d'alertes
      *
-     * @param name Nom du client.
+     * @param name   Nom du client.
      * @param alerts les alertes
      */
     public ConnectedInfo(String name, List<AlertMessage> alerts) {
@@ -68,11 +69,12 @@ public class ConnectedInfo extends ViewInfo {
     /**
      * Constructeur avec indicateur de notification
      *
-     * @param name Nom du client.
+     * @param name   Nom du client.
      * @param alerts les alertes
-     * @param notif indique si il y a de nouvelles notifications
+     * @param notif  indique si il y a de nouvelles notifications
      */
-    public ConnectedInfo(String name, List<AlertMessage> alerts, boolean notif) {
+    public ConnectedInfo(String name, List<AlertMessage> alerts,
+            boolean notif) {
         super(true, alerts);
         hasNotif = notif;
         userName = name;
@@ -81,7 +83,7 @@ public class ConnectedInfo extends ViewInfo {
     /**
      * Constructeur avec indicateur de notification
      *
-     * @param name Nom du client.
+     * @param name  Nom du client.
      * @param alert les alertes
      * @param notif indique si il y a de nouvelles notifications
      */

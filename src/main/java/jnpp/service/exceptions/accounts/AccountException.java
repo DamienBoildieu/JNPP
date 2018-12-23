@@ -19,7 +19,8 @@ public abstract class AccountException extends ServiceException {
         super(cause);
     }
 
-    public AccountException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public AccountException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

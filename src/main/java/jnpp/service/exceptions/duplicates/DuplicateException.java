@@ -19,7 +19,8 @@ public abstract class DuplicateException extends ServiceException {
         super(cause);
     }
 
-    public DuplicateException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public DuplicateException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

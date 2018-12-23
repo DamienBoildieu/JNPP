@@ -17,7 +17,8 @@ public class FakeAccountException extends FakeEntityException {
         super(cause);
     }
 
-    public FakeAccountException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public FakeAccountException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

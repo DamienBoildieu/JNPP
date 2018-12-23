@@ -2,13 +2,17 @@ package jnpp.dao.repositories;
 
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Query;
-import jnpp.dao.entities.movements.MovementEntity;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import jnpp.dao.entities.movements.MovementEntity;
+
 @Repository
-public class MovementDAOImpl extends GenericDAOImpl<MovementEntity> implements MovementDAO {
+public class MovementDAOImpl extends GenericDAOImpl<MovementEntity>
+        implements MovementDAO {
 
     @Transactional(readOnly = true)
     @Override

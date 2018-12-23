@@ -1,17 +1,20 @@
 package jnpp.controller.banker;
 
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
-import jnpp.service.dto.AddressDTO;
-import jnpp.service.dto.IdentityDTO;
-import jnpp.service.dto.advisor.AdvisorDTO;
-import jnpp.service.exceptions.duplicates.DuplicateAdvisorException;
-import jnpp.service.services.BankerService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import jnpp.service.dto.AddressDTO;
+import jnpp.service.dto.IdentityDTO;
+import jnpp.service.dto.advisor.AdvisorDTO;
+import jnpp.service.exceptions.duplicates.DuplicateAdvisorException;
+import jnpp.service.services.BankerService;
 
 /**
  * Contrôleur des conseillers
@@ -26,8 +29,8 @@ public class AdvisorsController {
     /**
      * Adresse par défaut d'un conseiller
      */
-    private static final AddressDTO DEFAULT_ADDRESS
-            = new AddressDTO(1, "Grand rue ", "Poitiers", "France");
+    private static final AddressDTO DEFAULT_ADDRESS = new AddressDTO(1,
+            "Grand rue ", "Poitiers", "France");
     /**
      * Conseiller par défaut
      */

@@ -1,17 +1,20 @@
 package jnpp.controller.banker;
 
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
-import jnpp.service.dto.accounts.CurrencyDTO;
-import jnpp.service.dto.accounts.ShareDTO;
-import jnpp.service.exceptions.duplicates.DuplicateShareException;
-import jnpp.service.services.AccountService;
-import jnpp.service.services.BankerService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import jnpp.service.dto.accounts.CurrencyDTO;
+import jnpp.service.dto.accounts.ShareDTO;
+import jnpp.service.exceptions.duplicates.DuplicateShareException;
+import jnpp.service.services.AccountService;
+import jnpp.service.services.BankerService;
 
 /**
  * Vue sur la création d'actions
@@ -41,8 +44,7 @@ public class SharesController {
      * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "banquier/actions", method = RequestMethod.GET)
-    protected ModelAndView sharesGet()
-            throws Exception {
+    protected ModelAndView sharesGet() throws Exception {
         List<ShareDTO> shares = accountService.getShares();
         ModelAndView mv = new ModelAndView("banker/shares_board");
         mv.addObject("shares", shares);
@@ -61,9 +63,11 @@ public class SharesController {
             throws Exception {
         String name = request.getParameter("name");
         String value = request.getParameter("value");
-        if (name != null && name.length() > 0 && value != null && value.length() > 0) {
+        if (name != null && name.length() > 0 && value != null
+                && value.length() > 0) {
             try {
-                bankerService.addShare(name, Double.valueOf(value), DEFAULT_CURRENCY);
+                bankerService.addShare(name, Double.valueOf(value),
+                        DEFAULT_CURRENCY);
             } catch (IllegalArgumentException e) {
             } catch (DuplicateShareException e) {
             }

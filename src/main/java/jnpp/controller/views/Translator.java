@@ -2,6 +2,7 @@ package jnpp.controller.views;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.accounts.CurrencyDTO;
@@ -56,10 +57,10 @@ public class Translator {
      */
     public Map<CurrencyDTO, String> translateCurrency(Language lang) {
         switch (lang) {
-            case FR:
-                return currencyToFrench();
-            default:
-                throw new AssertionError(lang.name());
+        case FR:
+            return currencyToFrench();
+        default:
+            throw new AssertionError(lang.name());
         }
     }
 
@@ -72,11 +73,11 @@ public class Translator {
         Map<CurrencyDTO, String> map = new HashMap<CurrencyDTO, String>();
         for (CurrencyDTO currency : CurrencyDTO.values()) {
             switch (currency) {
-                case EURO:
-                    map.put(currency, "EUR");
-                    break;
-                default:
-                    throw new AssertionError(currency.name());
+            case EURO:
+                map.put(currency, "EUR");
+                break;
+            default:
+                throw new AssertionError(currency.name());
             }
         }
         return map;
@@ -90,10 +91,10 @@ public class Translator {
      */
     public Map<IdentityDTO.Gender, String> translateGenders(Language lang) {
         switch (lang) {
-            case FR:
-                return gendersToFrench();
-            default:
-                throw new AssertionError(lang.name());
+        case FR:
+            return gendersToFrench();
+        default:
+            throw new AssertionError(lang.name());
         }
     }
 
@@ -106,14 +107,14 @@ public class Translator {
         Map<IdentityDTO.Gender, String> map = new HashMap<IdentityDTO.Gender, String>();
         for (IdentityDTO.Gender gender : IdentityDTO.Gender.values()) {
             switch (gender) {
-                case MALE:
-                    map.put(gender, "Homme");
-                    break;
-                case FEMALE:
-                    map.put(gender, "Femme");
-                    break;
-                default:
-                    throw new AssertionError(gender.name());
+            case MALE:
+                map.put(gender, "Homme");
+                break;
+            case FEMALE:
+                map.put(gender, "Femme");
+                break;
+            default:
+                throw new AssertionError(gender.name());
             }
         }
         return map;
@@ -127,10 +128,10 @@ public class Translator {
      */
     public Map<AccountDTO.Type, String> translateAccounts(Language lang) {
         switch (lang) {
-            case FR:
-                return accountsToFrench();
-            default:
-                throw new AssertionError(lang.name());
+        case FR:
+            return accountsToFrench();
+        default:
+            throw new AssertionError(lang.name());
         }
     }
 
@@ -143,20 +144,20 @@ public class Translator {
         Map<AccountDTO.Type, String> map = new HashMap<AccountDTO.Type, String>();
         for (AccountDTO.Type type : AccountDTO.Type.values()) {
             switch (type) {
-                case CURRENT:
-                    map.put(type, "Compte courrant");
-                    break;
-                case JOINT:
-                    map.put(type, "Compte joint");
-                    break;
-                case SAVING:
-                    map.put(type, "Compte dépôt");
-                    break;
-                case SHARE:
-                    map.put(type, "Compte titres");
-                    break;
-                default:
-                    throw new AssertionError(type.name());
+            case CURRENT:
+                map.put(type, "Compte courrant");
+                break;
+            case JOINT:
+                map.put(type, "Compte joint");
+                break;
+            case SAVING:
+                map.put(type, "Compte dépôt");
+                break;
+            case SHARE:
+                map.put(type, "Compte titres");
+                break;
+            default:
+                throw new AssertionError(type.name());
             }
         }
         return map;
@@ -168,12 +169,13 @@ public class Translator {
      * @param lang la langue
      * @return la map des moyens de paiement avec les strings associées
      */
-    public Map<PaymentMeanDTO.Type, String> translatePaymentMean(Language lang) {
+    public Map<PaymentMeanDTO.Type, String> translatePaymentMean(
+            Language lang) {
         switch (lang) {
-            case FR:
-                return paymentMeanToFrench();
-            default:
-                throw new AssertionError(lang.name());
+        case FR:
+            return paymentMeanToFrench();
+        default:
+            throw new AssertionError(lang.name());
         }
     }
 
@@ -186,14 +188,14 @@ public class Translator {
         Map<PaymentMeanDTO.Type, String> map = new HashMap<PaymentMeanDTO.Type, String>();
         for (PaymentMeanDTO.Type type : PaymentMeanDTO.Type.values()) {
             switch (type) {
-                case BANKCARD:
-                    map.put(type, "carte bancaire");
-                    break;
-                case CHECKBOOK:
-                    map.put(type, "chéquier");
-                    break;
-                default:
-                    throw new AssertionError(type.name());
+            case BANKCARD:
+                map.put(type, "carte bancaire");
+                break;
+            case CHECKBOOK:
+                map.put(type, "chéquier");
+                break;
+            default:
+                throw new AssertionError(type.name());
             }
         }
         return map;
@@ -205,12 +207,13 @@ public class Translator {
      * @param lang la langue
      * @return la map des statuts des commandes avec les strings associées
      */
-    public Map<PaymentMeanDTO.Status, String> translatePaymentMeanStatus(Language lang) {
+    public Map<PaymentMeanDTO.Status, String> translatePaymentMeanStatus(
+            Language lang) {
         switch (lang) {
-            case FR:
-                return paymentMeanStatusToFrench();
-            default:
-                throw new AssertionError(lang.name());
+        case FR:
+            return paymentMeanStatusToFrench();
+        default:
+            throw new AssertionError(lang.name());
         }
     }
 
@@ -223,17 +226,17 @@ public class Translator {
         Map<PaymentMeanDTO.Status, String> map = new HashMap<PaymentMeanDTO.Status, String>();
         for (PaymentMeanDTO.Status status : PaymentMeanDTO.Status.values()) {
             switch (status) {
-                case ORDERED:
-                    map.put(status, "Commandé");
-                    break;
-                case ARRIVED:
-                    map.put(status, "Arrivé");
-                    break;
-                case DELIVERED:
-                    map.put(status, "Récupéré");
-                    break;
-                default:
-                    throw new AssertionError(status.name());
+            case ORDERED:
+                map.put(status, "Commandé");
+                break;
+            case ARRIVED:
+                map.put(status, "Arrivé");
+                break;
+            case DELIVERED:
+                map.put(status, "Récupéré");
+                break;
+            default:
+                throw new AssertionError(status.name());
             }
         }
         return map;

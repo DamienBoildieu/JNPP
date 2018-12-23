@@ -4,10 +4,7 @@ public abstract class AccountDTO {
 
     public static enum Type {
 
-        CURRENT,
-        JOINT,
-        SAVING,
-        SHARE;
+        CURRENT, JOINT, SAVING, SHARE;
 
     }
 

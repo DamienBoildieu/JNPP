@@ -17,7 +17,8 @@ public class AmountException extends MovementException {
         super(cause);
     }
 
-    public AmountException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public AmountException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

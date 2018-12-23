@@ -9,7 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+
 import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
 import jnpp.dao.entities.IdentityEntity;
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.accounts.CloseRequestEntity;
@@ -48,7 +52,6 @@ import jnpp.service.exceptions.duplicates.DuplicateAccountException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeSavingBookException;
 import jnpp.service.exceptions.owners.AccountOwnerException;
-import org.springframework.stereotype.Service;
 
 @Service("AccountService")
 public class AccountServiceImpl implements AccountService {
@@ -91,7 +94,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AccountDTO> getAccounts(String login) throws FakeClientException {
+    public List<AccountDTO> getAccounts(String login)
+            throws FakeClientException {
         if (login == null) {
             throw new IllegalArgumentException();
         }
@@ -104,7 +108,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public ShareAccountDTO getShareAccount(String login) throws FakeClientException {
+    public ShareAccountDTO getShareAccount(String login)
+            throws FakeClientException {
         if (login == null) {
             throw new IllegalArgumentException();
         }
@@ -116,13 +121,15 @@ public class AccountServiceImpl implements AccountService {
         if (account == null) {
             return null;
         }
-        List<ShareTitleEntity> shareTitles = shareTitleDAO.findAllByRib(account.getRib());
+        List<ShareTitleEntity> shareTitles = shareTitleDAO
+                .findAllByRib(account.getRib());
         account.setShareTitles(shareTitles);
         return account.toDTO();
     }
 
     @Override
-    public CurrentAccountDTO openCurrentAccount(String login) throws DuplicateAccountException, FakeClientException {
+    public CurrentAccountDTO openCurrentAccount(String login)
+            throws DuplicateAccountException, FakeClientException {
         if (login == null) {
             throw new IllegalArgumentException();
         }
@@ -134,13 +141,16 @@ public class AccountServiceImpl implements AccountService {
             throw new DuplicateAccountException();
         }
         String rib = generateNewRib();
-        CurrentAccountEntity account = new CurrentAccountEntity(rib, client, DEFAULT_MONEY, DEFAULT_CURRENCY, DEFAULT_LIMIT);
+        CurrentAccountEntity account = new CurrentAccountEntity(rib, client,
+                DEFAULT_MONEY, DEFAULT_CURRENCY, DEFAULT_LIMIT);
         account = (CurrentAccountEntity) accountDAO.save(account);
         return account.toDTO();
     }
 
     @Override
-    public JointAccountDTO openJointAccount(String login, List<IdentityDTO> identities) throws FakeClientException, UnknownIdentityException, ClientTypeException {
+    public JointAccountDTO openJointAccount(String login,
+            List<IdentityDTO> identities) throws FakeClientException,
+            UnknownIdentityException, ClientTypeException {
         if (login == null || identities == null || identities.size() < 2) {
             throw new IllegalArgumentException();
         }
@@ -156,7 +166,9 @@ public class AccountServiceImpl implements AccountService {
         Iterator<IdentityDTO> ite = identities.iterator();
         while (ite.hasNext()) {
             IdentityEntity identity = IdentityEntity.toEntity(ite.next());
-            PrivateEntity currentClient = clientDAO.findPrivateByIdentity(identity.getGender(), identity.getFirstname(), identity.getLastname());
+            PrivateEntity currentClient = clientDAO.findPrivateByIdentity(
+                    identity.getGender(), identity.getFirstname(),
+                    identity.getLastname());
             if (currentClient == null) {
                 throw new UnknownIdentityException();
             } else {
@@ -167,16 +179,20 @@ public class AccountServiceImpl implements AccountService {
             }
         }
         if (!clientFound) {
-            throw new IllegalStateException("Le login ne fait pas reference a une identite contenue dans la liste.");
+            throw new IllegalStateException(
+                    "Le login ne fait pas reference a une identite contenue dans la liste.");
         }
         String rib = generateNewRib();
-        JointAccountEntity account = new JointAccountEntity(rib, clients, DEFAULT_MONEY, DEFAULT_CURRENCY);
+        JointAccountEntity account = new JointAccountEntity(rib, clients,
+                DEFAULT_MONEY, DEFAULT_CURRENCY);
         account = (JointAccountEntity) accountDAO.save(account);
         return account.toDTO();
     }
 
     @Override
-    public SavingAccountDTO openSavingAccount(String login, String name) throws FakeClientException, FakeSavingBookException, DuplicateAccountException, ClientTypeException {
+    public SavingAccountDTO openSavingAccount(String login, String name)
+            throws FakeClientException, FakeSavingBookException,
+            DuplicateAccountException, ClientTypeException {
         if (login == null || name == null) {
             throw new IllegalArgumentException();
         }
@@ -195,13 +211,15 @@ public class AccountServiceImpl implements AccountService {
             throw new DuplicateAccountException();
         }
         String rib = generateNewRib();
-        SavingAccountEntity account = new SavingAccountEntity(rib, client, DEFAULT_MONEY, DEFAULT_CURRENCY, savingBook);
+        SavingAccountEntity account = new SavingAccountEntity(rib, client,
+                DEFAULT_MONEY, DEFAULT_CURRENCY, savingBook);
         account = (SavingAccountEntity) accountDAO.save(account);
         return account.toDTO();
     }
 
     @Override
-    public ShareAccountDTO openShareAccount(String login) throws FakeClientException, DuplicateAccountException {
+    public ShareAccountDTO openShareAccount(String login)
+            throws FakeClientException, DuplicateAccountException {
         if (login == null) {
             throw new IllegalArgumentException();
         }
@@ -219,7 +237,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void closeAccount(String login, String rib) throws FakeClientException, AccountOwnerException, ClosureException, CloseRequestException {
+    public void closeAccount(String login, String rib)
+            throws FakeClientException, AccountOwnerException, ClosureException,
+            CloseRequestException {
         if (login == null || rib == null) {
             throw new IllegalArgumentException();
         }
@@ -232,36 +252,41 @@ public class AccountServiceImpl implements AccountService {
             throw new AccountOwnerException();
         }
         switch (account.getType()) {
-            case CURRENT:
-                closeAccount((CurrentAccountEntity) account);
+        case CURRENT:
+            closeAccount((CurrentAccountEntity) account);
+            break;
+        case JOINT:
+            switch (client.getType()) {
+            case PRIVATE:
+                closeAccount((JointAccountEntity) account,
+                        (PrivateEntity) client);
                 break;
-            case JOINT:
-                switch (client.getType()) {
-                    case PRIVATE:
-                        closeAccount((JointAccountEntity) account, (PrivateEntity) client);
-                        break;
-                    case PROFESIONAL:
-                        throw new IllegalStateException("Un professionel a ferme un compte joint.");
-                }
+            case PROFESIONAL:
+                throw new IllegalStateException(
+                        "Un professionel a ferme un compte joint.");
+            }
+            break;
+        case SAVING:
+            switch (client.getType()) {
+            case PRIVATE:
+                closeAccount((SavingAccountEntity) account);
                 break;
-            case SAVING:
-                switch (client.getType()) {
-                    case PRIVATE:
-                        closeAccount((SavingAccountEntity) account);
-                        break;
-                    case PROFESIONAL:
-                        throw new IllegalStateException("Un professionel a ferme un compte joint.");
-                }
-                break;
-            case SHARE:
-                closeAccount((ShareAccountEntity) account);
-                break;
+            case PROFESIONAL:
+                throw new IllegalStateException(
+                        "Un professionel a ferme un compte joint.");
+            }
+            break;
+        case SHARE:
+            closeAccount((ShareAccountEntity) account);
+            break;
         }
     }
 
-    private void closeAccount(CurrentAccountEntity account) throws ClosureException {
+    private void closeAccount(CurrentAccountEntity account)
+            throws ClosureException {
         if (account.getClients() != null && account.getClients().size() > 1) {
-            throw new IllegalStateException("Un compte courant a plusieurs proprietaires.");
+            throw new IllegalStateException(
+                    "Un compte courant a plusieurs proprietaires.");
         }
         if (account.getMoney() != 0) {
             throw new ClosureException();
@@ -269,9 +294,11 @@ public class AccountServiceImpl implements AccountService {
         accountDAO.delete(account);
     }
 
-    private void closeAccount(JointAccountEntity account, PrivateEntity client) throws ClosureException, CloseRequestException {
+    private void closeAccount(JointAccountEntity account, PrivateEntity client)
+            throws ClosureException, CloseRequestException {
         if (account.getClients() != null && account.getClients().size() < 2) {
-            throw new IllegalStateException("Un compte joint n'a que un seul proprietaire.");
+            throw new IllegalStateException(
+                    "Un compte joint n'a que un seul proprietaire.");
         }
 
         if (account.getMoney() != 0) {
@@ -280,7 +307,8 @@ public class AccountServiceImpl implements AccountService {
 
         List<ClientEntity> clients = account.getClients();
         if (clients.isEmpty()) {
-            throw new IllegalStateException("Probleme de AccountEntity.getClients().");
+            throw new IllegalStateException(
+                    "Probleme de AccountEntity.getClients().");
         }
 
         Map<ClientEntity, Boolean> map = new HashMap<ClientEntity, Boolean>();
@@ -289,12 +317,14 @@ public class AccountServiceImpl implements AccountService {
             map.put(itc.next(), false);
         }
 
-        List<CloseRequestEntity> requests = closeRequestDAO.findAllByRib(account.getRib());
+        List<CloseRequestEntity> requests = closeRequestDAO
+                .findAllByRib(account.getRib());
         Iterator<CloseRequestEntity> itr = requests.iterator();
         while (itr.hasNext()) {
             ClientEntity currentClient = itr.next().getClient();
             if (map.get(currentClient) == null) {
-                throw new IllegalStateException("Un client non proprietaire d'un compte joint a emis une requete de fermeture sur ce compte joint.");
+                throw new IllegalStateException(
+                        "Un client non proprietaire d'un compte joint a emis une requete de fermeture sur ce compte joint.");
             } else {
                 map.put(currentClient, true);
             }
@@ -307,7 +337,8 @@ public class AccountServiceImpl implements AccountService {
             } else {
                 map.put(client, true);
                 if (map.containsValue(false)) {
-                    closeRequestDAO.save(new CloseRequestEntity(client, account));
+                    closeRequestDAO
+                            .save(new CloseRequestEntity(client, account));
                     throw new CloseRequestException();
                 }
             }
@@ -320,9 +351,11 @@ public class AccountServiceImpl implements AccountService {
         accountDAO.delete(account);
     }
 
-    private void closeAccount(SavingAccountEntity account) throws ClosureException {
+    private void closeAccount(SavingAccountEntity account)
+            throws ClosureException {
         if (account.getClients() != null && account.getClients().size() > 1) {
-            throw new IllegalStateException("Un compte livret a plusieurs proprietaires.");
+            throw new IllegalStateException(
+                    "Un compte livret a plusieurs proprietaires.");
         }
         if (account.getMoney() != 0) {
             throw new ClosureException();
@@ -330,9 +363,11 @@ public class AccountServiceImpl implements AccountService {
         accountDAO.delete(account);
     }
 
-    private void closeAccount(ShareAccountEntity account) throws ClosureException {
+    private void closeAccount(ShareAccountEntity account)
+            throws ClosureException {
         if (account.getClients() != null && account.getClients().size() > 1) {
-            throw new IllegalStateException("Un compte d'actions a plusieurs proprietaires.");
+            throw new IllegalStateException(
+                    "Un compte d'actions a plusieurs proprietaires.");
         }
         if (!account.getShareTitles().isEmpty()) {
             throw new ClosureException();
@@ -341,7 +376,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<MovementDTO> getMovements(String login, String rib) throws FakeClientException, AccountOwnerException {
+    public List<MovementDTO> getMovements(String login, String rib)
+            throws FakeClientException, AccountOwnerException {
         if (login == null || rib == null) {
             throw new IllegalArgumentException();
         }
@@ -357,7 +393,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<MovementDTO> getMovements(String login, String rib, int n) throws FakeClientException, AccountOwnerException {
+    public List<MovementDTO> getMovements(String login, String rib, int n)
+            throws FakeClientException, AccountOwnerException {
         if (login == null || rib == null || n < 0) {
             throw new IllegalArgumentException();
         }
@@ -373,7 +410,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<MovementDTO> getMovements(String login, String rib, Date date) throws FakeClientException, AccountOwnerException {
+    public List<MovementDTO> getMovements(String login, String rib, Date date)
+            throws FakeClientException, AccountOwnerException {
         if (login == null || rib == null || date == null) {
             throw new IllegalArgumentException();
         }

@@ -17,7 +17,8 @@ public class CloseRequestException extends AccountException {
         super(cause);
     }
 
-    public CloseRequestException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public CloseRequestException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

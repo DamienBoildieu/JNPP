@@ -1,14 +1,18 @@
 package jnpp.dao.repositories;
 
 import java.util.List;
+
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import jnpp.dao.entities.accounts.SavingBookEntity;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import jnpp.dao.entities.accounts.SavingBookEntity;
+
 @Repository
-public class SavingBookDAOImpl extends GenericDAOImpl<SavingBookEntity> implements SavingBookDAO {
+public class SavingBookDAOImpl extends GenericDAOImpl<SavingBookEntity>
+        implements SavingBookDAO {
 
     @Transactional(readOnly = true)
     @Override

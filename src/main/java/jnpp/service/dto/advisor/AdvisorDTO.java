@@ -10,7 +10,8 @@ public class AdvisorDTO {
     private String phone;
     private AddressDTO officeAddress;
 
-    public AdvisorDTO(IdentityDTO identity, String email, String phone, AddressDTO officeAddress) {
+    public AdvisorDTO(IdentityDTO identity, String email, String phone,
+            AddressDTO officeAddress) {
         this.identity = identity;
         this.email = email;
         this.phone = phone;

@@ -2,8 +2,10 @@ package jnpp.dao.entities.movements;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+
 import jnpp.dao.entities.accounts.ShareEntity;
 import jnpp.service.dto.movements.PurchaseDTO;
 
@@ -28,12 +30,14 @@ public class PurchaseEntity extends ShareTradeEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "jnpp.dao.entities.transactions.PurchaseEntity[ id=" + getId() + " ]";
+        return "jnpp.dao.entities.transactions.PurchaseEntity[ id=" + getId()
+                + " ]";
     }
 
     @Override
     public PurchaseDTO toDTO() {
-        return new PurchaseDTO(getDate(), getRibFrom(), getRibTo(), getAmount(), getShare().toDTO(), getLabel());
+        return new PurchaseDTO(getDate(), getRibFrom(), getRibTo(), getAmount(),
+                getShare().toDTO(), getLabel());
     }
 
 }

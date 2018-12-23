@@ -17,7 +17,8 @@ public class FakeAdvisorException extends FakeEntityException {
         super(cause);
     }
 
-    public FakeAdvisorException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public FakeAdvisorException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

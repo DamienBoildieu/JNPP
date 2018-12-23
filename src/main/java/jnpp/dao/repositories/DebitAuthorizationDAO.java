@@ -1,18 +1,20 @@
 package jnpp.dao.repositories;
 
 import java.util.List;
+
 import jnpp.dao.entities.accounts.DebitAuthorizationEntity;
 
 /**
  * DAO des autorisations de débit
  */
-public interface DebitAuthorizationDAO extends GenericDAO<DebitAuthorizationEntity> {
+public interface DebitAuthorizationDAO
+        extends GenericDAO<DebitAuthorizationEntity> {
 
     /**
      * Recherche l'autorisation de débit entre deux comptes
      *
      * @param ribFrom l'émetteur de l'autorisation
-     * @param ribTo le compte autorisé à débiter
+     * @param ribTo   le compte autorisé à débiter
      * @return l'autorisation si elle existe, null sinon
      */
     DebitAuthorizationEntity findByRibFromRibTo(String ribFrom, String ribTo);
@@ -30,16 +32,17 @@ public interface DebitAuthorizationDAO extends GenericDAO<DebitAuthorizationEnti
      * compte
      *
      * @param login l'identifiant du client
-     * @param rib le compte
+     * @param rib   le compte
      * @return la liste des autorisations émises par un client pour un compte
      */
-    List<DebitAuthorizationEntity> findAllByLoginRibFrom(String login, String rib);
+    List<DebitAuthorizationEntity> findAllByLoginRibFrom(String login,
+            String rib);
 
     /**
      * Indique si un compte peut débiter un autre
      *
      * @param ribFrom le compte qui veut débiter
-     * @param ribTo le compte à débiter
+     * @param ribTo   le compte à débiter
      * @return true si il peut débiter, false sinon
      */
     boolean canDebit(String ribFrom, String ribTo);

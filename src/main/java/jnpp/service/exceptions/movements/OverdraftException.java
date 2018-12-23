@@ -17,7 +17,8 @@ public class OverdraftException extends MovementException {
         super(cause);
     }
 
-    public OverdraftException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public OverdraftException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

@@ -1,6 +1,7 @@
 package jnpp.controller;
 
 import javax.servlet.http.HttpSession;
+
 import jnpp.controller.exceptions.NullSessionException;
 import jnpp.controller.exceptions.UnconnectedException;
 import jnpp.controller.views.Translator;
@@ -23,7 +24,8 @@ public class SessionController {
      * @param session la session que l'on veut supprimer
      * @throws UnconnectedException si l'utilisateur n'est pas connecté
      */
-    public static void clearSession(HttpSession session) throws UnconnectedException {
+    public static void clearSession(HttpSession session)
+            throws UnconnectedException {
         if (SessionController.isConnected(session)) {
             session.removeAttribute("client");
             session.removeAttribute("hasNotif");
@@ -38,49 +40,56 @@ public class SessionController {
      * @param session la session a supprimer
      * @throws NullSessionException si la session vaut null
      */
-    public static void deleteSession(HttpSession session) throws NullSessionException {
+    public static void deleteSession(HttpSession session)
+            throws NullSessionException {
         if (session == null) {
             throw new NullSessionException();
         }
         session.invalidate();
     }
 
-    public static void setClient(HttpSession session, ClientDTO client) throws NullSessionException {
+    public static void setClient(HttpSession session, ClientDTO client)
+            throws NullSessionException {
         if (session == null) {
             throw new NullSessionException();
         }
         session.setAttribute("client", client);
     }
 
-    public static void setLanguage(HttpSession session, Translator.Language lang) throws NullSessionException {
+    public static void setLanguage(HttpSession session,
+            Translator.Language lang) throws NullSessionException {
         if (session == null) {
             throw new NullSessionException();
         }
         session.setAttribute("language", lang);
     }
 
-    public static void setHasNotif(HttpSession session, boolean hasNotif) throws NullSessionException {
+    public static void setHasNotif(HttpSession session, boolean hasNotif)
+            throws NullSessionException {
         if (session == null) {
             throw new NullSessionException();
         }
         session.setAttribute("hasNotif", hasNotif);
     }
 
-    public static ClientDTO getClient(HttpSession session) throws NullSessionException {
+    public static ClientDTO getClient(HttpSession session)
+            throws NullSessionException {
         if (session == null) {
             throw new NullSessionException();
         }
         return (ClientDTO) session.getAttribute("client");
     }
 
-    public static Translator.Language getLanguage(HttpSession session) throws NullSessionException {
+    public static Translator.Language getLanguage(HttpSession session)
+            throws NullSessionException {
         if (session == null) {
             throw new NullSessionException();
         }
         return (Translator.Language) session.getAttribute("language");
     }
 
-    public static Boolean getHasNotif(HttpSession session) throws NullSessionException {
+    public static Boolean getHasNotif(HttpSession session)
+            throws NullSessionException {
         if (session == null) {
             throw new NullSessionException();
         }
@@ -94,6 +103,7 @@ public class SessionController {
      * @return true si l'utilisateur a une session sur le site, false sinon
      */
     public static boolean isConnected(HttpSession session) {
-        return (session != null) && (session.getAttribute("client") != null) && (session.getAttribute("hasNotif") != null);
+        return (session != null) && (session.getAttribute("client") != null)
+                && (session.getAttribute("hasNotif") != null);
     }
 }

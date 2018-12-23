@@ -17,7 +17,8 @@ public class DuplicateShareException extends DuplicateException {
         super(cause);
     }
 
-    public DuplicateShareException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public DuplicateShareException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

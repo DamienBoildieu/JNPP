@@ -17,7 +17,8 @@ public class DuplicateSavingbookException extends DuplicateException {
         super(cause);
     }
 
-    public DuplicateSavingbookException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public DuplicateSavingbookException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

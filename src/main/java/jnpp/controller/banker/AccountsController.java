@@ -1,13 +1,15 @@
 package jnpp.controller.banker;
 
 import java.util.List;
-import jnpp.service.dto.accounts.AccountDTO;
-import jnpp.service.services.BankerService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import jnpp.service.dto.accounts.AccountDTO;
+import jnpp.service.services.BankerService;
 
 /**
  * Contrôleur des comptes de la banque

@@ -12,10 +12,10 @@ public enum CurrencyEntity {
 
     public static CurrencyEntity toEntity(CurrencyDTO dto) {
         switch (dto) {
-            case EURO:
-                return EURO;
-            default:
-                return null;
+        case EURO:
+            return EURO;
+        default:
+            return null;
         }
     }
 

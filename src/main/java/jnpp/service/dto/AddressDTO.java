@@ -7,7 +7,8 @@ public class AddressDTO {
     private String city;
     private String state;
 
-    public AddressDTO(Integer number, String street, String city, String state) {
+    public AddressDTO(Integer number, String street, String city,
+            String state) {
         this.number = number;
         this.street = street;
         this.city = city;

@@ -17,7 +17,8 @@ public class DuplicateAccountException extends DuplicateException {
         super(cause);
     }
 
-    public DuplicateAccountException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public DuplicateAccountException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

@@ -17,7 +17,8 @@ public class FakeDebitAuthorizationException extends FakeEntityException {
         super(cause);
     }
 
-    public FakeDebitAuthorizationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public FakeDebitAuthorizationException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

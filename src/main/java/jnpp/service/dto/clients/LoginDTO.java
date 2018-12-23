@@ -8,7 +8,8 @@ public class LoginDTO {
     private String name;
     private String email;
 
-    public LoginDTO(String login, String password, ClientDTO.Type type, String name, String email) {
+    public LoginDTO(String login, String password, ClientDTO.Type type,
+            String name, String email) {
         this.login = login;
         this.password = password;
         this.type = type;

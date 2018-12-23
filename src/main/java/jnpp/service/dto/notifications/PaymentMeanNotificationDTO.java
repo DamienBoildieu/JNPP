@@ -1,13 +1,15 @@
 package jnpp.service.dto.notifications;
 
 import java.util.Date;
+
 import jnpp.service.dto.paymentmeans.PaymentMeanDTO;
 
 public class PaymentMeanNotificationDTO extends NotificationDTO {
 
     private PaymentMeanDTO paymentMean;
 
-    public PaymentMeanNotificationDTO(Long id, Date date, Boolean seen, PaymentMeanDTO paymentMean) {
+    public PaymentMeanNotificationDTO(Long id, Date date, Boolean seen,
+            PaymentMeanDTO paymentMean) {
         super(id, date, seen);
         this.paymentMean = paymentMean;
     }

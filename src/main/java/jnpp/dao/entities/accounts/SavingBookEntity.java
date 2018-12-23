@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,17 +12,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+
 import jnpp.service.dto.accounts.SavingBookDTO;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(
-            name = "find_savingbook_by_name",
-            query = "SELECT s FROM SavingBookEntity s WHERE s.name = :name")
-    ,
-    @NamedQuery(
-            name = "find_all_savingbook",
-            query = "SELECT s FROM SavingBookEntity s")})
+        @NamedQuery(name = "find_savingbook_by_name", query = "SELECT s FROM SavingBookEntity s WHERE s.name = :name"),
+        @NamedQuery(name = "find_all_savingbook", query = "SELECT s FROM SavingBookEntity s") })
 public class SavingBookEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -91,7 +88,8 @@ public class SavingBookEntity implements Serializable {
             return false;
         }
         SavingBookEntity other = (SavingBookEntity) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        return !((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override
@@ -104,7 +102,8 @@ public class SavingBookEntity implements Serializable {
     }
 
     public static List<SavingBookDTO> toDTO(List<SavingBookEntity> entities) {
-        List<SavingBookDTO> dtos = new ArrayList<SavingBookDTO>(entities.size());
+        List<SavingBookDTO> dtos = new ArrayList<SavingBookDTO>(
+                entities.size());
         Iterator<SavingBookEntity> it = entities.iterator();
         while (it.hasNext()) {
             dtos.add(it.next().toDTO());

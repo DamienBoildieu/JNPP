@@ -1,6 +1,7 @@
 package jnpp.service.dto.clients;
 
 import java.util.Date;
+
 import jnpp.service.dto.AddressDTO;
 import jnpp.service.dto.IdentityDTO;
 
@@ -9,7 +10,8 @@ public class PrivateDTO extends ClientDTO {
     private IdentityDTO identity;
     private Date birthday;
 
-    public PrivateDTO(String login, IdentityDTO identity, Date birthday, String email, AddressDTO address, String phone) {
+    public PrivateDTO(String login, IdentityDTO identity, Date birthday,
+            String email, AddressDTO address, String phone) {
         super(login, email, address, phone);
         this.identity = identity;
         this.birthday = birthday;

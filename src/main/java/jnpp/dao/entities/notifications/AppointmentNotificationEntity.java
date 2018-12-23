@@ -1,10 +1,12 @@
 package jnpp.dao.entities.notifications;
 
 import java.io.Serializable;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
 import jnpp.dao.entities.advisor.AppointmentEntity;
 import jnpp.service.dto.notifications.AppointmentNotificationDTO;
 
@@ -34,12 +36,14 @@ public class AppointmentNotificationEntity extends NotificationEntity
 
     @Override
     public String toString() {
-        return "jnpp.dao.entities.notifications.AppointmentNotificationEntity[ id=" + getId() + " ]";
+        return "jnpp.dao.entities.notifications.AppointmentNotificationEntity[ id="
+                + getId() + " ]";
     }
 
     @Override
     public AppointmentNotificationDTO toDTO() {
-        return new AppointmentNotificationDTO(getId(), getDate(), getSeen(), appointment.toDTO());
+        return new AppointmentNotificationDTO(getId(), getDate(), getSeen(),
+                appointment.toDTO());
     }
 
 }

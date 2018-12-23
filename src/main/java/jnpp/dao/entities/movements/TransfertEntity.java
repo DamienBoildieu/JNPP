@@ -2,8 +2,10 @@ package jnpp.dao.entities.movements;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+
 import jnpp.dao.entities.accounts.CurrencyEntity;
 import jnpp.service.dto.movements.TransfertDTO;
 
@@ -28,12 +30,14 @@ public class TransfertEntity extends MoneyTradeEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "jnpp.dao.entities.transactions.TransfertEntity[ id=" + getId() + " ]";
+        return "jnpp.dao.entities.transactions.TransfertEntity[ id=" + getId()
+                + " ]";
     }
 
     @Override
     public TransfertDTO toDTO() {
-        return new TransfertDTO(getDate(), getRibFrom(), getRibTo(), getMoney(), getCurrency().toDTO(), getLabel());
+        return new TransfertDTO(getDate(), getRibFrom(), getRibTo(), getMoney(),
+                getCurrency().toDTO(), getLabel());
     }
 
 }

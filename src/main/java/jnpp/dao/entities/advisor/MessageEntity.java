@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -17,36 +18,29 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.service.dto.advisor.MessageDTO;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(
-            name = "find_all_message_by_login",
-            query = "SELECT m FROM MessageEntity m "
-            + "WHERE m.client.login = :login "
-            + "ORDER BY m.date ASC")
-    ,
-    @NamedQuery(
-            name = "find_recent_message_by_login",
-            query = "SELECT m FROM MessageEntity m "
-            + "WHERE m.client.login = :login "
-            + "  AND m.date >= :date "
-            + "ORDER BY m.date ASC")})
+        @NamedQuery(name = "find_all_message_by_login", query = "SELECT m FROM MessageEntity m "
+                + "WHERE m.client.login = :login " + "ORDER BY m.date ASC"),
+        @NamedQuery(name = "find_recent_message_by_login", query = "SELECT m FROM MessageEntity m "
+                + "WHERE m.client.login = :login " + "  AND m.date >= :date "
+                + "ORDER BY m.date ASC") })
 public class MessageEntity implements Serializable {
 
     public static enum Direction {
 
-        CLIENT_TO_ADVISOR,
-        ADVISOR_TO_CLIENT;
+        CLIENT_TO_ADVISOR, ADVISOR_TO_CLIENT;
 
         public MessageDTO.Direction toDTO() {
             switch (ordinal()) {
-                case 0:
-                    return MessageDTO.Direction.CLIENT_TO_ADVISOR;
-                case 1:
-                    return MessageDTO.Direction.ADVISOR_TO_CLIENT;
+            case 0:
+                return MessageDTO.Direction.CLIENT_TO_ADVISOR;
+            case 1:
+                return MessageDTO.Direction.ADVISOR_TO_CLIENT;
             }
             return null;
         }
@@ -145,7 +139,8 @@ public class MessageEntity implements Serializable {
             return false;
         }
         MessageEntity other = (MessageEntity) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        return !((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override
@@ -154,7 +149,8 @@ public class MessageEntity implements Serializable {
     }
 
     public MessageDTO toDTO() {
-        return new MessageDTO(direction.toDTO(), date, content, advisor.toDTO());
+        return new MessageDTO(direction.toDTO(), date, content,
+                advisor.toDTO());
     }
 
     public static List<MessageDTO> toDTO(List<MessageEntity> entities) {

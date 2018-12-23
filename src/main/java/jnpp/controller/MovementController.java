@@ -2,8 +2,18 @@ package jnpp.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.Translator;
 import jnpp.controller.views.alerts.AlertEnum;
@@ -30,13 +40,6 @@ import jnpp.service.exceptions.owners.AccountOwnerException;
 import jnpp.service.services.AccountService;
 import jnpp.service.services.MovementService;
 import jnpp.service.services.NotificationService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Le contrôleur des transactions
@@ -67,19 +70,20 @@ public class MovementController {
     /**
      * Requête vers la vue des transactions
      *
-     * @param model le model contient les alertes si il y a eu un redirect
+     * @param model   le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
-     * transiter lors des redirections
+     * @param rm      objet dans lequel on ajoute les informations que l'on veut
+     *                voir transiter lors des redirections
      * @return La vue des transactions
      * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "movement", method = RequestMethod.GET)
-    private ModelAndView movement(Model model, HttpServletRequest request, RedirectAttributes rm)
-            throws Exception {
+    private ModelAndView movement(Model model, HttpServletRequest request,
+            RedirectAttributes rm) throws Exception {
 
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
+                .get("alerts");
         if (session == null) {
             session = request.getSession(true);
         }
@@ -92,14 +96,19 @@ public class MovementController {
         Boolean hasNotif = SessionController.getHasNotif(session);
         if (!hasNotif) {
             try {
-                hasNotif = notifService.receiveUnseenNotifications(SessionController.getClient(session).getLogin()).size() > 0;
+                hasNotif = notifService
+                        .receiveUnseenNotifications(
+                                SessionController.getClient(session).getLogin())
+                        .size() > 0;
                 SessionController.setHasNotif(session, hasNotif);
             } catch (FakeClientException invalidClient) {
                 if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    alerts.add(new AlertMessage(AlertEnum.ERROR,
+                            "Il semble y avoir une erreur dans votre session"));
                 } else {
                     alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                    alerts.add(new AlertMessage(AlertEnum.ERROR,
+                            "Il semble y avoir une erreur dans votre session"));
                     rm.addFlashAttribute("alerts", alerts);
                 }
                 return new ModelAndView("redirect:/disconnect.htm");
@@ -111,7 +120,8 @@ public class MovementController {
         List<String> ribMoneyAccount = new ArrayList<String>();
         List<String> ribShareAccount = new ArrayList<String>();
 
-        List<AccountDTO> accounts = accountService.getAccounts(client.getLogin());
+        List<AccountDTO> accounts = accountService
+                .getAccounts(client.getLogin());
         for (AccountDTO account : accounts) {
             if (account.getType() == AccountDTO.Type.SHARE) {
                 ribShareAccount.add(account.getRib());
@@ -129,7 +139,8 @@ public class MovementController {
 
         List<String> sharesToSale = new ArrayList<String>();
 
-        ShareAccountDTO shareAccount = accountService.getShareAccount(client.getLogin());
+        ShareAccountDTO shareAccount = accountService
+                .getShareAccount(client.getLogin());
         if (shareAccount != null) {
             for (ShareTitleDTO shareTitle : shareAccount.getShareTitles()) {
                 sharesToSale.add(shareTitle.getShare().getName());
@@ -150,19 +161,20 @@ public class MovementController {
     /**
      * Requête des transferts
      *
-     * @param model le model contient les alertes si il y a eu un redirect
+     * @param model   le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
-     * transiter lors des redirections
+     * @param rm      objet dans lequel on ajoute les informations que l'on veut
+     *                voir transiter lors des redirections
      * @return La vue des transactions
      * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "transfert", method = RequestMethod.POST)
-    private ModelAndView transfert(Model model, HttpServletRequest request, RedirectAttributes rm)
-            throws Exception {
+    private ModelAndView transfert(Model model, HttpServletRequest request,
+            RedirectAttributes rm) throws Exception {
 
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
+                .get("alerts");
         if (session == null) {
             session = request.getSession(true);
         }
@@ -184,20 +196,25 @@ public class MovementController {
         }
 
         try {
-            movementService.transfertMoney(client.getLogin(), ribFrom, ribTo, amount, DEFAULT_CURRENCY, label);
+            movementService.transfertMoney(client.getLogin(), ribFrom, ribTo,
+                    amount, DEFAULT_CURRENCY, label);
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Transfert réussi."));
+                alerts.add(new AlertMessage(AlertEnum.SUCCESS,
+                        "Transfert réussi."));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Transfert réussi."));
+                alerts.add(new AlertMessage(AlertEnum.SUCCESS,
+                        "Transfert réussi."));
                 rm.addFlashAttribute("alerts", alerts);
             }
         } catch (FakeClientException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Il semble y avoir une erreur dans votre session"));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Il semble y avoir une erreur dans votre session"));
                 rm.addFlashAttribute("alerts", alerts);
             }
             return new ModelAndView("redirect:/disconnect.htm");
@@ -206,26 +223,32 @@ public class MovementController {
         } catch (AccountOwnerException ex) {
         } catch (AccountTypeException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Les transferts ne sont pas autorisés sur ce compte."));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Les transferts ne sont pas autorisés sur ce compte."));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Les transferts ne sont pas autorisés sur ce compte."));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Les transferts ne sont pas autorisés sur ce compte."));
                 rm.addFlashAttribute("alerts", alerts);
             }
         } catch (CurrencyException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce compte utilise une devise differente."));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Ce compte utilise une devise differente."));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce compte utilise une devise differente."));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Ce compte utilise une devise differente."));
                 rm.addFlashAttribute("alerts", alerts);
             }
         } catch (OverdraftException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Les depassements ne sont pas autorisés sur ce compte."));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Les depassements ne sont pas autorisés sur ce compte."));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Les depassements ne sont pas autorisés sur ce compte."));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Les depassements ne sont pas autorisés sur ce compte."));
                 rm.addFlashAttribute("alerts", alerts);
             }
         }
@@ -236,19 +259,20 @@ public class MovementController {
     /**
      * Requête des débits
      *
-     * @param model le model contient les alertes si il y a eu un redirect
+     * @param model   le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
-     * transiter lors des redirections
+     * @param rm      objet dans lequel on ajoute les informations que l'on veut
+     *                voir transiter lors des redirections
      * @return La vue des transactions
      * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "debit", method = RequestMethod.POST)
-    private ModelAndView debit(Model model, HttpServletRequest request, RedirectAttributes rm)
-            throws Exception {
+    private ModelAndView debit(Model model, HttpServletRequest request,
+            RedirectAttributes rm) throws Exception {
 
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
+                .get("alerts");
         if (session == null) {
             session = request.getSession(true);
         }
@@ -270,20 +294,25 @@ public class MovementController {
         }
 
         try {
-            movementService.debitMoney(client.getLogin(), ribFrom, ribTo, amount, DEFAULT_CURRENCY, label);
+            movementService.debitMoney(client.getLogin(), ribFrom, ribTo,
+                    amount, DEFAULT_CURRENCY, label);
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Debit réussi."));
+                alerts.add(
+                        new AlertMessage(AlertEnum.SUCCESS, "Debit réussi."));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.SUCCESS, "Debit réussi."));
+                alerts.add(
+                        new AlertMessage(AlertEnum.SUCCESS, "Debit réussi."));
                 rm.addFlashAttribute("alerts", alerts);
             }
         } catch (FakeClientException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Il semble y avoir une erreur dans votre session"));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Il semble y avoir une erreur dans votre session"));
                 rm.addFlashAttribute("alerts", alerts);
             }
             return new ModelAndView("redirect:/disconnect.htm");
@@ -292,34 +321,42 @@ public class MovementController {
         } catch (AccountOwnerException ex) {
         } catch (AccountTypeException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Le debits ne sont pas autorisés sur ce compte."));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Le debits ne sont pas autorisés sur ce compte."));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Les debits ne sont pas autorisés sur ce compte."));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Les debits ne sont pas autorisés sur ce compte."));
                 rm.addFlashAttribute("alerts", alerts);
             }
         } catch (CurrencyException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce compte utilise une devise differente."));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Ce compte utilise une devise differente."));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Ce compte utilise une devise differente."));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Ce compte utilise une devise differente."));
                 rm.addFlashAttribute("alerts", alerts);
             }
         } catch (OverdraftException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Les depassements ne sont pas autorisés sur ce compte."));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Les depassements ne sont pas autorisés sur ce compte."));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Les depassements ne sont pas autorisés sur ce compte."));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Les depassements ne sont pas autorisés sur ce compte."));
                 rm.addFlashAttribute("alerts", alerts);
             }
         } catch (DebitAuthorizationException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous n'etes pas autorise a debiter ce compte."));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Vous n'etes pas autorise a debiter ce compte."));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous n'etes pas autorise a debiter ce compte."));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Vous n'etes pas autorise a debiter ce compte."));
                 rm.addFlashAttribute("alerts", alerts);
             }
         }
@@ -330,19 +367,20 @@ public class MovementController {
     /**
      * Requête des achats d'actions
      *
-     * @param model le model contient les alertes si il y a eu un redirect
+     * @param model   le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
-     * transiter lors des redirections
+     * @param rm      objet dans lequel on ajoute les informations que l'on veut
+     *                voir transiter lors des redirections
      * @return La vue des transactions
      * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "purchase", method = RequestMethod.POST)
-    private ModelAndView purchase(Model model, HttpServletRequest request, RedirectAttributes rm)
-            throws Exception {
+    private ModelAndView purchase(Model model, HttpServletRequest request,
+            RedirectAttributes rm) throws Exception {
 
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
+                .get("alerts");
         if (session == null) {
             session = request.getSession(true);
         }
@@ -359,38 +397,48 @@ public class MovementController {
             label = "";
         }
         try {
-            movementService.purchaseShareTitles(SessionController.getClient(session).getLogin(), share, Integer.parseInt(amountStr), label);
+            movementService.purchaseShareTitles(
+                    SessionController.getClient(session).getLogin(), share,
+                    Integer.parseInt(amountStr), label);
         } catch (FakeClientException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Il semble y avoir une erreur dans votre session"));
                 rm.addFlashAttribute("alerts", alerts);
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Il semble y avoir une erreur dans votre session"));
             }
             return new ModelAndView("redirect:/disconnect.htm");
         } catch (NoCurrentAccountException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte courant pour effectuer cette action"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Vous devez posséder un compte courant pour effectuer cette action"));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte courant pour effectuer cette action"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Vous devez posséder un compte courant pour effectuer cette action"));
                 rm.addFlashAttribute("alerts", alerts);
             }
         } catch (NoShareAccountException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte titres pour effectuer cette action"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Vous devez posséder un compte titres pour effectuer cette action"));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte titres pour effectuer cette action"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Vous devez posséder un compte titres pour effectuer cette action"));
                 rm.addFlashAttribute("alerts", alerts);
             }
         } catch (FakeShareException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Cette action de bourse n'existe pas"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Cette action de bourse n'existe pas"));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Cette action de bourse n'existe pas"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Cette action de bourse n'existe pas"));
                 rm.addFlashAttribute("alerts", alerts);
             }
         }
@@ -400,18 +448,19 @@ public class MovementController {
     /**
      * Requête des ventes d'actions
      *
-     * @param model le model contient les alertes si il y a eu un redirect
+     * @param model   le model contient les alertes si il y a eu un redirect
      * @param request la requête
-     * @param rm objet dans lequel on ajoute les informations que l'on veut voir
-     * transiter lors des redirections
+     * @param rm      objet dans lequel on ajoute les informations que l'on veut
+     *                voir transiter lors des redirections
      * @return La vue des transactions
      * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "sale", method = RequestMethod.POST)
-    private ModelAndView sale(Model model, HttpServletRequest request, RedirectAttributes rm)
-            throws Exception {
+    private ModelAndView sale(Model model, HttpServletRequest request,
+            RedirectAttributes rm) throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap().get("alerts");
+        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
+                .get("alerts");
         if (session == null) {
             session = request.getSession(true);
         }
@@ -428,46 +477,58 @@ public class MovementController {
             label = "";
         }
         try {
-            movementService.saleShareTitles(SessionController.getClient(session).getLogin(), share, Integer.parseInt(amountStr), label);
+            movementService.saleShareTitles(
+                    SessionController.getClient(session).getLogin(), share,
+                    Integer.parseInt(amountStr), label);
         } catch (FakeClientException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Il semble y avoir une erreur dans votre session"));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Il semble y avoir une erreur dans votre session"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Il semble y avoir une erreur dans votre session"));
                 rm.addFlashAttribute("alerts", alerts);
             }
             return new ModelAndView("redirect:/disconnect.htm");
         } catch (NoCurrentAccountException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte courant pour effectuer cette action"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Vous devez posséder un compte courant pour effectuer cette action"));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte courant pour effectuer cette action"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Vous devez posséder un compte courant pour effectuer cette action"));
                 rm.addFlashAttribute("alerts", alerts);
             }
         } catch (NoShareAccountException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte titres pour effectuer cette action"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Vous devez posséder un compte titres pour effectuer cette action"));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous devez posséder un compte titres pour effectuer cette action"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Vous devez posséder un compte titres pour effectuer cette action"));
                 rm.addFlashAttribute("alerts", alerts);
             }
         } catch (FakeShareTitleException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne possédez pas ces actions"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Vous ne possédez pas ces actions"));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne possédez pas ces actions"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Vous ne possédez pas ces actions"));
                 rm.addFlashAttribute("alerts", alerts);
             }
         } catch (AmountException ex) {
             if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne possédez pas assez d'actions"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Vous ne possédez pas assez d'actions"));
             } else {
                 alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR, "Vous ne possédez pas assez d'actions"));
+                alerts.add(new AlertMessage(AlertEnum.ERROR,
+                        "Vous ne possédez pas assez d'actions"));
                 rm.addFlashAttribute("alerts", alerts);
             }
         }

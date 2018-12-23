@@ -2,6 +2,7 @@ package jnpp.controller.views;
 
 import java.util.Calendar;
 import java.util.Map;
+
 import jnpp.controller.views.Translator.Language;
 import jnpp.service.dto.notifications.AppointmentNotificationDTO;
 import jnpp.service.dto.notifications.MessageNotificationDTO;
@@ -50,41 +51,47 @@ public class NotifView {
         day = cal.get(Calendar.DAY_OF_MONTH);
         seen = notif.getSeen();
         switch (notif.getType()) {
-            case APPOINTMENT:
-                AppointmentNotificationDTO appoint = (AppointmentNotificationDTO) notif;
-                message = "Vous avez rendez-vous avec conseiller le " + appoint.getAppointment().getDate().toString();
+        case APPOINTMENT:
+            AppointmentNotificationDTO appoint = (AppointmentNotificationDTO) notif;
+            message = "Vous avez rendez-vous avec conseiller le "
+                    + appoint.getAppointment().getDate().toString();
+            break;
+        case PAYMENT_MEAN:
+            PaymentMeanNotificationDTO mean = (PaymentMeanNotificationDTO) notif;
+            Map<PaymentMeanDTO.Type, String> types = Translator.getInstance()
+                    .translatePaymentMean(Language.FR);
+            switch (mean.getPaymentMean().getStatus()) {
+            case ORDERED:
+                message = "Votre " + types.get(mean.getPaymentMean().getType())
+                        + " est commandé";
                 break;
-            case PAYMENT_MEAN:
-                PaymentMeanNotificationDTO mean = (PaymentMeanNotificationDTO) notif;
-                Map<PaymentMeanDTO.Type, String> types = Translator.getInstance().translatePaymentMean(Language.FR);
-                switch (mean.getPaymentMean().getStatus()) {
-                    case ORDERED:
-                        message = "Votre " + types.get(mean.getPaymentMean().getType()) + " est commandé";
-                        break;
-                    case ARRIVED:
-                        message = "Votre " + types.get(mean.getPaymentMean().getType()) + " est arrivé";
-                        break;
-                    case DELIVERED:
-                        message = "Vous avez récupéré votre " + types.get(mean.getPaymentMean().getType());
-                        break;
-                    default:
-                        throw new AssertionError(mean.getPaymentMean().getStatus().name());
-                }
+            case ARRIVED:
+                message = "Votre " + types.get(mean.getPaymentMean().getType())
+                        + " est arrivé";
                 break;
-            case MESSAGE:
-                MessageNotificationDTO msg = (MessageNotificationDTO) notif;
-                message = "Vous avez un reçu un nouveau message";
-                break;
-            case MOVEMENT:
-                MovementNotificationDTO move = (MovementNotificationDTO) notif;
-                message = "Une transaction a eu lieu sur un de vos compte";
-                break;
-            case OVERDRAFT:
-                OverdraftNotificationDTO over = (OverdraftNotificationDTO) notif;
-                message = "Vous êtes en négatif sur le compte " + over.getRib();
+            case DELIVERED:
+                message = "Vous avez récupéré votre "
+                        + types.get(mean.getPaymentMean().getType());
                 break;
             default:
-                throw new AssertionError(notif.getType().name());
+                throw new AssertionError(
+                        mean.getPaymentMean().getStatus().name());
+            }
+            break;
+        case MESSAGE:
+            MessageNotificationDTO msg = (MessageNotificationDTO) notif;
+            message = "Vous avez un reçu un nouveau message";
+            break;
+        case MOVEMENT:
+            MovementNotificationDTO move = (MovementNotificationDTO) notif;
+            message = "Une transaction a eu lieu sur un de vos compte";
+            break;
+        case OVERDRAFT:
+            OverdraftNotificationDTO over = (OverdraftNotificationDTO) notif;
+            message = "Vous êtes en négatif sur le compte " + over.getRib();
+            break;
+        default:
+            throw new AssertionError(notif.getType().name());
         }
     }
 

@@ -17,7 +17,8 @@ public class AccountTypeException extends MovementException {
         super(cause);
     }
 
-    public AccountTypeException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public AccountTypeException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

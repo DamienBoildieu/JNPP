@@ -17,7 +17,8 @@ public class DateException extends AdvisorException {
         super(cause);
     }
 
-    public DateException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public DateException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

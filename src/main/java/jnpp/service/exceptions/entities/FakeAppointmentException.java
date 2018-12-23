@@ -17,7 +17,8 @@ public class FakeAppointmentException extends FakeEntityException {
         super(cause);
     }
 
-    public FakeAppointmentException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public FakeAppointmentException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

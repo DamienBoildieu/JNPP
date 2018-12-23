@@ -6,8 +6,7 @@ public class MessageDTO {
 
     public static enum Direction {
 
-        CLIENT_TO_ADVISOR,
-        ADVISOR_TO_CLIENT;
+        CLIENT_TO_ADVISOR, ADVISOR_TO_CLIENT;
 
     }
 
@@ -16,7 +15,8 @@ public class MessageDTO {
     private String content;
     private AdvisorDTO advisor;
 
-    public MessageDTO(Direction direction, Date date, String content, AdvisorDTO advisor) {
+    public MessageDTO(Direction direction, Date date, String content,
+            AdvisorDTO advisor) {
         this.direction = direction;
         this.date = date;
         this.content = content;

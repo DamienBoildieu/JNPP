@@ -19,7 +19,8 @@ public abstract class FakeEntityException extends ServiceException {
         super(cause);
     }
 
-    public FakeEntityException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public FakeEntityException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

@@ -4,7 +4,8 @@ public class SavingAccountDTO extends MoneyAccountDTO {
 
     private SavingBookDTO savingBook;
 
-    public SavingAccountDTO(String rib, Double money, CurrencyDTO currency, SavingBookDTO savingBook) {
+    public SavingAccountDTO(String rib, Double money, CurrencyDTO currency,
+            SavingBookDTO savingBook) {
         super(rib, money, currency);
         this.savingBook = savingBook;
     }

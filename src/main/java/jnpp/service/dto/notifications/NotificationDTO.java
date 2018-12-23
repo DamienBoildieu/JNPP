@@ -6,11 +6,7 @@ public abstract class NotificationDTO {
 
     public static enum Type {
 
-        APPOINTMENT,
-        PAYMENT_MEAN,
-        MESSAGE,
-        MOVEMENT,
-        OVERDRAFT;
+        APPOINTMENT, PAYMENT_MEAN, MESSAGE, MOVEMENT, OVERDRAFT;
 
     }
 

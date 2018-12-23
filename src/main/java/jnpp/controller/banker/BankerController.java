@@ -18,8 +18,7 @@ public class BankerController {
      * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "banquier", method = RequestMethod.GET)
-    protected ModelAndView bankerGet()
-            throws Exception {
+    protected ModelAndView bankerGet() throws Exception {
         ModelAndView mv = new ModelAndView("banker/banker_home");
         return mv;
     }

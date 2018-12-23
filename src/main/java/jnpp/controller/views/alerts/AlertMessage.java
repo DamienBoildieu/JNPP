@@ -18,7 +18,7 @@ public class AlertMessage {
      * Constructeur
      *
      * @param alertType le type d'alerte
-     * @param message le message d'alerte
+     * @param message   le message d'alerte
      */
     public AlertMessage(AlertEnum alertType, String message) {
         this.alertType = alertType;

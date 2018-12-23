@@ -2,6 +2,7 @@ package jnpp.dao.repositories;
 
 import java.util.Date;
 import java.util.List;
+
 import jnpp.dao.entities.notifications.NotificationEntity;
 
 public interface NotificationDAO extends GenericDAO<NotificationEntity> {
@@ -26,7 +27,7 @@ public interface NotificationDAO extends GenericDAO<NotificationEntity> {
      * Retourne des notifications non vues d'un client.
      *
      * @param login Login du client.
-     * @param n Nombre de notifications.
+     * @param n     Nombre de notifications.
      * @return Liste d'entite de notifications.
      */
     List<NotificationEntity> findNUnseenByLogin(String login, int n);
@@ -35,7 +36,7 @@ public interface NotificationDAO extends GenericDAO<NotificationEntity> {
      * Retourne des notifications non vues d'un client posterieures a une date.
      *
      * @param login Login du client.
-     * @param date Date
+     * @param date  Date
      * @return Liste d'entite de notifications.
      */
     List<NotificationEntity> findUnseenRecentByLogin(String login, Date date);

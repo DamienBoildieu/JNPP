@@ -2,8 +2,10 @@ package jnpp.dao.entities.movements;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+
 import jnpp.dao.entities.accounts.CurrencyEntity;
 import jnpp.service.dto.movements.DebitDTO;
 
@@ -16,8 +18,8 @@ public class DebitEntity extends MoneyTradeEntity implements Serializable {
     public DebitEntity() {
     }
 
-    public DebitEntity(Date date, String ribFrom, String ribTo,
-            Double money, CurrencyEntity currency, String label) {
+    public DebitEntity(Date date, String ribFrom, String ribTo, Double money,
+            CurrencyEntity currency, String label) {
         super(date, ribFrom, ribTo, money, currency, label);
     }
 
@@ -28,12 +30,14 @@ public class DebitEntity extends MoneyTradeEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "jnpp.dao.entities.transactions.DebitEntity[ id=" + getId() + " ]";
+        return "jnpp.dao.entities.transactions.DebitEntity[ id=" + getId()
+                + " ]";
     }
 
     @Override
     public DebitDTO toDTO() {
-        return new DebitDTO(getDate(), getRibFrom(), getRibTo(), getMoney(), getCurrency().toDTO(), getLabel());
+        return new DebitDTO(getDate(), getRibFrom(), getRibTo(), getMoney(),
+                getCurrency().toDTO(), getLabel());
     }
 
 }

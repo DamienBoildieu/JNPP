@@ -17,7 +17,8 @@ public class AvailableException extends AdvisorException {
         super(cause);
     }
 
-    public AvailableException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public AvailableException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

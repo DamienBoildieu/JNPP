@@ -19,7 +19,8 @@ public abstract class OwnerException extends ServiceException {
         super(cause);
     }
 
-    public OwnerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public OwnerException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

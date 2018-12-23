@@ -2,6 +2,7 @@ package jnpp.dao.repositories;
 
 import java.util.Date;
 import java.util.List;
+
 import jnpp.dao.entities.advisor.MessageEntity;
 
 /**
@@ -21,7 +22,7 @@ public interface MessageDAO extends GenericDAO<MessageEntity> {
      * Retourne les n derniers messages d'un utilisateur
      *
      * @param login l'identifiant de l'utilisateur
-     * @param n le nombre de messages à récupérer
+     * @param n     le nombre de messages à récupérer
      * @return les n derniers messages de l'utilisateur
      */
     List<MessageEntity> findNByLogin(String login, int n);
@@ -31,9 +32,9 @@ public interface MessageDAO extends GenericDAO<MessageEntity> {
      * utilisateur
      *
      * @param login l'identifiant de l'utilisateur
-     * @param date la date
+     * @param date  la date
      * @return les messages envoyés ou reçus après la date indiquée d'un
-     * utilisateur
+     *         utilisateur
      */
     List<MessageEntity> findRecentByLogin(String login, Date date);
 

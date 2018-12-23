@@ -17,7 +17,8 @@ public class FakeClientException extends FakeEntityException {
         super(cause);
     }
 
-    public FakeClientException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public FakeClientException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

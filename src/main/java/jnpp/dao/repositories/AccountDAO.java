@@ -1,6 +1,7 @@
 package jnpp.dao.repositories;
 
 import java.util.List;
+
 import jnpp.dao.entities.accounts.AccountEntity;
 import jnpp.dao.entities.accounts.CurrentAccountEntity;
 import jnpp.dao.entities.accounts.ShareAccountEntity;
@@ -29,7 +30,7 @@ public interface AccountDAO extends GenericDAO<AccountEntity> {
     /**
      * Recherche si un utilisateur possède un compte livret du type indiqué
      *
-     * @param login l'identifiant de l'utilisateur
+     * @param login        l'identifiant de l'utilisateur
      * @param savingBookId le livret
      * @return true si il possède un compte livret du type indiqué, false sinon
      */

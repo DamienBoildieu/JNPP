@@ -3,11 +3,14 @@ package jnpp.dao.repositories;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 import org.springframework.transaction.annotation.Transactional;
 
-public abstract class GenericDAOImpl<T extends Serializable> implements GenericDAO<T> {
+public abstract class GenericDAOImpl<T extends Serializable>
+        implements GenericDAO<T> {
 
     @PersistenceContext(unitName = "JNPPPU")
     private EntityManager em;

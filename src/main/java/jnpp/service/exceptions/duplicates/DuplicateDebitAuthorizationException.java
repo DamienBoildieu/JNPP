@@ -9,7 +9,8 @@ public class DuplicateDebitAuthorizationException extends DuplicateException {
         super(message);
     }
 
-    public DuplicateDebitAuthorizationException(String message, Throwable cause) {
+    public DuplicateDebitAuthorizationException(String message,
+            Throwable cause) {
         super(message, cause);
     }
 
@@ -17,7 +18,8 @@ public class DuplicateDebitAuthorizationException extends DuplicateException {
         super(cause);
     }
 
-    public DuplicateDebitAuthorizationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public DuplicateDebitAuthorizationException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

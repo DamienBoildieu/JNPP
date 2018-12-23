@@ -1,12 +1,14 @@
 package jnpp.dao.entities.accounts;
 
 import java.io.Serializable;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.movements.MovementEntity;
 import jnpp.service.dto.accounts.SavingAccountDTO;
@@ -14,14 +16,13 @@ import jnpp.service.dto.accounts.SavingAccountDTO;
 @Entity
 @DiscriminatorValue(value = AccountEntity.Type.Values.SAVING)
 @NamedQueries({
-    @NamedQuery(
-            name = "has_saving_account",
-            query = "SELECT COUNT(a) "
-            + "FROM SavingAccountEntity a "
-            + "INNER JOIN a.clients a_clients "
-            + "WHERE a_clients.login = :login "
-            + "  AND a.savingBook.id = :savingbook_id")})
-public class SavingAccountEntity extends MoneyAccountEntity implements Serializable {
+        @NamedQuery(name = "has_saving_account", query = "SELECT COUNT(a) "
+                + "FROM SavingAccountEntity a "
+                + "INNER JOIN a.clients a_clients "
+                + "WHERE a_clients.login = :login "
+                + "  AND a.savingBook.id = :savingbook_id") })
+public class SavingAccountEntity extends MoneyAccountEntity
+        implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,7 +36,8 @@ public class SavingAccountEntity extends MoneyAccountEntity implements Serializa
     public SavingAccountEntity() {
     }
 
-    public SavingAccountEntity(String rib, ClientEntity client, Double money, CurrencyEntity currency, SavingBookEntity savingBook) {
+    public SavingAccountEntity(String rib, ClientEntity client, Double money,
+            CurrencyEntity currency, SavingBookEntity savingBook) {
         super(rib, client, money, currency);
         this.savingBook = savingBook;
     }
@@ -60,27 +62,30 @@ public class SavingAccountEntity extends MoneyAccountEntity implements Serializa
 
     @Override
     public SavingAccountDTO toDTO() {
-        return new SavingAccountDTO(getRib(), getMoney(), getCurrency().toDTO(), savingBook.toDTO());
+        return new SavingAccountDTO(getRib(), getMoney(), getCurrency().toDTO(),
+                savingBook.toDTO());
     }
 
     @Override
     public boolean canEmit(MovementEntity.Type movement) {
         switch (movement) {
-            case TRANSFERT:
-                return true;
+        case TRANSFERT:
+            return true;
+        default:
+            return false;
         }
-        return false;
     }
 
     @Override
     public boolean canReceive(MovementEntity.Type movement) {
         switch (movement) {
-            case TRANSFERT:
-                return true;
-            case DEPOSIT:
-                return true;
+        case TRANSFERT:
+            return true;
+        case DEPOSIT:
+            return true;
+        default:
+            return false;
         }
-        return false;
     }
 
     @Override

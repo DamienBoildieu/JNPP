@@ -1,13 +1,17 @@
 package jnpp.dao.repositories;
 
 import java.util.List;
+
 import javax.persistence.Query;
-import jnpp.dao.entities.accounts.CloseRequestEntity;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import jnpp.dao.entities.accounts.CloseRequestEntity;
+
 @Repository
-public class CloseRequestDAOImpl extends GenericDAOImpl<CloseRequestEntity> implements CloseRequestDAO {
+public class CloseRequestDAOImpl extends GenericDAOImpl<CloseRequestEntity>
+        implements CloseRequestDAO {
 
     @Transactional(readOnly = true)
     @Override

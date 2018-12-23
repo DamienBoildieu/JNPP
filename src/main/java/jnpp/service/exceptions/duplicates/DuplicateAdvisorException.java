@@ -17,7 +17,8 @@ public class DuplicateAdvisorException extends DuplicateException {
         super(cause);
     }
 
-    public DuplicateAdvisorException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public DuplicateAdvisorException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

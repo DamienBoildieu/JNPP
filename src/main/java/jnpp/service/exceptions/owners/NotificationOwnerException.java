@@ -17,7 +17,8 @@ public class NotificationOwnerException extends OwnerException {
         super(cause);
     }
 
-    public NotificationOwnerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public NotificationOwnerException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

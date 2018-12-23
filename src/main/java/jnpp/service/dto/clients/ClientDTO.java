@@ -6,8 +6,7 @@ public abstract class ClientDTO {
 
     public static enum Type {
 
-        PRIVATE,
-        PROFESIONAL;
+        PRIVATE, PROFESIONAL;
 
     }
 
@@ -16,7 +15,8 @@ public abstract class ClientDTO {
     private AddressDTO address;
     private String phone;
 
-    public ClientDTO(String login, String email, AddressDTO address, String phone) {
+    public ClientDTO(String login, String email, AddressDTO address,
+            String phone) {
         this.login = login;
         this.email = email;
         this.address = address;

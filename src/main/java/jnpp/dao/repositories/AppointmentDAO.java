@@ -2,6 +2,7 @@ package jnpp.dao.repositories;
 
 import java.util.Date;
 import java.util.List;
+
 import jnpp.dao.entities.advisor.AppointmentEntity;
 
 /**
@@ -22,7 +23,7 @@ public interface AppointmentDAO extends GenericDAO<AppointmentEntity> {
      * paramètre
      *
      * @param login l'identifiant du client
-     * @param date la date du rendez-vous
+     * @param date  la date du rendez-vous
      * @return la liste des rendez-vous du client proches de la date
      */
     List<AppointmentEntity> findRecentByLogin(String login, Date date);
@@ -30,7 +31,7 @@ public interface AppointmentDAO extends GenericDAO<AppointmentEntity> {
     /**
      * Retourne le nombre de rendez-vous d'un conseiller entre deux dates
      *
-     * @param id l'identifiant du conseiller
+     * @param id  l'identifiant du conseiller
      * @param min la date min
      * @param max la date max
      * @return le nombre de rendez-vous du conseiller

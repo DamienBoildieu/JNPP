@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -17,37 +18,26 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import jnpp.service.dto.movements.MovementDTO;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
-    @NamedQuery(
-            name = "find_all_movement_by_rib",
-            query = "SELECT m FROM MovementEntity m "
-            + "WHERE (m.ribFrom = :rib "
-            + "      OR TREAT(m AS TradeEntity).ribTo = :rib) "
-            + "ORDER BY m.date DESC")
-    ,
-    @NamedQuery(
-            name = "find_recent_movement_by_rib",
-            query = "SELECT m FROM MovementEntity m "
-            + "WHERE (m.ribFrom = :rib "
-            + "      OR TREAT(m AS TradeEntity).ribTo = :rib) "
-            + "  AND m.date >= :date "
-            + "ORDER BY m.date DESC")})
+        @NamedQuery(name = "find_all_movement_by_rib", query = "SELECT m FROM MovementEntity m "
+                + "WHERE (m.ribFrom = :rib "
+                + "      OR TREAT(m AS TradeEntity).ribTo = :rib) "
+                + "ORDER BY m.date DESC"),
+        @NamedQuery(name = "find_recent_movement_by_rib", query = "SELECT m FROM MovementEntity m "
+                + "WHERE (m.ribFrom = :rib "
+                + "      OR TREAT(m AS TradeEntity).ribTo = :rib) "
+                + "  AND m.date >= :date " + "ORDER BY m.date DESC") })
 public abstract class MovementEntity implements Serializable {
 
     public static enum Type {
 
-        TRANSFERT,
-        DEBIT,
-        PURCHASE,
-        SALE,
-        WITHDRAW,
-        PAYMENT,
-        DEPOSIT;
+        TRANSFERT, DEBIT, PURCHASE, SALE, WITHDRAW, PAYMENT, DEPOSIT;
 
         public static class Values {
 
@@ -134,7 +124,8 @@ public abstract class MovementEntity implements Serializable {
             return false;
         }
         MovementEntity other = (MovementEntity) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        return !((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id)));
     }
 
     public abstract MovementDTO toDTO();

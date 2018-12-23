@@ -8,8 +8,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
+
+import org.springframework.stereotype.Service;
+
 import jnpp.dao.entities.AddressEntity;
 import jnpp.dao.entities.IdentityEntity;
 import jnpp.dao.entities.advisor.AdvisorEntity;
@@ -26,7 +30,6 @@ import jnpp.service.exceptions.clients.AgeException;
 import jnpp.service.exceptions.clients.InformationException;
 import jnpp.service.exceptions.duplicates.DuplicateClientException;
 import jnpp.service.exceptions.entities.FakeClientException;
-import org.springframework.stereotype.Service;
 
 @Service("ClientService")
 public class ClientServiceImpl implements ClientService {
@@ -39,8 +42,7 @@ public class ClientServiceImpl implements ClientService {
     private static final int LOGIN_RANGE = 9 * LOGIN_MIN;
 
     public static final int PASSWORD_LENGTH = 8;
-    private static final String PASSWORD_SALT
-            = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    private static final String PASSWORD_SALT = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
     private static final String MAILBOX_HOST = "smtp.gmail.com";
     private static final String MAILBOX_PORT = "587";
@@ -68,8 +70,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void signOut(String login)
-            throws FakeClientException {
+    public void signOut(String login) throws FakeClientException {
         if (login == null) {
             throw new IllegalArgumentException();
         }
@@ -80,29 +81,35 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void signUp(IdentityDTO.Gender gender, String firstname, String lastname,
-            Date birthday, String email, Integer number, String street,
-            String city, String state, String phone)
+    public void signUp(IdentityDTO.Gender gender, String firstname,
+            String lastname, Date birthday, String email, Integer number,
+            String street, String city, String state, String phone)
             throws DuplicateClientException, AgeException,
             InformationException {
-        if (gender == null || firstname == null || lastname == null || birthday == null || email == null || number == null
-                || street == null || city == null || state == null || phone == null) {
+        if (gender == null || firstname == null || lastname == null
+                || birthday == null || email == null || number == null
+                || street == null || city == null || state == null
+                || phone == null) {
             throw new IllegalArgumentException();
         }
         if (!isOfAge(birthday)) {
             throw new AgeException();
         }
-        if (!isEmailValid(email) || !isAddressValid(number, street, city, state) || !isPhoneValid(phone)) {
+        if (!isEmailValid(email) || !isAddressValid(number, street, city, state)
+                || !isPhoneValid(phone)) {
             throw new InformationException();
         }
-        if (clientDAO.findPrivateByIdentity(IdentityEntity.Gender.toEntity(gender), firstname, lastname) != null) {
+        if (clientDAO.findPrivateByIdentity(
+                IdentityEntity.Gender.toEntity(gender), firstname,
+                lastname) != null) {
             throw new DuplicateClientException();
         }
         String login = generateNewLogin();
         String password = generateRandomLogin();
         AdvisorEntity advisor = chooseAdvisor();
-        PrivateEntity client = new PrivateEntity(login, password, IdentityEntity.Gender.toEntity(gender), firstname,
-                lastname, birthday, email, number, street, city, state, phone,
+        PrivateEntity client = new PrivateEntity(login, password,
+                IdentityEntity.Gender.toEntity(gender), firstname, lastname,
+                birthday, email, number, street, city, state, phone,
                 DEFAULT_NOTIFY, advisor);
         sendSignupMail(client);
         clientDAO.save(client);
@@ -120,16 +127,20 @@ public class ClientServiceImpl implements ClientService {
                 || phone == null) {
             throw new IllegalArgumentException();
         }
-        if (!isEmailValid(email) || !isAddressValid(number, street, city, state) || !isPhoneValid(phone)) {
+        if (!isEmailValid(email) || !isAddressValid(number, street, city, state)
+                || !isPhoneValid(phone)) {
             throw new InformationException();
         }
-        if (clientDAO.findProfessionalByNameIdentity(name, IdentityEntity.Gender.toEntity(ownerGender), ownerFirstname, ownerLastname) != null) {
+        if (clientDAO.findProfessionalByNameIdentity(name,
+                IdentityEntity.Gender.toEntity(ownerGender), ownerFirstname,
+                ownerLastname) != null) {
             throw new DuplicateClientException();
         }
         String login = generateNewLogin();
         String password = generateRandomLogin();
         AdvisorEntity advisor = chooseAdvisor();
-        ProfessionalEntity client = new ProfessionalEntity(login, password, name, IdentityEntity.Gender.toEntity(ownerGender),
+        ProfessionalEntity client = new ProfessionalEntity(login, password,
+                name, IdentityEntity.Gender.toEntity(ownerGender),
                 ownerFirstname, ownerLastname, email, number, street, city,
                 state, phone, DEFAULT_NOTIFY, advisor);
         sendSignupMail(client);
@@ -137,9 +148,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDTO update(String login, String email,
-            Integer number, String street, String city, String state,
-            String phone)
+    public ClientDTO update(String login, String email, Integer number,
+            String street, String city, String state, String phone)
             throws InformationException, FakeClientException {
         if (login == null || (email == null && number == null && street == null
                 && city == null && state == null && phone == null)) {
@@ -149,7 +159,8 @@ public class ClientServiceImpl implements ClientService {
         if (client == null) {
             throw new FakeClientException();
         }
-        if (!isEmailValid(email) || !isAddressValid(number, street, city, state) || !isPhoneValid(phone)) {
+        if (!isEmailValid(email) || !isAddressValid(number, street, city, state)
+                || !isPhoneValid(phone)) {
             throw new InformationException();
         }
         if (email != null) {
@@ -176,7 +187,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void close(String login, String password) throws ClosureException, FakeClientException {
+    public void close(String login, String password)
+            throws ClosureException, FakeClientException {
         if (login == null || password == null) {
             throw new IllegalArgumentException();
         }
@@ -191,7 +203,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public boolean updatePassword(String login, String oldPassword, String newPassword) throws FakeClientException {
+    public boolean updatePassword(String login, String oldPassword,
+            String newPassword) throws FakeClientException {
         if (login == null || oldPassword == null || newPassword == null) {
             throw new IllegalArgumentException();
         }
@@ -208,8 +221,9 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public boolean resetPassword(String login, IdentityDTO.Gender gender, String firstname,
-            String lastname, String email) throws FakeClientException {
+    public boolean resetPassword(String login, IdentityDTO.Gender gender,
+            String firstname, String lastname, String email)
+            throws FakeClientException {
         if (login == null || gender == null || firstname == null
                 || lastname == null || email == null) {
             throw new IllegalArgumentException();
@@ -228,7 +242,8 @@ public class ClientServiceImpl implements ClientService {
         if (identity == null) {
             return false;
         }
-        if (!gender.equals(identity.getGender()) || !firstname.equals(identity.getFirstname())
+        if (!gender.equals(identity.getGender())
+                || !firstname.equals(identity.getFirstname())
                 || !lastname.equals(identity.getLastname())) {
             return false;
         }
@@ -240,8 +255,9 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public boolean resetPassword(String login, String name, IdentityDTO.Gender ownerGender,
-            String ownerFirstname, String ownerLastname, String email) throws FakeClientException {
+    public boolean resetPassword(String login, String name,
+            IdentityDTO.Gender ownerGender, String ownerFirstname,
+            String ownerLastname, String email) throws FakeClientException {
         if (login == null || name == null || ownerGender == null
                 || ownerFirstname == null || ownerLastname == null) {
             throw new IllegalArgumentException();
@@ -260,7 +276,8 @@ public class ClientServiceImpl implements ClientService {
         if (identity == null) {
             return false;
         }
-        if (!ownerGender.equals(identity.getGender()) || !ownerFirstname.equals(identity.getFirstname())
+        if (!ownerGender.equals(identity.getGender())
+                || !ownerFirstname.equals(identity.getFirstname())
                 || !ownerLastname.equals(identity.getLastname())) {
             return false;
         }
@@ -290,8 +307,8 @@ public class ClientServiceImpl implements ClientService {
     private String generateRandomPassword() {
         StringBuilder sb = new StringBuilder();
         while (sb.length() < PASSWORD_LENGTH) {
-            sb.append(PASSWORD_SALT.
-                    charAt((int) (random.nextFloat() * PASSWORD_SALT.length())));
+            sb.append(PASSWORD_SALT.charAt(
+                    (int) (random.nextFloat() * PASSWORD_SALT.length())));
         }
         return sb.toString();
     }
@@ -309,7 +326,8 @@ public class ClientServiceImpl implements ClientService {
         return true;
     }
 
-    private static boolean isAddressValid(Integer number, String street, String city, String state) {
+    private static boolean isAddressValid(Integer number, String street,
+            String city, String state) {
         return true;
     }
 
@@ -318,14 +336,15 @@ public class ClientServiceImpl implements ClientService {
     }
 
     private static boolean isOfAge(Date birthday) {
-        return Period.between(birthday.toInstant().atZone(ZoneId.systemDefault()).
-                toLocalDate(), LocalDate.now()).getYears() >= OF_AGE;
+        return Period.between(birthday.toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDate(), LocalDate.now())
+                .getYears() >= OF_AGE;
     }
 
     private void sendSignupMail(ClientEntity client) {
         sendMail(client.getEmail(), "Bienvenue chez JNPP",
-                "identifiant:  " + client.getLogin() + "\n"
-                + "mot de passe: " + client.getPassword());
+                "identifiant:  " + client.getLogin() + "\n" + "mot de passe: "
+                        + client.getPassword());
     }
 
     private void sendResetMail(ClientEntity client) {
@@ -333,7 +352,8 @@ public class ClientServiceImpl implements ClientService {
                 "mot de passe: " + client.getPassword());
     }
 
-    private void sendMail(final String email, final String title, final String message) {
+    private void sendMail(final String email, final String title,
+            final String message) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
