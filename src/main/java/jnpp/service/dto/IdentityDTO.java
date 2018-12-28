@@ -1,6 +1,6 @@
 package jnpp.service.dto;
 
-public class IdentityDTO {
+public class IdentityDTO extends AbstractDTO {
 
     public enum Gender {
 

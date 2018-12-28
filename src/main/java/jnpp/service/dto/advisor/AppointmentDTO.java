@@ -1,8 +1,9 @@
 package jnpp.service.dto.advisor;
 
 import java.util.Date;
+import jnpp.service.dto.AbstractDTO;
 
-public class AppointmentDTO {
+public class AppointmentDTO extends AbstractDTO {
 
     private Long id;
     private Date date;

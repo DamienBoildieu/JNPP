@@ -1,8 +1,9 @@
 package jnpp.service.dto.notifications;
 
 import java.util.Date;
+import jnpp.service.dto.AbstractDTO;
 
-public abstract class NotificationDTO {
+public abstract class NotificationDTO extends AbstractDTO {
 
     public static enum Type {
 

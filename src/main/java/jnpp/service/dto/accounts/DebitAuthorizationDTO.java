@@ -1,6 +1,8 @@
 package jnpp.service.dto.accounts;
 
-public class DebitAuthorizationDTO {
+import jnpp.service.dto.AbstractDTO;
+
+public class DebitAuthorizationDTO extends AbstractDTO {
 
     private String ribFrom;
     private String ribTo;

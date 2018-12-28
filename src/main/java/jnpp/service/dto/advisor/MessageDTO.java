@@ -1,8 +1,9 @@
 package jnpp.service.dto.advisor;
 
 import java.util.Date;
+import jnpp.service.dto.AbstractDTO;
 
-public class MessageDTO {
+public class MessageDTO extends AbstractDTO {
 
     public static enum Direction {
 

@@ -1,6 +1,8 @@
 package jnpp.service.dto.clients;
 
-public class LoginDTO {
+import jnpp.service.dto.AbstractDTO;
+
+public class LoginDTO extends AbstractDTO {
 
     private String login;
     private String password;

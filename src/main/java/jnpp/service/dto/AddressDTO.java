@@ -1,6 +1,6 @@
 package jnpp.service.dto;
 
-public class AddressDTO {
+public class AddressDTO extends AbstractDTO {
 
     private Integer number;
     private String street;

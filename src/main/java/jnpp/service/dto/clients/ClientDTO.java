@@ -1,8 +1,9 @@
 package jnpp.service.dto.clients;
 
+import jnpp.service.dto.AbstractDTO;
 import jnpp.service.dto.AddressDTO;
 
-public abstract class ClientDTO {
+public abstract class ClientDTO extends AbstractDTO {
 
     public static enum Type {
 

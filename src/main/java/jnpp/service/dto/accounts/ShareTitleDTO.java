@@ -1,6 +1,8 @@
 package jnpp.service.dto.accounts;
 
-public class ShareTitleDTO {
+import jnpp.service.dto.AbstractDTO;
+
+public class ShareTitleDTO extends AbstractDTO {
 
     private Integer amount;
     private ShareDTO share;

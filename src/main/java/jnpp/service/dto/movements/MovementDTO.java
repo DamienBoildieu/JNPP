@@ -1,8 +1,9 @@
 package jnpp.service.dto.movements;
 
 import java.util.Date;
+import jnpp.service.dto.AbstractDTO;
 
-public abstract class MovementDTO {
+public abstract class MovementDTO extends AbstractDTO {
 
     public static enum Type {
 

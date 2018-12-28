@@ -1,6 +1,8 @@
 package jnpp.service.dto.paymentmeans;
 
-public abstract class PaymentMeanDTO {
+import jnpp.service.dto.AbstractDTO;
+
+public abstract class PaymentMeanDTO extends AbstractDTO {
 
     public static enum Type {
 

@@ -1,6 +1,8 @@
 package jnpp.service.dto.accounts;
 
-public abstract class AccountDTO {
+import jnpp.service.dto.AbstractDTO;
+
+public abstract class AccountDTO extends AbstractDTO {
 
     public static enum Type {
 

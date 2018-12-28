@@ -1,6 +1,8 @@
 package jnpp.service.dto.accounts;
 
-public class SavingBookDTO {
+import jnpp.service.dto.AbstractDTO;
+
+public class SavingBookDTO extends AbstractDTO {
 
     private String name;
     private Double moneyRate;

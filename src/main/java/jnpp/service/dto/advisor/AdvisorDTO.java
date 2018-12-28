@@ -1,9 +1,10 @@
 package jnpp.service.dto.advisor;
 
+import jnpp.service.dto.AbstractDTO;
 import jnpp.service.dto.AddressDTO;
 import jnpp.service.dto.IdentityDTO;
 
-public class AdvisorDTO {
+public class AdvisorDTO extends AbstractDTO {
 
     private IdentityDTO identity;
     private String email;
