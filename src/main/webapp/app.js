@@ -6,8 +6,8 @@
         .config(config)
         .run(run);
 
-    config.$inject = ['$routeProvider'];
-    function config($routeProvider) {
+    config.$inject = ['$routeProvider', '$locationProvider'];
+    function config($routeProvider, $locationProvider) {
         $routeProvider
             .when('/home', {
                 templateUrl: 'html/home.html'
@@ -17,8 +17,8 @@
                 templateUrl: 'html/signup.html',
                 controllerAs: 'vm'
             })
-
             .otherwise({ redirectTo: '/home' });
+  
     }
 
     run.$inject = ['$rootScope', '$location', '$cookies', '$http'];
