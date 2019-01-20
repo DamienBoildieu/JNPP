@@ -17,6 +17,11 @@
                 templateUrl: 'html/signup.html',
                 controllerAs: 'vm'
             })
+            .when('/connect', {
+            	controller: 'ConnectController',
+            	templateUrl: 'html/connect.html',
+            	controllerAs: 'vm'
+            })
             .otherwise({ redirectTo: '/home' });
   
     }
@@ -33,10 +38,13 @@
 
         $rootScope.$on('$locationChangeStart', function (event, next, current) {
             // redirect to login page if not logged in and trying to access a restricted page
-            var restrictedPage = $.inArray($location.path(), ['/home', '/signup']) === -1;
+            var connectedPage = $.inArray($location.path(), ['/home', '/signup', '/connect']) === -1;
+            var notConnectedPage =  $.inArray($location.path(), ['/signup', '/connect']) !== -1;
             var loggedIn = $rootScope.globals.currentUser;
-            if (restrictedPage && !loggedIn) {
-                $location.path('/home');
+            if (connectedPage && !loggedIn) {
+                $location.path('/connect');
+            } else if (notConnectedPage && loggedIn) {
+            	$location.path('/home');
             }
         });
     }

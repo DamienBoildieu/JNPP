@@ -24,6 +24,9 @@ and open the template in the editor.
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
   
+    <link type="text/css" rel="stylesheet"
+      href="/JNPP/css/common.css" media="screen" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -33,19 +36,21 @@ and open the template in the editor.
 </head>
 
 <body>
-        <!--
+        
         <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+        <button type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
         
             
-        </div> -->
-        <div ng-view></div>
-    
+        </div>
+        
+    <div ng-view></div>
     <script src="app.js"></script>
    
-    <script src="controllers/signup.js"></script>
+    <script src="js/controllers/connect.js"></script>
     
-    <script src="services/signup.js"></script>
+    <script src="js/services/flash.js"></script>
+    <script src="js/services/authentification.js"></script>
+    <script src="js/services/user.js"></script>
    
 </body>
 </html>
