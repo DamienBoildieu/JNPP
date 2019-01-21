@@ -11,16 +11,16 @@
         var vm = this;
  
         vm.connect = function() {
-        	AuthentificationService.Login(vm.username, vm.password, function (response) {
-                if (response.success) {
+            AuthentificationService.Login(vm.username, vm.password).then(
+                function(response) {
                     AuthentificationService.SetCredentials(vm.username, vm.password);
-                    console.log("toto");
                     FlashService.Success('Utilisateur connecté', true);
                     $location.path('/');
-                } else {
+                },
+                function (response) {
                     FlashService.Error(response.message, true);
                 }
-            });
+            );
         };
  
         initController();

@@ -1,5 +1,6 @@
 package jnpp.controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +31,9 @@ import jnpp.service.exceptions.duplicates.DuplicateClientException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.services.ClientService;
 import jnpp.service.services.NotificationService;
+import org.springframework.http.ResponseEntity;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.http.HttpStatus;
 
 /**
  * Classe contrôlant la gestion des utilisateurs
@@ -111,6 +115,10 @@ public class UserController {
                                                         // pouvoir arriver
     }
 
+    @RequestMapping(value = "connectAngular", method = RequestMethod.POST)
+    public ResponseEntity<?> addFriend (HttpServletRequest request) throws IOException {
+        return new ResponseEntity("ok", HttpStatus.OK);
+    }
     /**
      * Requête de déconnexion
      *
