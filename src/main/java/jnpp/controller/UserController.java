@@ -116,8 +116,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "connectAngular", method = RequestMethod.POST)
-    public ResponseEntity<?> addFriend (HttpServletRequest request) throws IOException {
-        return new ResponseEntity("ok", HttpStatus.OK);
+    public ResponseEntity<?> connectAngular (HttpServletRequest request) throws IOException {
+        return new ResponseEntity("ok", HttpStatus.BAD_REQUEST);
     }
     /**
      * Requête de déconnexion

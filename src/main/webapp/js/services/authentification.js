@@ -16,37 +16,12 @@
         return service;
  
         function Login(username, password) {
-            //let deferred = $q.defer();
             let data = {
                 'login' : username,
                 'pass' : password
             };
-            let url = 'http://localhost:8080/UsersAngularJS/connectAngular.htm';
-            return $http.post(url, data);/*.then(
-                function (response) {
-                    deferred.resolve(response);
-                },
-                function (errResponse) {
-                   deferred.reject(errResponse);
-                }
-            );
-            return deferred.promise;*/
-            /*var response;
-            UserService.GetByName(username)
-                .then(function (user) {
-                    if (user === "damien") {
-                        if (password === "damien") {
-                            response = { success: true };
-                        } else {
-                            response = { success: false, message: 'Erreur login / Mot de passe' };
-                        }
-                    }
-                    callback(response);
-                },
-                function(err) {
-                    response = { success: false, message: err};
-                    callback(response);
-                });*/
+            let url = 'http://localhost:8084/JNPP/connectAngular.htm';
+            return $http.post(url, data);
         }
  
         function SetCredentials(username, password) {

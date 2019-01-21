@@ -12,13 +12,13 @@
  
         vm.connect = function() {
             AuthentificationService.Login(vm.username, vm.password).then(
-                function(response) {
+                function() {
                     AuthentificationService.SetCredentials(vm.username, vm.password);
                     FlashService.Success('Utilisateur connecté', true);
                     $location.path('/');
                 },
                 function (response) {
-                    FlashService.Error(response.message, true);
+                    FlashService.Error(response.data, true);
                 }
             );
         };
