@@ -14,10 +14,11 @@
         	AuthentificationService.Login(vm.username, vm.password, function (response) {
                 if (response.success) {
                     AuthentificationService.SetCredentials(vm.username, vm.password);
+                    console.log("toto");
                     FlashService.Success('Utilisateur connecté', true);
                     $location.path('/');
                 } else {
-                    FlashService.Error(response.message);
+                    FlashService.Error(response.message, true);
                 }
             });
         };

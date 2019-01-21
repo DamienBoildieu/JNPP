@@ -37,9 +37,8 @@ and open the template in the editor.
 
 <body>
         
-        <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message">
-        <button type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
-        
+        <div ng-class="{'green': flash.type === 'success', 'red': flash.type === 'error' }" 
+        	ng-if="flash" ng-bind="flash.message" class="card-panel lighten-1 white-text left-align">        
             
         </div>
         
