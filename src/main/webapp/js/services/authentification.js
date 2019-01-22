@@ -20,7 +20,7 @@
                 'login' : username,
                 'pass' : password
             };
-            let url = 'http://localhost:8084/JNPP/connectAngular.htm';
+            let url = 'http://localhost:8080/JNPP/connectAngular.htm';
             return $http.post(url, data);
         }
  

@@ -34,6 +34,7 @@ import jnpp.service.services.NotificationService;
 import org.springframework.http.ResponseEntity;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * Classe contrôlant la gestion des utilisateurs
@@ -116,8 +117,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "connectAngular", method = RequestMethod.POST)
-    public ResponseEntity<?> connectAngular (HttpServletRequest request) throws IOException {
-        return new ResponseEntity("ok", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> connectAngular (@RequestBody String userString, HttpServletRequest request) throws IOException {
+        return new ResponseEntity(userString, HttpStatus.BAD_REQUEST);
     }
     /**
      * Requête de déconnexion
