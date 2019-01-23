@@ -18,7 +18,7 @@
         function Login(username, password) {
             let data = {
                 'login' : username,
-                'pass' : password
+                'password' : password
             };
             let url = 'http://localhost:8080/JNPP/connectAngular.htm';
             return $http.post(url, data);

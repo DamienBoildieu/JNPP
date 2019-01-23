@@ -31,6 +31,7 @@ import jnpp.service.exceptions.duplicates.DuplicateClientException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.services.ClientService;
 import jnpp.service.services.NotificationService;
+import org.codehaus.jackson.JsonNode;
 import org.springframework.http.ResponseEntity;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.HttpStatus;
@@ -117,8 +118,18 @@ public class UserController {
     }
 
     @RequestMapping(value = "connectAngular", method = RequestMethod.POST)
-    public ResponseEntity<?> connectAngular (@RequestBody String userString, HttpServletRequest request) throws IOException {
-        return new ResponseEntity(userString, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> connectAngular (@RequestBody String userString, HttpServletRequest request) 
+    		throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode data = mapper.readTree(userString);
+        String id = data.get("login").asText();
+        String password = data.get("password").asText();
+        ClientDTO client = this.clientService.signIn(id, password);
+        if (client!=null)
+            return new ResponseEntity<String>(client.toJson(), HttpStatus.OK);
+        else
+            return new ResponseEntity<String>("Erreur dans l'identifiant ou le mot de passe", 
+            								  HttpStatus.BAD_REQUEST);
     }
     /**
      * Requête de déconnexion
