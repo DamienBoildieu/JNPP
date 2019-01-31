@@ -38,10 +38,11 @@
 
         $rootScope.$on('$locationChangeStart', function (event, next, current) {
             // redirect to login page if not logged in and trying to access a restricted page
-            var connectedPage = $.inArray($location.path(), ['/home', '/signup', '/connect']) === -1;
-            var notConnectedPage =  $.inArray($location.path(), ['/signup', '/connect']) !== -1;
-            var loggedIn = $rootScope.globals.currentUser;
+            let connectedPage = $.inArray($location.path(), ['', '/', '/home', '/signup', '/connect']) === -1;
+            let notConnectedPage =  $.inArray($location.path(), ['/signup', '/connect']) !== -1;
+            let loggedIn = $rootScope.globals.currentUser;
             if (connectedPage && !loggedIn) {
+            	console.log(connectedPage);
                 $location.path('/connect');
             } else if (notConnectedPage && loggedIn) {
             	$location.path('/home');
