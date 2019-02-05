@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -130,6 +131,19 @@ public class UserController {
         else
             return new ResponseEntity<String>("Erreur dans l'identifiant ou le mot de passe", 
             								  HttpStatus.BAD_REQUEST);
+    }
+    
+    @RequestMapping(value = "getgenders", method = RequestMethod.POST)
+    public ResponseEntity<?> getGenders (HttpServletRequest request) 
+    		throws IOException {
+        HttpSession session = request.getSession();
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
+        Map<IdentityDTO.Gender, String> genderMap = Translator.getInstance().
+                translateGenders(SessionController.getLanguage(session));
+        ObjectMapper mapper = new ObjectMapper();
+        return new ResponseEntity<String>(mapper.writeValueAsString(genderMap), HttpStatus.OK);
     }
     /**
      * Requête de déconnexion

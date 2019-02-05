@@ -13,9 +13,12 @@
                 templateUrl: 'html/home.html'
             })
             .when('/signup', {
-                controller: 'SignUpController',
-                templateUrl: 'html/signup.html',
-                controllerAs: 'vm'
+                templateUrl: 'html/signup.html'
+            })
+            .when('/privatesignup', {
+            	controller: 'SignUpController',
+            	templateUrl: 'html/privatesignup.html',
+            	controllerAs: 'vm'
             })
             .when('/connect', {
             	controller: 'ConnectController',
@@ -23,7 +26,6 @@
             	controllerAs: 'vm'
             })
             .otherwise({ redirectTo: '/home' });
-  
     }
 
     run.$inject = ['$rootScope', '$location', '$cookies', '$http'];
@@ -36,10 +38,15 @@
             $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata;
         }
 
+        $rootScope.basePath = 'http://localhost:8080/JNPP/';
+        
         $rootScope.$on('$locationChangeStart', function (event, next, current) {
             // redirect to login page if not logged in and trying to access a restricted page
-            let connectedPage = $.inArray($location.path(), ['', '/', '/home', '/signup', '/connect']) === -1;
-            let notConnectedPage =  $.inArray($location.path(), ['/signup', '/connect']) !== -1;
+            let connectedPage = $.inArray($location.path(), 
+                ['', '/', '/home', '/signup', '/privatesignup',
+                    '/professionalsignup', '/connect']) === -1;
+            let notConnectedPage =  $.inArray($location.path(), ['/signup', 
+                '/privatesignup', '/professionalsignup', '/connect']) !== -1;
             let loggedIn = $rootScope.globals.currentUser;
             if (connectedPage && !loggedIn) {
             	console.log(connectedPage);

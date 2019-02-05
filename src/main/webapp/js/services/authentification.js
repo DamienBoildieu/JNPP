@@ -5,7 +5,7 @@
         .module('app')
         .factory('AuthentificationService', AuthentificationService);
  
-    AuthentificationService.$inject = ['$cookies', '$rootScope', '$http', '$q'];
+    AuthentificationService.$inject = ['$cookies', 'CommonService', '$http', '$q'];
     function AuthentificationService($cookies, $rootScope, $http, $q) {
         var service = {};
  
@@ -20,7 +20,7 @@
                 'login' : username,
                 'password' : password
             };
-            let url = 'http://localhost:8080/JNPP/connectAngular.htm';
+            let url = CommonService.basePath+'connectAngular.htm';
             return $http.post(url, data);
         }
  

@@ -9,22 +9,27 @@
                     <div class="row">
                         <div class="col s12">
                             <div class="input-field">
-                                <label for="account"> Identifiant </label> <input type="text"  ng-model="vm.username"
-                                                                                  class="validate" name="account" id="account">
+                                <label for="account"> Identifiant </label> 
+                                <input type="text"  ng-model="vm.username"
+                                    class="validate" name="account" id="account"
+                                    required>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12">
                             <div class="input-field">
-                                <label for="password"> Mot de passe </label> <input type="password" ng-model="vm.password"
-                                                                                 class="validate" name="password" id="password">
+                                <label for="password"> Mot de passe </label>
+                                <input type="password" ng-model="vm.password"
+                                    class="validate" name="password" id="password"
+                                    required>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12">
-                            <input type="submit" ng-disabled="form.$invalid" value="Se connecter" class="btn blue" />
+                            <input type="submit" ng-disabled="form.$invalid" 
+                                value="Se connecter" class="btn blue" />
                         </div>
                     </div>
                 </form>

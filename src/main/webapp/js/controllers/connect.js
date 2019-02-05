@@ -20,12 +20,6 @@
                 }
             );
         };
- 
-        initController();
-        
-        function initController() {
-            AuthentificationService.ClearCredentials();
-        }
     }
  
 })();
