@@ -17,7 +17,13 @@
  
         function getGenders() {
             let url = CommonService.basePath+'getgenders.htm';
-            return $http.post(url);
+            let deferred = $q.defer();
+            $http.post(url).then(
+                function (response) {
+                    deferred.resolve(response.data);
+                }
+            );
+            return deferred.promise;
         }
     }
  

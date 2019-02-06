@@ -12,12 +12,13 @@
         
         init();
         
-        this.privateSignUp = privateSignUp;
+        vm.genders = [];
+        vm.privateSignUp = privateSignUp;
         
         function init() {
             UserService.getGenders().then(
                  function(genders) {
-                    vm.genders = genders.data;
+                    vm.genders = genders;
                  }
             );
         }
