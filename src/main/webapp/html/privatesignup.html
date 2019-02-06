@@ -21,14 +21,15 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="input-field col s12">
-                                    <select ng-model="vm.gender" form="signup">
-                                            <option ng-repeat="(key, value) in vm.genders"
-                                                value="{{key}}">
-                                                {{value}}
-                                            </option>  
-                                    </select>
+                                <div class="row">
                                     <label>Sexe</label>
+                                </div>
+                                <div class="row">
+                                    <label ng-repeat="obj in vm.genders" form="signup">
+                                        <input ng-model="vm.gender" ng-value="{{obj.key}}" 
+                                            name="genderGroup" type="radio" checked/>
+                                        <span>{{obj.value}}</span>
+                                    </label>                                    
                                 </div>
                             </div>
                             <div class="row">

@@ -121,6 +121,14 @@ public class UserController {
     @RequestMapping(value = "connectAngular", method = RequestMethod.POST)
     public ResponseEntity<?> connectAngular (@RequestBody String userString, HttpServletRequest request) 
     		throws IOException {
+        HttpSession session = request.getSession();
+        if (session == null) {
+            session = request.getSession(true);
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
+        
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(userString);
         String id = data.get("login").asText();
@@ -133,10 +141,13 @@ public class UserController {
             								  HttpStatus.BAD_REQUEST);
     }
     
-    @RequestMapping(value = "getgenders", method = RequestMethod.POST)
+    @RequestMapping(value = "getGenders", method = RequestMethod.POST)
     public ResponseEntity<?> getGenders (HttpServletRequest request) 
     		throws IOException {
         HttpSession session = request.getSession();
+        if (session == null) {
+            session = request.getSession(true);
+        }
         if (SessionController.getLanguage(session) != Translator.Language.FR) {
             SessionController.setLanguage(session, Translator.Language.FR);
         }
@@ -144,6 +155,47 @@ public class UserController {
                 translateGenders(SessionController.getLanguage(session));
         ObjectMapper mapper = new ObjectMapper();
         return new ResponseEntity<String>(mapper.writeValueAsString(genderMap), HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "privateSignUpAngular", method = RequestMethod.POST)
+    public ResponseEntity<?> privateSignUpAngular (@RequestBody String body, HttpServletRequest request) 
+    		throws IOException {
+        HttpSession session = request.getSession();
+        if (session == null) {
+            session = request.getSession(true);
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
+        
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode data = mapper.readTree(body);
+        if (!SessionController.isConnected(session)) {
+            String firstName = data.get("firstName").asText();
+            String lastName = data.get("lastName").asText();
+            String genderStr = data.get("gender").asText();
+            String birthdayStr = data.get("birthday").asText();
+            String email = data.get("email").asText();
+            int streetNbrStr = data.get("streetNbr").asInt();
+            String street = data.get("street").asText();
+            String city = data.get("city").asText();
+            String country = data.get("country").asText();
+            String phone =  data.get("phone").asText();
+            
+            IdentityDTO.Gender gender;
+            if (genderStr.equals(IdentityDTO.Gender.MALE.name())) {
+                gender = IdentityDTO.Gender.MALE;
+            } else if (genderStr.equals(IdentityDTO.Gender.FEMALE.name())) {
+                gender = IdentityDTO.Gender.FEMALE;
+            } else {
+                return new ResponseEntity<String>("Sexe invalide", 
+                    HttpStatus.BAD_REQUEST);
+            }
+            Date birthday = new SimpleDateFormat("yyyy-MM-dd")
+                    .parse(birthdayStr);
+        }
+        return new ResponseEntity<String>("Vous devez être déconnecté", 
+            HttpStatus.FORBIDDEN);
     }
     /**
      * Requête de déconnexion

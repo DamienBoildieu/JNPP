@@ -5,9 +5,9 @@
         .module('app')
         .controller('SignUpController', SignUpController);
  
-    SignUpController.$inject = ['$location', 'UserService', 'FlashService'];
+    SignUpController.$inject = ['$location', 'CommonService', 'UserService', 'FlashService'];
     
-    function SignUpController($location, UserService, FlashService) {
+    function SignUpController($location, CommonService, UserService, FlashService) {
         let vm = this;
         
         init();
@@ -16,15 +16,17 @@
         vm.privateSignUp = privateSignUp;
         
         function init() {
-            UserService.getGenders().then(
-                 function(genders) {
-                    vm.genders = genders;
-                 }
+            CommonService.getGenders().then(
+                function(genders) {
+                    vm.genders = Object.getOwnPropertyNames(genders).map(k => ({key:k, value:genders[k]}));
+                }
             );
-        }
+        };
         
         function privateSignUp() {
-            AuthentificationService.Login(this.username, this.password).then(
+            UserService.privateSignUp(vm.lastName, vm.firstName, vm.gender,
+                vm.birthday, vm.email, vm.streetNbr, vm.street, vm.city,
+                vm.country, vm.phone).then(
                 function() {
                     AuthentificationService.SetCredentials(this.username, this.password);
                     FlashService.Success('Utilisateur connecté', true);
