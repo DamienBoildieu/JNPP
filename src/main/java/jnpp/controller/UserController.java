@@ -1,11 +1,14 @@
 package jnpp.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -131,7 +134,7 @@ public class UserController {
         
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(userString);
-        String id = data.get("login").asText();
+        String id = data.get("username").asText();
         String password = data.get("password").asText();
         ClientDTO client = this.clientService.signIn(id, password);
         if (client!=null)
@@ -171,28 +174,46 @@ public class UserController {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
         if (!SessionController.isConnected(session)) {
-            String firstName = data.get("firstName").asText();
-            String lastName = data.get("lastName").asText();
-            String genderStr = data.get("gender").asText();
-            String birthdayStr = data.get("birthday").asText();
-            String email = data.get("email").asText();
-            int streetNbrStr = data.get("streetNbr").asInt();
-            String street = data.get("street").asText();
-            String city = data.get("city").asText();
-            String country = data.get("country").asText();
-            String phone =  data.get("phone").asText();
-            
-            IdentityDTO.Gender gender;
-            if (genderStr.equals(IdentityDTO.Gender.MALE.name())) {
-                gender = IdentityDTO.Gender.MALE;
-            } else if (genderStr.equals(IdentityDTO.Gender.FEMALE.name())) {
-                gender = IdentityDTO.Gender.FEMALE;
-            } else {
-                return new ResponseEntity<String>("Sexe invalide", 
+            try {
+                String firstName = data.get("firstName").asText();
+                String lastName = data.get("lastName").asText();
+                String genderStr = data.get("gender").asText();
+                String birthdayStr = data.get("birthday").asText();
+                String email = data.get("email").asText();
+                int streetNbr = data.get("streetNbr").asInt();
+                String street = data.get("street").asText();
+                String city = data.get("city").asText();
+                String country = data.get("country").asText();
+                String phone =  data.get("phone").asText();
+                
+                IdentityDTO.Gender gender;
+                if (genderStr.equals(IdentityDTO.Gender.MALE.name())) {
+                    gender = IdentityDTO.Gender.MALE;
+                } else if (genderStr.equals(IdentityDTO.Gender.FEMALE.name())) {
+                    gender = IdentityDTO.Gender.FEMALE;
+                } else {
+                    return new ResponseEntity<String>("Sexe invalide",
+                        HttpStatus.BAD_REQUEST);
+                }
+                Date birthday = new SimpleDateFormat("yyyy-MM-dd")
+                        .parse(birthdayStr);
+                clientService.signUp(gender, firstName, lastName, birthday,
+                        email, streetNbr, street, city, country, phone);
+                return new ResponseEntity<String>("Utilisateur créé", 
+                    HttpStatus.CREATED);
+            } catch (ParseException ex) {
+                return new ResponseEntity<String>("Erreur dans le formulaire",
                     HttpStatus.BAD_REQUEST);
+            } catch (DuplicateClientException ex) {
+                return new ResponseEntity<String>("Ce client est déjà enregistré",
+                    HttpStatus.BAD_REQUEST);             
+            } catch (AgeException ex) {
+                return new ResponseEntity<String>("Un client ne peut pas être mineur",
+                    HttpStatus.BAD_REQUEST);
+            } catch (InformationException ex) {
+                return new ResponseEntity<String>("Une erreur est présente dans le formulaire",
+                    HttpStatus.BAD_REQUEST);                
             }
-            Date birthday = new SimpleDateFormat("yyyy-MM-dd")
-                    .parse(birthdayStr);
         }
         return new ResponseEntity<String>("Vous devez être déconnecté", 
             HttpStatus.FORBIDDEN);

@@ -8,15 +8,21 @@
     ConnectController.$inject = ['$location', 'AuthentificationService', 'FlashService'];
     
     function ConnectController($location, AuthentificationService, FlashService) {
-        this.connect = function() {
-            AuthentificationService.Login(this.username, this.password).then(
+        let vm = this;
+        
+        vm.connectData = {};
+        vm.connect = connect;
+        
+        function connect() {
+            AuthentificationService.login(vm.connectData).then(
                 function() {
-                    AuthentificationService.SetCredentials(this.username, this.password);
+                    AuthentificationService.setCredentials(vm.connectData.username, 
+                        vm.connectData.password);
                     FlashService.Success('Utilisateur connecté', true);
                     $location.path('/');
                 },
                 function (response) {
-                    FlashService.Error(response.data, true);
+                    FlashService.Error(response, true);
                 }
             );
         };

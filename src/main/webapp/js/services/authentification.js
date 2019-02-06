@@ -5,26 +5,21 @@
         .module('app')
         .factory('AuthentificationService', AuthentificationService);
  
-    AuthentificationService.$inject = ['$cookies','$rootScope', 'CommonService', '$http', '$q'];
-    function AuthentificationService($cookies, $rootScope, CommonService, $http, $q) {
+    AuthentificationService.$inject = ['$cookies','$rootScope', 'CommonService'];
+    function AuthentificationService($cookies, $rootScope, CommonService) {
         var service = {};
  
-        service.Login = Login;
-        service.SetCredentials = SetCredentials;
+        service.login = login;
+        service.setCredentials = setCredentials;
         service.ClearCredentials = ClearCredentials;
  
         return service;
  
-        function Login(username, password) {
-            let data = {
-                'login' : username,
-                'password' : password
-            };
-            let url = CommonService.basePath+'connectAngular.htm';
-            return $http.post(url, data);
+        function login(data) {
+            return CommonService.basicRequest('connectAngular.htm', data);
         }
  
-        function SetCredentials(username, password) {
+        function setCredentials(username, password) {
             $rootScope.globals = {
                 currentUser: {
                     username: username,

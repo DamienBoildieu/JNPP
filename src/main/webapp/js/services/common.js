@@ -11,9 +11,9 @@
         
         let service = {};
         
-        service.basePath = 'http://localhost:8084/JNPP/';
-        
-        service.getGenders = getGenders;
+        service.basePath = 'http://localhost:8080/JNPP/';      
+        service.getGenders = getGenders;     
+        service.basicRequest = basicRequest;
         
         return service;
         
@@ -26,7 +26,23 @@
                 }
             );
             return deferred.promise;
-        }
+        };
+        
+        function basicRequest(servletUrl, data) {
+            let url = service.basePath+servletUrl;
+            console.log(data);
+            let deferred = $q.defer();
+            $http.post(url, data).then(
+                function (response) {
+                    deferred.resolve(response.data);
+                },
+                function (response) {
+                    deferred.reject(response.data);
+                }
+            );
+            return deferred.promise;
+        };
+        
     }
  
 })();

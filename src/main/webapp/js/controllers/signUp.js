@@ -13,6 +13,7 @@
         init();
         
         vm.genders = [];
+        vm.privateSignUpData = {};
         vm.privateSignUp = privateSignUp;
         
         function init() {
@@ -24,16 +25,13 @@
         };
         
         function privateSignUp() {
-            UserService.privateSignUp(vm.lastName, vm.firstName, vm.gender,
-                vm.birthday, vm.email, vm.streetNbr, vm.street, vm.city,
-                vm.country, vm.phone).then(
-                function() {
-                    AuthentificationService.SetCredentials(this.username, this.password);
-                    FlashService.Success('Utilisateur connecté', true);
+            UserService.privateSignUp(vm.privateSignUpData).then(
+                function(response) {
+                    FlashService.Success(response, true);
                     $location.path('/');
                 },
                 function (response) {
-                    FlashService.Error(response.data, true);
+                    FlashService.Error(response, true);
                 }
             );
         };
