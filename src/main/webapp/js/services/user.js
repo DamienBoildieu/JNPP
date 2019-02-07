@@ -12,11 +12,16 @@
         let service = {};
         
         service.privateSignUp = privateSignUp;
+        service.proSignUp = proSignUp;
         
         return service;      
         
         function privateSignUp(data) {
             return CommonService.basicRequest('privateSignUpAngular.htm', data);
+        };
+        
+        function proSignUp(data) {
+            return CommonService.basicRequest('proSignUpAngular.htm', data);
         };
     }
  

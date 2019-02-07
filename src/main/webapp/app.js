@@ -20,6 +20,14 @@
             	templateUrl: 'html/privatesignup.html',
             	controllerAs: 'vm'
             })
+            .when('/professionalsignup', {
+            	controller: 'SignUpController',
+            	templateUrl: 'html/professionalsignup.html',
+            	controllerAs: 'vm'
+            })
+            .when('/signupsuccess', {
+                templateUrl: 'html/signupsuccess.html'
+            })
             .when('/connect', {
             	controller: 'ConnectController',
             	templateUrl: 'html/connect.html',
@@ -44,9 +52,9 @@
             // redirect to login page if not logged in and trying to access a restricted page
             let connectedPage = $.inArray($location.path(), 
                 ['', '/', '/home', '/signup', '/privatesignup',
-                    '/professionalsignup', '/connect']) === -1;
+                    '/professionalsignup', '/signupsuccess', '/connect']) === -1;
             let notConnectedPage =  $.inArray($location.path(), ['/signup', 
-                '/privatesignup', '/professionalsignup', '/connect']) !== -1;
+                '/privatesignup', '/professionalsignup', '/signupsuccess', '/connect']) !== -1;
             let loggedIn = $rootScope.globals.currentUser;
             if (connectedPage && !loggedIn) {
             	console.log(connectedPage);

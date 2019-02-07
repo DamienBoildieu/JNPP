@@ -14,7 +14,9 @@
         
         vm.genders = [];
         vm.privateSignUpData = {};
+        vm.proSignUpData = {};
         vm.privateSignUp = privateSignUp;
+        vm.proSignUp = proSignUp;
         
         function init() {
             CommonService.getGenders().then(
@@ -28,7 +30,19 @@
             UserService.privateSignUp(vm.privateSignUpData).then(
                 function(response) {
                     FlashService.Success(response, true);
-                    $location.path('/');
+                    $location.path('/signupsuccess');
+                },
+                function (response) {
+                    FlashService.Error(response, true);
+                }
+            );
+        };
+        
+        function proSignUp() {
+            UserService.proSignUp(vm.proSignUpData).then(
+                function(response) {
+                    FlashService.Success(response, true);
+                    $location.path('/signupsuccess');
                 },
                 function (response) {
                     FlashService.Error(response, true);

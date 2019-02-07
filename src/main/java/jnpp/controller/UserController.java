@@ -199,23 +199,74 @@ public class UserController {
                         .parse(birthdayStr);
                 clientService.signUp(gender, firstName, lastName, birthday,
                         email, streetNbr, street, city, country, phone);
-                return new ResponseEntity<String>("Utilisateur créé", 
+                return new ResponseEntity<String>("Utilisateur cree", 
                     HttpStatus.CREATED);
             } catch (ParseException ex) {
-                return new ResponseEntity<String>("Erreur dans le formulaire",
+                return new ResponseEntity<String>("Une erreur est presente dans le formulaire",
                     HttpStatus.BAD_REQUEST);
             } catch (DuplicateClientException ex) {
-                return new ResponseEntity<String>("Ce client est déjà enregistré",
+                return new ResponseEntity<String>("Ce client est deja enregistre",
                     HttpStatus.BAD_REQUEST);             
             } catch (AgeException ex) {
                 return new ResponseEntity<String>("Un client ne peut pas être mineur",
                     HttpStatus.BAD_REQUEST);
             } catch (InformationException ex) {
-                return new ResponseEntity<String>("Une erreur est présente dans le formulaire",
+                return new ResponseEntity<String>("Une erreur est presente dans le formulaire",
                     HttpStatus.BAD_REQUEST);                
             }
         }
-        return new ResponseEntity<String>("Vous devez être déconnecté", 
+        return new ResponseEntity<String>("Vous devez etre deconnecte", 
+            HttpStatus.FORBIDDEN);
+    }
+    
+    @RequestMapping(value = "proSignUpAngular", method = RequestMethod.POST)
+    public ResponseEntity<?> proSignUpAngular (@RequestBody String body, HttpServletRequest request) 
+    		throws IOException {
+        HttpSession session = request.getSession();
+        if (session == null) {
+            session = request.getSession(true);
+        }
+        if (SessionController.getLanguage(session) != Translator.Language.FR) {
+            SessionController.setLanguage(session, Translator.Language.FR);
+        }
+        
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode data = mapper.readTree(body);
+        if (!SessionController.isConnected(session)) {
+            try {
+                String company = data.get("firstName").asText();
+                String firstName = data.get("firstName").asText();
+                String lastName = data.get("lastName").asText();
+                String genderStr = data.get("gender").asText();
+                String email = data.get("email").asText();
+                int streetNbr = data.get("streetNbr").asInt();
+                String street = data.get("street").asText();
+                String city = data.get("city").asText();
+                String country = data.get("country").asText();
+                String phone =  data.get("phone").asText();
+                
+                IdentityDTO.Gender gender;
+                if (genderStr.equals(IdentityDTO.Gender.MALE.name())) {
+                    gender = IdentityDTO.Gender.MALE;
+                } else if (genderStr.equals(IdentityDTO.Gender.FEMALE.name())) {
+                    gender = IdentityDTO.Gender.FEMALE;
+                } else {
+                    return new ResponseEntity<String>("Sexe invalide",
+                        HttpStatus.BAD_REQUEST);
+                }
+                clientService.signUp(company,gender, firstName, lastName,
+                        email, streetNbr, street, city, country, phone);
+                return new ResponseEntity<String>("Utilisateur cree", 
+                    HttpStatus.CREATED);
+            } catch (DuplicateClientException ex) {
+                return new ResponseEntity<String>("Ce client est deja enregistre",
+                    HttpStatus.BAD_REQUEST);             
+            } catch (InformationException ex) {
+                return new ResponseEntity<String>("Une erreur est presente dans le formulaire",
+                    HttpStatus.BAD_REQUEST);                
+            }
+        }
+        return new ResponseEntity<String>("Vous devez etre deconnecte", 
             HttpStatus.FORBIDDEN);
     }
     /**

@@ -30,7 +30,6 @@
         
         function basicRequest(servletUrl, data) {
             let url = service.basePath+servletUrl;
-            console.log(data);
             let deferred = $q.defer();
             $http.post(url, data).then(
                 function (response) {
