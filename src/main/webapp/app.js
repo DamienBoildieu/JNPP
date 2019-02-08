@@ -9,8 +9,8 @@
     config.$inject = ['$routeProvider', '$locationProvider'];
     function config($routeProvider, $locationProvider) {
         $routeProvider
-            .when('/home', {
-                templateUrl: 'html/home.html'
+            .when('/welcome', {
+                templateUrl: 'html/welcome.html'
             })
             .when('/signup', {
                 templateUrl: 'html/signup.html'
@@ -33,7 +33,10 @@
             	templateUrl: 'html/connect.html',
             	controllerAs: 'vm'
             })
-            .otherwise({ redirectTo: '/home' });
+            .when('/home', {
+                templateUrl: 'html/home.html'
+            })
+            .otherwise({ redirectTo: '/welcome' });
     }
 
     run.$inject = ['$rootScope', '$location', '$cookies', '$http'];
@@ -51,8 +54,8 @@
         $rootScope.$on('$locationChangeStart', function (event, next, current) {
             // redirect to login page if not logged in and trying to access a restricted page
             let connectedPage = $.inArray($location.path(), 
-                ['', '/', '/home', '/signup', '/privatesignup',
-                    '/professionalsignup', '/signupsuccess', '/connect']) === -1;
+                ['', '/', '/welcome', '/signup', '/privatesignup',
+                '/professionalsignup', '/signupsuccess', '/connect']) === -1;
             let notConnectedPage =  $.inArray($location.path(), ['/signup', 
                 '/privatesignup', '/professionalsignup', '/signupsuccess', '/connect']) !== -1;
             let loggedIn = $rootScope.globals.currentUser;
@@ -60,7 +63,7 @@
             	console.log(connectedPage);
                 $location.path('/connect');
             } else if (notConnectedPage && loggedIn) {
-            	$location.path('/home');
+            	$location.path('/welcome');
             }
         });
     }

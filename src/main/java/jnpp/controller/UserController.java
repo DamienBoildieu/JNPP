@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -186,12 +184,8 @@ public class UserController {
                 String country = data.get("country").asText();
                 String phone =  data.get("phone").asText();
                 
-                IdentityDTO.Gender gender;
-                if (genderStr.equals(IdentityDTO.Gender.MALE.name())) {
-                    gender = IdentityDTO.Gender.MALE;
-                } else if (genderStr.equals(IdentityDTO.Gender.FEMALE.name())) {
-                    gender = IdentityDTO.Gender.FEMALE;
-                } else {
+                IdentityDTO.Gender gender = IdentityDTO.Gender.valueOf(genderStr);
+                if (null==gender) {
                     return new ResponseEntity<String>("Sexe invalide",
                         HttpStatus.BAD_REQUEST);
                 }

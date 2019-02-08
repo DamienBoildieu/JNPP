@@ -15,11 +15,12 @@
         
         function connect() {
             AuthentificationService.login(vm.connectData).then(
-                function() {
+                function(response) {
+                    console.log(response);
                     AuthentificationService.setCredentials(vm.connectData.username, 
                         vm.connectData.password);
                     FlashService.Success('Utilisateur connecté', true);
-                    $location.path('/');
+                    $location.path('/home');
                 },
                 function (response) {
                     FlashService.Error(response, true);

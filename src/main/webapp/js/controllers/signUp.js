@@ -5,9 +5,9 @@
         .module('app')
         .controller('SignUpController', SignUpController);
  
-    SignUpController.$inject = ['$location', 'CommonService', 'UserService', 'FlashService'];
+    SignUpController.$inject = ['$location', 'UserService', 'FlashService'];
     
-    function SignUpController($location, CommonService, UserService, FlashService) {
+    function SignUpController($location, UserService, FlashService) {
         let vm = this;
         
         init();
@@ -19,9 +19,12 @@
         vm.proSignUp = proSignUp;
         
         function init() {
-            CommonService.getGenders().then(
+            UserService.getGenders().then(
                 function(genders) {
                     vm.genders = Object.getOwnPropertyNames(genders).map(k => ({key:k, value:genders[k]}));
+                },
+                function(errMsg) {
+                    FlashService.Error(errMsg, true);
                 }
             );
         };
