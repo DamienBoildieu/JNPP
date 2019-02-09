@@ -7,7 +7,7 @@
 
     FlashService.$inject = ['$rootScope'];
     function FlashService($rootScope) {
-        var service = {};
+        let service = {};
 
         service.Success = Success;
         service.Error = Error;
@@ -23,7 +23,7 @@
             });
 
             function clearFlashMessage() {
-                var flash = $rootScope.flash;
+                let flash = $rootScope.flash;
                 if (flash) {
                     if (!flash.keepAfterLocationChange) {
                         delete $rootScope.flash;

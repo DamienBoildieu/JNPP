@@ -11,7 +11,7 @@
         
         let service = {};
         
-        service.basePath = 'http://localhost:8084/JNPP/';      
+        service.basePath = 'http://localhost:8080/JNPP/';      
         service.basicRequest = basicRequest;
         
         return service;

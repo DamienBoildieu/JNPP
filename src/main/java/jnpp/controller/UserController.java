@@ -26,6 +26,8 @@ import jnpp.controller.views.alerts.AlertMessage;
 import jnpp.controller.views.info.ViewInfo;
 import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.clients.ClientDTO;
+import jnpp.service.dto.clients.PrivateDTO;
+import jnpp.service.dto.clients.ProfessionalDTO;
 import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.clients.AgeException;
 import jnpp.service.exceptions.clients.InformationException;
@@ -129,17 +131,31 @@ public class UserController {
         if (SessionController.getLanguage(session) != Translator.Language.FR) {
             SessionController.setLanguage(session, Translator.Language.FR);
         }
-        
+        if (SessionController.isConnected(session))
+            return new ResponseEntity<String>("Vous devez etre deconnecte", 
+                HttpStatus.FORBIDDEN);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(userString);
         String id = data.get("username").asText();
         String password = data.get("password").asText();
         ClientDTO client = this.clientService.signIn(id, password);
-        if (client!=null)
-            return new ResponseEntity<String>(client.toJson(), HttpStatus.OK);
-        else
+        if (client!=null) {
+            SessionController.setClient(session, client);
+            switch (client.getType()) {
+                case PRIVATE:
+                    IdentityDTO identity = ((PrivateDTO)client).getIdentity();
+                    return new ResponseEntity<String>(identity.getFirstname()+" "+identity.getLastname(),
+                        HttpStatus.OK);
+                case PROFESIONAL:
+                    String name = ((ProfessionalDTO)client).getName();
+                    return new ResponseEntity<String>(name, HttpStatus.OK);
+                default:
+                    return new ResponseEntity<String>("Une erreur a eu lieu sur le serveur, "
+                        + "veuillez contacter un administrateur", HttpStatus.INTERNAL_SERVER_ERROR);           
+            }
+        } else
             return new ResponseEntity<String>("Erreur dans l'identifiant ou le mot de passe", 
-            								  HttpStatus.BAD_REQUEST);
+                HttpStatus.BAD_REQUEST);
     }
     
     @RequestMapping(value = "getGenders", method = RequestMethod.POST)
@@ -168,49 +184,47 @@ public class UserController {
         if (SessionController.getLanguage(session) != Translator.Language.FR) {
             SessionController.setLanguage(session, Translator.Language.FR);
         }
-        
+        if (SessionController.isConnected(session))
+            return new ResponseEntity<String>("Vous devez etre deconnecte", 
+                HttpStatus.FORBIDDEN);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
-        if (!SessionController.isConnected(session)) {
-            try {
-                String firstName = data.get("firstName").asText();
-                String lastName = data.get("lastName").asText();
-                String genderStr = data.get("gender").asText();
-                String birthdayStr = data.get("birthday").asText();
-                String email = data.get("email").asText();
-                int streetNbr = data.get("streetNbr").asInt();
-                String street = data.get("street").asText();
-                String city = data.get("city").asText();
-                String country = data.get("country").asText();
-                String phone =  data.get("phone").asText();
-                
-                IdentityDTO.Gender gender = IdentityDTO.Gender.valueOf(genderStr);
-                if (null==gender) {
-                    return new ResponseEntity<String>("Sexe invalide",
-                        HttpStatus.BAD_REQUEST);
-                }
-                Date birthday = new SimpleDateFormat("yyyy-MM-dd")
-                        .parse(birthdayStr);
-                clientService.signUp(gender, firstName, lastName, birthday,
-                        email, streetNbr, street, city, country, phone);
-                return new ResponseEntity<String>("Utilisateur cree", 
-                    HttpStatus.CREATED);
-            } catch (ParseException ex) {
-                return new ResponseEntity<String>("Une erreur est presente dans le formulaire",
+        try {
+            String firstName = data.get("firstName").asText();
+            String lastName = data.get("lastName").asText();
+            String genderStr = data.get("gender").asText();
+            String birthdayStr = data.get("birthday").asText();
+            String email = data.get("email").asText();
+            int streetNbr = data.get("streetNbr").asInt();
+            String street = data.get("street").asText();
+            String city = data.get("city").asText();
+            String country = data.get("country").asText();
+            String phone =  data.get("phone").asText();
+
+            IdentityDTO.Gender gender = IdentityDTO.Gender.valueOf(genderStr);
+            if (null==gender) {
+                return new ResponseEntity<String>("Sexe invalide",
                     HttpStatus.BAD_REQUEST);
-            } catch (DuplicateClientException ex) {
-                return new ResponseEntity<String>("Ce client est deja enregistre",
-                    HttpStatus.BAD_REQUEST);             
-            } catch (AgeException ex) {
-                return new ResponseEntity<String>("Un client ne peut pas être mineur",
-                    HttpStatus.BAD_REQUEST);
-            } catch (InformationException ex) {
-                return new ResponseEntity<String>("Une erreur est presente dans le formulaire",
-                    HttpStatus.BAD_REQUEST);                
             }
+            Date birthday = new SimpleDateFormat("yyyy-MM-dd")
+                    .parse(birthdayStr);
+            clientService.signUp(gender, firstName, lastName, birthday,
+                    email, streetNbr, street, city, country, phone);
+            return new ResponseEntity<String>("Utilisateur cree", 
+                HttpStatus.CREATED);
+        } catch (ParseException ex) {
+            return new ResponseEntity<String>("Une erreur est presente dans le formulaire",
+                HttpStatus.BAD_REQUEST);
+        } catch (DuplicateClientException ex) {
+            return new ResponseEntity<String>("Ce client est deja enregistre",
+                HttpStatus.BAD_REQUEST);             
+        } catch (AgeException ex) {
+            return new ResponseEntity<String>("Un client ne peut pas être mineur",
+                HttpStatus.BAD_REQUEST);
+        } catch (InformationException ex) {
+            return new ResponseEntity<String>("Une erreur est presente dans le formulaire",
+                HttpStatus.BAD_REQUEST);                
         }
-        return new ResponseEntity<String>("Vous devez etre deconnecte", 
-            HttpStatus.FORBIDDEN);
     }
     
     @RequestMapping(value = "proSignUpAngular", method = RequestMethod.POST)
@@ -226,42 +240,41 @@ public class UserController {
         
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
-        if (!SessionController.isConnected(session)) {
-            try {
-                String company = data.get("firstName").asText();
-                String firstName = data.get("firstName").asText();
-                String lastName = data.get("lastName").asText();
-                String genderStr = data.get("gender").asText();
-                String email = data.get("email").asText();
-                int streetNbr = data.get("streetNbr").asInt();
-                String street = data.get("street").asText();
-                String city = data.get("city").asText();
-                String country = data.get("country").asText();
-                String phone =  data.get("phone").asText();
-                
-                IdentityDTO.Gender gender;
-                if (genderStr.equals(IdentityDTO.Gender.MALE.name())) {
-                    gender = IdentityDTO.Gender.MALE;
-                } else if (genderStr.equals(IdentityDTO.Gender.FEMALE.name())) {
-                    gender = IdentityDTO.Gender.FEMALE;
-                } else {
-                    return new ResponseEntity<String>("Sexe invalide",
-                        HttpStatus.BAD_REQUEST);
-                }
-                clientService.signUp(company,gender, firstName, lastName,
-                        email, streetNbr, street, city, country, phone);
-                return new ResponseEntity<String>("Utilisateur cree", 
-                    HttpStatus.CREATED);
-            } catch (DuplicateClientException ex) {
-                return new ResponseEntity<String>("Ce client est deja enregistre",
-                    HttpStatus.BAD_REQUEST);             
-            } catch (InformationException ex) {
-                return new ResponseEntity<String>("Une erreur est presente dans le formulaire",
-                    HttpStatus.BAD_REQUEST);                
+        if (SessionController.isConnected(session))
+            return new ResponseEntity<String>("Vous devez etre deconnecte", 
+                HttpStatus.FORBIDDEN);
+        try {
+            String company = data.get("firstName").asText();
+            String firstName = data.get("firstName").asText();
+            String lastName = data.get("lastName").asText();
+            String genderStr = data.get("gender").asText();
+            String email = data.get("email").asText();
+            int streetNbr = data.get("streetNbr").asInt();
+            String street = data.get("street").asText();
+            String city = data.get("city").asText();
+            String country = data.get("country").asText();
+            String phone =  data.get("phone").asText();
+
+            IdentityDTO.Gender gender;
+            if (genderStr.equals(IdentityDTO.Gender.MALE.name())) {
+                gender = IdentityDTO.Gender.MALE;
+            } else if (genderStr.equals(IdentityDTO.Gender.FEMALE.name())) {
+                gender = IdentityDTO.Gender.FEMALE;
+            } else {
+                return new ResponseEntity<String>("Sexe invalide",
+                    HttpStatus.BAD_REQUEST);
             }
+            clientService.signUp(company,gender, firstName, lastName,
+                    email, streetNbr, street, city, country, phone);
+            return new ResponseEntity<String>("Utilisateur cree", 
+                HttpStatus.CREATED);
+        } catch (DuplicateClientException ex) {
+            return new ResponseEntity<String>("Ce client est deja enregistre",
+                HttpStatus.BAD_REQUEST);             
+        } catch (InformationException ex) {
+            return new ResponseEntity<String>("Une erreur est presente dans le formulaire",
+                HttpStatus.BAD_REQUEST);                
         }
-        return new ResponseEntity<String>("Vous devez etre deconnecte", 
-            HttpStatus.FORBIDDEN);
     }
     /**
      * Requête de déconnexion

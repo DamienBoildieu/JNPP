@@ -7,7 +7,7 @@
     
     BannerController.$inject = ['$rootScope'];
     function BannerController($rootScope) {
-        let loggedIn = $rootScope.globals.currentUser;
+        let loggedIn = $rootScope.globals.userName;
         if (loggedIn)
         	this.templateUrl = "html/connectedbanner.html";
         else

@@ -7,7 +7,7 @@
  
     AuthentificationService.$inject = ['$cookies','$rootScope', 'CommonService'];
     function AuthentificationService($cookies, $rootScope, CommonService) {
-        var service = {};
+        let service = {};
  
         service.login = login;
         service.setCredentials = setCredentials;
@@ -19,15 +19,11 @@
             return CommonService.basicRequest('connectAngular.htm', data);
         }
  
-        function setCredentials(username, password) {
+        function setCredentials(name) {
             $rootScope.globals = {
-                currentUser: {
-                    username: username,
-                    password: password
-                }
+                userName : name
             };
-            console.log('currentUser: username:' + $rootScope.globals.currentUser.username + 'pass:' + $rootScope.globals.currentUser.password
-                    );
+            console.log('currentUser:' + $rootScope.globals.userName);
             $cookies.putObject('globals', $rootScope.globals);
         }
  

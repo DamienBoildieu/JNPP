@@ -45,8 +45,8 @@
         
         // keep user logged in after page refresh
         $rootScope.globals = $cookies.getObject('globals') || {};
-        if ($rootScope.globals.currentUser) {
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata;
+        if ($rootScope.globals.userName) {
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.userName.authdata;
         }
 
         $rootScope.basePath = 'http://localhost:8080/JNPP/';
@@ -58,7 +58,7 @@
                 '/professionalsignup', '/signupsuccess', '/connect']) === -1;
             let notConnectedPage =  $.inArray($location.path(), ['/signup', 
                 '/privatesignup', '/professionalsignup', '/signupsuccess', '/connect']) !== -1;
-            let loggedIn = $rootScope.globals.currentUser;
+            let loggedIn = $rootScope.globals.userName;
             if (connectedPage && !loggedIn) {
             	console.log(connectedPage);
                 $location.path('/connect');

@@ -28,7 +28,7 @@ public class SessionController {
             throws UnconnectedException {
         if (SessionController.isConnected(session)) {
             session.removeAttribute("client");
-            session.removeAttribute("hasNotif");
+            //session.removeAttribute("hasNotif");
         } else {
             throw new UnconnectedException();
         }
@@ -103,7 +103,6 @@ public class SessionController {
      * @return true si l'utilisateur a une session sur le site, false sinon
      */
     public static boolean isConnected(HttpSession session) {
-        return (session != null) && (session.getAttribute("client") != null)
-                && (session.getAttribute("hasNotif") != null);
+        return (session != null) && (session.getAttribute("client") != null);
     }
 }

@@ -17,8 +17,7 @@
             AuthentificationService.login(vm.connectData).then(
                 function(response) {
                     console.log(response);
-                    AuthentificationService.setCredentials(vm.connectData.username, 
-                        vm.connectData.password);
+                    AuthentificationService.setCredentials(response);
                     FlashService.Success('Utilisateur connecté', true);
                     $location.path('/home');
                 },
