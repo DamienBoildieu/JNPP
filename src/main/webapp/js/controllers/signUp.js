@@ -24,7 +24,7 @@
                     vm.genders = Object.getOwnPropertyNames(genders).map(k => ({key:k, value:genders[k]}));
                 },
                 function(errMsg) {
-                    FlashService.Error(errMsg, true);
+                    FlashService.Error(errMsg);
                 }
             );
         };
@@ -36,7 +36,7 @@
                     $location.path('/signupsuccess');
                 },
                 function (response) {
-                    FlashService.Error(response, true);
+                    FlashService.Error(response);
                 }
             );
         };
@@ -48,7 +48,7 @@
                     $location.path('/signupsuccess');
                 },
                 function (response) {
-                    FlashService.Error(response, true);
+                    FlashService.Error(response);
                 }
             );
         };

@@ -60,7 +60,6 @@
                 '/privatesignup', '/professionalsignup', '/signupsuccess', '/connect']) !== -1;
             let loggedIn = $rootScope.globals.userName;
             if (connectedPage && !loggedIn) {
-            	console.log(connectedPage);
                 $location.path('/connect');
             } else if (notConnectedPage && loggedIn) {
             	$location.path('/welcome');

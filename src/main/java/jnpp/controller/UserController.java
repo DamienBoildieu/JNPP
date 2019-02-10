@@ -128,9 +128,6 @@ public class UserController {
         if (session == null) {
             session = request.getSession(true);
         }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
         if (SessionController.isConnected(session))
             return new ResponseEntity<String>("Vous devez etre deconnecte", 
                 HttpStatus.FORBIDDEN);
@@ -178,13 +175,7 @@ public class UserController {
     public ResponseEntity<?> privateSignUpAngular (@RequestBody String body, HttpServletRequest request) 
     		throws IOException {
         HttpSession session = request.getSession();
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (SessionController.isConnected(session))
+        if (session != null && SessionController.isConnected(session))
             return new ResponseEntity<String>("Vous devez etre deconnecte", 
                 HttpStatus.FORBIDDEN);
         ObjectMapper mapper = new ObjectMapper();
@@ -230,19 +221,12 @@ public class UserController {
     @RequestMapping(value = "proSignUpAngular", method = RequestMethod.POST)
     public ResponseEntity<?> proSignUpAngular (@RequestBody String body, HttpServletRequest request) 
     		throws IOException {
-        HttpSession session = request.getSession();
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        
+HttpSession session = request.getSession();
+        if (session != null && SessionController.isConnected(session))
+            return new ResponseEntity<String>("Vous devez etre deconnecte", 
+                HttpStatus.FORBIDDEN);        
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
-        if (SessionController.isConnected(session))
-            return new ResponseEntity<String>("Vous devez etre deconnecte", 
-                HttpStatus.FORBIDDEN);
         try {
             String company = data.get("firstName").asText();
             String firstName = data.get("firstName").asText();
@@ -275,6 +259,20 @@ public class UserController {
             return new ResponseEntity<String>("Une erreur est presente dans le formulaire",
                 HttpStatus.BAD_REQUEST);                
         }
+    }
+    
+    @RequestMapping(value = "disconnectAngular", method = RequestMethod.POST)
+    public ResponseEntity<?> disconnectAngular (@RequestBody String body, HttpServletRequest request) 
+    		throws IOException {
+        HttpSession session = request.getSession();
+        if (session == null) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+        if (SessionController.isConnected(session)) {
+            SessionController.deleteSession(session);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
     /**
      * Requête de déconnexion

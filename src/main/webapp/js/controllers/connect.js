@@ -22,7 +22,7 @@
                     $location.path('/home');
                 },
                 function (response) {
-                    FlashService.Error(response, true);
+                    FlashService.Error(response);
                 }
             );
         };
