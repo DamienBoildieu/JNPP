@@ -28,7 +28,7 @@
                     FlashService.Error(response);
                 }
             );
-        };
+        }
     }
  
 })();

@@ -3,20 +3,19 @@
  
     angular
         .module('app')
-        .controller('SignUpController', SignUpController);
+        .controller('PasswordController', PasswordController);
  
-    SignUpController.$inject = ['$location', 'UserService', 'FlashService'];
+    PasswordController.$inject = ['$location', 'UserService', 'FlashService'];
     
-    function SignUpController($location, UserService, FlashService) {
+    function PasswordController($location, UserService, FlashService) {
         let vm = this;
         
         init();
         
-        vm.genders = [];
-        vm.privateSignUpData = {};
-        vm.proSignUpData = {};
-        vm.privateSignUp = privateSignUp;
-        vm.proSignUp = proSignUp;
+        vm.privatePasswordData = {};
+        vm.proPasswordData = {};
+        vm.privatePassword = privatePassword;
+        vm.proPassword = proPassword;
         
         function init() {
             UserService.getGenders().then(
@@ -29,11 +28,12 @@
             );
         }
         
-        function privateSignUp() {
-            UserService.privateSignUp(vm.privateSignUpData).then(
+        function privatePassword() {
+            console.log(vm.privatePasswordData);
+            UserService.privatePassword(vm.privatePasswordData).then(
                 function(response) {
                     FlashService.Success(response, true);
-                    $location.path('/signupsuccess');
+                    $location.path('/passwordsuccess');
                 },
                 function (response) {
                     FlashService.Error(response);
@@ -41,11 +41,11 @@
             );
         }
         
-        function proSignUp() {
-            UserService.proSignUp(vm.proSignUpData).then(
+        function proPassword() {
+            UserService.proPassword(vm.proPasswordData).then(
                 function(response) {
                     FlashService.Success(response, true);
-                    $location.path('/signupsuccess');
+                    $location.path('/passwordsuccess');
                 },
                 function (response) {
                     FlashService.Error(response);

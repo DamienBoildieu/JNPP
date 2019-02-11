@@ -58,79 +58,14 @@ public class UserController {
     @Autowired
     private NotificationService notifService;
 
-    /**
-     * Requête du formulaire de connexion, essaie de connecter l'utilisateur
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return Une redirection vers le menu utilisateur si la connexion a
-     *         réussie, une redirection vers le formulaire de connexion si elle
-     *         a échouée, une redireciton vers l'index si l'utilisateur était
-     *         déjà connecté
-     * @throws Exception Exception non controllees.
-     */
     @RequestMapping(value = "connect", method = RequestMethod.POST)
-    protected ModelAndView connect(Model model, HttpServletRequest request,
-            RedirectAttributes rm) throws Exception {
+    public ResponseEntity<?> connect(@RequestBody String userString, HttpServletRequest request) 
+        throws IOException {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
+        if (null==session)
             session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (!SessionController.isConnected(session)) {
-            String id = request.getParameter("account");
-            String password = request.getParameter("password");
-            ClientDTO client = this.clientService.signIn(id, password);
-            if (client != null) {
-                boolean hasNotif = notifService
-                        .receiveUnseenNotifications(client.getLogin())
-                        .size() > 0;
-                SessionController.setHasNotif(session, hasNotif);
-                SessionController.setClient(session, client);
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Connexion réussie"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Connexion réussie"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-
-                return new ModelAndView("redirect:/home.htm");
-            } else {
-                AlertMessage error = new AlertMessage(AlertEnum.ERROR,
-                        "Nom d'utilisateur ou mot de passe incorrect");
-                if (alerts != null) {
-                    alerts.add(error);
-                    return new JNPPModelAndView("manageuser/connect",
-                            ViewInfo.createInfo(session, alerts));
-                } else {
-                    return new JNPPModelAndView("manageuser/connect",
-                            ViewInfo.createInfo(session, error));
-                }
-            }
-        }
-        return new ModelAndView("redirect:/index.htm"); // ne devrait pas
-                                                        // pouvoir arriver
-    }
-
-    @RequestMapping(value = "connectAngular", method = RequestMethod.POST)
-    public ResponseEntity<?> connectAngular (@RequestBody String userString, HttpServletRequest request) 
-    		throws IOException {
-        HttpSession session = request.getSession();
-        if (session == null) {
-            session = request.getSession(true);
-        }
         if (SessionController.isConnected(session))
-            return new ResponseEntity<String>("Vous devez etre deconnecte", 
-                HttpStatus.FORBIDDEN);
+            return new ResponseEntity("Vous devez etre deconnecte", HttpStatus.FORBIDDEN);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(userString);
         String id = data.get("username").asText();
@@ -141,43 +76,41 @@ public class UserController {
             switch (client.getType()) {
                 case PRIVATE:
                     IdentityDTO identity = ((PrivateDTO)client).getIdentity();
-                    return new ResponseEntity<String>(identity.getFirstname()+" "+identity.getLastname(),
+                    return new ResponseEntity(identity.getFirstname()+" "+identity.getLastname(),
                         HttpStatus.OK);
                 case PROFESIONAL:
                     String name = ((ProfessionalDTO)client).getName();
-                    return new ResponseEntity<String>(name, HttpStatus.OK);
+                    return new ResponseEntity(name, HttpStatus.OK);
                 default:
-                    return new ResponseEntity<String>("Une erreur a eu lieu sur le serveur, "
+                    return new ResponseEntity("Une erreur a eu lieu sur le serveur, "
                         + "veuillez contacter un administrateur", HttpStatus.INTERNAL_SERVER_ERROR);           
             }
         } else
-            return new ResponseEntity<String>("Erreur dans l'identifiant ou le mot de passe", 
+            return new ResponseEntity("Erreur dans l'identifiant ou le mot de passe", 
                 HttpStatus.BAD_REQUEST);
     }
     
     @RequestMapping(value = "getGenders", method = RequestMethod.GET)
-    public ResponseEntity<?> getGenders (HttpServletRequest request) 
-    		throws IOException {
+    public ResponseEntity<?> getGenders(HttpServletRequest request) 
+        throws IOException {
         HttpSession session = request.getSession();
-        if (session == null) {
+        if (null==session)
             session = request.getSession(true);
-        }
         if (SessionController.getLanguage(session) != Translator.Language.FR) {
             SessionController.setLanguage(session, Translator.Language.FR);
         }
         Map<IdentityDTO.Gender, String> genderMap = Translator.getInstance().
                 translateGenders(SessionController.getLanguage(session));
         ObjectMapper mapper = new ObjectMapper();
-        return new ResponseEntity<String>(mapper.writeValueAsString(genderMap), HttpStatus.OK);
+        return new ResponseEntity(mapper.writeValueAsString(genderMap), HttpStatus.OK);
     }
     
-    @RequestMapping(value = "privateSignUpAngular", method = RequestMethod.POST)
-    public ResponseEntity<?> privateSignUpAngular (@RequestBody String body, HttpServletRequest request) 
-    		throws IOException {
+    @RequestMapping(value = "privateSignUp", method = RequestMethod.POST)
+    public ResponseEntity<?> privateSignUp(@RequestBody String body, HttpServletRequest request) 
+        throws IOException {
         HttpSession session = request.getSession();
-        if (session != null && SessionController.isConnected(session))
-            return new ResponseEntity<String>("Vous devez etre deconnecte", 
-                HttpStatus.FORBIDDEN);
+        if (null!=session && SessionController.isConnected(session))
+            return new ResponseEntity("Vous devez etre deconnecte", HttpStatus.FORBIDDEN);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
         try {
@@ -193,38 +126,34 @@ public class UserController {
             String phone =  data.get("phone").asText();
 
             IdentityDTO.Gender gender = IdentityDTO.Gender.valueOf(genderStr);
-            if (null==gender) {
-                return new ResponseEntity<String>("Sexe invalide",
-                    HttpStatus.BAD_REQUEST);
-            }
+            if (null==gender)
+                return new ResponseEntity("Sexe invalide", HttpStatus.BAD_REQUEST);
             Date birthday = new SimpleDateFormat("yyyy-MM-dd")
                     .parse(birthdayStr);
             clientService.signUp(gender, firstName, lastName, birthday,
                     email, streetNbr, street, city, country, phone);
-            return new ResponseEntity<String>("Utilisateur cree", 
-                HttpStatus.CREATED);
+            return new ResponseEntity("Utilisateur cree", HttpStatus.CREATED);
         } catch (ParseException ex) {
-            return new ResponseEntity<String>("Une erreur est presente dans le formulaire",
+            return new ResponseEntity("Une erreur est presente dans le formulaire",
                 HttpStatus.BAD_REQUEST);
         } catch (DuplicateClientException ex) {
-            return new ResponseEntity<String>("Ce client est deja enregistre",
+            return new ResponseEntity("Ce client est deja enregistre",
                 HttpStatus.BAD_REQUEST);             
         } catch (AgeException ex) {
-            return new ResponseEntity<String>("Un client ne peut pas être mineur",
+            return new ResponseEntity("Un client ne peut pas être mineur",
                 HttpStatus.BAD_REQUEST);
         } catch (InformationException ex) {
-            return new ResponseEntity<String>("Une erreur est presente dans le formulaire",
+            return new ResponseEntity("Une erreur est presente dans le formulaire",
                 HttpStatus.BAD_REQUEST);                
         }
     }
     
-    @RequestMapping(value = "proSignUpAngular", method = RequestMethod.POST)
-    public ResponseEntity<?> proSignUpAngular (@RequestBody String body, HttpServletRequest request) 
-    		throws IOException {
-HttpSession session = request.getSession();
-        if (session != null && SessionController.isConnected(session))
-            return new ResponseEntity<String>("Vous devez etre deconnecte", 
-                HttpStatus.FORBIDDEN);        
+    @RequestMapping(value = "proSignUp", method = RequestMethod.POST)
+    public ResponseEntity<?> proSignUp(@RequestBody String body, HttpServletRequest request) 
+        throws IOException {
+        HttpSession session = request.getSession();
+        if (null!=session && SessionController.isConnected(session))
+            return new ResponseEntity("Vous devez etre deconnecte", HttpStatus.FORBIDDEN);        
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
         try {
@@ -239,423 +168,80 @@ HttpSession session = request.getSession();
             String country = data.get("country").asText();
             String phone =  data.get("phone").asText();
 
-            IdentityDTO.Gender gender;
-            if (genderStr.equals(IdentityDTO.Gender.MALE.name())) {
-                gender = IdentityDTO.Gender.MALE;
-            } else if (genderStr.equals(IdentityDTO.Gender.FEMALE.name())) {
-                gender = IdentityDTO.Gender.FEMALE;
-            } else {
-                return new ResponseEntity<String>("Sexe invalide",
-                    HttpStatus.BAD_REQUEST);
-            }
+            IdentityDTO.Gender gender = IdentityDTO.Gender.valueOf(genderStr);
+            if (null==gender)
+                return new ResponseEntity("Sexe invalide", HttpStatus.BAD_REQUEST);
             clientService.signUp(company,gender, firstName, lastName,
                     email, streetNbr, street, city, country, phone);
-            return new ResponseEntity<String>("Utilisateur cree", 
-                HttpStatus.CREATED);
+            return new ResponseEntity("Utilisateur cree", HttpStatus.CREATED);
         } catch (DuplicateClientException ex) {
-            return new ResponseEntity<String>("Ce client est deja enregistre",
-                HttpStatus.BAD_REQUEST);             
+            return new ResponseEntity("Ce client est deja enregistre", HttpStatus.BAD_REQUEST);             
         } catch (InformationException ex) {
-            return new ResponseEntity<String>("Une erreur est presente dans le formulaire",
+            return new ResponseEntity("Une erreur est presente dans le formulaire",
                 HttpStatus.BAD_REQUEST);                
         }
     }
     
-    @RequestMapping(value = "disconnectAngular", method = RequestMethod.GET)
-    public ResponseEntity<?> disconnectAngular (HttpServletRequest request) 
+    @RequestMapping(value = "disconnect", method = RequestMethod.GET)
+    public ResponseEntity<?> disconnect(HttpServletRequest request) 
     		throws IOException {
         HttpSession session = request.getSession();
-        if (session == null) {
+        if (null==session)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
-        }
         if (SessionController.isConnected(session)) {
             SessionController.deleteSession(session);
             return new ResponseEntity(HttpStatus.OK);
         }
         return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
-    /**
-     * Requête de déconnexion
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return Déconnecte si l'utilisateur était connecté, redirige toujours
-     *         vers l'index
-     * @throws Exception Exception non controllees.
-     */
-    @RequestMapping(value = "disconnect", method = RequestMethod.GET)
-    ModelAndView disconnect(Model model, HttpServletRequest request,
-            RedirectAttributes rm) throws Exception {
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        boolean disconnect = true;
-        if (SessionController.isConnected(session)) {
-            if (disconnect) {
-                SessionController.clearSession(session);
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Déconnexion réussie"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Déconnexion réussie"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-            } else {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Erreur lors de la déconnexion"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Erreur lors de la déconnexion"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-            }
-        }
-        return new ModelAndView("redirect:/index.htm");
-    }
 
-    /**
-     * Requête du formulaire d'inscription d'un particulier
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return Une redirection vers l'index si l'inscription a réussit ou si
-     *         l'utilisateur était connecté, reste sur la page d'inscription si
-     *         elle a échouée,
-     * @throws Exception Exception non controllees.
-     */
-    @RequestMapping(value = "privatesignup", method = RequestMethod.POST)
-    protected ModelAndView validatePersonalSignUp(Model model,
-            HttpServletRequest request, RedirectAttributes rm)
+    @RequestMapping(value = "privatePassword", method = RequestMethod.POST)
+    public ResponseEntity<?> privateResetPassword(@RequestBody String body, HttpServletRequest request) 
             throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (!SessionController.isConnected(session)) {
-            // Get parameters
-            String firstName = request.getParameter("firstName");
-            String lastName = request.getParameter("lastName");
-            String genderStr = request.getParameter("gender");
-            String birthdayStr = request.getParameter("birthday");
-            String email = request.getParameter("email");
-            String streetNbrStr = request.getParameter("streetNbr");
-            String street = request.getParameter("street");
-            String city = request.getParameter("city");
-            String country = request.getParameter("country");
-            String phone = request.getParameter("phone");
-            IdentityDTO.Gender gender;
-            if (genderStr.equals(IdentityDTO.Gender.MALE.name())) {
-                gender = IdentityDTO.Gender.MALE;
-            } else if (genderStr.equals(IdentityDTO.Gender.FEMALE.name())) {
-                gender = IdentityDTO.Gender.FEMALE;
-            } else {
-                if (alerts != null) {
-                    alerts.add(
-                            new AlertMessage(AlertEnum.ERROR, "Sexe invalide"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(
-                            new AlertMessage(AlertEnum.ERROR, "Sexe invalide"));
-                }
-                return new JNPPModelAndView("signup/privatesignup",
-                        ViewInfo.createInfo(session, alerts));
-            }
-            Date birthday = new SimpleDateFormat("yyyy-MM-dd")
-                    .parse(birthdayStr);
-            Integer streetNbr = Integer.parseInt(streetNbrStr);
-            // Call service
-            try {
-                clientService.signUp(gender, firstName, lastName, birthday,
-                        email, streetNbr, street, city, country, phone);
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Inscription réussie"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Inscription réussie"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-                return new ModelAndView("redirect:/signupsuccess.htm");
-            } catch (DuplicateClientException dupliactedClient) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Ce client est déjà enregistré"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Ce client est déjà enregistré"));
-                }
-                return new JNPPModelAndView("signup/privatesignup",
-                        ViewInfo.createInfo(session, alerts));
-            } catch (AgeException age) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Un client ne peut pas être mineur"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Un client ne peut pas être mineur"));
-                }
-                return new JNPPModelAndView("signup/privatesignup",
-                        ViewInfo.createInfo(session, alerts));
-            } catch (InformationException invalidFormat) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Une erreur est présente dans le formulaire"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Une erreur est présente dans le formulaire"));
-                }
-                return new JNPPModelAndView("signup/privatesignup",
-                        ViewInfo.createInfo(session, alerts));
-            }
-        }
-        return new ModelAndView("redirect:/index.htm"); // ne devrait pas
-                                                        // arriver
+        if (null!=session && SessionController.isConnected(session))
+            return new ResponseEntity<String>("Vous devez etre deconnecte", HttpStatus.FORBIDDEN);        
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode data = mapper.readTree(body);
+        String id = data.get("id").asText();
+        String firstName = data.get("firstName").asText();
+        String lastName = data.get("lastName").asText();
+        String email = data.get("email").asText();
+        String genderStr = data.get("gender").asText();
+        IdentityDTO.Gender gender = IdentityDTO.Gender.valueOf(genderStr);
+        if (null==gender)
+            return new ResponseEntity<String>("Sexe invalide", HttpStatus.BAD_REQUEST);
+        if (clientService.resetPassword(id, gender, firstName, lastName, email))
+            return new ResponseEntity("Demande de nouveau mot de passe acceptee",
+                HttpStatus.OK);
+        else 
+            return new ResponseEntity("Aucun compte associe a ces informations n'est enregistre chez nous",
+                HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * Requête du formulaire d'inscription d'un professionnel
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return Une redirection vers l'index si l'inscription a réussit ou si
-     *         l'utilisateur était connecté, reste sur la page d'inscription si
-     *         elle a échouée,
-     * @throws Exception Exception non controllees.
-     */
-    @RequestMapping(value = "professionalsignup", method = RequestMethod.POST)
-    protected ModelAndView validateProfessionalSignUp(Model model,
-            HttpServletRequest request, RedirectAttributes rm)
-            throws Exception {
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (!SessionController.isConnected(session)) {
-            // Get parameters
-            String companyName = request.getParameter("company");
-            String firstName = request.getParameter("firstName");
-            String lastName = request.getParameter("lastName");
-            String genderStr = request.getParameter("gender");
-            String email = request.getParameter("email");
-            String streetNbrStr = request.getParameter("streetNbr");
-            String street = request.getParameter("street");
-            String city = request.getParameter("city");
-            String country = request.getParameter("country");
-            String phone = request.getParameter("phone");
-            IdentityDTO.Gender gender;
-            if (genderStr.equals(IdentityDTO.Gender.MALE.name())) {
-                gender = IdentityDTO.Gender.MALE;
-            } else if (genderStr.equals(IdentityDTO.Gender.FEMALE.name())) {
-                gender = IdentityDTO.Gender.FEMALE;
-            } else {
-                if (alerts != null) {
-                    alerts.add(
-                            new AlertMessage(AlertEnum.ERROR, "Sexe invalide"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(
-                            new AlertMessage(AlertEnum.ERROR, "Sexe invalide"));
-                }
-                return new JNPPModelAndView("signup/professionalsignup",
-                        ViewInfo.createInfo(session, alerts));
-            }
-            Integer streetNbr = Integer.parseInt(streetNbrStr);
-            // call service
-            try {
-                clientService.signUp(companyName, gender, firstName, lastName,
-                        email, streetNbr, street, city, country, phone);
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Inscription réussie"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Inscription réussie"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-                return new ModelAndView("redirect:/signupsuccess.htm");
-            } catch (DuplicateClientException dupliactedClient) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Ce client est déjà enregistré"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Ce client est déjà enregistré"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-                return new JNPPModelAndView("signup/professionalsignup",
-                        ViewInfo.createInfo(session, alerts));
-            } catch (InformationException invalidFormat) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Une erreur est présente dans le formulaire"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Une erreur est présente dans le formulaire"));
-                }
-                return new JNPPModelAndView("signup/professionalsignup",
-                        ViewInfo.createInfo(session, alerts));
-            }
-        }
-        return new ModelAndView("redirect:/index.htm"); // ne devrait pas
-                                                        // arriver
-    }
-
-    /**
-     * Requête du formulaire de perte de mot de passe d'un particulier
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return Une redirection vers le menu utilisateur si la demande a réussie,
-     *         une redirection vers le formulaire de mot de passe si elle a
-     *         échouée, une redireciton vers l'index si l'utilisateur était déjà
-     *         connecté
-     * @throws Exception Exception non controllees.
-     */
-    @RequestMapping(value = "privatepassword", method = RequestMethod.POST)
-    protected ModelAndView privateResetPassword(Model model,
-            HttpServletRequest request, RedirectAttributes rm)
-            throws Exception {
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (!SessionController.isConnected(session)) {
-            String id = request.getParameter("id");
-            String firstName = request.getParameter("firstName");
-            String lastName = request.getParameter("lastName");
-            String email = request.getParameter("email");
-            IdentityDTO.Gender TODO_gender = IdentityDTO.Gender.MALE;
-            if (clientService.resetPassword(id, TODO_gender, firstName,
-                    lastName, email)) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Demande de nouveau mot de passe accepté"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Demande de nouveau mot de passe accepté"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-                return new ModelAndView("redirect:/passwordsuccess.htm");
-            } else {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Aucun compte associé à ces informations n'est enregistré chez nous"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Aucun compte associé à ces informations n'est enregistré chez nous"));
-                }
-                return new JNPPModelAndView("manageuser/privatepassword",
-                        ViewInfo.createInfo(session, alerts));
-            }
-
-        }
-        return new ModelAndView("redirect:/index.htm"); // ne devrait pas
-                                                        // pouvoir arriver
-    }
-
-    /**
-     * Requête du formulaire de perte de mot de passe d'un professionnel
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return Une redirection vers le menu utilisateur si la demande a réussie,
-     *         une redirection vers le formulaire de mot de passe si elle a
-     *         échouée, une redireciton vers l'index si l'utilisateur était déjà
-     *         connecté
-     * @throws Exception Exception non controllees.
-     */
     @RequestMapping(value = "professionalpassword", method = RequestMethod.POST)
-    protected ModelAndView professionalResetPassword(Model model,
-            HttpServletRequest request, RedirectAttributes rm)
+    protected ResponseEntity<?> professionalResetPassword(@RequestBody String body, HttpServletRequest request)
             throws Exception {
         HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (!SessionController.isConnected(session)) {
-            String id = request.getParameter("id");
-            String firstName = request.getParameter("firstName");
-            String lastName = request.getParameter("lastName");
-            String company = request.getParameter("company");
-            String email = request.getParameter("email");
-            IdentityDTO.Gender TODO_gender = IdentityDTO.Gender.MALE;
-            if (clientService.resetPassword(id, company, TODO_gender, firstName,
-                    lastName, email)) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Demande de nouveau mot de passe accepté"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Demande de nouveau mot de passe accepté"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-                return new ModelAndView("redirect:/passwordsuccess.htm");
-            } else {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Aucun compte associé à ces informations n'est enregistré chez nous"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Aucun compte associé à ces informations n'est enregistré chez nous"));
-                }
-                return new JNPPModelAndView("manageuser/professionalpassword",
-                        ViewInfo.createInfo(session, alerts));
-            }
-
-        }
-        return new ModelAndView("redirect:/index.htm"); // ne devrait pas
-                                                        // pouvoir arriver
+        if (null!=session && SessionController.isConnected(session))
+            return new ResponseEntity<String>("Vous devez etre deconnecte", HttpStatus.FORBIDDEN);        
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode data = mapper.readTree(body);
+        String id = data.get("id").asText();
+        String firstName = data.get("firstName").asText();
+        String lastName = data.get("lastName").asText();
+        String company = data.get("company").asText();
+        String email = data.get("email").asText();
+        String genderStr = data.get("gender").asText();
+        IdentityDTO.Gender gender = IdentityDTO.Gender.valueOf(genderStr);
+        if (null==gender)
+            return new ResponseEntity<String>("Sexe invalide", HttpStatus.BAD_REQUEST);
+        if (clientService.resetPassword(id, company, gender, firstName, lastName, email)) 
+            return new ResponseEntity("Demande de nouveau mot de passe acceptee",
+                    HttpStatus.OK);
+        else 
+            return new ResponseEntity("Aucun compte associe a ces informations n'est enregistre chez nous",
+                    HttpStatus.BAD_REQUEST);
     }
 
     /**

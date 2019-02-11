@@ -29,7 +29,7 @@
                 }
             );
             return deferred.promise;
-        };
+        }
         
         function basicRequestCallback(servletUrl, data, callback) {
             let url = service.basePath+servletUrl;

@@ -14,6 +14,8 @@
         service.getGenders = getGenders;
         service.privateSignUp = privateSignUp;
         service.proSignUp = proSignUp;
+        service.privatePassword = privatePassword;
+        service.proPassword = proPassword;
         
         return service;      
         
@@ -29,15 +31,23 @@
                 }
             );
             return deferred.promise;
-        };
+        }
         
         function privateSignUp(data) {
-            return CommonService.basicRequest('privateSignUpAngular.htm', data);
-        };
+            return CommonService.basicRequest('privateSignUp.htm', data);
+        }
         
         function proSignUp(data) {
-            return CommonService.basicRequest('proSignUpAngular.htm', data);
-        };
+            return CommonService.basicRequest('proSignUp.htm', data);
+        }
+        
+        function privatePassword(data) {
+            return CommonService.basicRequest('privatePassword.htm', data);
+        }
+        
+        function proPassword(data) {
+            return CommonService.basicRequest('proPassword.htm', data);
+        }
     }
  
 })();

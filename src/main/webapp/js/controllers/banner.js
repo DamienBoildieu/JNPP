@@ -21,7 +21,7 @@
             AuthentificationService.logout().then(
                     function() {
                         AuthentificationService.clearCredentials();
-                        vm.templateUrl = "html/unconnectedbanner.html";
+                        vm.templateUrl = "html/common/unconnectedbanner.html";
                         FlashService.Success('Deconnexion reussie', true);
                         $location.path('/welcome');
                     },
@@ -33,9 +33,9 @@
         
         function setTemplateUrl() {
             if ($rootScope.globals.userName)
-        	vm.templateUrl = "html/connectedbanner.html";
+        	vm.templateUrl = "html/common/connectedbanner.html";
             else
-        	vm.templateUrl = "html/unconnectedbanner.html";
+        	vm.templateUrl = "html/common/unconnectedbanner.html";
         }
     }
  

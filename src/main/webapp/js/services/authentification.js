@@ -17,11 +17,11 @@
         return service;
  
         function login(data) {
-            return CommonService.basicRequest('connectAngular.htm', data);
+            return CommonService.basicRequest('connect.htm', data);
         }
  
         function logout() {
-            let url = CommonService.basePath+'disconnectAngular.htm';
+            let url = CommonService.basePath+'disconnect.htm';
             let deferred = $q.defer();
             $http.get(url).then(
                 function() {

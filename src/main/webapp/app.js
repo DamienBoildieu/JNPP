@@ -10,31 +10,44 @@
     function config($routeProvider, $locationProvider) {
         $routeProvider
             .when('/welcome', {
-                templateUrl: 'html/welcome.html'
+                templateUrl: 'html/common/welcome.html'
             })
             .when('/signup', {
-                templateUrl: 'html/signup.html'
+                templateUrl: 'html/user/signup.html'
             })
             .when('/privatesignup', {
             	controller: 'SignUpController',
-            	templateUrl: 'html/privatesignup.html',
+            	templateUrl: 'html/user/privatesignup.html',
             	controllerAs: 'vm'
             })
             .when('/professionalsignup', {
             	controller: 'SignUpController',
-            	templateUrl: 'html/professionalsignup.html',
+            	templateUrl: 'html/user/professionalsignup.html',
             	controllerAs: 'vm'
             })
             .when('/signupsuccess', {
-                templateUrl: 'html/signupsuccess.html'
+                templateUrl: 'html/user/signupsuccess.html'
             })
             .when('/connect', {
             	controller: 'ConnectController',
-            	templateUrl: 'html/connect.html',
+            	templateUrl: 'html/user/connect.html',
+            	controllerAs: 'vm'
+            })
+            .when('/password', {
+                templateUrl: 'html/user/password.html'
+            })
+            .when('/privatepassword', {
+            	controller: 'PasswordController',
+            	templateUrl: 'html/user/privatepassword.html',
+            	controllerAs: 'vm'
+            })
+            .when('/professionalpassword', {
+            	controller: 'PasswordController',
+            	templateUrl: 'html/user/professionalpassword.html',
             	controllerAs: 'vm'
             })
             .when('/home', {
-                templateUrl: 'html/home.html'
+                templateUrl: 'html/user/home.html'
             })
             .otherwise({ redirectTo: '/welcome' });
     }
@@ -48,23 +61,22 @@
         if ($rootScope.globals.userName) {
             $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.userName.authdata;
         }
-
-        $rootScope.basePath = 'http://localhost:8080/JNPP/';
         
-        $rootScope.$on('$locationChangeStart', function (event, next, current) {
+       /* $rootScope.$on('$locationChangeStart', function (event, next, current) {
             // redirect to login page if not logged in and trying to access a restricted page
+            let connectedOnly = ['/signup', 
+                '/privatesignup', '/professionalsignup', '/signupsuccess', '/connect',
+                '/privatepassword', '/professionalpassword'];
             let connectedPage = $.inArray($location.path(), 
-                ['', '/', '/welcome', '/signup', '/privatesignup',
-                '/professionalsignup', '/signupsuccess', '/connect']) === -1;
-            let notConnectedPage =  $.inArray($location.path(), ['/signup', 
-                '/privatesignup', '/professionalsignup', '/signupsuccess', '/connect']) !== -1;
+                connectedOnly.concat(['', '/', '/welcome'])) === -1;
+            let notConnectedPage =  $.inArray($location.path(), connectedOnly) !== -1;
             let loggedIn = $rootScope.globals.userName;
             if (connectedPage && !loggedIn) {
                 $location.path('/connect');
             } else if (notConnectedPage && loggedIn) {
             	$location.path('/welcome');
             }
-        });
+        });*/
     }
 
 })();
