@@ -5,8 +5,8 @@
         .module('app')
         .factory('AuthentificationService', AuthentificationService);
  
-    AuthentificationService.$inject = ['$cookies','$rootScope', '$http', 'CommonService'];
-    function AuthentificationService($cookies, $rootScope, $http, CommonService) {
+    AuthentificationService.$inject = ['$cookies','$rootScope', '$http', '$q', 'CommonService'];
+    function AuthentificationService($cookies, $rootScope, $http, $q, CommonService) {
         let service = {};
  
         service.login = login;
@@ -20,23 +20,19 @@
             return CommonService.basicRequest('connectAngular.htm', data);
         }
  
-        function logout(callback) {
+        function logout() {
             let url = CommonService.basePath+'disconnectAngular.htm';
-            $http.post(url).then(
+            let deferred = $q.defer();
+            $http.get(url).then(
                 function() {
-                    let response = {
-                        success : true
-                    };
-                    callback(response);
+                    deferred.resolve();
                 }
                 ,
                 function () {
-                    let response = {
-                        success : false
-                    };
-                    callback(response);
+                    deferred.reject();
                 }
             );
+            return deferred.promise;
         }
         
         function setCredentials(name) {

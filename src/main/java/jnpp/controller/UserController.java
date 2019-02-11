@@ -155,7 +155,7 @@ public class UserController {
                 HttpStatus.BAD_REQUEST);
     }
     
-    @RequestMapping(value = "getGenders", method = RequestMethod.POST)
+    @RequestMapping(value = "getGenders", method = RequestMethod.GET)
     public ResponseEntity<?> getGenders (HttpServletRequest request) 
     		throws IOException {
         HttpSession session = request.getSession();
@@ -261,7 +261,7 @@ HttpSession session = request.getSession();
         }
     }
     
-    @RequestMapping(value = "disconnectAngular", method = RequestMethod.POST)
+    @RequestMapping(value = "disconnectAngular", method = RequestMethod.GET)
     public ResponseEntity<?> disconnectAngular (HttpServletRequest request) 
     		throws IOException {
         HttpSession session = request.getSession();

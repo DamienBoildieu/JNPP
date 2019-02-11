@@ -20,7 +20,7 @@
         function getGenders() {
             let url = CommonService.basePath+'getGenders.htm';
             let deferred = $q.defer();
-            $http.post(url).then(
+            $http.get(url).then(
                 function (response) {
                     deferred.resolve(response.data);
                 },
