@@ -5,9 +5,11 @@
         .module('app')
         .controller('ConnectController', ConnectController);
  
-    ConnectController.$inject = ['$location', 'AuthentificationService', 'FlashService'];
+    ConnectController.$inject = ['$location', 'NotifyService', 
+        'AuthentificationService', 'FlashService'];
     
-    function ConnectController($location, AuthentificationService, FlashService) {
+    function ConnectController($location, NotifyService,
+        AuthentificationService, FlashService) {
         let vm = this;
         
         vm.connectData = {};
@@ -18,6 +20,7 @@
                 function(response) {
                     console.log(response);
                     AuthentificationService.setCredentials(response);
+                    NotifyService.notify('logInOutEvent');
                     FlashService.Success('Utilisateur connecté', true);
                     $location.path('/home');
                 },

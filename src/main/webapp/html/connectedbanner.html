@@ -2,7 +2,7 @@
     <nav>
         <div class="nav-wrapper blue">
             <a href="#!/welcome" class="brand-logo center">JNPP</a>
-            <a href="#" data-target="side" target="_self" class="sidenav-trigger"><i
+            <a data-target="side" target="_self" class="sidenav-trigger"><i
                     class="material-icons">menu</i></a>
             <div class="right">
                 {{globals.userName}}
@@ -15,7 +15,7 @@
             <ul class="right hide-on-med-and-down">
                 <li><a href="#!/userinfo">Mes informations</a></li>
                 <li><a href="#!/advisor">Mon conseiller</a></li>
-                <li><a href="" ng-click="vm.logout()">Deconnexion</a></li>
+                <li><a ng-click="vm.logout()">Deconnexion</a></li>
             </ul>
         </div>
     </nav>

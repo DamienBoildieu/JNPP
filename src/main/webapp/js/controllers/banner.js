@@ -5,14 +5,16 @@
         .module('app')
         .controller('BannerController', BannerController);
     
-    BannerController.$inject = ['$rootScope', '$location', 'AuthentificationService', 'FlashService'];
-    function BannerController($rootScope, $location, AuthentificationService, FlashService) {
+    BannerController.$inject = ['$rootScope', '$scope', '$location', 'NotifyService',
+        'AuthentificationService', 'FlashService'];
+    function BannerController($rootScope, $scope, $location, NotifyService,
+        AuthentificationService, FlashService) {
         let vm = this;
-        let loggedIn = $rootScope.globals.userName;
-        if (loggedIn)
-        	vm.templateUrl = "html/connectedbanner.html";
-        else
-        	vm.templateUrl = "html/unconnectedbanner.html";
+        
+        setTemplateUrl();
+        
+        NotifyService.subscribe($scope, 'logInOutEvent', setTemplateUrl);
+        
         vm.logout = logout;
         
         function logout() {
@@ -20,6 +22,7 @@
                 function(response) {
                     if (response.success) {
                         AuthentificationService.clearCredentials();
+                        NotifyService.notify('logInOutEvent');
                         FlashService.Success('Deconnexion reussie', true);
                         $location.path('/welcome');
                     } else {
@@ -27,6 +30,13 @@
                     }
                 }
             );
+        }
+        
+        function setTemplateUrl() {
+            if ($rootScope.globals.userName)
+        	vm.templateUrl = "html/connectedbanner.html";
+            else
+        	vm.templateUrl = "html/unconnectedbanner.html";
         }
     }
  

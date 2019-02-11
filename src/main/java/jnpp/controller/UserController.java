@@ -262,7 +262,7 @@ HttpSession session = request.getSession();
     }
     
     @RequestMapping(value = "disconnectAngular", method = RequestMethod.POST)
-    public ResponseEntity<?> disconnectAngular (@RequestBody String body, HttpServletRequest request) 
+    public ResponseEntity<?> disconnectAngular (HttpServletRequest request) 
     		throws IOException {
         HttpSession session = request.getSession();
         if (session == null) {
