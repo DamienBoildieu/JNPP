@@ -30,10 +30,9 @@
         }
         
         function privatePassword() {
-            console.log(vm.privatePasswordData);
             UserService.privatePassword(vm.privatePasswordData).then(
-                function(response) {
-                    FlashService.Success(response, true);
+                function() {
+                    FlashService.Success('Vous avez bien ete inscrit', true);
                     $location.path('/passwordsuccess');
                 },
                 function (response) {
@@ -44,8 +43,8 @@
         
         function proPassword() {
             UserService.proPassword(vm.proPasswordData).then(
-                function(response) {
-                    FlashService.Success(response, true);
+                function() {
+                    FlashService.Success('Vous avez bien ete inscrit', true);
                     $location.path('/passwordsuccess');
                 },
                 function (response) {

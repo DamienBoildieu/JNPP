@@ -20,6 +20,11 @@ public class ProfessionalDTO extends ClientDTO {
         return ClientDTO.Type.PROFESIONAL;
     }
 
+    @Override
+    public String toViewJson() {
+        return new ClientViewDTO(this).toJson();
+    }
+    
     public String getName() {
         return name;
     }

@@ -7,7 +7,7 @@
         .run(run);
 
     config.$inject = ['$routeProvider', '$locationProvider'];
-    function config($routeProvider, $locationProvider) {
+    function config($routeProvider) {
         $routeProvider
             .when('/welcome', {
                 templateUrl: 'html/common/welcome.html'
@@ -54,6 +54,7 @@
                 templateUrl: 'html/user/passwordsuccess.html'
             })
             .when('/home', {
+                controller: 'ManageUserController',
                 templateUrl: 'html/user/home.html'
             })
             .otherwise({ redirectTo: '/welcome' });
@@ -66,7 +67,7 @@
         // keep user logged in after page refresh
         $rootScope.globals = $cookies.getObject('globals') || {};
         if ($rootScope.globals.userName) {
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.userName.authdata;
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.userLogin;
         }
     }
 

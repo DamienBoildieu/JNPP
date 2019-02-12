@@ -20,8 +20,8 @@
             let url = service.basePath+servletUrl;
             let deferred = $q.defer();
             $http.post(url, data).then(
-                function (response) {
-                    deferred.resolve(response.data);
+                function () {
+                    deferred.resolve();
                 },
                 function (response) {
                     deferred.reject(response.data);

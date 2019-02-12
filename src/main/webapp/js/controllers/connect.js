@@ -18,7 +18,6 @@
         function connect() {
             AuthentificationService.login(vm.connectData, function(response) {
                 if (response.success) {
-                    AuthentificationService.setCredentials(response.message);
                     NotifyService.notify('logInOutEvent');
                     FlashService.Success('Utilisateur connecté', true);
                     $location.path('/home');

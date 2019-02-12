@@ -32,8 +32,8 @@
         
         function privateSignUp() {
             UserService.privateSignUp(vm.privateSignUpData).then(
-                function(response) {
-                    FlashService.Success(response, true);
+                function() {
+                    FlashService.Success('Vous avez bien ete inscrit', true);
                     $location.path('/signupsuccess');
                 },
                 function (response) {
@@ -44,8 +44,8 @@
         
         function proSignUp() {
             UserService.proSignUp(vm.proSignUpData).then(
-                function(response) {
-                    FlashService.Success(response, true);
+                function() {
+                    FlashService.Success('Vous avez bien ete inscrit', true);
                     $location.path('/signupsuccess');
                 },
                 function (response) {

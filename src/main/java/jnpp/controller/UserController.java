@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,22 +18,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import jnpp.controller.views.JNPPModelAndView;
 import jnpp.controller.views.Translator;
 import jnpp.controller.views.alerts.AlertEnum;
 import jnpp.controller.views.alerts.AlertMessage;
-import jnpp.controller.views.info.ViewInfo;
 import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.clients.ClientDTO;
-import jnpp.service.dto.clients.PrivateDTO;
-import jnpp.service.dto.clients.ProfessionalDTO;
 import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.clients.AgeException;
 import jnpp.service.exceptions.clients.InformationException;
 import jnpp.service.exceptions.duplicates.DuplicateClientException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.services.ClientService;
-import jnpp.service.services.NotificationService;
 import org.codehaus.jackson.JsonNode;
 import org.springframework.http.ResponseEntity;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -52,39 +46,17 @@ public class UserController {
      */
     @Autowired
     private ClientService clientService;
-    /**
-     * Le service de notifications
-     */
-    @Autowired
-    private NotificationService notifService;
 
     @RequestMapping(value = "connect", method = RequestMethod.POST)
     public ResponseEntity<?> connect(@RequestBody String userString, HttpServletRequest request) 
         throws IOException {
-        HttpSession session = request.getSession();
-        if (null==session)
-            session = request.getSession(true);
-        if (SessionController.isConnected(session))
-            return new ResponseEntity("Vous devez etre deconnecte", HttpStatus.FORBIDDEN);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(userString);
         String id = data.get("username").asText();
         String password = data.get("password").asText();
         ClientDTO client = this.clientService.signIn(id, password);
         if (client!=null) {
-            SessionController.setClient(session, client);
-            switch (client.getType()) {
-                case PRIVATE:
-                    IdentityDTO identity = ((PrivateDTO)client).getIdentity();
-                    return new ResponseEntity(identity.getFirstname()+" "+identity.getLastname(),
-                        HttpStatus.OK);
-                case PROFESIONAL:
-                    String name = ((ProfessionalDTO)client).getName();
-                    return new ResponseEntity(name, HttpStatus.OK);
-                default:
-                    return new ResponseEntity("Une erreur a eu lieu sur le serveur, "
-                        + "veuillez contacter un administrateur", HttpStatus.INTERNAL_SERVER_ERROR);           
-            }
+            return new ResponseEntity(client.toViewJson(), HttpStatus.OK);
         } else
             return new ResponseEntity("Erreur dans l'identifiant ou le mot de passe", 
                 HttpStatus.BAD_REQUEST);
@@ -100,9 +72,6 @@ public class UserController {
     @RequestMapping(value = "privateSignUp", method = RequestMethod.POST)
     public ResponseEntity<?> privateSignUp(@RequestBody String body, HttpServletRequest request) 
         throws IOException {
-        HttpSession session = request.getSession();
-        if (null!=session && SessionController.isConnected(session))
-            return new ResponseEntity("Vous devez etre deconnecte", HttpStatus.FORBIDDEN);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
         try {
@@ -124,7 +93,7 @@ public class UserController {
                     .parse(birthdayStr);
             clientService.signUp(gender, firstName, lastName, birthday,
                     email, streetNbr, street, city, country, phone);
-            return new ResponseEntity("Utilisateur cree", HttpStatus.CREATED);
+            return new ResponseEntity(HttpStatus.CREATED);
         } catch (ParseException ex) {
             return new ResponseEntity("Une erreur est presente dans le formulaire",
                 HttpStatus.BAD_REQUEST);
@@ -143,9 +112,6 @@ public class UserController {
     @RequestMapping(value = "proSignUp", method = RequestMethod.POST)
     public ResponseEntity<?> proSignUp(@RequestBody String body, HttpServletRequest request) 
         throws IOException {
-        HttpSession session = request.getSession();
-        if (null!=session && SessionController.isConnected(session))
-            return new ResponseEntity("Vous devez etre deconnecte", HttpStatus.FORBIDDEN);        
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
         try {
@@ -165,7 +131,7 @@ public class UserController {
                 return new ResponseEntity("Sexe invalide", HttpStatus.BAD_REQUEST);
             clientService.signUp(company,gender, firstName, lastName,
                     email, streetNbr, street, city, country, phone);
-            return new ResponseEntity("Utilisateur cree", HttpStatus.CREATED);
+            return new ResponseEntity(HttpStatus.CREATED);
         } catch (DuplicateClientException ex) {
             return new ResponseEntity("Ce client est deja enregistre", HttpStatus.BAD_REQUEST);             
         } catch (InformationException ex) {
@@ -189,10 +155,7 @@ public class UserController {
 
     @RequestMapping(value = "privatePassword", method = RequestMethod.POST)
     public ResponseEntity<?> privateResetPassword(@RequestBody String body, HttpServletRequest request) 
-            throws Exception {
-        HttpSession session = request.getSession();
-        if (null!=session && SessionController.isConnected(session))
-            return new ResponseEntity<String>("Vous devez etre deconnecte", HttpStatus.FORBIDDEN);        
+            throws Exception {    
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
         String id = data.get("id").asText();
@@ -204,8 +167,7 @@ public class UserController {
         if (null==gender)
             return new ResponseEntity<String>("Sexe invalide", HttpStatus.BAD_REQUEST);
         if (clientService.resetPassword(id, gender, firstName, lastName, email))
-            return new ResponseEntity("Demande de nouveau mot de passe acceptee",
-                HttpStatus.OK);
+            return new ResponseEntity(HttpStatus.OK);
         else 
             return new ResponseEntity("Aucun compte associe a ces informations n'est enregistre chez nous",
                 HttpStatus.BAD_REQUEST);
@@ -229,8 +191,7 @@ public class UserController {
         if (null==gender)
             return new ResponseEntity<String>("Sexe invalide", HttpStatus.BAD_REQUEST);
         if (clientService.resetPassword(id, company, gender, firstName, lastName, email)) 
-            return new ResponseEntity("Demande de nouveau mot de passe acceptee",
-                    HttpStatus.OK);
+            return new ResponseEntity(HttpStatus.OK);
         else 
             return new ResponseEntity("Aucun compte associe a ces informations n'est enregistre chez nous",
                     HttpStatus.BAD_REQUEST);

@@ -14,7 +14,6 @@
         return service;      
         
         function translateGenders(genderArray) {
-            console.log(genderArray);
             return genderArray.map(gender => ({key:gender, value:translateGender(gender)}));
         }
         
