@@ -8,26 +8,24 @@
     ConnectController.$inject = ['$location', 'NotifyService', 
         'AuthentificationService', 'FlashService'];
     
-    function ConnectController($location, NotifyService,
-        AuthentificationService, FlashService) {
+    function ConnectController($location, NotifyService, AuthentificationService, FlashService) {
+        AuthentificationService.unconnectedPage('/welcome');
         let vm = this;
         
         vm.connectData = {};
         vm.connect = connect;
         
         function connect() {
-            AuthentificationService.login(vm.connectData).then(
-                function(response) {
-                    console.log(response);
-                    AuthentificationService.setCredentials(response);
+            AuthentificationService.login(vm.connectData, function(response) {
+                if (response.success) {
+                    AuthentificationService.setCredentials(response.message);
                     NotifyService.notify('logInOutEvent');
                     FlashService.Success('Utilisateur connecté', true);
                     $location.path('/home');
-                },
-                function (response) {
-                    FlashService.Error(response);
+                } else {
+                    FlashService.Error(response.message);
                 }
-            );
+            });
         }
     }
  

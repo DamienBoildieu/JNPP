@@ -5,9 +5,10 @@
         .module('app')
         .controller('PasswordController', PasswordController);
  
-    PasswordController.$inject = ['$location', 'UserService', 'FlashService'];
+    PasswordController.$inject = ['$location', 'AuthentificationService', 'UserService', 'FlashService'];
     
-    function PasswordController($location, UserService, FlashService) {
+    function PasswordController($location, AuthentificationService, UserService, FlashService) {
+        AuthentificationService.unconnectedPage('/welcome');
         let vm = this;
         
         init();

@@ -13,6 +13,7 @@
                 templateUrl: 'html/common/welcome.html'
             })
             .when('/signup', {
+            	controller: 'SignUpController',
                 templateUrl: 'html/user/signup.html'
             })
             .when('/privatesignup', {
@@ -26,6 +27,7 @@
             	controllerAs: 'vm'
             })
             .when('/signupsuccess', {
+                controller: 'SignUpController',
                 templateUrl: 'html/user/signupsuccess.html'
             })
             .when('/connect', {
@@ -34,6 +36,7 @@
             	controllerAs: 'vm'
             })
             .when('/password', {
+                controller: 'PasswordController',
                 templateUrl: 'html/user/password.html'
             })
             .when('/privatepassword', {
@@ -42,9 +45,13 @@
             	controllerAs: 'vm'
             })
             .when('/professionalpassword', {
-            	controller: 'PasswordController',
+                controller: 'PasswordController',
             	templateUrl: 'html/user/professionalpassword.html',
             	controllerAs: 'vm'
+            })
+            .when('/passwordsuccess', {
+                controller: 'PasswordController',
+                templateUrl: 'html/user/passwordsuccess.html'
             })
             .when('/home', {
                 templateUrl: 'html/user/home.html'
@@ -52,31 +59,15 @@
             .otherwise({ redirectTo: '/welcome' });
     }
 
-    run.$inject = ['$rootScope', '$location', '$cookies', '$http'];
+    run.$inject = ['$rootScope', '$cookies', '$http'];
     
-    function run($rootScope, $location, $cookies, $http) {
+    function run($rootScope, $cookies, $http) {
         
         // keep user logged in after page refresh
         $rootScope.globals = $cookies.getObject('globals') || {};
         if ($rootScope.globals.userName) {
             $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.userName.authdata;
         }
-        
-       /* $rootScope.$on('$locationChangeStart', function (event, next, current) {
-            // redirect to login page if not logged in and trying to access a restricted page
-            let connectedOnly = ['/signup', 
-                '/privatesignup', '/professionalsignup', '/signupsuccess', '/connect',
-                '/privatepassword', '/professionalpassword'];
-            let connectedPage = $.inArray($location.path(), 
-                connectedOnly.concat(['', '/', '/welcome'])) === -1;
-            let notConnectedPage =  $.inArray($location.path(), connectedOnly) !== -1;
-            let loggedIn = $rootScope.globals.userName;
-            if (connectedPage && !loggedIn) {
-                $location.path('/connect');
-            } else if (notConnectedPage && loggedIn) {
-            	$location.path('/welcome');
-            }
-        });*/
     }
 
 })();

@@ -5,9 +5,10 @@
         .module('app')
         .controller('SignUpController', SignUpController);
  
-    SignUpController.$inject = ['$location', 'UserService', 'FlashService'];
+    SignUpController.$inject = ['$location', 'AuthentificationService', 'UserService', 'FlashService'];
     
-    function SignUpController($location, UserService, FlashService) {
+    function SignUpController($location, AuthentificationService, UserService, FlashService) {
+        AuthentificationService.unconnectedPage('/welcome');
         let vm = this;
         
         init();

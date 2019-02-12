@@ -5,9 +5,9 @@
         .module('app')
         .controller('BannerController', BannerController);
     
-    BannerController.$inject = ['$rootScope', '$scope', '$location', 'NotifyService',
+    BannerController.$inject = ['$scope', '$location', 'NotifyService', 
         'AuthentificationService', 'FlashService'];
-    function BannerController($rootScope, $scope, $location, NotifyService,
+    function BannerController($scope, $location, NotifyService,
         AuthentificationService, FlashService) {
         let vm = this;
         
@@ -32,7 +32,7 @@
         }
         
         function setTemplateUrl() {
-            if ($rootScope.globals.userName)
+            if (AuthentificationService.isLogged)
         	vm.templateUrl = "html/common/connectedbanner.html";
             else
         	vm.templateUrl = "html/common/unconnectedbanner.html";
