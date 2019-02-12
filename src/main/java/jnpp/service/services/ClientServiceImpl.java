@@ -105,7 +105,7 @@ public class ClientServiceImpl implements ClientService {
             throw new DuplicateClientException();
         }
         String login = generateNewLogin();
-        String password = generateRandomLogin();
+        String password = generateRandomPassword();
         AdvisorEntity advisor = chooseAdvisor();
         PrivateEntity client = new PrivateEntity(login, password,
                 IdentityEntity.Gender.toEntity(gender), firstname, lastname,
@@ -137,7 +137,7 @@ public class ClientServiceImpl implements ClientService {
             throw new DuplicateClientException();
         }
         String login = generateNewLogin();
-        String password = generateRandomLogin();
+        String password = generateRandomPassword();
         AdvisorEntity advisor = chooseAdvisor();
         ProfessionalEntity client = new ProfessionalEntity(login, password,
                 name, IdentityEntity.Gender.toEntity(ownerGender),
@@ -242,7 +242,7 @@ public class ClientServiceImpl implements ClientService {
         if (identity == null) {
             return false;
         }
-        if (!gender.equals(identity.getGender())
+        if (!gender.equals(identity.toDTO().getGender())
                 || !firstname.equals(identity.getFirstname())
                 || !lastname.equals(identity.getLastname())) {
             return false;
@@ -276,7 +276,7 @@ public class ClientServiceImpl implements ClientService {
         if (identity == null) {
             return false;
         }
-        if (!ownerGender.equals(identity.getGender())
+        if (!ownerGender.equals(identity.toDTO().getGender())
                 || !ownerFirstname.equals(identity.getFirstname())
                 || !ownerLastname.equals(identity.getLastname())) {
             return false;
