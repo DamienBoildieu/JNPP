@@ -56,6 +56,11 @@
             .when('/home', {
                 templateUrl: 'html/user/home.html'
             })
+            .when('/banker/logins', {
+                controller: 'LoginsController',
+                templateUrl: 'html/banker/logins.html',
+            	controllerAs: 'vm'
+            })
             .otherwise({ redirectTo: '/welcome' });
     }
 
