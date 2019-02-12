@@ -21,7 +21,7 @@
         function init() {
             UserService.getGenders().then(
                 function(genders) {
-                    vm.genders = Object.getOwnPropertyNames(genders).map(k => ({key:k, value:genders[k]}));
+                    vm.genders = genders;
                 },
                 function(errMsg) {
                     FlashService.Error(errMsg);

@@ -5,9 +5,9 @@
         .module('app')
         .factory('UserService', UserService);
  
-    UserService.$inject = ['$http', '$q', 'CommonService'];
+    UserService.$inject = ['$http', '$q', 'CommonService', 'TranslatorService'];
     
-    function UserService($http, $q, CommonService) {
+    function UserService($http, $q, CommonService, TranslatorService) {
         
         let service = {};
         
@@ -24,7 +24,7 @@
             let deferred = $q.defer();
             $http.get(url).then(
                 function (response) {
-                    deferred.resolve(response.data);
+                    deferred.resolve(TranslatorService.translateGenders(response.data));
                 },
                 function () {
                     deferred.reject("Erreur rencontre dans le serveur");

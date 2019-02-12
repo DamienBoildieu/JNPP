@@ -93,16 +93,8 @@ public class UserController {
     @RequestMapping(value = "getGenders", method = RequestMethod.GET)
     public ResponseEntity<?> getGenders(HttpServletRequest request) 
         throws IOException {
-        HttpSession session = request.getSession();
-        if (null==session)
-            session = request.getSession(true);
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        Map<IdentityDTO.Gender, String> genderMap = Translator.getInstance().
-                translateGenders(SessionController.getLanguage(session));
         ObjectMapper mapper = new ObjectMapper();
-        return new ResponseEntity(mapper.writeValueAsString(genderMap), HttpStatus.OK);
+        return new ResponseEntity(mapper.writeValueAsString(IdentityDTO.Gender.values()), HttpStatus.OK);
     }
     
     @RequestMapping(value = "privateSignUp", method = RequestMethod.POST)
