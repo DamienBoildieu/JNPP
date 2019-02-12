@@ -242,7 +242,7 @@ public class ClientServiceImpl implements ClientService {
         if (identity == null) {
             return false;
         }
-        if (!gender.equals(identity.toDTO().getGender())
+        if (!gender.equals(identity.getGender().toDTO())
                 || !firstname.equals(identity.getFirstname())
                 || !lastname.equals(identity.getLastname())) {
             return false;
@@ -276,7 +276,7 @@ public class ClientServiceImpl implements ClientService {
         if (identity == null) {
             return false;
         }
-        if (!ownerGender.equals(identity.toDTO().getGender())
+        if (!ownerGender.equals(identity.getGender().toDTO())
                 || !ownerFirstname.equals(identity.getFirstname())
                 || !ownerLastname.equals(identity.getLastname())) {
             return false;
