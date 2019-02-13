@@ -50,7 +50,7 @@ public class UserController {
     private ClientService clientService;
 
     @RequestMapping(value = "connect", method = RequestMethod.POST)
-    public ResponseEntity<?> connect(@RequestBody String userString, HttpServletRequest request) 
+    public ResponseEntity<?> connect(@RequestBody String userString) 
         throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(userString);
@@ -67,14 +67,14 @@ public class UserController {
     }
     
     @RequestMapping(value = "getGenders", method = RequestMethod.GET)
-    public ResponseEntity<?> getGenders(HttpServletRequest request) 
+    public ResponseEntity<?> getGenders() 
         throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return new ResponseEntity(mapper.writeValueAsString(IdentityDTO.Gender.values()), HttpStatus.OK);
     }
     
     @RequestMapping(value = "privateSignUp", method = RequestMethod.POST)
-    public ResponseEntity<?> privateSignUp(@RequestBody String body, HttpServletRequest request) 
+    public ResponseEntity<?> privateSignUp(@RequestBody String body) 
         throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
@@ -103,7 +103,7 @@ public class UserController {
                 HttpStatus.BAD_REQUEST);
         } catch (DuplicateClientException ex) {
             return new ResponseEntity("Ce client est deja enregistre",
-                HttpStatus.BAD_REQUEST);             
+                HttpStatus.CONFLICT);             
         } catch (AgeException ex) {
             return new ResponseEntity("Un client ne peut pas être mineur",
                 HttpStatus.BAD_REQUEST);
@@ -114,7 +114,7 @@ public class UserController {
     }
     
     @RequestMapping(value = "proSignUp", method = RequestMethod.POST)
-    public ResponseEntity<?> proSignUp(@RequestBody String body, HttpServletRequest request) 
+    public ResponseEntity<?> proSignUp(@RequestBody String body) 
         throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
@@ -137,7 +137,7 @@ public class UserController {
                     email, streetNbr, street, city, country, phone);
             return new ResponseEntity(HttpStatus.CREATED);
         } catch (DuplicateClientException ex) {
-            return new ResponseEntity("Ce client est deja enregistre", HttpStatus.BAD_REQUEST);             
+            return new ResponseEntity("Ce client est deja enregistre", HttpStatus.CONFLICT);             
         } catch (InformationException ex) {
             return new ResponseEntity("Une erreur est presente dans le formulaire",
                 HttpStatus.BAD_REQUEST);                
@@ -145,7 +145,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "privatePassword", method = RequestMethod.PUT)
-    public ResponseEntity<?> privateResetPassword(@RequestBody String body, HttpServletRequest request) 
+    public ResponseEntity<?> privateResetPassword(@RequestBody String body) 
         throws Exception {    
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
@@ -165,7 +165,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "professionalpassword", method = RequestMethod.PUT)
-    public ResponseEntity<?> professionalResetPassword(@RequestBody String body, HttpServletRequest request)
+    public ResponseEntity<?> professionalResetPassword(@RequestBody String body)
         throws Exception {     
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
@@ -266,7 +266,7 @@ public class UserController {
 
     @RequestMapping(value = "updateUserInfo", method = RequestMethod.PUT)
     private ResponseEntity<?> updateUserInfo(@RequestHeader("authorization") String autho,
-        @RequestBody String body, HttpServletRequest request) throws Exception {
+        @RequestBody String body) throws Exception {
         String login = SessionController.decodeLogin(autho);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
@@ -284,92 +284,25 @@ public class UserController {
             return new ResponseEntity(client.toJson(), HttpStatus.OK);
         } catch (FakeClientException invalidClient) {
             return new ResponseEntity("Il semble y avoir une erreur dans votre session",
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.CONFLICT);
         } catch (InformationException invalidFormat) {
             return new ResponseEntity("Une erreur est présente dans le formulaire",
                 HttpStatus.BAD_REQUEST);
         }
     }
 
-    /**
-     * Requête de fermeture de compte client
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @param view    Nom de vue.
-     * @return L'index si réussite, la vue userInfo sinon
-     * @throws Exception Exception non controllees.
-     */
-    @RequestMapping(value = "closeuser", method = RequestMethod.POST)
-    protected ModelAndView closeUser(Model model, HttpServletRequest request,
-            RedirectAttributes rm, String view) throws Exception {
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (SessionController.isConnected(session)) {
-            try {
-                String password = request.getParameter("psswd");
-                String confirm = request.getParameter("confirm");
-                if (!password.equals(confirm)) {
-                    if (alerts != null) {
-                        alerts.add(new AlertMessage(AlertEnum.ERROR,
-                                "Les deux champs de mot de passe doivent correspondre"));
-                    } else {
-                        alerts = new ArrayList<AlertMessage>();
-                        alerts.add(new AlertMessage(AlertEnum.ERROR,
-                                "Les deux champs de mot de passe doivent correspondre"));
-                        rm.addFlashAttribute("alerts", alerts);
-                    }
 
-                    return new ModelAndView("redirect:/userinfo.htm");
-                }
-                clientService.close(
-                        SessionController.getClient(session).getLogin(),
-                        password);
-                SessionController.clearSession(session);
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Votre compte a bien été cloturé"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Votre compte a bien été cloturé"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-                return new ModelAndView("redirect:/index.htm");
-            } catch (ClosureException closure) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Votre compte client ne peut être cloturé, assuerz-vous d'avoir fermé tout vos comptes"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Votre compte client ne peut être cloturé, assuerz-vous d'avoir fermé tout vos comptes"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-                return new ModelAndView("redirect:/userInfo.htm");
-            } catch (FakeClientException invalidClient) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Il semble y avoir une erreur dans votre session"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Il semble y avoir une erreur dans votre session"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-                return new ModelAndView("redirect:/disconnect.htm");
-            }
+    @RequestMapping(value = "deleteUser", method = RequestMethod.DELETE)
+    protected ResponseEntity<?> deleteUser(@RequestHeader("authorization") String autho) throws Exception {
+        String login = SessionController.decodeLogin(autho);
+        String password = SessionController.decodePassword(autho);
+        try {
+            clientService.close(login, password);
+        } catch (ClosureException ex) {
+           return new ResponseEntity("Le compte ne peut pas être fermé à l'heure actuelle", HttpStatus.CONFLICT);
+        } catch (FakeClientException ex) {
+            return new ResponseEntity("Il semble y avoir une erreur dans votre session", HttpStatus.CONFLICT);
         }
-        return new ModelAndView("redirect:/index.htm"); // ne devrait pas
-                                                        // pouvoir arriver
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

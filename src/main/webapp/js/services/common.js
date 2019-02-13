@@ -14,6 +14,7 @@
         service.basePath = 'http://localhost:8084/JNPP/';      
         service.basicPutRequest = basicPutRequest;
         service.basicPostRequest = basicPostRequest;
+        service.basicDeleteRequest = basicDeleteRequest;
         
         return service;
         
@@ -43,7 +44,22 @@
                 }
             );
             return deferred.promise;
-        }        
+        }
+        
+        function basicDeleteRequest(servletUrl, data) {
+            let url = service.basePath+servletUrl;
+            console.log(data);
+            let deferred = $q.defer();
+            $http.delete(url, data).then(
+                function (response) {
+                    deferred.resolve(response.data);
+                },
+                function (response) {
+                    deferred.reject(response.data);
+                }
+            );
+            return deferred.promise;
+        }
     }
  
 })();

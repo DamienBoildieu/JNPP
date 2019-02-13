@@ -21,6 +21,8 @@
         
         service.updateUserInfo = updateUserInfo;
         
+        service.close = close;
+        
         return service;      
         
         function getGenders() {
@@ -55,6 +57,16 @@
         
         function updateUserInfo(data) {
             return CommonService.basicPutRequest('updateUserInfo.htm', data);
+        }
+        
+        function close(data) {
+            let decoded = atob($http.defaults.headers.common['Authorization']);
+            let splitted = decoded.split(":");
+            if (data===splitted[1])
+                return CommonService.basicDeleteRequest('deleteUser.htm', data);
+            else
+                return $q.defer().reject("Le mot de passe entré ne correspond pas "+
+                    "à celui de la session").promise;
         }
     }
  
