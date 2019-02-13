@@ -32,7 +32,7 @@
         function privatePassword() {
             UserService.privatePassword(vm.privatePasswordData).then(
                 function() {
-                    FlashService.Success('Vous avez bien ete inscrit', true);
+                    FlashService.Success('Votre mot de passe a été réinitialisé', true);
                     $location.path('/passwordsuccess');
                 },
                 function (response) {
@@ -44,7 +44,7 @@
         function proPassword() {
             UserService.proPassword(vm.proPasswordData).then(
                 function() {
-                    FlashService.Success('Vous avez bien ete inscrit', true);
+                    FlashService.Success('Votre mot de passe a été réinitialisé', true);
                     $location.path('/passwordsuccess');
                 },
                 function (response) {

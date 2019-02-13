@@ -12,10 +12,14 @@
         let service = {};
         
         service.getGenders = getGenders;
+        
         service.privateSignUp = privateSignUp;
         service.proSignUp = proSignUp;
+        
         service.privatePassword = privatePassword;
         service.proPassword = proPassword;
+        
+        service.updateUserInfo = updateUserInfo;
         
         return service;      
         
@@ -34,19 +38,23 @@
         }
         
         function privateSignUp(data) {
-            return CommonService.basicRequest('privateSignUp.htm', data);
+            return CommonService.basicPostRequest('privateSignUp.htm', data);
         }
         
         function proSignUp(data) {
-            return CommonService.basicRequest('proSignUp.htm', data);
+            return CommonService.basicPostRequest('proSignUp.htm', data);
         }
         
         function privatePassword(data) {
-            return CommonService.basicRequest('privatePassword.htm', data);
+            return CommonService.basicPutRequest('privatePassword.htm', data);
         }
         
         function proPassword(data) {
-            return CommonService.basicRequest('proPassword.htm', data);
+            return CommonService.basicPutRequest('proPassword.htm', data);
+        }
+        
+        function updateUserInfo(data) {
+            return CommonService.basicPutRequest('updateUserInfo.htm', data);
         }
     }
  

@@ -9,11 +9,16 @@
     function AuthentificationService($location, $cookies, $rootScope, $http, CommonService) {
         let service = {};
  
-        service.isLogged = false;
+        if ($rootScope.currentUser)
+            service.isLogged = true;
+        else
+            service.isLogged = false;
         service.login = login;
         service.logout = logout;
         service.connectedPage = connectedPage;
         service.unconnectedPage = unconnectedPage;
+        service.setCredentials = setCredentials;
+        service.clearCredentials = clearCredentials;
         
         return service;
  
@@ -25,11 +30,8 @@
                         let message = {
                             success : true
                         };
-                        $rootScope.globals = {
-                            currentUser : response.data
-                        };
-                        $cookies.putObject('globals', $rootScope.globals);
-                        $http.defaults.headers.common['Authorization'] = $rootScope.globals.currentUser.login;
+                        service.setCredentials(response.data);
+                        $http.defaults.headers.common['Authorization'] = response.headers('Authorization');
                         service.isLogged = true;
                         callback(message);
                     },
@@ -54,12 +56,12 @@
         function logout() {
             if (service.isLogged) {
                 service.isLogged = false;
-                $cookies.remove('globals');
+                service.clearCredentials();
+                delete $http.defaults.headers.common['Authorization'];
             }
         }
         
         function connectedPage(redirect) {
-            console.log(service.isLogged);
             if (!service.isLogged)
                 $location.path(redirect);
         }
@@ -67,6 +69,18 @@
         function unconnectedPage(redirect) {
             if (service.isLogged)
                 $location.path(redirect);
+        }
+        
+        function setCredentials(credentials) {
+            $rootScope.globals = {
+                currentUser : credentials
+            };
+            $cookies.putObject('globals', $rootScope.globals);
+        }
+        
+        function clearCredentials() {
+            delete $rootScope.globals;
+            $cookies.remove('globals');
         }
     }
  

@@ -32,6 +32,7 @@ import jnpp.service.services.ClientService;
 import org.codehaus.jackson.JsonNode;
 import org.springframework.http.ResponseEntity;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -57,7 +58,9 @@ public class UserController {
         String password = data.get("password").asText();
         ClientDTO client = this.clientService.signIn(id, password);
         if (client!=null) {
-            return new ResponseEntity(client.toJson(), HttpStatus.OK);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Authorization", SessionController.encodeAuthData(id,password));
+            return new ResponseEntity(client.toJson(), responseHeaders ,HttpStatus.OK);
         } else
             return new ResponseEntity("Erreur dans l'identifiant ou le mot de passe", 
                 HttpStatus.BAD_REQUEST);
@@ -140,23 +143,10 @@ public class UserController {
                 HttpStatus.BAD_REQUEST);                
         }
     }
-    
-    @RequestMapping(value = "disconnect", method = RequestMethod.GET)
-    public ResponseEntity<?> disconnect(HttpServletRequest request) 
-    		throws IOException {
-        HttpSession session = request.getSession();
-        if (null==session)
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        if (SessionController.isConnected(session)) {
-            SessionController.deleteSession(session);
-            return new ResponseEntity(HttpStatus.OK);
-        }
-        return new ResponseEntity(HttpStatus.FORBIDDEN);
-    }
 
-    @RequestMapping(value = "privatePassword", method = RequestMethod.POST)
+    @RequestMapping(value = "privatePassword", method = RequestMethod.PUT)
     public ResponseEntity<?> privateResetPassword(@RequestBody String body, HttpServletRequest request) 
-            throws Exception {    
+        throws Exception {    
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
         String id = data.get("id").asText();
@@ -174,12 +164,9 @@ public class UserController {
                 HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(value = "professionalpassword", method = RequestMethod.POST)
+    @RequestMapping(value = "professionalpassword", method = RequestMethod.PUT)
     public ResponseEntity<?> professionalResetPassword(@RequestBody String body, HttpServletRequest request)
-            throws Exception {
-        HttpSession session = request.getSession();
-        if (null!=session && SessionController.isConnected(session))
-            return new ResponseEntity<String>("Vous devez etre deconnecte", HttpStatus.FORBIDDEN);        
+        throws Exception {     
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
         String id = data.get("id").asText();
@@ -198,6 +185,7 @@ public class UserController {
                     HttpStatus.BAD_REQUEST);
     }
 
+    
     @RequestMapping(value = "getUserInfo", method = RequestMethod.GET)
     public ResponseEntity<?> getUserInfo(@RequestHeader("authorization") String autho, HttpServletRequest request)
             throws Exception {
@@ -276,80 +264,31 @@ public class UserController {
                                                         // pouvoir arriver
     }
 
-    /**
-     * Requête du formulaire de changement d'information d'un utilisateur
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return La vue d'information client
-     * @throws Exception Exception non controllees.
-     */
-    @RequestMapping(value = "editinfo", method = RequestMethod.POST)
-    private ModelAndView validateInfo(Model model, HttpServletRequest request,
-            RedirectAttributes rm) throws Exception {
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (SessionController.isConnected(session)) {
-            // Get parameters
-            String email = request.getParameter("email");
-            String streetNbrStr = request.getParameter("streetNbr");
-            String street = request.getParameter("street");
-            String city = request.getParameter("city");
-            String country = request.getParameter("country");
-            String phone = request.getParameter("phone");
+    @RequestMapping(value = "updateUserInfo", method = RequestMethod.PUT)
+    private ResponseEntity<?> updateUserInfo(@RequestHeader("authorization") String autho,
+        @RequestBody String body, HttpServletRequest request) throws Exception {
+        String login = SessionController.decodeLogin(autho);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode data = mapper.readTree(body);
+        String email = data.get("email").asText();
+        JsonNode address = data.get("address");
+        int streetNbr = address.get("number").asInt();
+        String street = address.get("street").asText();
+        String city = address.get("city").asText();
+        String country = address.get("state").asText();
+        String phone = data.get("phone").asText();
 
-            Integer streetNbr = Integer.parseInt(streetNbrStr);
-            // Call service
-            try {
-                ClientDTO client = clientService.update(
-                        SessionController.getClient(session).getLogin(), email,
-                        streetNbr, street, city, country, phone);
-                SessionController.setClient(session, client);
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Mise à jour réussie"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Mise à jour réussie"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-                return new ModelAndView("redirect:/userinfo.htm");
-            } catch (FakeClientException invalidClient) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Il semble y avoir une erreur dans votre session"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Il semble y avoir une erreur dans votre session"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-                return new ModelAndView("redirect:/disconnect.htm");
-            } catch (InformationException invalidFormat) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Une erreur est présente dans le formulaire"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Une erreur est présente dans le formulaire"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-                return new ModelAndView("redirect:/userinfo.htm");
-            }
+        // Call service
+        try {
+            ClientDTO client = clientService.update(login, email, streetNbr, street, city, country, phone);
+            return new ResponseEntity(client.toJson(), HttpStatus.OK);
+        } catch (FakeClientException invalidClient) {
+            return new ResponseEntity("Il semble y avoir une erreur dans votre session",
+                HttpStatus.BAD_REQUEST);
+        } catch (InformationException invalidFormat) {
+            return new ResponseEntity("Une erreur est présente dans le formulaire",
+                HttpStatus.BAD_REQUEST);
         }
-        return new ModelAndView("redirect:/index.htm"); // ne devrait pas
-                                                        // arriver
     }
 
     /**
