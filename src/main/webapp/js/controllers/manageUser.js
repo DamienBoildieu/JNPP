@@ -28,7 +28,6 @@
                     break;
             }
             vm.info = $rootScope.globals.currentUser;
-            console.log(vm.info);
         }
     }
 })();
