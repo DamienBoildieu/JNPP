@@ -12,6 +12,11 @@
             .when('/overview', {
                 templateUrl: 'html/banker/overview.html'
             })
+            .when('/logins', {
+            	controller: 'LoginsController',
+            	templateUrl: 'html/banker/logins.html',
+            	controllerAs: 'vm'
+            })
             .otherwise({redirectTo: '/overview'});
     }
 

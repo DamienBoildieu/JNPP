@@ -1,0 +1,25 @@
+
+<div class="container">
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Login</th>
+                <th scope="col">Password</th>
+                <th scope="col">Type</th>
+                <th scope="col">Name</th>
+                <th scope="col">Mail</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="login in vm.logins">
+                <th scope="row">{{$index + 1}}</th>
+                <td>{{login.login}}</td>
+                <td>{{login.password}}</td>
+                <td>{{login.type}}</td>
+                <td>{{login.name}}</td>
+                <td>{{login.mail}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

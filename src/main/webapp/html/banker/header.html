@@ -1,3 +1,36 @@
 <header>
-    TODO
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">JNPP</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav" ng-controller="HeaderController">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" ng-class="{active: isActive('/overview')}" href="#!/overview">Overwiew</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" ng-class="{active: isActive('/logins')}" href="#!/logins">Logins</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" ng-class="{active: isActive('/accounts')}" href="#!/accounts">Accounts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" ng-class="{active: isActive('/operations')}" href="#!/operations">Operations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" ng-class="{active: isActive('/advisors')}" href="#!/advisors">Advisors</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" ng-class="{active: isActive('/purshases')}" href="#!/purshases">Purchases</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" ng-class="{active: isActive('/shares')}" href="#!/shares">Shares</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" ng-class="{active: isActive('/books')}" href="#!/books">Saving books</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </header>
