@@ -25,7 +25,6 @@
         }
         
         function setTemplateUrl() {
-            console.log($location.path());
             if (AuthentificationService.isLogged)
         	vm.templateUrl = "html/common/connectedbanner.html";
             else

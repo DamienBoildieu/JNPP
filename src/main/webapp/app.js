@@ -59,7 +59,8 @@
             })
             .when('/userinfo', {
                 controller: 'ManageUserController',
-                templateUrl: 'html/user/userinfo.html'
+                templateUrl: 'html/user/userinfo.html',
+                controllerAs: 'vm'
             })
             .otherwise({ redirectTo: '/welcome' });
     }

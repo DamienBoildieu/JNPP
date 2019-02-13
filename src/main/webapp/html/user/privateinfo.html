@@ -1,0 +1,161 @@
+<div class="container">
+    <div class="row">
+        <div class='card-panel white col s5 offset-s1 center-align'>
+            <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
+                <form name="form" ng-submit="vm.privateInfo()" role="form">
+                    <div class="row">
+                        <div class="col s6">
+                            <div class="row">
+                                <div class="col s12">            
+                                    <label>Nom</label>
+                                    <input type="text" value="{{vm.info.identity.lastname}}" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12">            
+                                    <label>Prénom</label>
+                                    <input type="text" value="{{vm.info.identity.firstname}}" readonly>
+                                </div>
+                            </div>
+                            <!--<div class="row">
+                                <div class="input-field col s12">
+                                    <label>Sexe</label>
+                                    <input type="text" value="${gendersMap[client.getIdentity().getGender()]}" readonly>
+                                </div>
+                            </div>-->
+                            <div class="row">
+                                <div class="col s12">     
+                                    <label>Date de naissance</label> 
+                                    <input type="text" value="{{vm.info.birthday | date:'dd mmmm yyyy'}}" readonly>
+                                </div>
+                            </div>                                
+                            <div class="row">
+                                <div class="col s12">
+                                    <label for="email">Email</label>
+                                    <input type="email" ng-value="vm.info.email" 
+                                        ng-model="vm.edit.email" class="validate" id="email" required>
+                                </div>
+                            </div>                                                   
+                        </div>
+                        <div class="col s6">
+                            <div class="row">
+                                <div class="col s12">
+                                    <label for="streetNbr">Numéro de rue</label> 
+                                    <input type="text" ng-value="vm.info.address.number" 
+                                        ng-model="vm.edit.address.number" class="validate" 
+                                        id="streetNbr" pattern="[1-9][0-9]*" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12">
+                                    <label for="street">Rue</label>
+                                    <input type="text" ng-value="vm.info.address.street" 
+                                        ng-model="vm.edit.address.street" class="validate"
+                                        id="street" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12">
+                                    <label for="city">Ville</label> 
+                                    <input type="text" ng-model="vm.edit.address.city" 
+                                        ng-value="vm.info.address.city" class="validate"
+                                        id="city" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12">
+                                    <label for="country">Pays</label> 
+                                    <input type="text" ng-model="vm.edit.address.state"
+                                        ng-value="vm.info.address.state" class="validate" 
+                                        id="country" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12">
+                                    <label for="phone">Téléphone</label> 
+                                    <input type="tel" ng-model="vm.edit.phone"
+                                        ng-value="vm.info.phone" class="validate" id="phone" 
+                                        pattern="[0-9]{10}" required>
+                                </div>
+                            </div>   
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col s12">
+                            <input type="submit" value="Changer mes informations" 
+                                   ng-disabled="form.$invalid" class="btn blue" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class='card-panel white col s5 offset-s1 center-align'>
+            <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
+                <form name="form" ng-submit="vm.changePassword()" role="form">
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="input-field">
+                                <label for="oldpsswd"> Ancien mot de passe </label> 
+                                <input type="password" class="validate" 
+                                    ng-model="vm.changePsswd.old" id="oldpsswd">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="input-field">
+                                <label for="newpsswd"> Nouveau mot de passe </label> 
+                                <input type="password" class="validate" 
+                                    ng-model="vm.changePsswd.new" id="newpsswd">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="input-field">
+                                <label for="confirmpsswd"> Confirmer le nouveau mot de passe </label> 
+                                <input type="password" class="validate" 
+                                    ng-model="vm.changePsswd.confirm" id="confirmpsswd">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <input type="submit" value="Changer mon mot de passe" 
+                                ng-disabled="form.$invalid" class="btn blue" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
+                <form name="form" ng-submit="vm.close()" role="form">
+                     <div class="row">
+                        <div class="col s12">
+                            <div class="input-field">
+                                <label for="psswd"> Mot de passe </label>
+                                <input type="password" class="validate"
+                                       ng-model="vm.close.psswd" id="psswd">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="input-field">
+                                <label for="confirm"> Confirmer le mot de passe </label>
+                                <input type="password" class="validate" 
+                                    ng-model="vm.close.confirm" id="confirm">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <input type="submit" value="Supprimer votre compte" 
+                                ng-disabled="form.$invalid" class="btn blue" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
