@@ -5,9 +5,9 @@
         .module('app')
         .controller('BannerController', BannerController);
     
-    BannerController.$inject = ['$scope', '$location', 'NotifyService', 
-        'AuthentificationService', 'FlashService'];
-    function BannerController($scope, $location, NotifyService,
+    BannerController.$inject = ['$route', '$scope', '$location', 
+        'NotifyService', 'AuthentificationService', 'FlashService'];
+    function BannerController($route, $scope, $location, NotifyService,
         AuthentificationService, FlashService) {
         let vm = this;
         
@@ -25,6 +25,7 @@
         }
         
         function setTemplateUrl() {
+            console.log($location.path());
             if (AuthentificationService.isLogged)
         	vm.templateUrl = "html/common/connectedbanner.html";
             else
