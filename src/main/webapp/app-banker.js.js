@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app', ['ngRoute', 'ngCookies'])
+        .module('app-banker', ['ngRoute', 'ngCookies'])
         .config(config)
         .run(run);
 
@@ -55,6 +55,11 @@
             })
             .when('/home', {
                 templateUrl: 'html/user/home.html'
+            })
+            .when('banker/logins', {
+                controller: 'LoginsController',
+                templateUrl: 'html/banker/logins.html',
+            	controllerAs: 'vm'
             })
             .otherwise({ redirectTo: '/welcome' });
     }
