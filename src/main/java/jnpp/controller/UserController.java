@@ -34,6 +34,7 @@ import org.springframework.http.ResponseEntity;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 /**
  * Classe contrôlant la gestion des utilisateurs
@@ -56,7 +57,7 @@ public class UserController {
         String password = data.get("password").asText();
         ClientDTO client = this.clientService.signIn(id, password);
         if (client!=null) {
-            return new ResponseEntity(client.toViewJson(), HttpStatus.OK);
+            return new ResponseEntity(client.toJson(), HttpStatus.OK);
         } else
             return new ResponseEntity("Erreur dans l'identifiant ou le mot de passe", 
                 HttpStatus.BAD_REQUEST);
@@ -174,7 +175,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "professionalpassword", method = RequestMethod.POST)
-    protected ResponseEntity<?> professionalResetPassword(@RequestBody String body, HttpServletRequest request)
+    public ResponseEntity<?> professionalResetPassword(@RequestBody String body, HttpServletRequest request)
             throws Exception {
         HttpSession session = request.getSession();
         if (null!=session && SessionController.isConnected(session))
@@ -197,6 +198,13 @@ public class UserController {
                     HttpStatus.BAD_REQUEST);
     }
 
+    @RequestMapping(value = "getUserInfo", method = RequestMethod.GET)
+    public ResponseEntity<?> getUserInfo(@RequestHeader("authorization") String autho, HttpServletRequest request)
+            throws Exception {
+        System.out.println(autho);
+        return new ResponseEntity("ok", HttpStatus.OK);
+    }
+    
     /**
      * Requête de changement de mot de passe
      *

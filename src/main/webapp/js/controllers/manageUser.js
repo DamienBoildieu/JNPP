@@ -16,7 +16,7 @@
         init();
         
         function init() {
-            let type = $rootScope.globals.userType;
+            let type = $rootScope.globals.currentUser.type;
             switch (type) {
                 case 'PRIVATE':
                     vm.templateUrl = 'html/user/privateinfo.html';
@@ -27,7 +27,8 @@
                 default:
                     break;
             }
-            vm.info = UserService.getInfo();
+            vm.info = $rootScope.globals.currentUser;
+            console.log(vm.info);
         }
     }
 })();

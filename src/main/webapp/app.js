@@ -54,8 +54,12 @@
                 templateUrl: 'html/user/passwordsuccess.html'
             })
             .when('/home', {
-                controller: 'ManageUserController',
+                controller: 'HomeController',
                 templateUrl: 'html/user/home.html'
+            })
+            .when('/userinfo', {
+                controller: 'ManageUserController',
+                templateUrl: 'html/user/userinfo.html'
             })
             .otherwise({ redirectTo: '/welcome' });
     }
@@ -67,7 +71,7 @@
         // keep user logged in after page refresh
         $rootScope.globals = $cookies.getObject('globals') || {};
         if ($rootScope.globals.userName) {
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.userLogin;
+            $http.defaults.headers.common['Authorization'] = $rootScope.globals.userLogin;
         }
     }
 
