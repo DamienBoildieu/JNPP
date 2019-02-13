@@ -18,17 +18,10 @@
         vm.logout = logout;
         
         function logout() {
-            AuthentificationService.logout().then(
-                    function() {
-                        AuthentificationService.clearCredentials();
-                        vm.templateUrl = "html/common/unconnectedbanner.html";
-                        FlashService.Success('Deconnexion reussie', true);
-                        $location.path('/welcome');
-                    },
-                    function() {
-                        FlashService.Error('Erreur lors de la deconnexion');
-                    }
-            );
+            AuthentificationService.logout();
+            vm.templateUrl = "html/common/unconnectedbanner.html";
+            FlashService.Success('Deconnexion reussie', true);
+            $location.path('/welcome');
         }
         
         function setTemplateUrl() {

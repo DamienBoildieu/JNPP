@@ -24,6 +24,8 @@ public abstract class ClientDTO extends AbstractDTO {
         this.phone = phone;
     }
 
+    public abstract String toViewJson();
+    
     public abstract Type getType();
 
     public String getLogin() {

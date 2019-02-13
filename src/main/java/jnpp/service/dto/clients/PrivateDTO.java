@@ -22,6 +22,10 @@ public class PrivateDTO extends ClientDTO {
         return ClientDTO.Type.PRIVATE;
     }
 
+    @Override
+    public String toViewJson() {
+        return new ClientViewDTO(this).toJson();
+    }
     public IdentityDTO getIdentity() {
         return identity;
     }
