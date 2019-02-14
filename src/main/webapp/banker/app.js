@@ -27,6 +27,11 @@
             	templateUrl: 'html/shares.html',
             	controllerAs: 'vm'
             })
+            .when('/books', {
+            	controller: 'BooksController',
+            	templateUrl: 'html/books.html',
+            	controllerAs: 'vm'
+            })
             .otherwise({redirectTo: '/overview'});
     }
 

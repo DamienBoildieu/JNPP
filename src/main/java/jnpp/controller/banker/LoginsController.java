@@ -33,7 +33,7 @@ public class LoginsController {
      * @return la vue des identifiants des clients
      */
     @RequestMapping(value = "banker/logins", method = RequestMethod.GET)
-    protected ResponseEntity<?> loginsGet(HttpServletRequest request) throws IOException {
+    protected ResponseEntity<?> get() throws IOException {
         List<LoginDTO> logins = bankerService.getClientLogins();
         String json = AbstractDTO.toJson(logins);
         return new ResponseEntity(json, HttpStatus.OK);   

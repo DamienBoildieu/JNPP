@@ -33,7 +33,7 @@ public class AccountsController {
      * @return La vue des comptes
      */
     @RequestMapping(value = "banker/accounts", method = RequestMethod.GET)
-    protected ResponseEntity<?> accountsGet(HttpServletRequest request) throws IOException {
+    protected ResponseEntity<?> get() throws IOException {
         List<AccountDTO> accounts = bankerService.getAccounts();
         String json = AbstractDTO.toJson(accounts);
         return new ResponseEntity(json, HttpStatus.OK);
