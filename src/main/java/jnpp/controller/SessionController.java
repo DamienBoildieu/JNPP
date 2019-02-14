@@ -1,5 +1,6 @@
 package jnpp.controller;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import javax.servlet.http.HttpSession;
 
 import jnpp.controller.exceptions.NullSessionException;
@@ -104,5 +105,21 @@ public class SessionController {
      */
     public static boolean isConnected(HttpSession session) {
         return (session != null) && (session.getAttribute("client") != null);
+    }
+    
+    public static String decodeLogin(String basicallyEncoded) {
+        String decoded = new String(Base64.decode(basicallyEncoded));
+        String[] splitted = decoded.split(":");
+        return splitted[0].split(" ")[1];
+    }
+    
+    public static String decodePassword(String basicallyEncoded) {
+        String decoded = new String(Base64.decode(basicallyEncoded));
+        String[] splitted = decoded.split(":");
+        return splitted[1];
+    }
+    
+    public static String encodeAuthData(String login, String password) {
+        return Base64.encode(("Basic "+login+":"+password).getBytes());
     }
 }

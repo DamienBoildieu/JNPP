@@ -70,10 +70,10 @@
     function run($rootScope, $cookies, $http) {
         
         // keep user logged in after page refresh
-        $rootScope.globals = $cookies.getObject('globals') || {};
-        if ($rootScope.globals.userName) {
-            $http.defaults.headers.common['Authorization'] = $rootScope.globals.userLogin;
-        }
+       // $rootScope.globals = $cookies.getObject('globals') || {};
+       /* if ($rootScope.globals.userName) {
+            $http.defaults.headers.common['Authorization'] = btoa($rootScope.globals.userLogin;
+        }*/
     }
 
 })();

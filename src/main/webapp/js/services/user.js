@@ -12,10 +12,16 @@
         let service = {};
         
         service.getGenders = getGenders;
+        
         service.privateSignUp = privateSignUp;
         service.proSignUp = proSignUp;
+        
         service.privatePassword = privatePassword;
         service.proPassword = proPassword;
+        
+        service.updateUserInfo = updateUserInfo;
+        
+        service.close = close;
         
         return service;      
         
@@ -34,19 +40,33 @@
         }
         
         function privateSignUp(data) {
-            return CommonService.basicRequest('privateSignUp.htm', data);
+            return CommonService.basicPostRequest('privateSignUp.htm', data);
         }
         
         function proSignUp(data) {
-            return CommonService.basicRequest('proSignUp.htm', data);
+            return CommonService.basicPostRequest('proSignUp.htm', data);
         }
         
         function privatePassword(data) {
-            return CommonService.basicRequest('privatePassword.htm', data);
+            return CommonService.basicPutRequest('privatePassword.htm', data);
         }
         
         function proPassword(data) {
-            return CommonService.basicRequest('proPassword.htm', data);
+            return CommonService.basicPutRequest('proPassword.htm', data);
+        }
+        
+        function updateUserInfo(data) {
+            return CommonService.basicPutRequest('updateUserInfo.htm', data);
+        }
+        
+        function close(data) {
+            let decoded = atob($http.defaults.headers.common['Authorization']);
+            let splitted = decoded.split(":");
+            if (data===splitted[1])
+                return CommonService.basicDeleteRequest('deleteUser.htm', data);
+            else
+                return $q.defer().reject("Le mot de passe entré ne correspond pas "+
+                    "à celui de la session").promise;
         }
     }
  

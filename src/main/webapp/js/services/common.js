@@ -12,23 +12,54 @@
         let service = {};
         
         service.basePath = 'http://localhost:8084/JNPP/';      
-        service.basicRequest = basicRequest;
+        service.basicPutRequest = basicPutRequest;
+        service.basicPostRequest = basicPostRequest;
+        service.basicDeleteRequest = basicDeleteRequest;
         
         return service;
         
-        function basicRequest(servletUrl, data) {
+        function basicPutRequest(servletUrl, data) {
             let url = service.basePath+servletUrl;
             let deferred = $q.defer();
-            $http.post(url, data).then(
-                function () {
-                    deferred.resolve();
+            $http.put(url, data).then(
+                function (response) {
+                    deferred.resolve(response.data);
                 },
                 function (response) {
                     deferred.reject(response.data);
                 }
             );
             return deferred.promise;
-        }        
+        }
+        
+        function basicPostRequest(servletUrl, data) {
+            let url = service.basePath+servletUrl;
+            let deferred = $q.defer();
+            $http.post(url, data).then(
+                function (response) {
+                    deferred.resolve(response.data);
+                },
+                function (response) {
+                    deferred.reject(response.data);
+                }
+            );
+            return deferred.promise;
+        }
+        
+        function basicDeleteRequest(servletUrl, data) {
+            let url = service.basePath+servletUrl;
+            console.log(data);
+            let deferred = $q.defer();
+            $http.delete(url, data).then(
+                function (response) {
+                    deferred.resolve(response.data);
+                },
+                function (response) {
+                    deferred.reject(response.data);
+                }
+            );
+            return deferred.promise;
+        }
     }
  
 })();
