@@ -1,8 +1,10 @@
 package jnpp.controller.banker;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import jnpp.service.dto.AbstractDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,9 +14,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jnpp.service.dto.AddressDTO;
 import jnpp.service.dto.IdentityDTO;
+import jnpp.service.dto.accounts.AccountDTO;
+import jnpp.service.dto.accounts.ShareDTO;
 import jnpp.service.dto.advisor.AdvisorDTO;
 import jnpp.service.exceptions.duplicates.DuplicateAdvisorException;
 import jnpp.service.services.BankerService;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * Contrôleur des conseillers
@@ -31,12 +40,9 @@ public class AdvisorsController {
      */
     private static final AddressDTO DEFAULT_ADDRESS = new AddressDTO(1,
             "Grand rue ", "Poitiers", "France");
-    /**
-     * Conseiller par défaut
-     */
-    private static final AdvisorDTO DEFAULT_ADVISOR = new AdvisorDTO(
-            new IdentityDTO(DEFAULT_GENDER, "", ""), "conseiller@jnpp.fr",
-            "0123456789", DEFAULT_ADDRESS);
+
+    private static final String DEFAULT_EMAIL = "conseiller@jnpp.fr";
+    private static final String DEFAULT_PHONE = "0123456789";
 
     /**
      * Service banquier
@@ -50,54 +56,34 @@ public class AdvisorsController {
      *
      * @return la vue de la liste des conseilelrs
      */
-    @RequestMapping(value = "banquier/conseillers", method = RequestMethod.GET)
-    protected ModelAndView advisorsGet() {
+    @RequestMapping(value = "banker/advisors", method = RequestMethod.GET)
+    protected ResponseEntity<?> get() throws IOException {
         List<AdvisorDTO> advisors = bankerService.getAdvisors();
-        ModelAndView mv = new ModelAndView("banker/advisors_board");
-        mv.addObject("advisors", advisors);
-        mv.addObject("default_advisor", DEFAULT_ADVISOR);
-        return mv;
+        String json = AbstractDTO.toJson(advisors);
+        return new ResponseEntity(json, HttpStatus.OK);
     }
-
+    
     /**
      * Ajout d'un conseiller
      *
      * @param request la requête
      * @return la vue des conseillers
-     */
-    @RequestMapping(value = "banquier/conseillers", method = RequestMethod.POST)
-    protected ModelAndView advisorsPOST(HttpServletRequest request) {
-        String firstname = request.getParameter("firstname");
-        String lastname = request.getParameter("lastname");
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-        String officeAdress = request.getParameter("office_address");
-        if (firstname != null && firstname.length() > 0 && lastname != null
-                && lastname.length() > 0 && email != null && email.length() > 0
-                && phone != null && phone.length() > 0 && officeAdress != null
-                && officeAdress.length() > 0) {
-            try {
-                AddressDTO address = parseAddress(officeAdress);
-                bankerService.addAdvisor(DEFAULT_GENDER, firstname, lastname,
-                        email, phone, address.getNumber(), address.getStreet(),
-                        address.getCity(), address.getState());
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (DuplicateAdvisorException e) {
-                e.printStackTrace();
-            }
-        }
-        return new ModelAndView("redirect:/banquier/conseillers.htm");
-    }
-
-    /**
-     * Parse une adresse
-     *
-     * @param address l'adresse par défaut
-     * @return l'adresse par défaut
-     */
-    private static AddressDTO parseAddress(String address) {
-        return DEFAULT_ADDRESS;
+     */    
+    @RequestMapping(value = "banker/advisors", method = RequestMethod.POST)
+    protected ResponseEntity<?> post(@RequestBody String string) 
+            throws Exception {
+        JsonNode data = (new ObjectMapper()).readTree(string);
+        String firstname = data.get("firstname").asText();
+        String lastname = data.get("lastname").asText();
+        try {
+            AdvisorDTO advisor = bankerService.addAdvisor(DEFAULT_GENDER, 
+                    firstname, lastname, DEFAULT_EMAIL, DEFAULT_PHONE, 
+                    DEFAULT_ADDRESS.getNumber(), DEFAULT_ADDRESS.getStreet(), 
+                    DEFAULT_ADDRESS.getCity(), DEFAULT_ADDRESS.getState());
+            String json = advisor.toJson();
+            return new ResponseEntity(json, HttpStatus.OK);
+        } catch (Exception e) {}
+        return new ResponseEntity("Bad arguments", HttpStatus.BAD_REQUEST);
     }
 
 }

@@ -1,0 +1,39 @@
+<div class="container">
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Lastname</th>
+                <th scope="col">Firstname</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Office</th>
+                <th scope="col">Clients</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="advisor in advisors">
+                <th scope="row">{{$index + 1}}</th>
+                <td>{{advisor.identity.lastname}}</td>
+                <td>{{advisor.identity.firstname}}</td>
+                <td>{{advisor.email}}</td>
+                <td>{{advisor.phone}}</td>
+                <td>{{advisor.officeAddress.number}} {{advisor.officeAddress.street}}, {{advisor.officeAddress.city}}, {{advisor.officeAddress.state}}</td>
+                <td>TODO</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="container">
+    <form name="form" ng-submit="vm.addAdvisor()" class="form-inline justify-content-center">
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="shares-name" class="sr-only">Lastname</label>
+            <input ng-model="data.lastname" type="text" required class="form-control" id="shares-name" placeholder="Lastname">
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="shares-value" class="sr-only">Firstname</label>
+            <input ng-model="data.firstname" type="text" required class="form-control" id="shares-value" placeholder="Firstname">
+        </div>
+        <button ng-disabled="form.$invalid" type="submit" class="btn btn-primary mb-2">Add</button>
+    </form>
+</div>
