@@ -16,7 +16,7 @@ public abstract class AbstractDTO {
         }
     }
     
-    public static String toJson(List<AbstractDTO> dtos) {
+    public static String toJson(List<? extends AbstractDTO> dtos) {
         try {
             return MAPPER.writeValueAsString(dtos);
         } catch (IOException e) {

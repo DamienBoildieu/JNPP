@@ -1,0 +1,18 @@
+<div class="container">
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">RIB</th>
+                <th scope="col">Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="account in vm.accounts">
+                <th scope="row">{{$index + 1}}</th>
+                <td>{{account.rib}}</td>
+                <td>{{account.type}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

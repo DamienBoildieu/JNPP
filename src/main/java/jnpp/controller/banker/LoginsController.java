@@ -1,15 +1,19 @@
 package jnpp.controller.banker;
 
+import java.io.IOException;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import jnpp.service.dto.AbstractDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import jnpp.service.dto.clients.LoginDTO;
 import jnpp.service.services.BankerService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 /**
  * Contrôleur de la vue des identifiants des clients
@@ -28,12 +32,11 @@ public class LoginsController {
      *
      * @return la vue des identifiants des clients
      */
-    @RequestMapping(value = "banquier/identifiants", method = RequestMethod.GET)
-    protected ModelAndView loginsGet() {
+    @RequestMapping(value = "banker/logins", method = RequestMethod.GET)
+    protected ResponseEntity<?> loginsGet(HttpServletRequest request) throws IOException {
         List<LoginDTO> logins = bankerService.getClientLogins();
-        ModelAndView mv = new ModelAndView("banker/logins_board");
-        mv.addObject("logins", logins);
-        return mv;
+        String json = AbstractDTO.toJson(logins);
+        return new ResponseEntity(json, HttpStatus.OK);   
     }
 
 }

@@ -1,0 +1,31 @@
+<div class="container">
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="share in shares">
+                <th scope="row">{{$index + 1}}</th>
+                <td>{{share.name}}</td>
+                <td>{{share.value}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="container">
+    <form name="form" ng-submit="vm.addShare()" class="form-inline justify-content-center">
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="shares-name" class="sr-only">Name</label>
+            <input ng-model="data.name" type="text" required class="form-control" id="shares-name" placeholder="Name">
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="shares-value" class="sr-only">Value</label>
+            <input ng-model="data.value" type="number" required min="0" step=any class="form-control" id="shares-value" placeholder="Value">
+        </div>
+        <button ng-disabled="form.$invalid" type="submit" class="btn btn-primary mb-2">Add</button>
+    </form>
+</div>

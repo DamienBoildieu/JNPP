@@ -98,7 +98,7 @@ public class ClientServiceImpl implements ClientService {
         if (!isEmailValid(email) || !isAddressValid(number, street, city, state)
                 || !isPhoneValid(phone)) {
             throw new InformationException();
-        }
+        }        
         if (clientDAO.findPrivateByIdentity(
                 IdentityEntity.Gender.toEntity(gender), firstname,
                 lastname) != null) {
