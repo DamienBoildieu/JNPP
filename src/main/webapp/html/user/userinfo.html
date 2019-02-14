@@ -7,13 +7,13 @@
         </div>
         <div class='card-panel white col s5 offset-s1 center-align'>
             <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
-                <form name="form" ng-submit="vm.changePassword()" role="form">
+                <form name="form" ng-submit="vm.updatePassword()" role="form">
                     <div class="row">
                         <div class="col s12">
                             <div class="input-field">
                                 <label for="oldpsswd"> Ancien mot de passe </label> 
                                 <input type="password" class="validate" 
-                                    ng-model="vm.changePsswdData.old" id="oldpsswd">
+                                    ng-model="vm.updatePsswdData.old" id="oldpsswd">
                             </div>
                         </div>
                     </div>
@@ -22,7 +22,7 @@
                             <div class="input-field">
                                 <label for="newpsswd"> Nouveau mot de passe </label> 
                                 <input type="password" class="validate" 
-                                    ng-model="vm.changePsswdData.new" id="newpsswd">
+                                    ng-model="vm.updatePsswdData.new" id="newpsswd">
                             </div>
                         </div>
                     </div>
@@ -31,7 +31,7 @@
                             <div class="input-field">
                                 <label for="confirmpsswd"> Confirmer le nouveau mot de passe </label> 
                                 <input type="password" class="validate" 
-                                    ng-model="vm.changePsswdData.confirm" id="confirmpsswd">
+                                    ng-model="vm.updatePsswdData.confirm" id="confirmpsswd">
                             </div>
                         </div>
                     </div>

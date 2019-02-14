@@ -14,9 +14,10 @@
         
         let vm = this;
         
-        vm.changePsswdData = {};
+        vm.updatePsswdData = {};
         vm.closeData = {};
         vm.editInfo = editInfo;
+        vm.updatePassword = updatePassword;
         vm.close = close;
         
         init();
@@ -65,7 +66,9 @@
                         default:
                             break;
                     }
-                    AuthentificationService.setCredentials(response);
+                    $rootScope.globals = {
+                        currentUser : response
+                    };
                 },
                 function (response) {
                     switch (vm.info.type) {
@@ -83,8 +86,22 @@
             );
         }
         
+        function updatePassword() {
+            if (vm.updatePsswdData.new===vm.updatePsswdData.confirm) {
+                UserService.updatePassword(vm.updatePsswdData.old, vm.updatePsswdData.new).then(
+                    function () {
+                        
+                    },
+                    function (response) {
+                        FlashService.Error(response);
+                    }
+                );
+            } else {
+                FlashService.Error('Les deux mots de passe entrés ne correspondent pas');
+            }
+        }
+        
         function close() {
-            console.log(vm.closeData);
             if (vm.closeData.psswd===vm.closeData.confirm) {
                 UserService.close(vm.closeData.psswd).then(
                     function () {
