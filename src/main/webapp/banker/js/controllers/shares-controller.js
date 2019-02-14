@@ -5,8 +5,8 @@
         .module('app')
         .controller('SharesController', SharesController);
  
-    SharesController.$inject = ['$location', '$scope', 'SharesService'];
-    function SharesController($location, $scope, SharesService) {
+    SharesController.$inject = ['$scope', 'SharesService'];
+    function SharesController($scope, SharesService) {
         
         var vm = this;
         var defaultForm = {name: null, value: null};

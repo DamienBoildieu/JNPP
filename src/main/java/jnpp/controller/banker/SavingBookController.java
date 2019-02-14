@@ -1,8 +1,10 @@
 package jnpp.controller.banker;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import jnpp.service.dto.AbstractDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,9 +13,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import jnpp.service.dto.accounts.SavingBookDTO;
+import jnpp.service.dto.accounts.ShareDTO;
 import jnpp.service.exceptions.duplicates.DuplicateSavingbookException;
 import jnpp.service.services.AccountService;
 import jnpp.service.services.BankerService;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * Contrôleur de la vue de création de livrets
@@ -37,13 +45,12 @@ public class SavingBookController {
      *
      * @return Vue.
      * @throws Exception Exception non controllees.
-     */
-    @RequestMapping(value = "banquier/livrets", method = RequestMethod.GET)
-    protected ModelAndView savingBookGet() throws Exception {
+     */    
+    @RequestMapping(value = "banker/books", method = RequestMethod.GET)
+    protected ResponseEntity<?> get() throws IOException {
         List<SavingBookDTO> savingbooks = accountService.getSavingBooks();
-        ModelAndView mv = new ModelAndView("banker/savingbooks_board");
-        mv.addObject("savingbooks", savingbooks);
-        return mv;
+        String json = AbstractDTO.toJson(savingbooks);
+        return new ResponseEntity(json, HttpStatus.OK);   
     }
 
     /**
@@ -52,24 +59,21 @@ public class SavingBookController {
      * @param request la requête
      * @return Le formulaire de créations de livrets
      * @throws Exception Exception non controllees.
-     */
-    @RequestMapping(value = "banquier/livrets", method = RequestMethod.POST)
-    protected ModelAndView savingBookPost(HttpServletRequest request)
+     */   
+    @RequestMapping(value = "banker/books", method = RequestMethod.POST)
+    protected ResponseEntity<?> post(@RequestBody String string) 
             throws Exception {
-        String name = request.getParameter("name");
-        String moneyRate = request.getParameter("money_rate");
-        String timeRate = request.getParameter("time_rate");
-        if (name != null && name.length() > 0 && moneyRate != null
-                && moneyRate.length() > 0 && timeRate != null
-                && timeRate.length() > 0) {
-            try {
-                bankerService.addSavingbook(name, Double.valueOf(moneyRate),
-                        Double.valueOf(timeRate));
-            } catch (IllegalArgumentException e) {
-            } catch (DuplicateSavingbookException e) {
-            }
-        }
-        return new ModelAndView("redirect:/banquier/livrets.htm");
+        JsonNode data = (new ObjectMapper()).readTree(string);
+        String name = data.get("name").asText();
+        Double moneyRate = data.get("moneyRate").asDouble();
+        Double timeRate = data.get("timeRate").asDouble();
+        try {
+            SavingBookDTO book = bankerService.addSavingbook(name, moneyRate,
+                    timeRate);
+            String json = book.toJson();
+            return new ResponseEntity(json, HttpStatus.OK);
+        } catch (Exception e) {}
+        return new ResponseEntity("Bad arguments", HttpStatus.BAD_REQUEST);
     }
 
 }

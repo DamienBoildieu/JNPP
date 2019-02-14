@@ -52,8 +52,7 @@ public class SharesController {
      * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "banker/shares", method = RequestMethod.GET)
-    protected ResponseEntity<?> sharesGet(HttpServletRequest request) 
-            throws IOException {
+    protected ResponseEntity<?> get() throws IOException {
         List<ShareDTO> shares = accountService.getShares();
         String json = AbstractDTO.toJson(shares);
         return new ResponseEntity(json, HttpStatus.OK);   
@@ -67,8 +66,8 @@ public class SharesController {
      * @throws Exception Exception non controllees.
      */
     @RequestMapping(value = "banker/shares", method = RequestMethod.POST)
-    protected ResponseEntity<?> sharesPost(@RequestBody String string, 
-            HttpServletRequest request) throws Exception {
+    protected ResponseEntity<?> post(@RequestBody String string) 
+            throws Exception {
         JsonNode data = (new ObjectMapper()).readTree(string);
         String name = data.get("name").asText();
         Double value = data.get("value").asDouble();
