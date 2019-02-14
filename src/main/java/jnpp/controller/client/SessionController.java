@@ -1,7 +1,7 @@
 package jnpp.controller.client;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.DatatypeConverter;
 
 import jnpp.controller.client.exceptions.NullSessionException;
 import jnpp.controller.client.exceptions.UnconnectedException;
@@ -108,18 +108,18 @@ public class SessionController {
     }
     
     public static String decodeLogin(String basicallyEncoded) {
-        String decoded = new String(Base64.decode(basicallyEncoded));
+        String decoded = new String(DatatypeConverter.parseBase64Binary(basicallyEncoded));
         String[] splitted = decoded.split(":");
         return splitted[0].split(" ")[1];
     }
     
     public static String decodePassword(String basicallyEncoded) {
-        String decoded = new String(Base64.decode(basicallyEncoded));
+        String decoded = new String(DatatypeConverter.parseBase64Binary(basicallyEncoded));
         String[] splitted = decoded.split(":");
         return splitted[1];
     }
     
     public static String encodeAuthData(String login, String password) {
-        return Base64.encode(("Basic "+login+":"+password).getBytes());
+        return DatatypeConverter.printBase64Binary(("Basic "+login+":"+password).getBytes());
     }
 }
