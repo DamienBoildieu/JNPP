@@ -15,6 +15,7 @@
         service.basicPutRequest = basicPutRequest;
         service.basicPostRequest = basicPostRequest;
         service.basicDeleteRequest = basicDeleteRequest;
+        service.basicGetRequest = basicGetRequest;
         
         return service;
         
@@ -52,6 +53,20 @@
             $http.delete(url).then(
                 function () {
                     deferred.resolve();
+                },
+                function (response) {
+                    deferred.reject(response.data);
+                }
+            );
+            return deferred.promise;
+        }
+        
+        function basicGetRequest(servletUrl) {
+            let url = service.basePath+servletUrl;
+            let deferred = $q.defer();
+            $http.get(url).then(
+                function (response) {
+                    deferred.resolve(response.data);
                 },
                 function (response) {
                     deferred.reject(response.data);

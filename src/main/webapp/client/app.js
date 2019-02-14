@@ -62,6 +62,16 @@
                 templateUrl: 'client/html/user/userinfo.html',
                 controllerAs: 'vm'
             })
+            .when('/resume', {
+                controller: 'ResumeController',
+                templateUrl: 'client/html/accounts/resume.html',
+                controllerAs: 'vm'
+            })
+            .when('/openaccount', {
+                controller: 'OpenAccountController',
+                templateUrl: 'client/html/accounts/openaccount.html',
+                controllerAs: 'vm'
+            })
             .otherwise({ redirectTo: '/welcome' });
     }
 

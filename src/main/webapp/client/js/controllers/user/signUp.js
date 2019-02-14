@@ -5,9 +5,11 @@
         .module('app')
         .controller('SignUpController', SignUpController);
  
-    SignUpController.$inject = ['$scope', '$location', 'AuthentificationService', 'UserService', 'FlashService'];
+    SignUpController.$inject = ['$scope', '$location', 'AuthentificationService', 
+        'UserService', 'FlashService', 'TranslatorService'];
     
-    function SignUpController($scope, $location, AuthentificationService, UserService, FlashService) {
+    function SignUpController($scope, $location, AuthentificationService, UserService,
+            FlashService, TranslatorService) {
         AuthentificationService.unconnectedPage('/welcome');
         let vm = this;
         
@@ -22,7 +24,7 @@
         function init() {
             UserService.getGenders().then(
                 function(genders) {
-                    $scope.genders = genders;
+                    $scope.genders = TranslatorService.translateGenders(genders);
                 },
                 function(errMsg) {
                     FlashService.Error(errMsg);

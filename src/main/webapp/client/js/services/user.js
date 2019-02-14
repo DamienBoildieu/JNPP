@@ -5,10 +5,10 @@
         .module('app')
         .factory('UserService', UserService);
  
-    UserService.$inject = ['$rootScope', '$http', '$q', 'CommonService', 'TranslatorService',
+    UserService.$inject = ['$rootScope', '$http', '$q', 'CommonService',
         'AuthentificationService'];
     
-    function UserService($rootScope, $http, $q, CommonService, TranslatorService, AuthentificationService) {
+    function UserService($rootScope, $http, $q, CommonService, AuthentificationService) {
         
         let service = {};
         
@@ -32,10 +32,10 @@
             let deferred = $q.defer();
             $http.get(url).then(
                 function (response) {
-                    deferred.resolve(TranslatorService.translateGenders(response.data));
+                    deferred.resolve(response.data);
                 },
                 function () {
-                    deferred.reject("Erreur rencontre dans le serveur");
+                    deferred.reject("Erreur rencontrée dans le serveur");
                 }
             );
             return deferred.promise;

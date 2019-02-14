@@ -10,18 +10,18 @@
         <main>
             <%@ include file="../include/alerts.jsp"%>
             <div class="row">
-            <div class="col s2 center-align">
-                <div class="card-panel white">
-                    <div clas="row">
-                        <a class="btn blue" href="<c:url value='/openaccount.htm' />">Ouvrir un compte</a>
-                    </div>
-                    <div style="margin-bottom: 5px;"></div>
-                    <div clas="row">
-                        <a class="btn blue" href="<c:url value='/movement.htm' />">Faire une transaction</a>
+                <div class="col s2 center-align">
+                    <div class="card-panel white">
+                        <div clas="row">
+                            <a class="btn blue" href="<c:url value='/openaccount.htm' />">Ouvrir un compte</a>
+                        </div>
+                        <div style="margin-bottom: 5px;"></div>
+                        <div clas="row">
+                            <a class="btn blue" href="<c:url value='/movement.htm' />">Faire une transaction</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="container">              
+                <div class="container">              
                      <div class='col s10 offset-s1 center-align'>
                         <c:forEach items="${accounts}" var="element">
                             <div class="col s12 m4">

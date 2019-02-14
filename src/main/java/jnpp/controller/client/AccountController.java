@@ -1,7 +1,10 @@
 package jnpp.controller.client;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jnpp.controller.client.views.Translator;
 import jnpp.controller.client.views.alerts.AlertEnum;
 import jnpp.controller.client.views.alerts.AlertMessage;
+import jnpp.service.dto.AbstractDTO;
 import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.clients.PrivateDTO;
@@ -34,6 +38,10 @@ import jnpp.service.exceptions.owners.AccountOwnerException;
 import jnpp.service.services.AccountService;
 import jnpp.service.services.DebitAuthorizationService;
 import jnpp.service.services.PaymentMeanService;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 /**
  * Classe de contrôleur des requêtes sur des comptes
@@ -57,6 +65,24 @@ public class AccountController {
     @Autowired
     private PaymentMeanService paymentMeanService;
 
+    
+    @RequestMapping(value = "getClientAccounts", method = RequestMethod.GET)
+    public ResponseEntity<?> getClientAccounts(@RequestHeader("authorization") String autho) 
+        throws IOException {
+        String login = SessionController.decodeLogin(autho);       
+        try {
+            return new ResponseEntity(AbstractDTO.toJson(accountService.getAccounts(login)), HttpStatus.OK);
+        } catch (FakeClientException ex) {
+            return new ResponseEntity("Il semble y avoir une erreur dans votre session",
+                HttpStatus.FORBIDDEN);
+        }
+    }
+    
+    @RequestMapping(value = "getSavingBooks", method = RequestMethod.GET)
+    public ResponseEntity<?> getSavingBooks() throws IOException {
+        return new ResponseEntity(AbstractDTO.toJson(accountService.getSavingBooks()), HttpStatus.OK);
+    }
+    
     /**
      * Demande d'ouverture de compte courant
      *
