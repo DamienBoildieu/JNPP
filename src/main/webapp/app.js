@@ -65,15 +65,15 @@
             .otherwise({ redirectTo: '/welcome' });
     }
 
-    run.$inject = ['$rootScope', '$cookies', '$http'];
+    run.$inject = ['$cookies', 'AuthentificationService'];
     
-    function run($rootScope, $cookies, $http) {
+    function run($cookies, AuthentificationService) {
         
         // keep user logged in after page refresh
-       // $rootScope.globals = $cookies.getObject('globals') || {};
-       /* if ($rootScope.globals.userName) {
-            $http.defaults.headers.common['Authorization'] = btoa($rootScope.globals.userLogin;
-        }*/
+        let authorization = $cookies.getObject('authorization');
+        if (authorization) {
+            AuthentificationService.reconnect(authorization);
+        }
     }
 
 })();

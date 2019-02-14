@@ -5,16 +5,16 @@
         .module('app')
         .factory('AuthentificationService', AuthentificationService);
  
-    AuthentificationService.$inject = ['$location', '$cookies','$rootScope', '$http', 'CommonService'];
-    function AuthentificationService($location, $cookies, $rootScope, $http, CommonService) {
+    AuthentificationService.$inject = ['$location', '$cookies','$rootScope', '$http', 
+        'CommonService', 'NotifyService'];
+    function AuthentificationService($location, $cookies, $rootScope, $http, 
+        CommonService, NotifyService) {
         let service = {};
  
-        if ($rootScope.currentUser)
-            service.isLogged = true;
-        else
-            service.isLogged = false;
+        service.isLogged = false;
         service.login = login;
         service.logout = logout;
+        service.reconnect = reconnect;
         service.connectedPage = connectedPage;
         service.unconnectedPage = unconnectedPage;
         service.setCredentials = setCredentials;
@@ -30,8 +30,11 @@
                         let message = {
                             success : true
                         };
-                        service.setCredentials(response.data);
-                        $http.defaults.headers.common['Authorization'] = response.headers('Authorization');
+                        service.setCredentials(
+                            {
+                                user : response.data,
+                                authorization : response.headers('Authorization')
+                            });
                         service.isLogged = true;
                         callback(message);
                     },
@@ -57,8 +60,25 @@
             if (service.isLogged) {
                 service.isLogged = false;
                 service.clearCredentials();
-                delete $http.defaults.headers.common['Authorization'];
             }
+        }
+        
+        
+        function reconnect(authorization) {
+        let decoded = atob(authorization);
+            let splitted = decoded.split(':');
+            let login = splitted[0].split(' ')[1];
+            let password = splitted[1];
+            service.login(
+                { 
+                    username : login,
+                    password : password
+                },
+                function (message) {
+                    if (message.success)
+                         NotifyService.notify('logInOutEvent');
+                }
+            );    
         }
         
         function connectedPage(redirect) {
@@ -73,13 +93,15 @@
         
         function setCredentials(credentials) {
             $rootScope.globals = {
-                currentUser : credentials
+                currentUser : credentials.user
             };
-            $cookies.putObject('globals', $rootScope.globals);
+            $http.defaults.headers.common['Authorization'] = credentials.authorization;
+            $cookies.putObject('authorization', credentials.authorization);
         }
         
         function clearCredentials() {
             delete $rootScope.globals;
+            delete $http.defaults.headers.common['Authorization'];
             $cookies.remove('globals');
         }
     }
