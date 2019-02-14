@@ -1,0 +1,82 @@
+<form name="form" ng-submit="vm.editInfo()" role="form">
+    <div class="row">
+        <div class="col s6">
+            <div class="row">
+                <div class="col s12">            
+                    <label>Nom</label>
+                    <input type="text" ng-value="info.identity.lastname" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">            
+                    <label>Prénom</label>
+                    <input type="text" ng-value="info.identity.firstname" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <label>Sexe</label>
+                    <input type="text" ng-value="info.identity.gender" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">     
+                    <label>Date de naissance</label> 
+                    <input type="text" ng-value="info.birthday | date:'dd/MM/yyyy'" readonly>
+                </div>
+            </div>                                
+            <div class="row">
+                <div class="col s12">
+                    <label for="email">Email</label>
+                    <input type="email" ng-value="info.email" 
+                        ng-model="info.email" class="validate" id="email" required>
+                </div>
+            </div>                                                   
+        </div>
+        <div class="col s6">
+            <div class="row">
+                <div class="col s12">
+                    <label for="streetNbr">Numéro de rue</label> 
+                    <input type="text" ng-value="info.address.number"
+                        ng-model="info.address.number" class="validate" 
+                        id="streetNbr" pattern="[1-9][0-9]*" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <label for="street">Rue</label>
+                    <input type="text" ng-value="info.address.street" 
+                        ng-model="info.address.street" class="validate" id="street" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <label for="city">Ville</label> 
+                    <input type="text" ng-value="info.address.city"
+                         ng-model="info.address.city" class="validate" id="city" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <label for="country">Pays</label> 
+                    <input type="text" ng-value="info.address.state" 
+                        ng-model="info.address.state" class="validate" id="country" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <label for="phone">Téléphone</label> 
+                    <input type="tel" ng-value="info.phone"
+                        ng-model="info.phone" class="validate" id="phone" 
+                        pattern="[0-9]{10}" required>
+                </div>
+            </div>   
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <input type="submit" value="Changer mes informations" class="btn blue" />
+        </div>
+    </div>
+</form>

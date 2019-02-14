@@ -1,0 +1,104 @@
+(function () {
+    'use strict';
+ 
+    angular
+        .module('app')
+        .factory('UserService', UserService);
+ 
+    UserService.$inject = ['$rootScope', '$http', '$q', 'CommonService', 'TranslatorService',
+        'AuthentificationService'];
+    
+    function UserService($rootScope, $http, $q, CommonService, TranslatorService, AuthentificationService) {
+        
+        let service = {};
+        
+        service.getGenders = getGenders;
+        
+        service.privateSignUp = privateSignUp;
+        service.proSignUp = proSignUp;
+        
+        service.privatePassword = privatePassword;
+        service.proPassword = proPassword;
+        
+        service.updateUserInfo = updateUserInfo;
+        service.updatePassword = updatePassword;
+        
+        service.close = close;
+        
+        return service;      
+        
+        function getGenders() {
+            let url = CommonService.basePath+'getGenders.htm';
+            let deferred = $q.defer();
+            $http.get(url).then(
+                function (response) {
+                    deferred.resolve(TranslatorService.translateGenders(response.data));
+                },
+                function () {
+                    deferred.reject("Erreur rencontre dans le serveur");
+                }
+            );
+            return deferred.promise;
+        }
+        
+        function privateSignUp(data) {
+            return CommonService.basicPostRequest('privateSignUp.htm', data);
+        }
+        
+        function proSignUp(data) {
+            return CommonService.basicPostRequest('proSignUp.htm', data);
+        }
+        
+        function privatePassword(data) {
+            return CommonService.basicPutRequest('privatePassword.htm', data);
+        }
+        
+        function proPassword(data) {
+            return CommonService.basicPutRequest('proPassword.htm', data);
+        }
+        
+        function updateUserInfo(data) {
+            return CommonService.basicPutRequest('updateUserInfo.htm', data);
+        }
+        
+        function updatePassword(oldPassword, newPassword) {
+            let decoded = atob($http.defaults.headers.common['Authorization']);
+            let splitted = decoded.split(":");
+            if (oldPassword===splitted[1]) {
+                let url = CommonService.basePath+'updateUserPassword.htm';
+                let deferred = $q.defer();
+                $http.put(url, 
+                    {
+                        newPassword : newPassword
+                    }).then(
+                    function (response) {
+                        AuthentificationService.setCredentials(
+                            {
+                                user : $rootScope.globals.currentUser,
+                                authorization : response.headers('Authorization')
+                            });
+                        deferred.resolve();
+                    },
+                    function (response) {
+                        deferred.reject(response.data);
+                    }
+                );
+                return deferred.promise;
+            } else 
+                return $q.defer().reject("Le mot de passe entré ne correspond pas "+
+                    "à celui de la session").promise;
+        }
+        
+        function close(data) {
+            let decoded = atob($http.defaults.headers.common['Authorization']);
+            let splitted = decoded.split(":");
+            if (data===splitted[1])
+                return CommonService.basicDeleteRequest('deleteUser.htm');
+            else
+                return $q.defer().reject("Le mot de passe entré ne correspond pas "+
+                    "à celui de la session").promise;
+        }
+    }
+ 
+})();
+ 
