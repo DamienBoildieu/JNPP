@@ -74,7 +74,7 @@ public class LinkAccountController {
      *         redirection vers l'index sinon
      * @throws Exception Exception non controllees.
      */
-    @RequestMapping(value = "account", method = RequestMethod.GET)
+    @RequestMapping(value = "oldaccount", method = RequestMethod.GET)
     protected ModelAndView linktoAccount(Model model,
             HttpServletRequest request, RedirectAttributes rm)
             throws Exception {

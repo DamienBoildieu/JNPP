@@ -2,12 +2,15 @@ package jnpp.controller.client;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import jnpp.controller.client.views.JNPPModelAndView;
+import jnpp.controller.client.views.MovementView;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,10 +23,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jnpp.controller.client.views.Translator;
 import jnpp.controller.client.views.alerts.AlertEnum;
 import jnpp.controller.client.views.alerts.AlertMessage;
+import jnpp.controller.client.views.info.ViewInfo;
 import jnpp.service.dto.AbstractDTO;
 import jnpp.service.dto.IdentityDTO;
+import jnpp.service.dto.accounts.AccountDTO;
+import static jnpp.service.dto.accounts.AccountDTO.Type.SAVING;
+import jnpp.service.dto.accounts.ShareAccountDTO;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.clients.PrivateDTO;
+import jnpp.service.dto.movements.MovementDTO;
+import jnpp.service.dto.paymentmeans.BankCardDTO;
+import jnpp.service.dto.paymentmeans.CheckbookDTO;
 import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.accounts.ClientTypeException;
 import jnpp.service.exceptions.accounts.CloseRequestException;
@@ -40,10 +50,12 @@ import jnpp.service.services.DebitAuthorizationService;
 import jnpp.service.services.PaymentMeanService;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ObjectNode;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -88,7 +100,7 @@ public class AccountController {
     }
     
     @RequestMapping(value = "openCurrentAccount", method = RequestMethod.POST)
-    private ResponseEntity<?> openCurrentAccount(@RequestHeader("authorization") String autho)
+    public ResponseEntity<?> openCurrentAccount(@RequestHeader("authorization") String autho)
         throws IOException {
         String login = SessionController.decodeLogin(autho); 
         try {
@@ -105,7 +117,7 @@ public class AccountController {
     }
 
     @RequestMapping(value = "openSavingAccount", method = RequestMethod.POST)
-    private ResponseEntity<?> openSavingAccount(@RequestHeader("authorization") String autho,
+    public ResponseEntity<?> openSavingAccount(@RequestHeader("authorization") String autho,
         @RequestBody String body) throws IOException {
         String login = SessionController.decodeLogin(autho); 
         ObjectMapper mapper = new ObjectMapper();
@@ -134,7 +146,7 @@ public class AccountController {
     }
 
     @RequestMapping(value = "openJointAccount", method = RequestMethod.POST)
-    private ResponseEntity<?> openJointAccount(@RequestHeader("authorization") String autho,
+    public ResponseEntity<?> openJointAccount(@RequestHeader("authorization") String autho,
         @RequestBody String body) throws IOException {
         String login = SessionController.decodeLogin(autho);
         ObjectMapper mapper = new ObjectMapper();
@@ -175,7 +187,7 @@ public class AccountController {
     }
 
     @RequestMapping(value = "openShareAccount", method = RequestMethod.POST)
-    private ResponseEntity<?> openShareAccount(@RequestHeader("authorization") String autho)
+    public ResponseEntity<?> openShareAccount(@RequestHeader("authorization") String autho)
         throws IOException {
         String login = SessionController.decodeLogin(autho);
         // Call service
@@ -183,7 +195,7 @@ public class AccountController {
             accountService.openShareAccount(login);
             return new ResponseEntity(HttpStatus.CREATED);
         } catch (DuplicateAccountException duplicate) {
-             HttpHeaders responseHeaders = new HttpHeaders();
+            HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
             return new ResponseEntity("Vous possédez déjà un compte titres", responseHeaders, 
                 HttpStatus.BAD_REQUEST);
@@ -193,6 +205,39 @@ public class AccountController {
         }
     }
 
+    @RequestMapping(value = "account", method = RequestMethod.GET)
+    public ResponseEntity<?> getAccount(@RequestHeader("authorization") String autho,
+            @PathVariable String accountRib) throws IOException {
+        try {
+            String login = SessionController.decodeLogin(autho);
+            List<AccountDTO> accounts = accountService.getAccounts(login);
+            Iterator<AccountDTO> ite = accounts.iterator();
+            
+            while (ite.hasNext()) {
+                AccountDTO account = ite.next();
+                if (account.getRib().equals(accountRib)) {
+                    List<MovementDTO> movements = accountService.getMovements(login,
+                            accountRib);
+                    String responseBody = "{" + AbstractDTO.toJson(movements) +
+                            "," + account.toJson() + "}";
+                    return new ResponseEntity(responseBody, HttpStatus.OK);
+
+                }
+            }
+        } catch (FakeClientException ex) {
+            return new ResponseEntity("Il semble y avoir une erreur dans votre session", 
+                HttpStatus.CONFLICT);
+        } catch (AccountOwnerException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Vous n'êtes pas le propriétaire de ce compte", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
+        }
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+        return new ResponseEntity("Ce compte ne correspond pas à un de vos comptes", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
+    }
     /**
      * Demande de fermeture de comptes
      *

@@ -13,11 +13,12 @@
         
         service.getClientAccounts = getClientAccounts;
         service.getSavingBooks = getSavingBooks;
+        service.getAccount = getAccount;
         service.openCurrentAccount = openCurrentAccount;
         service.openSavingAccount = openSavingAccount;
         service.openJointAccount = openJointAccount;
         service.openShareAccount = openShareAccount;
-        
+
         return service;
         
         function getClientAccounts(callback) {
@@ -43,6 +44,21 @@
         
         function getSavingBooks() {
             let url = CommonService.basePath+'getSavingBooks.htm';
+            let deferred = $q.defer();
+            $http.get(url).then(
+                function (response) {
+                    deferred.resolve(response.data);
+                },
+                function () {
+                    deferred.reject("Erreur rencontrée dans le serveur");
+                }
+            );
+            return deferred.promise;
+        }
+        
+        function getAccount(rib) {
+            let url = CommonService.basePath+'account/'+rib+'.htm';
+            console.log(rib);
             let deferred = $q.defer();
             $http.get(url).then(
                 function (response) {

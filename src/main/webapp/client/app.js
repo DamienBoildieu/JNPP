@@ -72,6 +72,11 @@
                 templateUrl: 'client/html/accounts/openaccount.html',
                 controllerAs: 'vm'
             })
+            .when('/account/:accountRib', {
+                controller: 'AccountController',
+                templateUrl: 'client/html/accounts/account.html',
+                controllerAs: 'vm'
+            })
             .otherwise({ redirectTo: '/welcome' });
     }
 
