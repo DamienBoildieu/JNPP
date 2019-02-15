@@ -1,8 +1,11 @@
 package jnpp.controller.banker;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import jnpp.service.dto.AbstractDTO;
+import jnpp.service.dto.advisor.AdvisorDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 import jnpp.service.dto.clients.LoginDTO;
 import jnpp.service.exceptions.entities.FakeAdvisorException;
 import jnpp.service.services.BankerService;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Contrôleur des clients d'un conseiller
@@ -32,26 +40,18 @@ public class AdvisorClientsController {
      * @param request la requête
      * @return La vue des clients d'un conseiller
      */
-    @RequestMapping(value = "banquier/conseiller/clients", method = RequestMethod.GET)
-    protected ModelAndView advisorClientsGet(HttpServletRequest request) {
-        String firstname = request.getParameter("prenom");
-        String lastname = request.getParameter("nom");
-        if (firstname == null || firstname.length() == 0 || lastname == null
-                || lastname.length() == 0) {
-            return new ModelAndView("redirect:/banquier/conseillers.htm");
-        }
+    @RequestMapping(value = "banker/advisor/clients", method = RequestMethod.GET)
+    protected ResponseEntity<?> get(
+            @RequestParam(value = "firstname") String firstname,
+            @RequestParam(value = "lastname") String lastname)
+            throws IOException {
         try {
             List<LoginDTO> clients = bankerService.getAdvisorLogins(firstname,
                     lastname);
-            ModelAndView mv = new ModelAndView("banker/advisor_clients_board");
-            mv.addObject("advisor_firstname", firstname);
-            mv.addObject("advisor_lastname", lastname);
-            mv.addObject("clients", clients);
-            return mv;
-        } catch (FakeAdvisorException e) {
-        } catch (IllegalArgumentException e) {
-        }
-        return new ModelAndView("redirect:/banquier/conseillers.htm");
+            String json = AbstractDTO.toJson(clients);
+            return new ResponseEntity(json, HttpStatus.OK);
+        } catch (Exception e) {}
+        return new ResponseEntity("Bad arguments", HttpStatus.BAD_REQUEST);
     }
 
 }

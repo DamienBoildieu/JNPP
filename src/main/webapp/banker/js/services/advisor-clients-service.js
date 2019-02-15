@@ -3,21 +3,22 @@
 
     angular
         .module('app')
-        .factory('AccountsService', AccountsService);
+        .factory('AdvisorClientsService', AdvisorClientsService);
 
-    AccountsService.$inject = ['$http', '$q'];
-    function AccountsService($http, $q) {
+    AdvisorClientsService.$inject = ['$http', '$q'];
+    function AdvisorClientsService($http, $q) {
 
         const service = {};
 
         service.getAll = getAll;
-
+        
         return service;
 
-        function getAll() {
-            const url = 'http://localhost:8084/JNPP/banker/accounts.htm';
+        function getAll(firstname, lastname) {
+            const url = 'http://localhost:8084/JNPP/banker/advisor/clients.htm';
             const deferred = $q.defer();
-            $http.get(url).then(
+            $http.get(url, {params: {firstname: firstname, lastname: lastname}})
+            .then(
                 function (response) {
                     deferred.resolve(response.data);
                 },

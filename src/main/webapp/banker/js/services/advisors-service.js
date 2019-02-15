@@ -37,8 +37,8 @@
                 function (response) {
                     deferred.resolve(response.data);
                 },
-                function (response) {
-                    deferred.reject(response.data);
+                function () {
+                    deferred.reject();
                 }
             );
             return deferred.promise;

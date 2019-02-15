@@ -19,7 +19,11 @@
                 <td>{{advisor.email}}</td>
                 <td>{{advisor.phone}}</td>
                 <td>{{advisor.officeAddress.number}} {{advisor.officeAddress.street}}, {{advisor.officeAddress.city}}, {{advisor.officeAddress.state}}</td>
-                <td>TODO</td>
+                <td>
+                    <a href="#!/advisor/clients?firstname={{advisor.identity.firstname}}&lastname={{advisor.identity.lastname}}" class="btn btn-light">
+                        Clients
+                    </a>
+                </td>
             </tr>
         </tbody>
     </table>

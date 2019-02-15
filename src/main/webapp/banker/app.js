@@ -27,6 +27,11 @@
             	templateUrl: 'html/advisors.html',
             	controllerAs: 'vm'
             })
+            .when('/advisor/clients', {
+            	controller: 'AdvisorClientsController',
+            	templateUrl: 'html/advisor-clients.html',
+            	controllerAs: 'vm'
+            })
             .when('/shares', {
             	controller: 'SharesController',
             	templateUrl: 'html/shares.html',

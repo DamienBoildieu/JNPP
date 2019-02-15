@@ -22,9 +22,8 @@
                 function (response) {
                     deferred.resolve(response.data);
                 },
-                function (response) {
+                function () {
                     deferred.reject("> Server error.");
-                    console.log(response);
                 }
             );
             return deferred.promise;
