@@ -12,6 +12,8 @@ import jnpp.dao.entities.IdentityEntity;
 import jnpp.dao.entities.clients.ClientEntity;
 import jnpp.dao.entities.clients.PrivateEntity;
 import jnpp.dao.entities.movements.MovementEntity;
+import jnpp.service.dto.AbstractDTO;
+import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.JointAccountDTO;
 
 @Entity
@@ -42,13 +44,13 @@ public class JointAccountEntity extends MoneyAccountEntity
 
     @Override
     public JointAccountDTO toDTO() {
-        List<IdentityEntity> owners = new ArrayList<IdentityEntity>(
+        List<IdentityDTO> owners = new ArrayList<IdentityDTO>(
                 getClients().size());
         Iterator<ClientEntity> it = getClients().iterator();
         while (it.hasNext()) {
             ClientEntity client = it.next();
             if (client.getType() == ClientEntity.Type.PRIVATE) {
-                owners.add(((PrivateEntity) client).getIdentity());
+                owners.add(((PrivateEntity) client).getIdentity().toDTO());
             } else {
                 throw new IllegalStateException(
                         "Un professionel a un compte joint.");

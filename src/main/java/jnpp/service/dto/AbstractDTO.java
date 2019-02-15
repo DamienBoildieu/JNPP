@@ -2,8 +2,12 @@ package jnpp.service.dto;
 
 import java.io.IOException;
 import java.util.List;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
+import org.codehaus.jackson.annotate.JsonTypeInfo.As;
+import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
 import org.codehaus.jackson.map.ObjectMapper;
 
+//@JsonTypeInfo(include=As.WRAPPER_OBJECT, use=Id.NAME)
 public abstract class AbstractDTO {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
