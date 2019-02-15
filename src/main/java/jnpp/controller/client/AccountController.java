@@ -38,9 +38,12 @@ import jnpp.service.exceptions.owners.AccountOwnerException;
 import jnpp.service.services.AccountService;
 import jnpp.service.services.DebitAuthorizationService;
 import jnpp.service.services.PaymentMeanService;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 /**
@@ -83,157 +86,50 @@ public class AccountController {
         return new ResponseEntity(AbstractDTO.toJson(accountService.getSavingBooks()), HttpStatus.OK);
     }
     
-    /**
-     * Demande d'ouverture de compte courant
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return La vue des comptes
-     * @throws Exception Exception non controllees.
-     */
-    @RequestMapping(value = "opencurrentaccount", method = RequestMethod.POST)
-    private ModelAndView openCurrentAccount(Model model,
-            HttpServletRequest request, RedirectAttributes rm)
-            throws Exception {
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
+    @RequestMapping(value = "openCurrentAccount", method = RequestMethod.POST)
+    private ResponseEntity<?> openCurrentAccount(@RequestHeader("authorization") String autho)
+        throws IOException {
+        String login = SessionController.decodeLogin(autho); 
+        try {
+            accountService.openCurrentAccount(login);
+            return new ResponseEntity(HttpStatus.CREATED);
+        } catch (DuplicateAccountException duplicate) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Vous possédez déjà un compte courant", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
+        } catch (FakeClientException clientException) {
+            return new ResponseEntity("Il semble y avoir une erreur dans votre session", HttpStatus.CONFLICT);
         }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (SessionController.isConnected(session)) {
-            // Call service
-            try {
-                accountService.openCurrentAccount(
-                        SessionController.getClient(session).getLogin());
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Votre compte courant est ouvert"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Votre compte courant est ouvert"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-            } catch (DuplicateAccountException duplicate) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Vous possédez déjà un compte courant"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Vous possédez déjà un compte courant"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-            } catch (FakeClientException clientException) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Il semble y avoir une erreur dans votre session"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Il semble y avoir une erreur dans votre session"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-                return new ModelAndView("redirect:/disconnect.htm");
-            } finally {
-                return new ModelAndView("redirect:/resume.htm");
-            }
-        }
-        return new ModelAndView("redirect:/index.htm"); // ne devrait pas
-                                                        // arriver
     }
 
-    /**
-     * Demande d'ouverture de livret
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return La vue des comptes
-     * @throws Exception Exception non controllees.
-     */
-    @RequestMapping(value = "opensavingaccount", method = RequestMethod.POST)
-    private ModelAndView openSavingAccount(Model model,
-            HttpServletRequest request, RedirectAttributes rm)
-            throws Exception {
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
+    @RequestMapping(value = "openSavingAccount", method = RequestMethod.POST)
+    private ResponseEntity<?> openSavingAccount(@RequestHeader("authorization") String autho,
+        @RequestBody String body) throws IOException {
+        String login = SessionController.decodeLogin(autho); 
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode data = mapper.readTree(body);
+        String bookName = data.get("bookName").asText();
+        // Call service
+        try {
+            accountService.openSavingAccount(login, bookName);
+            return new ResponseEntity(HttpStatus.CREATED);
+        } catch (DuplicateAccountException duplicate) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Vous possédez déjà un compte courant", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
+        } catch (FakeClientException clientException) {
+            return new ResponseEntity("Il semble y avoir une erreur dans votre session", 
+                HttpStatus.CONFLICT);
+        } catch (FakeSavingBookException bookException) {
+            return new ResponseEntity("Ce livret n'existe pas", HttpStatus.BAD_REQUEST);
+        } catch (ClientTypeException typeClient) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Vous ne pouvez pas créer de livret", responseHeaders, 
+                HttpStatus.FORBIDDEN);
         }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (SessionController.isConnected(session)) {
-            // Call service
-            try {
-                String bookName = request.getParameter("bookName");
-                accountService.openSavingAccount(
-                        SessionController.getClient(session).getLogin(),
-                        bookName);
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Votre livret est ouvert"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Votre livret est ouvert"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-            } catch (DuplicateAccountException duplicate) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Vous possédez déjà un livret de ce type"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Vous possédez déjà un livret de ce type"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-            } catch (FakeClientException clientException) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Il semble y avoir une erreur dans votre session"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Il semble y avoir une erreur dans votre session"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-                return new ModelAndView("redirect:/disconnect.htm");
-            } catch (FakeSavingBookException bookException) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Ce livret n'existe pas"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Ce livret n'existe pas"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-            } catch (ClientTypeException typeClient) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Vous ne pouvez pas créer de livret"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Vous ne pouvez pas créer de livret"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-            }
-            return new ModelAndView("redirect:/resume.htm");
-        }
-        return new ModelAndView("redirect:/index.htm"); // ne devrait pas
-                                                        // arriver
     }
 
     /**

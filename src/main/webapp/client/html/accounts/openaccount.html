@@ -29,23 +29,11 @@
             <div ng-if="globals.currentUser.type==='PRIVATE'" class="collapsible-header">Livret</div>
             <div ng-if="globals.currentUser.type==='PRIVATE'" class="collapsible-body white center-align">
                 <div class="col s12">
-                    <form id="savingForm" name="savingForm" ng-submit="vm.openSavingAccount()" role="form">                                                   
-                        <div class="row">
-                            <div class="input-field col s12">
-                                <select name="bookName" form="savingForm">
-                                    <option ng-repeat="book in books" value="{{book.name}}">
-                                        {{book.name}}
-                                    </option>        
-                                </select>
-                                <label>Nom du livret</label>
-                            </div>
+                        <div ng-repeat="book in books" class="row">
+                           <button  class="btn blue" ng-click="vm.openSavingBook(book.name)">
+                                {{book.name}}
+                            </button>
                         </div>
-                        <div class="row">
-                            <div class="col s12">
-                                <input type="submit" value="Livret" class="btn blue" />
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
         </li>
@@ -54,18 +42,18 @@
             <div ng-if="globals.currentUser.type==='PRIVATE'" class="collapsible-body white center-align">
                 <div class="col s12">
                     <form id="jointForm" name="jointForm" ng-submit="vm.openJointAccount()" role="form">                                                
-                        <input type="hidden" id="nbClients" name="nbClients" value=${nbClients}>
                             <div ng-repeat="x in [].constructor(nbClients) track by $index" class="row">
                                 <div class="input-field col s4">
-                                    <label for="lastName${index}">Nom</label> <input type="text"
-                                                                                      class="validate" name="lastName${index}" id="lastName${index}" required>
+                                    <label for="lastName${index}">Nom</label> 
+                                    <input type="text" class="validate" 
+                                        name="lastName${index}" id="lastName${index}" required>
                                 </div>
                                 <div class="input-field col s4">
-                                    <label for="firstName${index}">Prénom</label> <input type="text"
-                                                                                      class="validate" name="firstName${index}" id="firstName${index}" required>
+                                    <label for="firstName${index}">Prénom</label> 
+                                    <input type="text" class="validate" name="firstName${index}" id="firstName${index}" required>
                                 </div>
                                 <div class="input-field col s4">
-                                    <select name="gender${index}" form="jointForm">
+                                    <select name="gender" form="jointForm">
                                         <option ng-repeat="gender in genders" value="{{gender.key}}">
                                             {{gender.value}}
                                         </option>        
@@ -75,10 +63,14 @@
                             </div>
                         <div class="row">
                             <div class="col s6">
-                                <a class="btn-floating blue" href="<c:url value='/openaccount.htm' />?nbClients=${nbClients-1}"><i class="material-icons">remove</i></a>
+                                <button class="btn-floating blue" ng-click="vm.subNbClients()">
+                                    <i class="material-icons">remove</i>
+                                </button>
                             </div> 
                             <div class="col s6">
-                                <a class="btn-floating blue" href="<c:url value='/openaccount.htm' />?nbClients=${nbClients+1}"><i class="material-icons">add</i></a>
+                                <button class="btn-floating blue" ng-click="vm.addNbClients()">
+                                    <i class="material-icons">add</i>
+                                </button>
                             </div>                                       
                         </div>
                         <div class="row">

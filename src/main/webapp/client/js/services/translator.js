@@ -86,7 +86,7 @@
         }
         
         function translateCurrency(currency) {
-            if (currency==='EUR')
+            if (currency==='EURO')
                 return '€';
             else
                 return '';
@@ -94,7 +94,7 @@
         
         function untranslateCurrency(value) {
             if (value==='€')
-                return 'EUR';
+                return 'EURO';
             else
                 return '';
         }

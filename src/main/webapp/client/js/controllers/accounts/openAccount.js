@@ -5,10 +5,10 @@
         .module('app')
         .controller('OpenAccountController', OpenAccountController);
  
-    OpenAccountController.$inject = ['$rootScope', '$scope', 'AuthentificationService',
+    OpenAccountController.$inject = ['$rootScope', '$scope', '$location', 'AuthentificationService',
         'AccountService', 'UserService', 'TranslatorService', 'FlashService'];
     
-    function OpenAccountController($rootScope, $scope, AuthentificationService,
+    function OpenAccountController($rootScope, $scope, $location, AuthentificationService,
         AccountService, UserService, TranslatorService, FlashService) {
         AuthentificationService.connectedPage('/welcome');
         
@@ -16,15 +16,19 @@
         
         $scope.nbClients = 1;
         $scope.genders = [];
+        
+        vm.openCurrentAccount = openCurrentAccount;
+        vm.openSavingBook = openSavingBook;
+        vm.subNbClients = subNbClients;
+        vm.addNbClients = addNbClients;     
+        
         init();
         
         function init() {
             UserService.getGenders().then(
                 function(genders) {
-                    $scope.genders = TranslatorService.translateGenders(genders);
-                    $(document).ready(function(){
+                    $scope.genders = TranslatorService.translateGenders(genders);                  
                         $('select').formSelect();
-                    });
                 },
                 function(errMsg) {
                     FlashService.Error(errMsg);
@@ -34,9 +38,6 @@
                 AccountService.getSavingBooks().then(
                     function (books) {
                         $scope.books = books;
-                        $(document).ready(function(){
-                            $('select').formSelect();
-                        });
                     },
                     function (response) {
                         FlashService.Error(response);
@@ -46,6 +47,40 @@
             $(document).ready(function(){
                 $('.collapsible').collapsible();
             });
+        }
+        
+        function openCurrentAccount() {
+            AccountService.openCurrentAccount().then(
+                function() {
+                    FlashService.Success('Votre compte courrant a bien été ouvert', true);
+                    $location.path('/resume');
+                },
+                function (response) {
+                    FlashService.Error(response);
+                }
+            );
+        }
+        
+        function openSavingBook(bookName) {
+            AccountService.openSavingAccount({bookName : bookName}).then(
+                function() {
+                    FlashService.Success('Votre livret a bien été ouvert', true);
+                    $location.path('/resume');
+                },
+                function (response) {
+                    FlashService.Error(response);
+                }
+            );
+        }
+        
+        function subNbClients() {
+            if ($scope.nbClients > 1)
+                $scope.nbClients--;
+        }
+        
+        function addNbClients() {
+            $scope.nbClients++;
+                $('select').formSelect();
         }
     }
 })();

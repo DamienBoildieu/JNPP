@@ -5,8 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,17 +88,25 @@ public class UserController {
                     email, streetNbr, street, city, country, phone);
             return new ResponseEntity(HttpStatus.CREATED);
         } catch (ParseException ex) {
-            return new ResponseEntity("Une erreur est presente dans le formulaire",
-                HttpStatus.BAD_REQUEST);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         } catch (DuplicateClientException ex) {
-            return new ResponseEntity("Ce client est deja enregistre",
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Ce client est déjà enregistré", responseHeaders,
                 HttpStatus.CONFLICT);             
         } catch (AgeException ex) {
-            return new ResponseEntity("Un client ne peut pas être mineur",
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Un client ne peut pas être mineur", responseHeaders,
                 HttpStatus.BAD_REQUEST);
         } catch (InformationException ex) {
-            return new ResponseEntity("Une erreur est presente dans le formulaire",
-                HttpStatus.BAD_REQUEST);                
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire",
+                responseHeaders, HttpStatus.BAD_REQUEST);                
         }
     }
     
@@ -128,10 +134,15 @@ public class UserController {
                     email, streetNbr, street, city, country, phone);
             return new ResponseEntity(HttpStatus.CREATED);
         } catch (DuplicateClientException ex) {
-            return new ResponseEntity("Ce client est deja enregistre", HttpStatus.CONFLICT);             
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Ce client est déjà enregistré", responseHeaders, 
+                HttpStatus.CONFLICT);             
         } catch (InformationException ex) {
-            return new ResponseEntity("Une erreur est presente dans le formulaire",
-                HttpStatus.BAD_REQUEST);                
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire",
+                responseHeaders, HttpStatus.BAD_REQUEST);                
         }
     }
 
@@ -150,14 +161,17 @@ public class UserController {
             return new ResponseEntity<String>("Sexe invalide", HttpStatus.BAD_REQUEST);
         if (clientService.resetPassword(id, gender, firstName, lastName, email))
             return new ResponseEntity(HttpStatus.OK);
-        else 
-            return new ResponseEntity("Aucun compte associe a ces informations n'est enregistre chez nous",
-                HttpStatus.BAD_REQUEST);
+        else {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Aucun compte associé a ces informations n'est enregistré chez nous",
+                responseHeaders, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(value = "professionalpassword", method = RequestMethod.PUT)
     public ResponseEntity<?> professionalResetPassword(@RequestBody String body)
-        throws Exception {     
+        throws IOException {     
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
         String id = data.get("id").asText();
@@ -169,24 +183,24 @@ public class UserController {
         IdentityDTO.Gender gender = IdentityDTO.Gender.valueOf(genderStr);
         if (null==gender)
             return new ResponseEntity<String>("Sexe invalide", HttpStatus.BAD_REQUEST);
-        if (clientService.resetPassword(id, company, gender, firstName, lastName, email)) 
-            return new ResponseEntity(HttpStatus.OK);
-        else 
-            return new ResponseEntity("Aucun compte associe a ces informations n'est enregistre chez nous",
-                    HttpStatus.BAD_REQUEST);
-    }
-
-    
-    @RequestMapping(value = "getUserInfo", method = RequestMethod.GET)
-    public ResponseEntity<?> getUserInfo(@RequestHeader("authorization") String autho, HttpServletRequest request)
-            throws Exception {
-        System.out.println(autho);
-        return new ResponseEntity("ok", HttpStatus.OK);
+        try {
+            if (clientService.resetPassword(id, company, gender, firstName, lastName, email))
+                return new ResponseEntity(HttpStatus.OK);
+            else {
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+                return new ResponseEntity("Aucun compte associé a ces informations n'est enregistré chez nous",
+                        responseHeaders, HttpStatus.BAD_REQUEST);
+            }
+        } catch (FakeClientException ex) {
+            return new ResponseEntity("Il semble y avoir une erreur dans votre session",
+                HttpStatus.CONFLICT);
+        }
     }
 
     @RequestMapping(value = "updateUserInfo", method = RequestMethod.PUT)
     private ResponseEntity<?> updateUserInfo(@RequestHeader("authorization") String autho,
-        @RequestBody String body) throws Exception {
+        @RequestBody String body) throws IOException {
         String login = SessionController.decodeLogin(autho);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode data = mapper.readTree(body);
@@ -206,14 +220,16 @@ public class UserController {
             return new ResponseEntity("Il semble y avoir une erreur dans votre session",
                 HttpStatus.CONFLICT);
         } catch (InformationException invalidFormat) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
             return new ResponseEntity("Une erreur est présente dans le formulaire",
-                HttpStatus.BAD_REQUEST);
+                responseHeaders, HttpStatus.BAD_REQUEST);
         }
     }
 
     @RequestMapping(value = "updateUserPassword", method = RequestMethod.PUT)
     private ResponseEntity<?> updateUserPassword(@RequestHeader("authorization") String autho,
-        @RequestBody String body) throws Exception {
+        @RequestBody String body) throws IOException {
         String login = SessionController.decodeLogin(autho);
         String password = SessionController.decodePassword(autho);
         ObjectMapper mapper = new ObjectMapper();
@@ -236,13 +252,16 @@ public class UserController {
     }  
     
     @RequestMapping(value = "deleteUser", method = RequestMethod.DELETE)
-    protected ResponseEntity<?> deleteUser(@RequestHeader("authorization") String autho) throws Exception {
+    protected ResponseEntity<?> deleteUser(@RequestHeader("authorization") String autho) throws IOException {
         String login = SessionController.decodeLogin(autho);
         String password = SessionController.decodePassword(autho);
         try {
             clientService.close(login, password);
         } catch (ClosureException ex) {
-           return new ResponseEntity("Le compte ne peut pas être fermé à l'heure actuelle", HttpStatus.CONFLICT);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Le compte ne peut pas être fermé à l'heure actuelle",
+                    responseHeaders, HttpStatus.CONFLICT);
         } catch (FakeClientException ex) {
             return new ResponseEntity("Il semble y avoir une erreur dans votre session", HttpStatus.CONFLICT);
         }

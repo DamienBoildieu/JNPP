@@ -13,11 +13,30 @@
         
         service.getClientAccounts = getClientAccounts;
         service.getSavingBooks = getSavingBooks;
+        service.openCurrentAccount = openCurrentAccount;
+        service.openSavingAccount = openSavingAccount;
         
         return service;
         
-        function getClientAccounts() {
-            return CommonService.basicGetRequest('getClientAccounts.htm');
+        function getClientAccounts(callback) {
+            let url = CommonService.basePath+'getClientAccounts.htm';
+            $http.get(url).then(
+                function (response) {
+                    let message = {
+                        success : true,
+                        message: response.data
+                    };
+                    callback(message);
+                },
+                function (response) {
+                    let message = {
+                        success : false,
+                        message: response.data
+                    };
+                    callback(message);
+                }
+            );
+            //return CommonService.basicGetRequest('getClientAccounts.htm');
         }
         
         function getSavingBooks() {
@@ -29,6 +48,34 @@
                 },
                 function () {
                     deferred.reject("Erreur rencontrée dans le serveur");
+                }
+            );
+            return deferred.promise;
+        }
+        
+        function openCurrentAccount() {
+            let url = CommonService.basePath+'openCurrentAccount.htm';
+            let deferred = $q.defer();
+            $http.post(url).then(
+                function () {
+                    deferred.resolve();
+                },
+                function (response) {
+                    deferred.reject(response.data);
+                }
+            );
+            return deferred.promise;
+        }
+        
+        function openSavingAccount(data) {
+            let url = CommonService.basePath+'openSavingAccount.htm';
+            let deferred = $q.defer();
+            $http.post(url, data).then(
+                function () {
+                    deferred.resolve();
+                },
+                function (response) {
+                    deferred.reject(response.data);
                 }
             );
             return deferred.promise;

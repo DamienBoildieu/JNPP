@@ -17,19 +17,20 @@
         init();
         
         function init() {
-            AccountService.getClientAccounts().then(
+            AccountService.getClientAccounts(
                 function (response) {
-                    $scope.accounts = response;
-                    for (let account of $scope.accounts) {
-                        if (account.type!=='SHARE') {
-                            account.currency = TranslatorService.translateCurrency(account.currency);
+                    if (response.success) {
+                        $scope.accounts = response.message;
+                        for (let account of $scope.accounts) {
+                            if (account.type!=='SHARE') {
+                                account.currency = TranslatorService.translateCurrency(account.currency);
+                            }
+                            account.type = TranslatorService.translateAccount(account.type);                      
                         }
-                        account.type = TranslatorService.translateAccount(account.type);
-                        
+                    } else {
+                        FlashService.Error(response.message);
                     }
-                },
-                function (response) {
-                    FlashService.Error(response);
+
                 }
             );
         }
