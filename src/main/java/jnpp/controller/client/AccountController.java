@@ -40,6 +40,7 @@ import jnpp.service.services.DebitAuthorizationService;
 import jnpp.service.services.PaymentMeanService;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -132,106 +133,46 @@ public class AccountController {
         }
     }
 
-    /**
-     * Demande d'ouverture de compte joint
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return La vue des comptes
-     * @throws Exception Exception non controllees.
-     */
-    @RequestMapping(value = "openjointaccount", method = RequestMethod.POST)
-    private ModelAndView openJointAccount(Model model,
-            HttpServletRequest request, RedirectAttributes rm)
-            throws Exception {
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (SessionController.isConnected(session)) {
-            // Call service
-            try {
-                List<IdentityDTO> identities = new ArrayList<IdentityDTO>();
-                ClientDTO client = SessionController.getClient(session);
-                if (client.getType() == ClientDTO.Type.PROFESIONAL) {
-                    throw new ClientTypeException();
-                }
-                identities.add(((PrivateDTO) client).getIdentity());
-                String nbClientsStr = request.getParameter("nbClients");
-                Integer nbClients = Integer.parseInt(nbClientsStr);
-                for (int i = 1; i <= nbClients; i++) {
-                    String lastName = request
-                            .getParameter("lastName" + String.valueOf(i));
-                    String firstName = request
-                            .getParameter("firstName" + String.valueOf(i));
-                    String genderStr = request
-                            .getParameter("gender" + String.valueOf(i));
-                    IdentityDTO.Gender gender = IdentityDTO.Gender.MALE;
-                    if (genderStr.equals(IdentityDTO.Gender.MALE.name())) {
-                        gender = IdentityDTO.Gender.MALE;
-                    } else if (genderStr
-                            .equals(IdentityDTO.Gender.FEMALE.name())) {
-                        gender = IdentityDTO.Gender.FEMALE;
-                    }
-                    identities
-                            .add(new IdentityDTO(gender, firstName, lastName));
-                }
-                accountService.openJointAccount(
-                        SessionController.getClient(session).getLogin(),
-                        identities);
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Votre compte joint est ouvert"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Votre compte joint est ouvert"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-            } catch (FakeClientException clientException) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Il semble y avoir une erreur dans votre session"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Il semble y avoir une erreur dans votre session"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-                return new ModelAndView("redirect:/disconnect.htm");
-            } catch (ClientTypeException typeClient) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Vous ne pouvez pas créer de compte joint"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Vous ne pouvez pas créer de compte joint"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-            } catch (UnknownIdentityException unknowIdentity) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Une des personnes que vous avez indiquées n'est pas inscrite chez nous"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Une des personnes que vous avez indiquées n'est pas inscrite chez nous"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
+    @RequestMapping(value = "openJointAccount", method = RequestMethod.POST)
+    private ResponseEntity<?> openJointAccount(@RequestHeader("authorization") String autho,
+        @RequestBody String body) throws IOException {
+        String login = SessionController.decodeLogin(autho); 
+        System.out.println(body);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode data = mapper.readTree(body);
+        List<IdentityDTO> identities = new ArrayList<IdentityDTO>();
+        if (data.isArray()) {
+            for (final JsonNode elem : data) {
+                String firstName = elem.get("firstname").asText();
+                String lastName = elem.get("lastname").asText();
+                String genderStr = elem.get("gender").asText();
+                IdentityDTO.Gender gender = IdentityDTO.Gender.valueOf(genderStr);
+                if (null==gender)
+                    return new ResponseEntity("Sexe invalide", HttpStatus.BAD_REQUEST);
+                identities.add(new IdentityDTO(gender, firstName, lastName));
             }
-            return new ModelAndView("redirect:/resume.htm");
-
         }
-        return new ModelAndView("redirect:/index.htm"); // ne devrait pas
-                                                        // arriver
+        if (identities.size()<2)
+            return new ResponseEntity("Il faut au moins deux personnes pour ouvrir un compte joint", HttpStatus.BAD_REQUEST);
+        // Call service
+        try {
+            accountService.openJointAccount(login, identities);
+            return new ResponseEntity(HttpStatus.CREATED);
+        } catch (FakeClientException clientException) {
+            return new ResponseEntity("Il semble y avoir une erreur dans votre session", 
+                HttpStatus.CONFLICT);
+        } catch (ClientTypeException typeClient) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Vous ne pouvez pas créer de compte joint", responseHeaders, 
+                HttpStatus.FORBIDDEN);
+        } catch (UnknownIdentityException unknowIdentity) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une des personnes que vous avez indiquées "
+                + "n'est pas inscrite chez nous en tant que particulier", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**

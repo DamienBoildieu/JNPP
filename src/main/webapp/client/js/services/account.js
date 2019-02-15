@@ -15,6 +15,7 @@
         service.getSavingBooks = getSavingBooks;
         service.openCurrentAccount = openCurrentAccount;
         service.openSavingAccount = openSavingAccount;
+        service.openJointAccount = openJointAccount;
         
         return service;
         
@@ -69,6 +70,21 @@
         
         function openSavingAccount(data) {
             let url = CommonService.basePath+'openSavingAccount.htm';
+            let deferred = $q.defer();
+            $http.post(url, data).then(
+                function () {
+                    deferred.resolve();
+                },
+                function (response) {
+                    deferred.reject(response.data);
+                }
+            );
+            return deferred.promise;
+        }
+        
+        function openJointAccount(data) {
+            let url = CommonService.basePath+'openJointAccount.htm';
+            console.log(data);
             let deferred = $q.defer();
             $http.post(url, data).then(
                 function () {

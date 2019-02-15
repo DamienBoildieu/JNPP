@@ -14,13 +14,14 @@
         
         let vm = this;
         
-        $scope.nbClients = 1;
         $scope.genders = [];
+        $scope.jointAccountDatas = [{}];
         
         vm.openCurrentAccount = openCurrentAccount;
         vm.openSavingBook = openSavingBook;
         vm.subNbClients = subNbClients;
         vm.addNbClients = addNbClients;     
+        vm.openJointAccount = openJointAccount;
         
         init();
         
@@ -28,7 +29,6 @@
             UserService.getGenders().then(
                 function(genders) {
                     $scope.genders = TranslatorService.translateGenders(genders);                  
-                        $('select').formSelect();
                 },
                 function(errMsg) {
                     FlashService.Error(errMsg);
@@ -43,6 +43,7 @@
                         FlashService.Error(response);
                     }
                 );
+                
             }
             $(document).ready(function(){
                 $('.collapsible').collapsible();
@@ -73,14 +74,30 @@
             );
         }
         
+        function openJointAccount() {
+            console.log($scope.jointAccountDatas);
+            $scope.jointAccountDatas.push($rootScope.globals.currentUser.identity);
+            console.log($scope.jointAccountDatas);
+            AccountService.openJointAccount($scope.jointAccountDatas).then(
+                function() {
+                    FlashService.Success('Votre compte joint a bien été ouvert', true);
+                    $scope.jointAccountDatas = [{}];
+                    $location.path('/resume');
+                },
+                function (response) {
+                    $scope.jointAccountDatas.pop();
+                    FlashService.Error(response);
+                }
+            );
+        }
+        
         function subNbClients() {
-            if ($scope.nbClients > 1)
-                $scope.nbClients--;
+            if ($scope.jointAccountDatas.length>1)
+                $scope.jointAccountDatas.pop();
         }
         
         function addNbClients() {
-            $scope.nbClients++;
-                $('select').formSelect();
+            $scope.jointAccountDatas.push({});
         }
     }
 })();

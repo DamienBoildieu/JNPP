@@ -29,7 +29,6 @@
     <main>
         <div ng-class="{'green': flash.type === 'success', 'red': flash.type === 'error' }" 
         ng-if="flash" ng-bind="flash.message" id="flashMessage" class="card-panel lighten-1 white-text left-align"> 
-            <i class="material-icons right">warning</i>
         </div>
         <div ng-view></div>
     </main>
