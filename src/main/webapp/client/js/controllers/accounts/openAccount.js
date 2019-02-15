@@ -22,6 +22,7 @@
         vm.subNbClients = subNbClients;
         vm.addNbClients = addNbClients;     
         vm.openJointAccount = openJointAccount;
+        vm.openShareAccount = openShareAccount;
         
         init();
         
@@ -75,9 +76,7 @@
         }
         
         function openJointAccount() {
-            console.log($scope.jointAccountDatas);
             $scope.jointAccountDatas.push($rootScope.globals.currentUser.identity);
-            console.log($scope.jointAccountDatas);
             AccountService.openJointAccount($scope.jointAccountDatas).then(
                 function() {
                     FlashService.Success('Votre compte joint a bien été ouvert', true);
@@ -86,6 +85,18 @@
                 },
                 function (response) {
                     $scope.jointAccountDatas.pop();
+                    FlashService.Error(response);
+                }
+            );
+        }
+        
+        function openShareAccount() {
+            AccountService.openShareAccount().then(
+                function() {
+                    FlashService.Success('Votre compte titres a bien été ouvert', true);
+                    $location.path('/resume');
+                },
+                function (response) {
                     FlashService.Error(response);
                 }
             );
