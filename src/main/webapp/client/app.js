@@ -77,6 +77,11 @@
                 templateUrl: 'client/html/accounts/account.html',
                 controllerAs: 'vm'
             })
+            .when('/movement', {
+                controller: 'MovementController',
+                templateUrl: 'client/html/movements/movement.html',
+                controllerAs: 'vm'
+            })
             .otherwise({ redirectTo: '/welcome' });
     }
 

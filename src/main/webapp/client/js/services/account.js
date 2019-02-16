@@ -58,7 +58,6 @@
         
         function getAccount(rib) {
             let url = CommonService.basePath+'account/'+rib+'.htm';
-            console.log(rib);
             let deferred = $q.defer();
             $http.get(url).then(
                 function (response) {

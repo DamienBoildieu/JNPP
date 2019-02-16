@@ -1,5 +1,6 @@
 package jnpp.controller.client;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,13 @@ import jnpp.service.exceptions.owners.AccountOwnerException;
 import jnpp.service.services.AccountService;
 import jnpp.service.services.MovementService;
 import jnpp.service.services.NotificationService;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 /**
  * Le contrôleur des transactions
@@ -256,112 +264,56 @@ public class MovementController {
         return new ModelAndView("redirect:/movement.htm");
     }
 
-    /**
-     * Requête des débits
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return La vue des transactions
-     * @throws Exception Exception non controllees.
-     */
     @RequestMapping(value = "debit", method = RequestMethod.POST)
-    private ModelAndView debit(Model model, HttpServletRequest request,
-            RedirectAttributes rm) throws Exception {
-
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (!SessionController.isConnected(session)) {
-            return new ModelAndView("redirect:/index.htm");
-        }
-
-        ClientDTO client = SessionController.getClient(session);
-
-        String ribFrom = request.getParameter("ribFrom");
-        String ribTo = request.getParameter("ribTo");
-        Double amount = Double.valueOf(request.getParameter("amount"));
-        String label = request.getParameter("label");
-        if (label == null) {
-            label = "";
-        }
+    private ResponseEntity<?> debit(@RequestHeader("authorization") String autho,
+        @RequestBody String body) throws IOException {
+        String login = SessionController.decodeLogin(autho);   
+  
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode data = mapper.readTree(body);
+        
+        String ribFrom = data.get("ribFrom").asText();
+        String ribTo = data.get("ribTo").asText();
+        Double amount = data.get("amount").asDouble();
+        String label = data.get("label").asText();
 
         try {
-            movementService.debitMoney(client.getLogin(), ribFrom, ribTo,
-                    amount, DEFAULT_CURRENCY, label);
-            if (alerts != null) {
-                alerts.add(
-                        new AlertMessage(AlertEnum.SUCCESS, "Debit réussi."));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(
-                        new AlertMessage(AlertEnum.SUCCESS, "Debit réussi."));
-                rm.addFlashAttribute("alerts", alerts);
-            }
+            movementService.debitMoney(login, ribFrom, ribTo, amount, DEFAULT_CURRENCY, label);
+            return new ResponseEntity(HttpStatus.CREATED);
         } catch (FakeClientException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Il semble y avoir une erreur dans votre session"));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Il semble y avoir une erreur dans votre session"));
-                rm.addFlashAttribute("alerts", alerts);
-            }
-            return new ModelAndView("redirect:/disconnect.htm");
+            return new ResponseEntity("Il semble y avoir une erreur dans votre session",
+                HttpStatus.CONFLICT);
         } catch (FakeAccountException ex) {
-
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Ce rib n'est associé à aucun compte",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         } catch (AccountOwnerException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Le compte à débiter n'appartient à personne",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         } catch (AccountTypeException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Le debits ne sont pas autorisés sur ce compte."));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Les debits ne sont pas autorisés sur ce compte."));
-                rm.addFlashAttribute("alerts", alerts);
-            }
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Les débits ne sont pas autorisés sur ce compte",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         } catch (CurrencyException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Ce compte utilise une devise differente."));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Ce compte utilise une devise differente."));
-                rm.addFlashAttribute("alerts", alerts);
-            }
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Ce compte utilise une devise différente",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         } catch (OverdraftException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Les depassements ne sont pas autorisés sur ce compte."));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Les depassements ne sont pas autorisés sur ce compte."));
-                rm.addFlashAttribute("alerts", alerts);
-            }
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Les dépassements ne sont pas autorisés sur ce compte",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         } catch (DebitAuthorizationException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Vous n'etes pas autorise a debiter ce compte."));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Vous n'etes pas autorise a debiter ce compte."));
-                rm.addFlashAttribute("alerts", alerts);
-            }
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Vous n'etes pas autorise a debiter ce compte",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         }
-
-        return new ModelAndView("redirect:/movement.htm");
     }
 
     /**

@@ -20,12 +20,16 @@
             AccountService.getAccount($routeParams.accountRib).then(
                 function(response) {
                     $scope.account = response.account;
-                    $scope.movements = response.movements;
+                    $scope.movements = transformMovements(response.movements);
                 },
                 function(response) {
                     FlashService.Error(response);
                 }
             );
+        }
+        
+        function transformMovements(movementsDTO) {
+            
         }
     }
 })();
