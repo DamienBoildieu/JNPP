@@ -15,14 +15,17 @@
         let vm = this;
         $scope.debitUrl = 'client/html/movements/movementdebit.html';
         $scope.transfertUrl = 'client/html/movements/movementtransfert.html';
+        $scope.purchaseUrl = 'client/html/movements/movementpurchase.html';
         
         $scope.debitData = {};
         $scope.transfertData = {};
+        $scope.purchaseData = {};
         $scope.moneyAccounts =  [];
         $scope.shareAccounts = [];
         
-        vm.doDebit = doDebit;
-        vm.doTransfert = doTransfert;
+        vm.debit = debit;
+        vm.transfert = transfert;
+        vm.purchase = purchase;
         
         init();
         
@@ -41,6 +44,14 @@
                         }, 200);
                     } else
                        FlashService.Error(response.message); 
+                }            
+            );
+            AccountService.getShares().then(
+                function (response) {
+                    $scope.shares = response;
+                    setTimeout(function () {
+                        $('select').formSelect();
+                    }, 200);
                 }
             );
             $(document).ready(function(){
@@ -48,8 +59,8 @@
             });
         }
         
-        function doDebit() {
-            MovementService.doDebit($scope.debitData).then(
+        function debit() {
+            MovementService.debit($scope.debitData).then(
                 function() {
                     FlashService.Success('Votre virement a bien été effectué', true);
                     $location.path('/resume');
@@ -60,8 +71,8 @@
             );
         }
         
-        function doTransfert() {
-            MovementService.doTransfert($scope.transfertData).then(
+        function transfert() {
+            MovementService.transfert($scope.transfertData).then(
                 function() {
                     FlashService.Success('Votre virement a bien été effectué', true);
                     $location.path('/resume');
@@ -71,5 +82,17 @@
                 }
             );
         }
+        
+        function purchase() {
+            MovementService.purchase($scope.purchaseData).then(
+                function() {
+                    FlashService.Success('Votre demande de titres a été acceptée', true);
+                    $location.path('/resume');
+                },
+                function (response) {
+                    FlashService.Error(response.message); 
+                }
+            );
+        }  
     }
 })();

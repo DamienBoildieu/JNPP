@@ -1,4 +1,4 @@
-<form name="debitForm" ng-submit="vm.doDebit()" role="form">
+<form name="debitForm" ng-submit="vm.debit()" role="form">
     <div class="card">
         <div class="row valign-wrapper">
             <div class="col s10">
@@ -31,7 +31,7 @@
                             <td colspan="3">
                                 <div class="row valign-wrapper">
                                     <div class="col s1">
-                                        Libelle:
+                                        Libellé:
                                     </div>
                                     <div class="col s11">
                                         <input type="text" ng-model="debitData.label" class="right-align" required>

@@ -165,7 +165,7 @@ public class MovementController {
 
         return mv;
     }
-
+    
     @RequestMapping(value = "transfert", method = RequestMethod.POST)
     private ResponseEntity<?> transfert(@RequestHeader("authorization") String autho,
         @RequestBody String body) throws IOException {
@@ -265,85 +265,38 @@ public class MovementController {
         }
     }
 
-    /**
-     * Requête des achats d'actions
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return La vue des transactions
-     * @throws Exception Exception non controllees.
-     */
     @RequestMapping(value = "purchase", method = RequestMethod.POST)
-    private ModelAndView purchase(Model model, HttpServletRequest request,
-            RedirectAttributes rm) throws Exception {
-
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (!SessionController.isConnected(session)) {
-            return new ModelAndView("redirect:/index.htm");
-        }
-        String amountStr = request.getParameter("amount");
-        String share = request.getParameter("share");
-        String label = request.getParameter("label");
-        if (label == null) {
-            label = "";
-        }
+    private ResponseEntity<?> purchase(@RequestHeader("authorization") String autho,
+        @RequestBody String body) throws Exception {
+        String login = SessionController.decodeLogin(autho);   
+  
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode data = mapper.readTree(body);
+        int amount = data.get("amount").asInt();
+        String share = data.get("share").asText();
+        String label = data.get("label").asText();
         try {
-            movementService.purchaseShareTitles(
-                    SessionController.getClient(session).getLogin(), share,
-                    Integer.parseInt(amountStr), label);
+            movementService.purchaseShareTitles(login, share, amount, label);
+            return new ResponseEntity(HttpStatus.CREATED);
         } catch (FakeClientException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Il semble y avoir une erreur dans votre session"));
-                rm.addFlashAttribute("alerts", alerts);
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Il semble y avoir une erreur dans votre session"));
-            }
-            return new ModelAndView("redirect:/disconnect.htm");
+            return new ResponseEntity("Il semble y avoir une erreur dans votre session",
+                HttpStatus.CONFLICT);
         } catch (NoCurrentAccountException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Vous devez posséder un compte courant pour effectuer cette action"));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Vous devez posséder un compte courant pour effectuer cette action"));
-                rm.addFlashAttribute("alerts", alerts);
-            }
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Vous devez posséder un compte courant pour effectuer cette action",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         } catch (NoShareAccountException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Vous devez posséder un compte titres pour effectuer cette action"));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Vous devez posséder un compte titres pour effectuer cette action"));
-                rm.addFlashAttribute("alerts", alerts);
-            }
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Vous devez posséder un compte titres pour effectuer cette action",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         } catch (FakeShareException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Cette action de bourse n'existe pas"));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Cette action de bourse n'existe pas"));
-                rm.addFlashAttribute("alerts", alerts);
-            }
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Cette action de bourse n'existe pas",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         }
-        return new ModelAndView("redirect:/movement.htm");
     }
 
     /**

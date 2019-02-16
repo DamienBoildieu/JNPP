@@ -70,7 +70,7 @@ public class AccountController {
     private PaymentMeanService paymentMeanService;
 
     
-    @RequestMapping(value = "getClientAccounts", method = RequestMethod.GET)
+    @RequestMapping(value = "clientAccounts", method = RequestMethod.GET)
     public ResponseEntity<?> getClientAccounts(@RequestHeader("authorization") String autho) 
         throws IOException {
         String login = SessionController.decodeLogin(autho);       
@@ -82,9 +82,15 @@ public class AccountController {
         }
     }
     
-    @RequestMapping(value = "getSavingBooks", method = RequestMethod.GET)
+    @RequestMapping(value = "savingBooks", method = RequestMethod.GET)
     public ResponseEntity<?> getSavingBooks() throws IOException {
         return new ResponseEntity(AbstractDTO.toJson(accountService.getSavingBooks()), HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "shares", method = RequestMethod.GET)
+    public ResponseEntity<?> getShares() 
+        throws IOException {
+        return new ResponseEntity(AbstractDTO.toJson(accountService.getShares()), HttpStatus.OK);
     }
     
     @RequestMapping(value = "openCurrentAccount", method = RequestMethod.POST)
