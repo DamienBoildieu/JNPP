@@ -64,8 +64,8 @@
                 function (response) {
                     deferred.resolve(response.data);
                 },
-                function () {
-                    deferred.reject("Erreur rencontrée dans le serveur");
+                function (response) {
+                    deferred.reject(response.data);
                 }
             );
             return deferred.promise;

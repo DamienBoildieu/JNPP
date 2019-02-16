@@ -19,8 +19,8 @@
         function init() {
             AccountService.getAccount($routeParams.accountRib).then(
                 function(response) {
-                    $scope.response = response;
-                    console.log($scope.response);
+                    $scope.account = response.account;
+                    $scope.movements = response.movements;
                 },
                 function(response) {
                     FlashService.Error(response);
