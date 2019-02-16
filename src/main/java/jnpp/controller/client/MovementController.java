@@ -166,102 +166,51 @@ public class MovementController {
         return mv;
     }
 
-    /**
-     * Requête des transferts
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return La vue des transactions
-     * @throws Exception Exception non controllees.
-     */
     @RequestMapping(value = "transfert", method = RequestMethod.POST)
-    private ModelAndView transfert(Model model, HttpServletRequest request,
-            RedirectAttributes rm) throws Exception {
-
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (!SessionController.isConnected(session)) {
-            return new ModelAndView("redirect:/index.htm");
-        }
-
-        ClientDTO client = SessionController.getClient(session);
-
-        String ribFrom = request.getParameter("ribFrom");
-        String ribTo = request.getParameter("ribTo");
-        Double amount = Double.valueOf(request.getParameter("amount"));
-        String label = request.getParameter("label");
-        if (label == null) {
-            label = "";
-        }
+    private ResponseEntity<?> transfert(@RequestHeader("authorization") String autho,
+        @RequestBody String body) throws IOException {
+        String login = SessionController.decodeLogin(autho);   
+  
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode data = mapper.readTree(body);
+        
+        String ribFrom = data.get("ribFrom").asText();
+        String ribTo = data.get("ribTo").asText();
+        Double amount = data.get("amount").asDouble();
+        String label = data.get("label").asText();
 
         try {
-            movementService.transfertMoney(client.getLogin(), ribFrom, ribTo,
-                    amount, DEFAULT_CURRENCY, label);
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                        "Transfert réussi."));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                        "Transfert réussi."));
-                rm.addFlashAttribute("alerts", alerts);
-            }
+            movementService.transfertMoney(login, ribFrom, ribTo, amount, DEFAULT_CURRENCY, label);
+            return new ResponseEntity(HttpStatus.CREATED);
         } catch (FakeClientException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Il semble y avoir une erreur dans votre session"));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Il semble y avoir une erreur dans votre session"));
-                rm.addFlashAttribute("alerts", alerts);
-            }
-            return new ModelAndView("redirect:/disconnect.htm");
+            return new ResponseEntity("Il semble y avoir une erreur dans votre session",
+                HttpStatus.CONFLICT);
         } catch (FakeAccountException ex) {
-
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Ce rib n'est associé à aucun compte",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         } catch (AccountOwnerException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Vous n'êtes pas le propriétaire du compte effectuant le virement",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         } catch (AccountTypeException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Les transferts ne sont pas autorisés sur ce compte."));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Les transferts ne sont pas autorisés sur ce compte."));
-                rm.addFlashAttribute("alerts", alerts);
-            }
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Les débits ne sont pas autorisés sur ce compte",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         } catch (CurrencyException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Ce compte utilise une devise differente."));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Ce compte utilise une devise differente."));
-                rm.addFlashAttribute("alerts", alerts);
-            }
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Ce compte utilise une devise différente du votre",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         } catch (OverdraftException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Les depassements ne sont pas autorisés sur ce compte."));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Les depassements ne sont pas autorisés sur ce compte."));
-                rm.addFlashAttribute("alerts", alerts);
-            }
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Les dépassements ne sont pas autorisés sur ce compte",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         }
-
-        return new ModelAndView("redirect:/movement.htm");
     }
 
     @RequestMapping(value = "debit", method = RequestMethod.POST)
@@ -301,7 +250,7 @@ public class MovementController {
         } catch (CurrencyException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
-            return new ResponseEntity("Ce compte utilise une devise différente",
+            return new ResponseEntity("Ce compte utilise une devise différente du votre",
                 responseHeaders, HttpStatus.BAD_REQUEST);
         } catch (OverdraftException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();

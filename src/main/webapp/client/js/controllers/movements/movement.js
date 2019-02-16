@@ -14,11 +14,15 @@
         
         let vm = this;
         $scope.debitUrl = 'client/html/movements/movementdebit.html';
+        $scope.transfertUrl = 'client/html/movements/movementtransfert.html';
         
+        $scope.debitData = {};
+        $scope.transfertData = {};
         $scope.moneyAccounts =  [];
         $scope.shareAccounts = [];
         
         vm.doDebit = doDebit;
+        vm.doTransfert = doTransfert;
         
         init();
         
@@ -48,6 +52,19 @@
             MovementService.doDebit($scope.debitData).then(
                 function() {
                     FlashService.Success('Votre virement a bien été effectué', true);
+                    $location.path('/resume');
+                },
+                function (response) {
+                    FlashService.Error(response.message); 
+                }
+            );
+        }
+        
+        function doTransfert() {
+            MovementService.doTransfert($scope.transfertData).then(
+                function() {
+                    FlashService.Success('Votre virement a bien été effectué', true);
+                    $location.path('/resume');
                 },
                 function (response) {
                     FlashService.Error(response.message); 
