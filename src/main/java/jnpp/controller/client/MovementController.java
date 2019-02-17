@@ -1,31 +1,13 @@
 package jnpp.controller.client;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import jnpp.controller.client.views.JNPPModelAndView;
-import jnpp.controller.client.views.Translator;
-import jnpp.controller.client.views.alerts.AlertEnum;
-import jnpp.controller.client.views.alerts.AlertMessage;
-import jnpp.controller.client.views.info.ViewInfo;
-import jnpp.service.dto.accounts.AccountDTO;
 import jnpp.service.dto.accounts.CurrencyDTO;
-import jnpp.service.dto.accounts.ShareAccountDTO;
-import jnpp.service.dto.accounts.ShareDTO;
-import jnpp.service.dto.accounts.ShareTitleDTO;
-import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.exceptions.accounts.CurrencyException;
 import jnpp.service.exceptions.accounts.NoCurrentAccountException;
 import jnpp.service.exceptions.accounts.NoShareAccountException;
@@ -38,9 +20,7 @@ import jnpp.service.exceptions.movements.AmountException;
 import jnpp.service.exceptions.movements.DebitAuthorizationException;
 import jnpp.service.exceptions.movements.OverdraftException;
 import jnpp.service.exceptions.owners.AccountOwnerException;
-import jnpp.service.services.AccountService;
 import jnpp.service.services.MovementService;
-import jnpp.service.services.NotificationService;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.HttpHeaders;

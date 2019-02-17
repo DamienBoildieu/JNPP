@@ -61,9 +61,9 @@
                     $scope.shares = response;
                     console.log($scope.shares);
                     if ($scope.shares[0]) {
-                            $scope.purchasetData = {share : $scope.shares[0].name};
-                            $scope.saleData = {share : $scope.shares[0].name};     
-                        }
+                        $scope.purchaseData = {share : $scope.shares[0].name};
+                        $scope.saleData = {share : $scope.shares[0].name};     
+                    }
                     setTimeout(function () {
                         $('select').formSelect();
                     }, 200);
