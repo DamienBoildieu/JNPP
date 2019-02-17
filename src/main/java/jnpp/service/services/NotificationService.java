@@ -10,6 +10,8 @@ import jnpp.service.exceptions.owners.NotificationOwnerException;
 
 public interface NotificationService {
 
+    NotificationDTO getNotification(String login, Long id) throws FakeClientException,
+            FakeNotificationException, NotificationOwnerException;
     /**
      * Retourne les notifications d'un client.
      *

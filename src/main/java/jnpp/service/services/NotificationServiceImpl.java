@@ -26,6 +26,27 @@ public class NotificationServiceImpl implements NotificationService {
     @Resource
     NotificationDAO notificationDAO;
 
+    
+    @Override
+    public NotificationDTO getNotification(String login, Long id) throws FakeClientException,
+            FakeNotificationException, NotificationOwnerException {
+        if (login == null || id == null) {
+            throw new IllegalArgumentException();
+        }
+        ClientEntity client = clientDAO.find(login);
+        if (client == null) {
+            throw new FakeClientException();
+        }
+        NotificationEntity notification = notificationDAO.find(id);
+        if (notification == null) {
+            throw new FakeNotificationException();
+        }
+        if (!client.equals(notification.getClient())) {
+            throw new NotificationOwnerException();
+        }
+        return notification.toDTO();
+    }
+    
     @Override
     public List<NotificationDTO> receiveNotifications(String login)
             throws FakeClientException {

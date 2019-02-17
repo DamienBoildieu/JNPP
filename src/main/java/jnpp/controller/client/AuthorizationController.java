@@ -59,8 +59,8 @@ public class AuthorizationController {
         String ribTo = data.get("ribTo").asText();
 
         try {
-            authorizationService.createDebitAuthorization(login, ribFrom, ribTo);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity(authorizationService.createDebitAuthorization(login, ribFrom, ribTo).toJson(),
+                HttpStatus.CREATED);
 
         } catch (FakeClientException ex) {
             return new ResponseEntity("Il semble y avoir une erreur dans votre session",

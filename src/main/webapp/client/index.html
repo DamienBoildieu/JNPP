@@ -31,6 +31,13 @@
         ng-if="flash" ng-bind="flash.message" id="flashMessage" class="card-panel lighten-1 white-text left-align"> 
         </div>
         <div ng-view></div>
+        <div ng-controller="NotifButtonController as vm">
+            <div ng-if="isLogged" class="fixed-action-btn">
+                <a ng-class="{'pulse' : hasNotifs}" href="#!/notifs" class="btn-floating btn-large blue">
+                    <i class="large material-icons">notifications</i>
+                </a>
+           </div>   
+        </div>     
     </main>
     <footer>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
@@ -42,7 +49,9 @@
 
         <script src="client/app.js"></script>
 
-        <script src="client/js/controllers/common/banner.js"></script>   
+        <script src="client/js/controllers/common/banner.js"></script>
+        <script src="client/js/controllers/common/notificationButton.js"></script>
+        <script src="client/js/controllers/common/notificationView.js"></script>
         <script src="client/js/controllers/user/connect.js"></script>
         <script src="client/js/controllers/user/signUp.js"></script>
         <script src="client/js/controllers/user/password.js"></script>
@@ -65,8 +74,7 @@
         <script src="client/js/services/movement.js"></script>
         <script src="client/js/services/authorization.js"></script>
         <script src="client/js/services/advisor.js"></script>
-        
-        <script src="client/js/utils/flashDelay.js"></script>
+        <script src="client/js/services/notification.js"></script>
     </footer>   
 </body>
 </html>

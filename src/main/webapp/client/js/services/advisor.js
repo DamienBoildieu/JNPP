@@ -34,17 +34,7 @@
         }
         
         function makeAppoint(data) {
-            let url = CommonService.basePath+'makeAppoint.htm';
-            let deferred = $q.defer();
-            $http.post(url, data).then(
-                function () {
-                    deferred.resolve();
-                },
-                function (response) {
-                    deferred.reject(response.data);
-                }
-            );
-            return deferred.promise;
+            return CommonService.basicPostRequest('makeAppoint.htm', data);
         }
         
         function cancelAppoint(data) {
@@ -67,17 +57,7 @@
         }
         
         function sendMessage(data) {
-            let url = CommonService.basePath+'sendMessage.htm';
-            let deferred = $q.defer();
-            $http.post(url, data).then(
-                function () {
-                    deferred.resolve();
-                },
-                function (response) {
-                    deferred.reject(response.data);
-                }
-            );
-            return deferred.promise;
+            return CommonService.basicPostRequest('sendMessage.htm', data);
         }
     }
 })();

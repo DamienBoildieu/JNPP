@@ -6,11 +6,16 @@
         .config(config)
         .run(run);
 
-    config.$inject = ['$routeProvider', '$locationProvider'];
+    config.$inject = ['$routeProvider'];
     function config($routeProvider) {
         $routeProvider
             .when('/welcome', {
                 templateUrl: 'client/html/common/welcome.html'
+            })
+            .when('/notifs', {
+                controller: 'NotifViewController',
+                templateUrl: 'client/html/common/notifs.html',
+                controllerAs: 'vm' 
             })
             .when('/signup', {
             	controller: 'SignUpController',
@@ -105,15 +110,18 @@
             .otherwise({ redirectTo: '/welcome' });
     }
 
-    run.$inject = ['$cookies', 'AuthentificationService'];
+    run.$inject = ['$rootScope', '$cookies', 'AuthentificationService', 'NotifyService'];
     
-    function run($cookies, AuthentificationService) {
-        
+    function run($rootScope, $cookies, AuthentificationService, NotifyService) {
         // keep user logged in after page refresh
         let authorization = $cookies.getObject('authorization');
         if (authorization) {
             AuthentificationService.reconnect(authorization);
         }
+        
+        $rootScope.$on('$routeChangeSuccess', function () {
+            NotifyService.notify('checkNotifsEvent');
+        });
     }
 
 })();

@@ -3,24 +3,14 @@ package jnpp.controller.client;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import jnpp.controller.client.views.Translator;
-import jnpp.controller.client.views.alerts.AlertEnum;
-import jnpp.controller.client.views.alerts.AlertMessage;
 import jnpp.service.dto.AbstractDTO;
 import jnpp.service.dto.advisor.AdvisorDTO;
 import jnpp.service.exceptions.advisors.AvailableException;
@@ -56,6 +46,7 @@ public class AdvisorController {
         String login = SessionController.decodeLogin(autho);       
         try {
             AdvisorDTO advisor = advisorService.getAdvisor(login);
+            System.out.println(advisor.toJson());
             if (advisor!=null)
                 return new ResponseEntity(advisor.toJson(), HttpStatus.OK);
             else 
@@ -102,8 +93,8 @@ public class AdvisorController {
         try {
             Date appointDate = new SimpleDateFormat("dd/MM/yyyy HH:mm")
                     .parse(date);
-            advisorService.makeAppointment(login, appointDate);
-            return new ResponseEntity(HttpStatus.CREATED);
+            return new ResponseEntity(advisorService.makeAppointment(login, appointDate).toJson(),
+                HttpStatus.CREATED);
         } catch (ParseException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
@@ -160,8 +151,8 @@ public class AdvisorController {
         
         String message = data.get("content").asText();
         try {
-            advisorService.sendMessage(login, message);
-            return new ResponseEntity(HttpStatus.CREATED);
+            return new ResponseEntity(advisorService.sendMessage(login, message).toJson(),
+                HttpStatus.CREATED);
         } catch (FakeClientException clientException) {
             return new ResponseEntity("Il semble y avoir une erreur dans votre session",
                 HttpStatus.CONFLICT);

@@ -41,52 +41,18 @@
                     callback(message);
                 }
             );
-            //return CommonService.basicGetRequest('getClientAccounts.htm');
         }
         
         function getSavingBooks() {
             return CommonService.basicGetRequest('savingBooks.htm');
-            /*let url = CommonService.basePath+'savingBooks.htm';
-            let deferred = $q.defer();
-            $http.get(url).then(
-                function (response) {
-                    deferred.resolve(response.data);
-                },
-                function () {
-                    deferred.reject("Erreur rencontrée dans le serveur");
-                }
-            );
-            return deferred.promise;*/
         }
         
         function getShares() {
             return CommonService.basicGetRequest('shares.htm');
-            /*let url = CommonService.basePath+'shares.htm';
-            let deferred = $q.defer();
-            $http.get(url).then(
-                function (response) {
-                    deferred.resolve(response.data);
-                },
-                function () {
-                    deferred.reject("Erreur rencontrée dans le serveur");
-                }
-            );
-            return deferred.promise;*/
         }
         
         function getAuthorizations() {
             return CommonService.basicGetRequest('authorizations.htm');
-            /*let url = CommonService.basePath+'authorizations.htm';
-            let deferred = $q.defer();
-            $http.get(url).then(
-                function (response) {
-                    deferred.resolve(response.data);
-                },
-                function () {
-                    deferred.reject("Erreur rencontrée dans le serveur");
-                }
-            );
-            return deferred.promise;*/
         }
         
         function getAccount(rib) {

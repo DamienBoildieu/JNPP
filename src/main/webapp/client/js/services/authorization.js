@@ -23,17 +23,7 @@
         }
         
         function addAuthorization(data) {
-            let url = CommonService.basePath+'addAuthorization.htm';
-            let deferred = $q.defer();
-            $http.post(url, data).then(
-                function () {
-                    deferred.resolve();
-                },
-                function (response) {
-                    deferred.reject(response.data);
-                }
-            );
-            return deferred.promise;
+            return CommonService.basicPostRequest('addAuthorization.htm', data);
         } 
         
         function deleteAuthorization(data) {

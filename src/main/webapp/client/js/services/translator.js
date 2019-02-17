@@ -5,7 +5,8 @@
         .module('app')
         .factory('TranslatorService', TranslatorService);
      
-    function TranslatorService() {
+    TranslatorService.$inject = ['$filter'];
+    function TranslatorService($filter) {
         
         let service = {};
         
@@ -21,6 +22,13 @@
         service.isTranslatedCurrency = isTranslatedCurrency;
         service.translateCurrency = translateCurrency;
         service.untranslateCurrency = untranslateCurrency;
+        
+        service.isTranslatedPaymentMean = isTranslatedPaymentMean;
+        service.translatePaymentMean = translatePaymentMean;
+        service.untranslatePaymentMean = untranslatePaymentMean;
+        
+        service.transformNotif = transformNotif;
+        service.transformNotifs = transformNotifs;
         
         return service;      
         
@@ -97,6 +105,59 @@
                 return 'EURO';
             else
                 return '';
+        }
+        
+        function isTranslatedPaymentMean(string) {
+            return string==='carte bancaire' || string==='chéquier';
+        }
+        
+        function translatePaymentMean(paymentMean) {
+            if (paymentMean==='BANKCARD')
+                return 'carte bancaire';
+            else if (paymentMean==='CHECKBOOK')
+                return 'chéquier';
+            else
+                return '';
+        }
+        
+        function untranslatePaymentMean(value) {
+            if (value==='carte bancaire')
+                return 'BANKCARD';
+            else if (value==='chéquier')
+                return 'CHECKBOOK';
+            else
+                return '';
+        }
+        
+        
+        function transformNotif(notif) {
+            if (notif.type==='APPOINTMENT')
+                notif.message = 'Vous avez rendez-vous avec conseiller le '
+                + $filter(notif.appointment.date, 'dd/MM/yyyy HH:mm');
+            else if (notif.type==='PAYMENT_MEAN') {
+                let translated = service.translatePaymentMean(notif.paymentMean.type);
+                if (notif.paymentMean==='ORDERED')
+                    notif.message = 'Votre ' + translated + ' est commandé';
+                else if (notif.paymentMean==='ARRIVED')
+                    notif.message = 'Votre ' + translated + ' est arrivé';
+                else if (notif.paymentMean==='DELIVERED')
+                    notif.message = 'Vous avez récupéré votre ' + translated;
+                else
+                    notif.message = 'Votre ' + translated + ' est dans un état inconnu';
+            } else if (notif.type==='MESSAGE')
+                notif.message = 'Vous avez un reçu un nouveau message';
+            else if (notif.type==='MOVEMENT')
+                notif.message = 'Une transaction a eu lieu sur un de vos compte';
+            else if (notif.type==='OVERDRAFT')
+                notif.message = 'Vous êtes en négatif sur le compte ' + notif.rib;
+            else
+                notif.message = '';
+        }
+        
+        function transformNotifs(notifs) {
+            for (let notif of notifs) {
+                service.transformNotif(notif);
+            }
         }
     }
  
