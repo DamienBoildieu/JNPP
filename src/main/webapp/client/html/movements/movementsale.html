@@ -1,0 +1,48 @@
+<form name="saleForm" ng-submit="vm.sale()" role="form">
+    <div class="card">
+        <div class="row valign-wrapper">
+            <div class="col s10">
+                <table class="centered striped">
+                    <thead>
+                        <tr>
+                            <th>Quantite</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="number" min="0" ng-model="saleData.amount" class="center-align" required>
+                            </td>
+                            <td>
+                                <select ng-model="saleData.share">
+                                    <option ng-repeat="shareTitle in shareAccounts[0].shareTitles" 
+                                        value="{{shareTitle.share.name}}">
+                                        {{shareTitle.share.name}}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="row valign-wrapper">
+                                    <div class="col s1">
+                                        Libellé:
+                                    </div>
+                                    <div class="col s11">
+                                        <input type="text" ng-model="saleData.label" class="right-align" required>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col s2">
+                <div class="center-align">
+                    <button class="btn waves-effect blue" type="submit">Vendre</button> 
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

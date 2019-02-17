@@ -19,13 +19,17 @@
         function init() {
             AccountService.getAccount($routeParams.accountRib).then(
                 function(response) {
-                    $scope.response = response;
-                    console.log($scope.response);
+                    $scope.account = response.account;
+                    $scope.movements = transformMovements(response.movements);
                 },
                 function(response) {
                     FlashService.Error(response);
                 }
             );
+        }
+        
+        function transformMovements(movementsDTO) {
+            
         }
     }
 })();

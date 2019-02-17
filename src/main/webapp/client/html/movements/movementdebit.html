@@ -1,0 +1,52 @@
+<form name="debitForm" ng-submit="vm.debit()" role="form">
+    <div class="card">
+        <div class="row valign-wrapper">
+            <div class="col s10">
+                <table class="centered striped">
+                    <thead>
+                        <tr>
+                            <th>RIB orgine</th>
+                            <th>RIB destination</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <select ng-model="debitData.ribFrom">
+                                    <option ng-repeat="account in moneyAccounts" 
+                                        value="{{account.rib}}">
+                                        {{account.rib}}
+                                    </option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" ng-model="debitData.ribTo" class="center-align" required>
+                            </td>
+                            <td>
+                                <input type="number" min="0" ng-model="debitData.amount" class="center-align" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div class="row valign-wrapper">
+                                    <div class="col s1">
+                                        Libellé:
+                                    </div>
+                                    <div class="col s11">
+                                        <input type="text" ng-model="debitData.label" class="right-align" required>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col s2">
+                <div class="center-align">
+                    <button class="btn waves-effect blue" type="submit">Debiter</button> 
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

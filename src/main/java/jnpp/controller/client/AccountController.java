@@ -4,13 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import jnpp.controller.client.views.JNPPModelAndView;
-import jnpp.controller.client.views.MovementView;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,17 +19,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jnpp.controller.client.views.Translator;
 import jnpp.controller.client.views.alerts.AlertEnum;
 import jnpp.controller.client.views.alerts.AlertMessage;
-import jnpp.controller.client.views.info.ViewInfo;
 import jnpp.service.dto.AbstractDTO;
 import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.AccountDTO;
-import static jnpp.service.dto.accounts.AccountDTO.Type.SAVING;
 import jnpp.service.dto.accounts.ShareAccountDTO;
 import jnpp.service.dto.clients.ClientDTO;
-import jnpp.service.dto.clients.PrivateDTO;
 import jnpp.service.dto.movements.MovementDTO;
-import jnpp.service.dto.paymentmeans.BankCardDTO;
-import jnpp.service.dto.paymentmeans.CheckbookDTO;
 import jnpp.service.exceptions.ClosureException;
 import jnpp.service.exceptions.accounts.ClientTypeException;
 import jnpp.service.exceptions.accounts.CloseRequestException;
@@ -50,8 +41,6 @@ import jnpp.service.services.DebitAuthorizationService;
 import jnpp.service.services.PaymentMeanService;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ObjectNode;
-import org.codehaus.jackson.type.TypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,7 +71,7 @@ public class AccountController {
     private PaymentMeanService paymentMeanService;
 
     
-    @RequestMapping(value = "getClientAccounts", method = RequestMethod.GET)
+    @RequestMapping(value = "clientAccounts", method = RequestMethod.GET)
     public ResponseEntity<?> getClientAccounts(@RequestHeader("authorization") String autho) 
         throws IOException {
         String login = SessionController.decodeLogin(autho);       
@@ -94,9 +83,15 @@ public class AccountController {
         }
     }
     
-    @RequestMapping(value = "getSavingBooks", method = RequestMethod.GET)
+    @RequestMapping(value = "savingBooks", method = RequestMethod.GET)
     public ResponseEntity<?> getSavingBooks() throws IOException {
         return new ResponseEntity(AbstractDTO.toJson(accountService.getSavingBooks()), HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "shares", method = RequestMethod.GET)
+    public ResponseEntity<?> getShares() 
+        throws IOException {
+        return new ResponseEntity(AbstractDTO.toJson(accountService.getShares()), HttpStatus.OK);
     }
     
     @RequestMapping(value = "openCurrentAccount", method = RequestMethod.POST)
@@ -205,7 +200,7 @@ public class AccountController {
         }
     }
 
-    @RequestMapping(value = "account", method = RequestMethod.GET)
+    @RequestMapping(value = "account/{accountRib}", method = RequestMethod.GET)
     public ResponseEntity<?> getAccount(@RequestHeader("authorization") String autho,
             @PathVariable String accountRib) throws IOException {
         try {
@@ -218,8 +213,8 @@ public class AccountController {
                 if (account.getRib().equals(accountRib)) {
                     List<MovementDTO> movements = accountService.getMovements(login,
                             accountRib);
-                    String responseBody = "{" + AbstractDTO.toJson(movements) +
-                            "," + account.toJson() + "}";
+                    String responseBody = "{ \"account\" : " + account.toJson() +
+                            ", \"movements\" : " + AbstractDTO.toJson(movements) + "}";
                     return new ResponseEntity(responseBody, HttpStatus.OK);
 
                 }

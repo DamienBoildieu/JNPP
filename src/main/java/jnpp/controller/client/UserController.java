@@ -55,7 +55,7 @@ public class UserController {
                 HttpStatus.BAD_REQUEST);
     }
     
-    @RequestMapping(value = "getGenders", method = RequestMethod.GET)
+    @RequestMapping(value = "genders", method = RequestMethod.GET)
     public ResponseEntity<?> getGenders() 
         throws IOException {
         ObjectMapper mapper = new ObjectMapper();

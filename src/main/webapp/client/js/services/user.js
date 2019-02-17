@@ -28,7 +28,7 @@
         return service;      
         
         function getGenders() {
-            let url = CommonService.basePath+'getGenders.htm';
+            let url = CommonService.basePath+'genders.htm';
             let deferred = $q.defer();
             $http.get(url).then(
                 function (response) {

@@ -1,0 +1,48 @@
+<form name="purchaseForm" ng-submit="vm.purchase()" role="form">
+    <div class="card">
+        <div class="row valign-wrapper">
+            <div class="col s10">
+                <table class="centered striped">
+                    <thead>
+                        <tr>
+                            <th>Quantite</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="number" min="0" ng-model="purchaseData.amount" class="center-align" required>
+                            </td>
+                            <td>
+                                <select ng-model="purchaseData.share">
+                                    <option ng-repeat="share in shares" 
+                                        value="{{share.name}}">
+                                        {{share.name}}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="row valign-wrapper">
+                                    <div class="col s1">
+                                        Libellé:
+                                    </div>
+                                    <div class="col s11">
+                                        <input type="text" ng-model="purchaseData.label" class="right-align" required>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col s2">
+                <div class="center-align">
+                    <button class="btn waves-effect blue" type="submit">Acheter</button> 
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
