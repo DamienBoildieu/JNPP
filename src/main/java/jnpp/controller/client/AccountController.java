@@ -29,7 +29,6 @@ import jnpp.service.exceptions.accounts.ClientTypeException;
 import jnpp.service.exceptions.accounts.CloseRequestException;
 import jnpp.service.exceptions.accounts.UnknownIdentityException;
 import jnpp.service.exceptions.duplicates.DuplicateAccountException;
-import jnpp.service.exceptions.duplicates.DuplicateDebitAuthorizationException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeDebitAuthorizationException;
 import jnpp.service.exceptions.entities.FakeSavingBookException;

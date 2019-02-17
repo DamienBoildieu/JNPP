@@ -59,7 +59,14 @@
             AuthorizationService.addAuthorization($scope.authorizationData).then(
                 function() {
                     FlashService.Success('Votre autorisation de débit a été acceptée');
-                    init();
+                    AuthorizationService.getAuthorizations().then(
+                        function (response) {
+                            $scope.authorizations = response;
+                        },
+                        function (response) {
+                            FlashService.Error(response); 
+                        }     
+                    );
                 },
                 function (response) {
                     FlashService.Error(response); 
@@ -70,8 +77,15 @@
         function deleteAuthorization(index) {
             AuthorizationService.deleteAuthorization($scope.authorizations[index]).then(
                 function() {
-                    FlashService.Success('Votre autorisation de débit a été acceptée');
-                    init();
+                    FlashService.Success('Votre autorisation de débit a été supprimée');
+                    AuthorizationService.getAuthorizations().then(
+                        function (response) {
+                            $scope.authorizations = response;
+                        },
+                        function (response) {
+                            FlashService.Error(response); 
+                        }     
+                    );
                 },
                 function (response) {
                     FlashService.Error(response); 

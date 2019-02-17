@@ -87,6 +87,16 @@
                 templateUrl: 'client/html/movements/authorization.html',
                 controllerAs: 'vm'         
             })
+            .when('/advisor', {
+                controller: 'AdvisorController',
+                templateUrl: 'client/html/advisor/advisor.html',
+                controllerAs: 'vm'         
+            })
+            .when('/appoint', {
+                controller: 'AdvisorController',
+                templateUrl: 'client/html/advisor/appoint.html',
+                controllerAs: 'vm'         
+            })
             .otherwise({ redirectTo: '/welcome' });
     }
 

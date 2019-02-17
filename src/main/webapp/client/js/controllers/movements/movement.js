@@ -47,6 +47,9 @@
                             $scope.debitData = {ribFrom : $scope.moneyAccounts[0].rib};
                             $scope.transfertData = {ribFrom : $scope.moneyAccounts[0].rib};
                         }
+                        if ($scope.shareAccounts[0] && $scope.shareAccounts[0].shareTitles[0]) {
+                           $scope.saleData = {share : $scope.shareAccounts[0].shareTitles[0].share.name};
+                        }
                         setTimeout(function () {
                             $('select').formSelect();
                         }, 200);
@@ -58,8 +61,7 @@
                 function (response) {
                     $scope.shares = response;
                     if ($scope.shares[0]) {
-                        $scope.purchaseData = {share : $scope.shares[0].name};
-                        $scope.saleData = {share : $scope.shares[0].name};     
+                        $scope.purchaseData = {share : $scope.shares[0].name};     
                     }
                     setTimeout(function () {
                         $('select').formSelect();
@@ -113,7 +115,7 @@
             if ($scope.purchaseData.amount && $scope.purchaseData.label && 
                 $scope.purchaseData.share) {
                 MovementService.purchase($scope.purchaseData).then(
-                    function() {                        
+                    function() {
                         FlashService.Success('Votre demande de titres a été acceptée', true);
                         $location.path('/resume');
                     },

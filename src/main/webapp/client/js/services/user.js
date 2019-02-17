@@ -65,9 +65,9 @@
         function updatePassword(oldPassword, newPassword) {
             let decoded = atob($http.defaults.headers.common['Authorization']);
             let splitted = decoded.split(":");
-            if (oldPassword===splitted[1]) {
-                let url = CommonService.basePath+'updateUserPassword.htm';
-                let deferred = $q.defer();
+            let url = CommonService.basePath+'updateUserPassword.htm';
+            let deferred = $q.defer();
+            if (oldPassword===splitted[1]) {               
                 $http.put(url, 
                     {
                         newPassword : newPassword
@@ -85,9 +85,11 @@
                     }
                 );
                 return deferred.promise;
-            } else 
-                return $q.defer().reject("Le mot de passe entré ne correspond pas "+
-                    "à celui de la session").promise;
+            } else {
+                deferred.reject("Le mot de passe entré ne correspond pas "+
+                    "à celui de la session");
+                return deferred.promise;
+            }
         }
         
         function close(data) {

@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="row">
+        <div class='card-panel white col s6 offset-s3 center-align'>
+            <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
+                <div ng-repeat="appoint in appoints track by $index" class="card blue s12">
+                    <div class="row">
+                        <p class="white-text">
+                            {{appoint.date | date:'dd/MM/yyyy HH:mm'}} avec 
+                            {{appoint.advisor.identity.firstname}} {{appoint.advisor.identity.lastname}}
+                        </p>
+                    </div>
+                    <div class="row">
+                        <button ng-click="vm.cancelAppoint($index)" class="btn-small blue">
+                            Annuler
+                        </button>     
+                    </div>
+                </div>
+                <div class="row">
+                    <form ng-submit="vm.makeAppoint()" role="form" class="valign-wrapper">
+                        <div class="col s4">
+                            <label for="date">Jour</label>
+                            <input type="date" class="validate" 
+                                ng-model="appointData.date" id="date" required>
+                        </div>
+                        <div class="col s4">
+                            <label for="time">Heure</label> 
+                            <input type="time" class="validate" ng-model="appointData.time" id="time" required>
+                        </div>
+                        <div class="col s4">
+                            <input type="submit" value="Prendre rendez-vous" class="btn blue" />
+                        </div>
+                    </form>      
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
