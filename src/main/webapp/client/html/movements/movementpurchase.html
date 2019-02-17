@@ -12,11 +12,11 @@
                     <tbody>
                         <tr>
                             <td>
-                                <input type="number" ng-model="purchaseData.amount" class="center-align">
+                                <input type="number" min="0" ng-model="purchaseData.amount" class="center-align" required>
                             </td>
                             <td>
-                                <select ng-model="purchaseData.share">
-                                    <option ng-repeat="share in sharesToPurchase" 
+                                <select ng-model="purchaseData.share" required>
+                                    <option ng-repeat="share in shares" 
                                         value="{{share.name}}">
                                         {{share.name}}
                                     </option>
@@ -30,7 +30,7 @@
                                         Libellé:
                                     </div>
                                     <div class="col s11">
-                                        <input type="text" ng-model="purchaseData.label" class="right-align">
+                                        <input type="text" ng-model="purchaseData.label" class="right-align" required>
                                     </div>
                                 </div>
                             </td>
@@ -40,7 +40,7 @@
             </div>
             <div class="col s2">
                 <div class="center-align">
-                    <button class="btn waves-effect blue" type="submit" name="purchase" value="purchase">Acheter</button> 
+                    <button class="btn waves-effect blue" type="submit">Acheter</button> 
                 </div>
             </div>
         </div>

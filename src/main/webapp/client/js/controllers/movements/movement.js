@@ -16,16 +16,20 @@
         $scope.debitUrl = 'client/html/movements/movementdebit.html';
         $scope.transfertUrl = 'client/html/movements/movementtransfert.html';
         $scope.purchaseUrl = 'client/html/movements/movementpurchase.html';
+        $scope.saleUrl = 'client/html/movements/movementsale.html';
         
         $scope.debitData = {};
         $scope.transfertData = {};
         $scope.purchaseData = {};
+        $scope.saleData = {};
         $scope.moneyAccounts =  [];
         $scope.shareAccounts = [];
-        
+        $scope.shares = [];
+               
         vm.debit = debit;
         vm.transfert = transfert;
         vm.purchase = purchase;
+        vm.sale = sale;
         
         init();
         
@@ -39,16 +43,27 @@
                             else
                                 $scope.moneyAccounts.push(account);
                         }
+                        if ($scope.moneyAccounts[0]) {
+                            $scope.debitData = {ribFrom : $scope.moneyAccounts[0].rib};
+                            $scope.transfertData = {ribFrom : $scope.moneyAccounts[0].rib};     
+                        }
+
+                        console.log($scope.moneyAccounts);
                         setTimeout(function () {
                             $('select').formSelect();
                         }, 200);
                     } else
                        FlashService.Error(response.message); 
-                }            
+                }
             );
             AccountService.getShares().then(
                 function (response) {
                     $scope.shares = response;
+                    console.log($scope.shares);
+                    if ($scope.shares[0]) {
+                            $scope.purchasetData = {share : $scope.shares[0].name};
+                            $scope.saleData = {share : $scope.shares[0].name};     
+                        }
                     setTimeout(function () {
                         $('select').formSelect();
                     }, 200);
@@ -60,39 +75,72 @@
         }
         
         function debit() {
-            MovementService.debit($scope.debitData).then(
-                function() {
-                    FlashService.Success('Votre virement a bien été effectué', true);
-                    $location.path('/resume');
-                },
-                function (response) {
-                    FlashService.Error(response.message); 
-                }
-            );
+            if ($scope.debitData.ribFrom && $scope.debitData.ribTo && $scope.debitData.amount &&
+                $scope.debitData.label) {
+                MovementService.debit($scope.debitData).then(
+                    function() {
+                        FlashService.Success('Votre virement a bien été effectué', true);
+                        $location.path('/resume');
+                    },
+                    function (response) {
+                        FlashService.Error(response.message); 
+                    }
+                );
+            } else {
+                FlashService.Error("Vous devez remplir tous les champs"); 
+            }
+
         }
         
         function transfert() {
-            MovementService.transfert($scope.transfertData).then(
-                function() {
-                    FlashService.Success('Votre virement a bien été effectué', true);
-                    $location.path('/resume');
-                },
-                function (response) {
-                    FlashService.Error(response.message); 
-                }
-            );
+            if ($scope.transfertData.ribFrom && $scope.transfertData.ribTo && 
+                $scope.transfertData.amount && $scope.transfertData.label) {
+                MovementService.transfert($scope.transfertData).then(
+                    function() {
+                        FlashService.Success('Votre virement a bien été effectué', true);
+                        $location.path('/resume');
+                    },
+                    function (response) {
+                        FlashService.Error(response.message); 
+                    }
+                );
+            } else {
+                FlashService.Error("Vous devez remplir tous les champs");
+            }
         }
         
         function purchase() {
-            MovementService.purchase($scope.purchaseData).then(
-                function() {
-                    FlashService.Success('Votre demande de titres a été acceptée', true);
-                    $location.path('/resume');
-                },
-                function (response) {
-                    FlashService.Error(response.message); 
-                }
-            );
-        }  
+            if ($scope.purchaseData.amount && $scope.purchaseData.label && 
+                $scope.purchaseData.share) {
+                MovementService.purchase($scope.purchaseData).then(
+                    function() {
+                        FlashService.Success('Votre demande de titres a été acceptée', true);
+                        $location.path('/resume');
+                    },
+                    function (response) {
+                        FlashService.Error(response.message); 
+                    }
+                );
+            } else {
+                FlashService.Error("Vous devez remplir tous les champs");
+            }
+        }
+        
+        function sale() {
+            if ($scope.saleData.amount && $scope.saleData.label && 
+                $scope.saleData.share) {
+                MovementService.sale($scope.saleData).then(
+                    function() {
+                        FlashService.Success('Votre vente de titres a été acceptée', true);
+                        $location.path('/resume');
+                    },
+                    function (response) {
+                        FlashService.Error(response.message); 
+                    }
+                );
+            } else {
+                FlashService.Error("Vous devez remplir tous les champs");
+            }
+        }
     }
 })();

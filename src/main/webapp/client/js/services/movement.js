@@ -14,6 +14,7 @@
         service.debit = debit;
         service.transfert = transfert;
         service.purchase = purchase;
+        service.sale = sale;
         
         return service;
         
@@ -47,6 +48,20 @@
         
         function purchase(data) {
             let url = CommonService.basePath+'purchase.htm';
+            let deferred = $q.defer();
+            $http.post(url, data).then(
+                function () {
+                    deferred.resolve();
+                },
+                function (response) {
+                    deferred.reject(response.data);
+                }
+            );
+            return deferred.promise;
+        }
+        
+        function sale(data) {
+            let url = CommonService.basePath+'sale.htm';
             let deferred = $q.defer();
             $http.post(url, data).then(
                 function () {

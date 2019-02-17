@@ -12,13 +12,14 @@
                     <tbody>
                         <tr>
                             <td>
-                                <input type="number" name="amount" class="center-align">
+                                <input type="number" min="0" ng-model="saleData.amount" class="center-align" required>
                             </td>
                             <td>
-                                <select name="share" form="sale">
-                                    <c:forEach items="${sharesToSale}" var="share">
-                                        <option value="${share}" selected>${share}</option>
-                                    </c:forEach>
+                                <select ng-model="saleData.share">
+                                    <option ng-repeat="shareTitle in shareAccounts[0].shareTittles" 
+                                        value="{{shareTitle.name}}">
+                                        {{shareTitle.name}}
+                                    </option>
                                 </select>
                             </td>
                         </tr>
@@ -26,10 +27,10 @@
                             <td colspan="2">
                                 <div class="row valign-wrapper">
                                     <div class="col s1">
-                                        Libelle:
+                                        Libellé:
                                     </div>
                                     <div class="col s11">
-                                        <input type="text" name="label" class="right-align">
+                                        <input type="text" ng-model="saleData.label" class="right-align" required>
                                     </div>
                                 </div>
                             </td>
@@ -39,7 +40,7 @@
             </div>
             <div class="col s2">
                 <div class="center-align">
-                    <button class="btn waves-effect blue" type="submit" name="purchase" value="purchase">Vendre</button> 
+                    <button class="btn waves-effect blue" type="submit">Vendre</button> 
                 </div>
             </div>
         </div>
