@@ -48,7 +48,7 @@
                             $scope.transfertData = {ribFrom : $scope.moneyAccounts[0].rib};     
                         }
 
-                        console.log($scope.moneyAccounts);
+                        console.log($scope.shareAccounts[0]);
                         setTimeout(function () {
                             $('select').formSelect();
                         }, 200);

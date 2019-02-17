@@ -22,6 +22,7 @@ import jnpp.controller.client.views.alerts.AlertMessage;
 import jnpp.service.dto.AbstractDTO;
 import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.AccountDTO;
+import jnpp.service.dto.accounts.ShareAccountDTO;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.movements.MovementDTO;
 import jnpp.service.exceptions.ClosureException;

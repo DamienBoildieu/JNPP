@@ -16,9 +16,9 @@
                             </td>
                             <td>
                                 <select ng-model="saleData.share">
-                                    <option ng-repeat="shareTitle in shareAccounts[0].shareTittles" 
-                                        value="{{shareTitle.name}}">
-                                        {{shareTitle.name}}
+                                    <option ng-repeat="shareTitle in shareAccounts[0].shareTitles" 
+                                        value="{{shareTitle.share.name}}">
+                                        {{shareTitle.share.name}}
                                     </option>
                                 </select>
                             </td>
