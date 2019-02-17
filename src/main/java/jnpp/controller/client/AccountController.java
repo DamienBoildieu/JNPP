@@ -22,7 +22,6 @@ import jnpp.controller.client.views.alerts.AlertMessage;
 import jnpp.service.dto.AbstractDTO;
 import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.AccountDTO;
-import jnpp.service.dto.accounts.ShareAccountDTO;
 import jnpp.service.dto.clients.ClientDTO;
 import jnpp.service.dto.movements.MovementDTO;
 import jnpp.service.exceptions.ClosureException;
@@ -233,6 +232,8 @@ public class AccountController {
         return new ResponseEntity("Ce compte ne correspond pas à un de vos comptes", responseHeaders, 
                 HttpStatus.BAD_REQUEST);
     }
+    
+    
     /**
      * Demande de fermeture de comptes
      *
@@ -394,101 +395,6 @@ public class AccountController {
                 alerts = new ArrayList<AlertMessage>();
                 alerts.add(new AlertMessage(AlertEnum.ERROR,
                         "Vous devez être proprietaire du compte autorisé à être debité."));
-                rm.addFlashAttribute("alerts", alerts);
-            }
-        }
-
-        return new ModelAndView("redirect:/authorization.htm");
-    }
-
-    /**
-     * Ajout d'une autorisation de débit
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return La vue d'autorisations de débit
-     * @throws Exception Exception non controllees.
-     */
-    @RequestMapping(value = "addDebitAuthorization", method = RequestMethod.POST)
-    private ModelAndView addDebitAuthorization(Model model,
-            HttpServletRequest request, RedirectAttributes rm)
-            throws Exception {
-
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (!SessionController.isConnected(session)) {
-            return new ModelAndView("redirect:/index.htm");
-        }
-
-        ClientDTO client = SessionController.getClient(session);
-
-        String ribFrom = request.getParameter("ribFrom");
-        String ribTo = request.getParameter("ribTo");
-
-        try {
-            authorizationService.createDebitAuthorization(client.getLogin(),
-                    ribFrom, ribTo);
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                        "Autorisation accreptée."));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                        "Autorisation accreptée."));
-                rm.addFlashAttribute("alerts", alerts);
-            }
-
-        } catch (FakeClientException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Il semble y avoir une erreur dans votre session"));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Il semble y avoir une erreur dans votre session"));
-                rm.addFlashAttribute("alerts", alerts);
-            }
-            return new ModelAndView("redirect:/disconnect.htm");
-
-        } catch (AccountOwnerException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Vous devez être proprietaire du compte autorisé à être debité."));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Vous devez être proprietaire du compte autorisé à être debité."));
-                rm.addFlashAttribute("alerts", alerts);
-            }
-
-        } catch (DuplicateDebitAuthorizationException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Vous avez deja autorisé ce compte à debiter votre compte."));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Vous avez deja autorisé ce compte à debiter votre compte."));
-                rm.addFlashAttribute("alerts", alerts);
-            }
-
-        } catch (AccountTypeException ex) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Votre compte n'est pas debitable ou le compte cible ne peut etre debiteur."));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Votre compte n'est pas debitable ou le compte cible ne peut etre debiteur."));
                 rm.addFlashAttribute("alerts", alerts);
             }
         }

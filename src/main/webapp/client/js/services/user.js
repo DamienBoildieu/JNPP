@@ -28,7 +28,8 @@
         return service;      
         
         function getGenders() {
-            let url = CommonService.basePath+'genders.htm';
+            return CommonService.basicGetRequest('genders.htm');
+            /*let url = CommonService.basePath+'genders.htm';
             let deferred = $q.defer();
             $http.get(url).then(
                 function (response) {
@@ -38,7 +39,7 @@
                     deferred.reject("Erreur rencontrée dans le serveur");
                 }
             );
-            return deferred.promise;
+            return deferred.promise;*/
         }
         
         function privateSignUp(data) {

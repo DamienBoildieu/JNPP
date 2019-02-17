@@ -1,0 +1,46 @@
+<div class="container">
+    <table class="responsive-table centered striped card">
+        <thead>
+            <tr>
+                <th>Mes comptes</th>
+                <th>Comptes autorisés</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="authorization in authorizations track by $index">
+            <td>{{authorization.ribFrom}}</td>
+            <td>{{authorization.ribTo}}</td>
+            <td>
+                <button class="btn waves-effect blue" ng-click="vm.deleteAuthorization($index)">
+                    Supprimer
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="container">
+    <form name="authorizationForm" ng-submit="vm.addAuthorization()" role="form" class="card">
+        <table class="responsive-table centered striped card">
+            <tbody>
+                <tr>
+                    <td>
+                        <select ng-model="authorizationData.ribFrom">
+                            <option ng-repeat="account in moneyAccounts" 
+                                value="{{account.rib}}">
+                                {{account.rib}}
+                            </option>
+                        </select>
+                    </td>
+                    <td><input type="text" ng-model="authorizationData.ribTo" class="center-align" required></td>
+                    <td>                        
+                        <button class="btn waves-effect blue" type="submit">
+                            Ajouter
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

@@ -199,7 +199,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "updateUserInfo", method = RequestMethod.PUT)
-    private ResponseEntity<?> updateUserInfo(@RequestHeader("authorization") String autho,
+    public ResponseEntity<?> updateUserInfo(@RequestHeader("authorization") String autho,
         @RequestBody String body) throws IOException {
         String login = SessionController.decodeLogin(autho);
         ObjectMapper mapper = new ObjectMapper();
@@ -228,7 +228,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "updateUserPassword", method = RequestMethod.PUT)
-    private ResponseEntity<?> updateUserPassword(@RequestHeader("authorization") String autho,
+    public ResponseEntity<?> updateUserPassword(@RequestHeader("authorization") String autho,
         @RequestBody String body) throws IOException {
         String login = SessionController.decodeLogin(autho);
         String password = SessionController.decodePassword(autho);
@@ -252,11 +252,12 @@ public class UserController {
     }  
     
     @RequestMapping(value = "deleteUser", method = RequestMethod.DELETE)
-    protected ResponseEntity<?> deleteUser(@RequestHeader("authorization") String autho) throws IOException {
+    public ResponseEntity<?> deleteUser(@RequestHeader("authorization") String autho) throws IOException {
         String login = SessionController.decodeLogin(autho);
         String password = SessionController.decodePassword(autho);
         try {
             clientService.close(login, password);
+            return new ResponseEntity(HttpStatus.OK);
         } catch (ClosureException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
@@ -265,6 +266,5 @@ public class UserController {
         } catch (FakeClientException ex) {
             return new ResponseEntity("Il semble y avoir une erreur dans votre session", HttpStatus.CONFLICT);
         }
-        return new ResponseEntity(HttpStatus.OK);
     }
 }

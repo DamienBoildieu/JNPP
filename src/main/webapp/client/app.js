@@ -82,6 +82,11 @@
                 templateUrl: 'client/html/movements/movement.html',
                 controllerAs: 'vm'
             })
+            .when('/authorization', {
+                controller: 'AuthorizationController',
+                templateUrl: 'client/html/movements/authorization.html',
+                controllerAs: 'vm'         
+            })
             .otherwise({ redirectTo: '/welcome' });
     }
 

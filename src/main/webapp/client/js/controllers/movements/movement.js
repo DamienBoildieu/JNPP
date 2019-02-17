@@ -5,10 +5,10 @@
         .module('app')
         .controller('MovementController', MovementController);
  
-    MovementController.$inject = ['$scope', '$location', 'MovementService',
+    MovementController.$inject = ['$scope', '$location', 'MovementService', 'AuthorizationService',
         'AuthentificationService', 'AccountService', 'FlashService'];
     
-    function MovementController($scope, $location, MovementService,
+    function MovementController($scope, $location, MovementService, AuthorizationService,
         AuthentificationService, AccountService, FlashService) {
         AuthentificationService.connectedPage('/welcome');
         
@@ -25,7 +25,7 @@
         $scope.moneyAccounts =  [];
         $scope.shareAccounts = [];
         $scope.shares = [];
-               
+        
         vm.debit = debit;
         vm.transfert = transfert;
         vm.purchase = purchase;
@@ -45,10 +45,8 @@
                         }
                         if ($scope.moneyAccounts[0]) {
                             $scope.debitData = {ribFrom : $scope.moneyAccounts[0].rib};
-                            $scope.transfertData = {ribFrom : $scope.moneyAccounts[0].rib};     
+                            $scope.transfertData = {ribFrom : $scope.moneyAccounts[0].rib};
                         }
-
-                        console.log($scope.shareAccounts[0]);
                         setTimeout(function () {
                             $('select').formSelect();
                         }, 200);
@@ -59,7 +57,6 @@
             AccountService.getShares().then(
                 function (response) {
                     $scope.shares = response;
-                    console.log($scope.shares);
                     if ($scope.shares[0]) {
                         $scope.purchaseData = {share : $scope.shares[0].name};
                         $scope.saleData = {share : $scope.shares[0].name};     
@@ -67,8 +64,11 @@
                     setTimeout(function () {
                         $('select').formSelect();
                     }, 200);
+                },
+                function (response) {
+                    FlashService.Error(response);
                 }
-            );
+            );            
             $(document).ready(function(){
                 $('.collapsible').collapsible();
             });
@@ -83,7 +83,7 @@
                         $location.path('/resume');
                     },
                     function (response) {
-                        FlashService.Error(response.message); 
+                        FlashService.Error(response); 
                     }
                 );
             } else {
@@ -101,7 +101,7 @@
                         $location.path('/resume');
                     },
                     function (response) {
-                        FlashService.Error(response.message); 
+                        FlashService.Error(response); 
                     }
                 );
             } else {
@@ -113,12 +113,12 @@
             if ($scope.purchaseData.amount && $scope.purchaseData.label && 
                 $scope.purchaseData.share) {
                 MovementService.purchase($scope.purchaseData).then(
-                    function() {
+                    function() {                        
                         FlashService.Success('Votre demande de titres a été acceptée', true);
                         $location.path('/resume');
                     },
                     function (response) {
-                        FlashService.Error(response.message); 
+                        FlashService.Error(response); 
                     }
                 );
             } else {
@@ -135,7 +135,7 @@
                         $location.path('/resume');
                     },
                     function (response) {
-                        FlashService.Error(response.message); 
+                        FlashService.Error(response); 
                     }
                 );
             } else {

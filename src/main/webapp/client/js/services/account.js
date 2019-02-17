@@ -14,6 +14,7 @@
         service.getClientAccounts = getClientAccounts;
         service.getSavingBooks = getSavingBooks;
         service.getShares = getShares;
+        service.getAuthorizations = getAuthorizations;
         service.getAccount = getAccount;
         service.openCurrentAccount = openCurrentAccount;
         service.openSavingAccount = openSavingAccount;
@@ -44,7 +45,8 @@
         }
         
         function getSavingBooks() {
-            let url = CommonService.basePath+'savingBooks.htm';
+            return CommonService.basicGetRequest('savingBooks.htm');
+            /*let url = CommonService.basePath+'savingBooks.htm';
             let deferred = $q.defer();
             $http.get(url).then(
                 function (response) {
@@ -54,11 +56,12 @@
                     deferred.reject("Erreur rencontrée dans le serveur");
                 }
             );
-            return deferred.promise;
+            return deferred.promise;*/
         }
         
         function getShares() {
-            let url = CommonService.basePath+'shares.htm';
+            return CommonService.basicGetRequest('shares.htm');
+            /*let url = CommonService.basePath+'shares.htm';
             let deferred = $q.defer();
             $http.get(url).then(
                 function (response) {
@@ -68,7 +71,22 @@
                     deferred.reject("Erreur rencontrée dans le serveur");
                 }
             );
-            return deferred.promise;
+            return deferred.promise;*/
+        }
+        
+        function getAuthorizations() {
+            return CommonService.basicGetRequest('authorizations.htm');
+            /*let url = CommonService.basePath+'authorizations.htm';
+            let deferred = $q.defer();
+            $http.get(url).then(
+                function (response) {
+                    deferred.resolve(response.data);
+                },
+                function () {
+                    deferred.reject("Erreur rencontrée dans le serveur");
+                }
+            );
+            return deferred.promise;*/
         }
         
         function getAccount(rib) {

@@ -29,6 +29,12 @@
         	$scope.templateUrl = "client/html/common/connectedbanner.html";
             else
         	$scope.templateUrl = "client/html/common/unconnectedbanner.html";
+            $(document).ready(function(){
+                $('.sidenav').sidenav();
+              });
+            setTimeout(function () {
+                $('.sidenav').sidenav();
+            }, 200);
         }
     }
  
