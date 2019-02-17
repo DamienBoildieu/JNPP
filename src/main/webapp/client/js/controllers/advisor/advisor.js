@@ -15,11 +15,15 @@
         let vm = this;
         
         $scope.advisor = {};
-        $scope.appoints = {};
+        $scope.appoints = [];
+        $scope.messages = [];
+        
         $scope.appointData = {};
+        $scope.messageData = {};
         
         vm.makeAppoint = makeAppoint;
         vm.cancelAppoint = cancelAppoint;
+        vm.sendMessage = sendMessage;
         
         init();
         
@@ -35,6 +39,14 @@
             AdvisorService.getAppoints().then(
                 function (response) {
                     $scope.appoints = response;
+                },
+                function (response) {
+                    FlashService.Error(response);
+                }
+            );
+            AdvisorService.getMessages().then(
+                function (response) {
+                    $scope.messages = response;
                 },
                 function (response) {
                     FlashService.Error(response);
@@ -80,6 +92,25 @@
                 function (response) {
                     FlashService.Error(response);
                 }
+            );
+        }
+        
+        function sendMessage() {
+            AdvisorService.sendMessage($scope.messageData).then(
+               function () {
+                    FlashService.Success("Votre a été envoyé");
+                    AdvisorService.getMessages().then(
+                        function (response) {
+                            $scope.messages = response;
+                        },
+                        function (response) {
+                            FlashService.Error(response);
+                        }
+                    );
+                },
+                function (response) {
+                    FlashService.Error(response);
+                }     
             );
         }
     }

@@ -97,6 +97,11 @@
                 templateUrl: 'client/html/advisor/appoint.html',
                 controllerAs: 'vm'         
             })
+            .when('/message', {
+                controller: 'AdvisorController',
+                templateUrl: 'client/html/advisor/message.html',
+                controllerAs: 'vm'         
+            })
             .otherwise({ redirectTo: '/welcome' });
     }
 
