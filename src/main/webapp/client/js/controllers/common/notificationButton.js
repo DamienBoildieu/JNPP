@@ -21,14 +21,16 @@
                 $scope.isLogged = AuthentificationService.isLogged;
             });
             NotifyService.subscribe($scope, 'checkNotifsEvent', function() {
-                NotificationService.hasNotifs().then(
-                    function (response) {
-                        $scope.hasNotifs = response.hasNotifs;
-                    },
-                    function (response) {
-                        console.log(response);
-                    }
-                );
+                if ($scope.isLogged) {
+                    NotificationService.hasNotifs().then(
+                        function (response) {
+                            $scope.hasNotifs = response.hasNotifs;
+                        },
+                        function (response) {
+                            console.log(response);
+                        }
+                    );
+                }
             });
         }
     }

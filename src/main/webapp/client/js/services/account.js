@@ -16,11 +16,14 @@
         service.getShares = getShares;
         service.getAuthorizations = getAuthorizations;
         service.getAccount = getAccount;
+        
         service.openCurrentAccount = openCurrentAccount;
         service.openSavingAccount = openSavingAccount;
         service.openJointAccount = openJointAccount;
         service.openShareAccount = openShareAccount;
-
+        
+        service.closeAccount = closeAccount;
+        
         return service;
         
         function getClientAccounts(callback) {
@@ -115,6 +118,25 @@
             let url = CommonService.basePath+'openShareAccount.htm';
             let deferred = $q.defer();
             $http.post(url).then(
+                function () {
+                    deferred.resolve();
+                },
+                function (response) {
+                    deferred.reject(response.data);
+                }
+            );
+            return deferred.promise;
+        }
+        
+        function closeAccount(data) {
+            let url = CommonService.basePath+'closeAccount.htm';
+            let deferred = $q.defer();
+             $http.delete(url, {
+                data : data,
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8"
+                }
+            }).then(
                 function () {
                     deferred.resolve();
                 },

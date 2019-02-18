@@ -40,7 +40,6 @@ public class NotificationController {
         try {
             List<NotificationDTO> notifs = notifService.receiveUnseenNotifications(login);
             String responseBody = "{\"hasNotifs\":" + String.valueOf(!notifs.isEmpty()) + "}";
-            System.out.println(responseBody);
             return new ResponseEntity(responseBody, HttpStatus.OK);
         } catch (FakeClientException ex) {
             return new ResponseEntity("Il semble y avoir une erreur dans votre session",

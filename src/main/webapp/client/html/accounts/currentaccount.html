@@ -1,0 +1,71 @@
+<div class="row">
+    <div class="col s2 center-align">
+        <div class="card-panel white">
+            <div class="row">
+                <a class="btn blue" href="#!/movement">Faire une transaction</a>
+            </div>
+            <div style="margin-bottom: 5px;"></div>
+            <div class="row">
+                <div class="col s12">
+                    <button ng-click="vm.closeAccount()" class="btn blue">
+                        Fermer le compte
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-panel blue">
+            <div class="row">
+                <p class="white-text"> Cartes : </p>
+            </div>
+            <div ng-repeat="car in cards" class="row">
+                <p class="white-text"> {{card.id}} {{card.status}} </p>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <button ng-click="vm.commandCard()" class="btn blue">
+                        Commander
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-panel blue">
+            <div class="row">
+                <p class="white-text"> Chéquiers : </p>
+            </div>
+            <div ng-repeat="checkbook in checkbooks" clas="row">
+                <p class="white-text"> {{checkbook.id}} {{checkbook.status}} </p>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <button ng-click="vm.commandCheckbook()" class="btn blue">
+                        Commander
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class='card blue col s10 offset-s1 center-align'>
+                <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
+                     <div class="card-content white-text">
+                        <span class="card-title center-align">{{account.rib}}</span>
+                        <div class="row">
+                            <div class="col s12">
+                                <p>
+                                    {{account.type}}                                               
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card white s12">
+                            <h4 ng-class="{'green-text' : account.money>0, 'red-text' : account.money<=0}">
+                                {{account.money}}{{account.currency}}
+                            </h4>
+                        </div>
+                        <div ng-include="movementsUrl"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

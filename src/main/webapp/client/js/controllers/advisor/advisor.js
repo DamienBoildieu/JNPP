@@ -61,7 +61,6 @@
             AdvisorService.makeAppoint({date : date}).then(
                 function (response) {
                     $scope.appoints.push(response);
-                    FlashService.Success("Votre rendez-vous a bien été pris"); 
                 },
                 function (response) {
                     FlashService.Error(response);
@@ -72,8 +71,7 @@
         function cancelAppoint(index) {
             AdvisorService.cancelAppoint({id: $scope.appoints[index].id}).then(
                 function () {
-                    $scope.appoints.splice(index, 1),
-                    FlashService.Success("Votre rendez-vous a été supprimé");
+                    $scope.appoints.splice(index, 1);
                 },
                 function (response) {
                     FlashService.Error(response);
@@ -85,7 +83,6 @@
             AdvisorService.sendMessage($scope.messageData).then(
                function (response) {
                    $scope.messages.push(response);
-                    FlashService.Success("Votre a été envoyé");
                 },
                 function (response) {
                     FlashService.Error(response);

@@ -315,7 +315,7 @@ public class MovementServiceImpl implements MovementService {
             Integer amount, String label)
             throws FakeClientException, NoCurrentAccountException,
             NoShareAccountException, FakeShareException {
-        if (login == null || name == null || amount == null || amount <= 1
+        if (login == null || name == null || amount == null || amount < 1
                 || label == null) {
             throw new IllegalArgumentException();
         }
@@ -386,7 +386,7 @@ public class MovementServiceImpl implements MovementService {
     public SaleDTO saleShareTitles(String login, String name, Integer amount,
             String label) throws FakeClientException, NoCurrentAccountException,
             NoShareAccountException, FakeShareTitleException, AmountException {
-        if (login == null || name == null || amount == null || amount <= 1
+        if (login == null || name == null || amount == null || amount < 1
                 || label == null) {
             throw new IllegalArgumentException();
         }

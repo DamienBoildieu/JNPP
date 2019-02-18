@@ -46,7 +46,6 @@ public class AdvisorController {
         String login = SessionController.decodeLogin(autho);       
         try {
             AdvisorDTO advisor = advisorService.getAdvisor(login);
-            System.out.println(advisor.toJson());
             if (advisor!=null)
                 return new ResponseEntity(advisor.toJson(), HttpStatus.OK);
             else 

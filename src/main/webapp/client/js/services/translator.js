@@ -27,6 +27,10 @@
         service.translatePaymentMean = translatePaymentMean;
         service.untranslatePaymentMean = untranslatePaymentMean;
         
+        service.isTranslatedPaymentMeanStatus = isTranslatedPaymentMeanStatus;
+        service.translatePaymentMeanStatus = translatePaymentMeanStatus;
+        service.untranslatePaymentMeanStatus = untranslatePaymentMeanStatus;
+        
         service.transformNotif = transformNotif;
         service.transformNotifs = transformNotifs;
         
@@ -82,8 +86,8 @@
         function untranslateAccount(value) {
             if (value==='Compte courrant')
                 return 'CURRENT';
-            else if (value==='JOINT')
-                return 'Compte joint';
+            else if (value==='Compte joint')
+                return 'JOINT';
             else if (value==='Compte dépôt')
                 return 'SAVING';
             else if (value==='Compte titres')
@@ -132,6 +136,31 @@
                 return '';
         }
         
+        function isTranslatedPaymentMeanStatus(string) {
+            return string==='Commandé' || string==='Arrivé' || string==='Récupéré';
+        }
+        
+        function translatePaymentMeanStatus(status) {
+            if (status==='ORDERED')
+                return 'Commandé';
+            else if (status==='ARRIVED')
+                return 'Arrivé';
+            else if (status==='DELIVERED')
+                return 'Récupéré';
+            else
+                return '';
+        }
+        
+        function untranslatePaymentMeanStatus(value) {
+            if (value==='Commandé')
+                return 'ORDERED';
+            else if (value==='Arrivé')
+                return 'ARRIVED';
+            else if (value==='Récupéré')
+                return 'DELIVERED';
+            else
+                return '';
+        }
         
         function transformNotif(notif) {
             if (notif.type==='APPOINTMENT')

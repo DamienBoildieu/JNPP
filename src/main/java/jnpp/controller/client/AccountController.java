@@ -74,14 +74,16 @@ public class AccountController {
         String login = SessionController.decodeLogin(autho);       
         try {
             List<AccountDTO> accounts = accountService.getAccounts(login);
-            for (ListIterator<AccountDTO> it = accounts.listIterator(); it.hasNext();) {
+            for (ListIterator<AccountDTO> it = accounts.listIterator(); it.hasNext();) {    
                 AccountDTO account = it.next();
                 if (account.getType().equals(AccountDTO.Type.SHARE)) {
                     it.remove();
                     break;
                 }
             }
-            accounts.add(accountService.getShareAccount(login));
+            AccountDTO account = accountService.getShareAccount(login);
+            if (account!=null)
+                accounts.add(account);
             return new ResponseEntity(AbstractDTO.toJson(accounts), HttpStatus.OK);
         } catch (FakeClientException ex) {
             return new ResponseEntity("Il semble y avoir une erreur dans votre session",
@@ -219,6 +221,8 @@ public class AccountController {
                 if (account.getRib().equals(accountRib)) {
                     List<MovementDTO> movements = accountService.getMovements(login,
                             accountRib);
+                    if (account.getType().equals(AccountDTO.Type.SHARE))
+                        account = accountService.getShareAccount(login);
                     String responseBody = "{ \"account\" : " + account.toJson() +
                             ", \"movements\" : " + AbstractDTO.toJson(movements) + "}";
                     return new ResponseEntity(responseBody, HttpStatus.OK);
@@ -240,90 +244,32 @@ public class AccountController {
                 HttpStatus.BAD_REQUEST);
     }
     
-    
-    /**
-     * Demande de fermeture de comptes
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return La vue des comptes
-     * @throws Exception Exception non controllees.
-     */
-    @RequestMapping(value = "closeaccount", method = RequestMethod.POST)
-    private ModelAndView closeAccount(Model model, HttpServletRequest request,
-            RedirectAttributes rm) throws Exception {
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
+    @RequestMapping(value = "closeAccount", method = RequestMethod.DELETE)
+    public ResponseEntity<?> closeAccount(@RequestHeader("authorization") String autho,
+        @RequestBody String body) throws IOException {
+        String login = SessionController.decodeLogin(autho);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode data = mapper.readTree(body);
+        String rib = data.get("rib").asText();
+        try {
+            accountService.closeAccount(login, rib);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (AccountOwnerException ownerException) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Vous n'êtes pas le propriétaire de ce compte", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
+        } catch (ClosureException closureException) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Ce compte ne peut pas être fermé", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
+        } catch (CloseRequestException requestException) {
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (FakeClientException clientException) {
+            return new ResponseEntity("Il semble y avoir une erreur dans votre session", 
+                HttpStatus.CONFLICT);
         }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (SessionController.isConnected(session)) {
-            // Call service
-            try {
-                String rib = request.getParameter("rib");
-                accountService.closeAccount(
-                        SessionController.getClient(session).getLogin(), rib);
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Le compte a bien été fermé"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "Le compte a bien été fermé"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-            } catch (AccountOwnerException ownerException) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Vous n'êtes pas propriétaire de ce compte"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Vous n'êtes pas propriétaire de ce compte"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-            } catch (ClosureException closureException) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Ce compte ne peut pas être fermé"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Ce compte ne peut pas être fermé"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-            } catch (CloseRequestException requestException) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "La demande de fermeture a été prise en compte, en attente de la demande des autres propriétaires"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                            "La demande de fermeture a été prise en compte, en attente de la demande des autres propriétaires"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-            } catch (FakeClientException clientException) {
-                if (alerts != null) {
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Il semble y avoir une erreur dans votre session"));
-                } else {
-                    alerts = new ArrayList<AlertMessage>();
-                    alerts.add(new AlertMessage(AlertEnum.ERROR,
-                            "Il semble y avoir une erreur dans votre session"));
-                    rm.addFlashAttribute("alerts", alerts);
-                }
-                return new ModelAndView("redirect:/disconnect.htm");
-            }
-            return new ModelAndView("redirect:/resume.htm");
-        }
-        return new ModelAndView("redirect:/index.htm"); // ne devrait pas
-                                                        // arriver
     }
 
     
