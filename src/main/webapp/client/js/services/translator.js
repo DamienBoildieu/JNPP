@@ -30,6 +30,9 @@
         service.transformNotif = transformNotif;
         service.transformNotifs = transformNotifs;
         
+        service.transformMovement = transformMovement;
+        service.transformMovements = transformMovements;
+        
         return service;      
         
         function translateGenders(genderArray) {
@@ -157,6 +160,52 @@
         function transformNotifs(notifs) {
             for (let notif of notifs) {
                 service.transformNotif(notif);
+            }
+        }
+        
+        function transformMovement(movement, clientRib) {
+            if (movement.type==='TRANSFERT') {
+                let amount = movement.money;
+                if (movement.ribFrom===clientRib) {
+                    movement.otherAccount = movement.ribTo;
+                    amount = -amount;
+                } else {
+                    movement.otherAccount = movement.ribFrom;
+                }
+                movement.value = amount + service.translateCurrency(movement.currency);
+                movement.label = "Transfert";
+            } else if (movement.type==='DEBIT') {
+                let amount = movement.money;
+                if (movement.ribFrom===clientRib) {
+                    movement.otherAccount = movement.ribTo;
+                } else {
+                    movement.otherAccount = movement.ribFrom;
+                    amount = -amount;
+                }
+                movement.value = amount + service.translateCurrency(movement.currency);
+                movement.label = "Débit";
+            } else if (movement.type==='PURCHASE') {
+                movement.otherAccount = movement.ribFrom;
+                movement.value = movement.amount;
+                movement.label = movement.share.name;
+            } else if (movement.type==='SALE') {
+                movement.otherAccount = movement.ribTo;
+                movement.value = -movement.amount;
+                movement.label = movement.share.name;
+            } else if (movement.type==='PAYMENT') {
+                movement.otherAccount = movement.target;
+                movement.value = movement.money + service.translateCurrency(movement.currency);
+                movement.label = "Paiement";
+            } else if (movement.type==='DEPOSIT') {
+                movement.otherAccount = 'JNPP';
+                movement.value = movement.money + service.translateCurrency(movement.currency);
+                movement.label = "Dépôt";
+            }
+        }
+        
+        function transformMovements(movements, clientRib) {
+            for (let movement of movements) {
+                service.transformMovement(movement, clientRib);
             }
         }
     }

@@ -9,8 +9,8 @@
                 </div>
             </div>
         </div>
-        <div class='card-panel white col s8 center-align'>
-            <div class='container' style="margin-bottom: 40px; margin-top: 40px;">
+        <div class='card-panel card-overflow white col s8 center-align'>
+            <div class='container' style="margin-bottom: 40px; margin-top: 40px; ">
                 <div ng-repeat="notif in notifs track by $index" 
                      ng-class="{'blue' : notif.seen, 'white' : !notif.seen }" class="card-panel s12">
                     <p ng-class="{'white-text' : notif.seen, 'blue-text' : !notif.seen }">
