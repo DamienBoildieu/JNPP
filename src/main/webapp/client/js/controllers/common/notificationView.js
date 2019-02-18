@@ -6,9 +6,9 @@
         .controller('NotifViewController', NotifViewController);
     
     NotifViewController.$inject = ['$scope', 'NotificationService', 
-        'FlashService', 'AuthentificationService', 'TranslatorService'];
+        'FlashService', 'AuthentificationService', 'TranslatorService', 'NotifyService'];
     function NotifViewController($scope, NotificationService, FlashService,
-        AuthentificationService, TranslatorService) {
+        AuthentificationService, TranslatorService, NotifyService) {
         AuthentificationService.connectedPage('/welcome');
 
         let vm = this;
@@ -37,6 +37,7 @@
                 function (response) {
                     $scope.notifs = response;
                     TranslatorService.transformNotifs($scope.notifs);
+                    NotifyService.notify('checkNotifsEvent');
                 },
                 function (response) {
                     FlashService.Error(response);
@@ -49,6 +50,7 @@
                 function (response) {
                     TranslatorService.transformNotif(response);
                     $scope.notifs.splice(index, 1, response);
+                    NotifyService.notify('checkNotifsEvent');
                 },
                 function (response) {
                     FlashService.Error(response);

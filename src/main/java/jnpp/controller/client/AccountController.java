@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -72,7 +73,16 @@ public class AccountController {
         throws IOException {
         String login = SessionController.decodeLogin(autho);       
         try {
-            return new ResponseEntity(AbstractDTO.toJson(accountService.getAccounts(login)), HttpStatus.OK);
+            List<AccountDTO> accounts = accountService.getAccounts(login);
+            for (ListIterator<AccountDTO> it = accounts.listIterator(); it.hasNext();) {
+                AccountDTO account = it.next();
+                if (account.getType().equals(AccountDTO.Type.SHARE)) {
+                    it.remove();
+                    break;
+                }
+            }
+            accounts.add(accountService.getShareAccount(login));
+            return new ResponseEntity(AbstractDTO.toJson(accounts), HttpStatus.OK);
         } catch (FakeClientException ex) {
             return new ResponseEntity("Il semble y avoir une erreur dans votre session",
                 HttpStatus.FORBIDDEN);
