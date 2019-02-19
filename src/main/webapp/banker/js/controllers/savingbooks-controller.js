@@ -3,35 +3,36 @@
  
     angular
         .module('app')
-        .controller('SharesController', SharesController);
+        .controller('SavingbooksController', SavingbooksController);
  
-    SharesController.$inject = ['$scope', 'SharesService'];
-    function SharesController($scope, SharesService) {
+    SavingbooksController.$inject = ['$scope', 'SavingbooksService'];
+    function SavingbooksController($scope, SavingbooksService) {
         
         const vm = this;
         
         /***********************************************************************
          * Attributs du controller. */
         
-        const DEFAULT_SHARE = {name: null, value: null};
+        const DEFAULT_SAVINGBOOK = 
+                {name: null, moneyRate: null, timeRate: null};
         
-        vm.shares = new Array();
-        vm.share = angular.copy(DEFAULT_SHARE);
+        vm.savingbooks = new Array();
+        vm.savingbook = angular.copy(DEFAULT_SAVINGBOOK);
         
         /***********************************************************************
          * Constructeur du controller. */
         
         (function() {
-            getShares();
+            getSavingbooks();
         })();
 
         /***********************************************************************
          * Methodes privees du controller. */
         
-        function getShares() {
-            SharesService.getShares().then(
+        function getSavingbooks() {
+            SavingbooksService.getSavingbooks().then(
                 function(response) {
-                    vm.shares = response;
+                    vm.savingbooks = response;
                 }
             );            
         }
@@ -39,11 +40,11 @@
         /***********************************************************************
          * Methodes publiques du controller accesible a la vue. */
         
-        vm.addShare = function() {         
-            SharesService.addShare(vm.share).then(
+        vm.addSavingbook = function() {         
+            SavingbooksService.addSavingbook(vm.savingbook).then(
                 function(response) {
-                    vm.shares.push(response);
-                    vm.share = angular.copy(DEFAULT_SHARE);
+                    vm.savingbooks.push(response);
+                    vm.savingbook = angular.copy(DEFAULT_SAVINGBOOK);
                     $scope.form.$setPristine();
                     $scope.form.$setUntouched();
                 }

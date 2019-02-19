@@ -11,44 +11,52 @@
         $routeProvider
             .when('/logins', {
             	controller: 'LoginsController',
-            	templateUrl: 'html/logins.html',
+            	templateUrl: 'html/logins-view.html',
+            	controllerAs: 'vm'
+            })
+            .when('/accounts', {
+            	controller: 'AccountsController',
+            	templateUrl: 'html/accounts-view.html',
+            	controllerAs: 'vm'
+            })
+            .when('/operations', {
+            	controller: 'OperationsController',
+            	templateUrl: 'html/operations-view.html',
             	controllerAs: 'vm'
             })
             .when('/messages', {
             	controller: 'MessagesController',
-            	templateUrl: 'html/messages.html',
+            	templateUrl: 'html/messages-view.html',
             	controllerAs: 'vm',
                 reloadOnSearch: false
             })
-            .when('/accounts', {
-            	controller: 'AccountsController',
-            	templateUrl: 'html/accounts.html',
-            	controllerAs: 'vm'
-            })
             .when('/advisors', {
             	controller: 'AdvisorsController',
-            	templateUrl: 'html/advisors.html',
+            	templateUrl: 'html/advisors-view.html',
             	controllerAs: 'vm'
             })
             .when('/advisor', {
             	controller: 'AdvisorController',
-            	templateUrl: 'html/advisor.html',
+            	templateUrl: 'html/advisor-view.html',
             	controllerAs: 'vm'
             })
-            .when('/purchases', {
-            	controller: 'PurchasesController',
-            	templateUrl: 'html/purchases.html',
+            .when('/orders', {
+            	controller: 'OrdersController',
+            	templateUrl: 'html/orders-view.html',
             	controllerAs: 'vm'
             })
             .when('/shares', {
             	controller: 'SharesController',
-            	templateUrl: 'html/shares.html',
+            	templateUrl: 'html/shares-view.html',
             	controllerAs: 'vm'
             })
-            .when('/books', {
-            	controller: 'BooksController',
-            	templateUrl: 'html/books.html',
+            .when('/savingbooks', {
+            	controller: 'SavingbooksController',
+            	templateUrl: 'html/savingbooks-view.html',
             	controllerAs: 'vm'
+            })
+            .when('/', {
+                redirectTo: '/logins'
             })
             .otherwise({redirectTo: '/logins'});
     }

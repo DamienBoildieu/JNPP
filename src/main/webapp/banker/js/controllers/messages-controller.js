@@ -54,7 +54,7 @@
         
         /* Recupere la liste des clients. */
         function getClients() {
-            LoginsService.getAll().then(
+            LoginsService.getLogins().then(
                     function(response) {
                         vm.clients = response;
                     });

@@ -5,24 +5,36 @@
         .module('app')
         .controller('AdvisorController', AdvisorController);
  
-    AdvisorController.$inject = ['$location', 'AdvisorService'];
-    function AdvisorController($location, AdvisorService) 
-    {
+    AdvisorController.$inject = ['$location', 'AdvisorsService'];
+    function AdvisorController($location, AdvisorsService) {
         
-        var vm = this;
-    
-        const firstname = $location.search().firstname;
-        const lastname = $location.search().lastname;
+        const vm = this;
         
-        if (!firstname || !lastname) $location.path('/advisors');
+        /***********************************************************************
+         * Attributs du controller. */
 
-        vm.advisor = {firstname: firstname, lastname: lastname};
+        vm.advisor = {
+            firstname: $location.search().firstname, 
+            lastname: $location.search().lastname};
         vm.clients = new Array();
         
-        getClients(firstname, lastname);
+        /***********************************************************************
+         * Constructeur du controller. */
+        
+        (function() {
+            
+            /* Pas de parametres passes dans l'url, on redirige. */
+            if (!vm.advisor.firstname || !vm.advisor.lastname) 
+                $location.path('/advisors');
+            
+            getClients(vm.advisor.firstname, vm.advisor.lastname);
+        })();
+        
+        /***********************************************************************
+         * Methodes privees du controller. */
         
         function getClients(firstname, lastname) {
-            AdvisorService.getAll(firstname, lastname).then(
+            AdvisorsService.getAdvisorClients(firstname, lastname).then(
                 function(clients) {
                     vm.clients = clients;
                 },

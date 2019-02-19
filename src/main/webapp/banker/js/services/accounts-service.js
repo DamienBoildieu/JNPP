@@ -5,27 +5,24 @@
         .module('app')
         .factory('AccountsService', AccountsService);
 
-    AccountsService.$inject = ['$http', '$q'];
-    function AccountsService($http, $q) {
+    AccountsService.$inject = ['RequestsService'];
+    function AccountsService(RequestsService) {
+
+        /***********************************************************************
+         * Construction du service. */
 
         const service = {};
 
-        service.getAll = getAll;
+        service.getAccounts = getAccounts;
 
         return service;
 
-        function getAll() {
-            const url = 'http://localhost:8084/JNPP/banker/accounts.htm';
-            const deferred = $q.defer();
-            $http.get(url).then(
-                function (response) {
-                    deferred.resolve(response.data);
-                },
-                function () {
-                    deferred.reject("> Server error.");
-                }
-            );
-            return deferred.promise;
+        /***********************************************************************
+         * Methodes du services. */
+
+        function getAccounts() {            
+            const url = RequestsService.url() + 'get-accounts.htm';
+            return RequestsService.get(url);
         }
 
     }

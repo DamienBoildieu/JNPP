@@ -8,34 +8,47 @@
     AdvisorsController.$inject = ['$scope', 'AdvisorsService'];
     function AdvisorsController($scope, AdvisorsService) {
         
-        var vm = this;
-        var defaultForm = {lastname: null, firstname: null};
+        const vm = this;
+        
+        /***********************************************************************
+         * Attributs du controller. */
+        
+        const DEFAULT_ADVISOR = {lastname: null, firstname: null};
         
         vm.advisors = new Array();
-        vm.data = angular.copy(defaultForm);
+        vm.advisor = angular.copy(DEFAULT_ADVISOR);
         
-        vm.addAdvisor = addAdvisor;
+        /***********************************************************************
+         * Constructeur du controller. */
         
-        getAdvisors();
+        (function() {
+            getAdvisors();
+        })();
+
+        /***********************************************************************
+         * Methodes privees du controller. */
         
         function getAdvisors() {
-            AdvisorsService.getAll().then(
-                function(advisors) {
-                    vm.advisors = advisors;
+            AdvisorsService.getAdvisors().then(
+                function(response) {
+                    vm.advisors = response;
                 }
             );            
         }
         
-        function addAdvisor() {         
-            AdvisorsService.add(vm.data).then(
-                function(advisor) {
-                    vm.advisors.push(advisor);
-                    vm.data = angular.copy(defaultForm);
+        /***********************************************************************
+         * Methodes publiques du controller accesible a la vue. */
+        
+        vm.addAdvisor = function() {         
+            AdvisorsService.addAdvisor(vm.advisor).then(
+                function(response) {
+                    vm.advisors.push(response);
+                    vm.advisor = angular.copy(DEFAULT_ADVISOR);
                     $scope.form.$setPristine();
                     $scope.form.$setUntouched();
                 }
             );
-        }
+        };
     
     }
  

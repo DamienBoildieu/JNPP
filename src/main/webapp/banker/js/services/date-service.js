@@ -10,6 +10,8 @@
 
         /***********************************************************************
          * Construction du service. */
+        
+        const DATE_FORMAT = 'dd/MM/yyyy HH:mm:ss';
 
         const service = {};
 
@@ -23,12 +25,12 @@
         
         /* Retourne la l'heure et la date de l'instant. */
         function now() {
-            return $filter('date')(Date.now(), 'dd/MM/yyyy HH:mm:ss');
+            return format(Date.now());
         }
         
         /* Formate une date machine. */
         function format(time) {
-            return $filter('date')(time, 'dd/MM/yyyy HH:mm:ss');
+            return $filter('date')(time, DATE_FORMAT);
         }
    
     }

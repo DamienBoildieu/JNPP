@@ -8,7 +8,7 @@
     RequestsService.$inject = ['$http', '$q'];
     function RequestsService($http, $q) {
 
-        const BASE_URL = 'http://localhost:8084/JNPP/';
+        const BASE_URL = 'http://localhost:8084/JNPP/banker/';
 
         /***********************************************************************
          * Construction du service. */

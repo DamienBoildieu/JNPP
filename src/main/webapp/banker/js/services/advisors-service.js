@@ -5,43 +5,37 @@
         .module('app')
         .factory('AdvisorsService', AdvisorsService);
 
-    AdvisorsService.$inject = ['$http', '$q'];
-    function AdvisorsService($http, $q) {
+    AdvisorsService.$inject = ['RequestsService'];
+    function AdvisorsService(RequestsService) {
+
+        /***********************************************************************
+         * Construction du service. */
 
         const service = {};
 
-        service.getAll = getAll;
-        service.add = add;
+        service.getAdvisors = getAdvisors;
+        service.getAdvisorClients = getAdvisorClients;
+        service.addAdvisor = addAdvisor;
         
         return service;
 
-        function getAll() {
-            const url = 'http://localhost:8084/JNPP/banker/advisors.htm';
-            const deferred = $q.defer();
-            $http.get(url).then(
-                function (response) {
-                    deferred.resolve(response.data);
-                },
-                function (response) {
-                    deferred.reject("> Server error.");
-                    console.log(response);
-                }
-            );
-            return deferred.promise;
+        /***********************************************************************
+         * Methodes du services. */
+
+        function getAdvisors() {
+            const url = RequestsService.url() + 'get-advisors.htm';
+            return RequestsService.get(url);
         }
         
-        function add(advisor) {
-            const url = 'http://localhost:8084/JNPP/banker/advisors.htm';
-            const deferred = $q.defer();
-            $http.post(url, advisor).then(
-                function (response) {
-                    deferred.resolve(response.data);
-                },
-                function () {
-                    deferred.reject();
-                }
-            );
-            return deferred.promise;
+        function getAdvisorClients(firstname, lastname) {
+            const url = RequestsService.url() + 'get-advisor-clients.htm';
+            return RequestsService.get(url, 
+                    {firstname: firstname, lastname: lastname});
+        }
+        
+        function addAdvisor(advisor) {
+            const url = RequestsService.url() + 'add-advisor.htm';
+            return RequestsService.post(url, advisor);
         }
 
     }

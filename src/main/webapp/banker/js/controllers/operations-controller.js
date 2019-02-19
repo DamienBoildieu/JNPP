@@ -1,38 +1,32 @@
 (function () {
     'use strict';
- 
+
     angular
         .module('app')
-        .controller('LoginsController', LoginsController);
- 
-    LoginsController.$inject = ['LoginsService'];
-    function LoginsController(LoginsService) {
-        
+        .controller('OperationsController', OperationsController);
+
+    OperationsController.$inject = [];
+    function OperationsController() {
+
         const vm = this;
         
         /***********************************************************************
          * Attributs du controller. */
         
-        vm.logins = new Array();
-
         /***********************************************************************
          * Constructeur du controller. */
         
+        /* Initialise le controller. */
         (function() {
-            getLogins();
+
         })();
 
         /***********************************************************************
          * Methodes privees du controller. */
         
-        function getLogins() {
-            LoginsService.getLogins().then(
-                function(response) {
-                    vm.logins = response;
-                }
-            );            
-        }
-    
+        /***********************************************************************
+         * Methodes publiques du controller accesible a la vue. */
+
     }
- 
+
 })();

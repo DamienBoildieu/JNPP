@@ -17,29 +17,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
-public class PurchasesController {
+public class OrdersController {
 
     @Autowired
     BankerService bankerService;
 
-    @RequestMapping(value = "banker/get-purchases", method = RequestMethod.GET)
-    protected ResponseEntity<?> getPurchases() throws IOException {
+    @RequestMapping(value = "banker/get-orders", method = RequestMethod.GET)
+    public ResponseEntity<?> getOrders() throws IOException {
         List<PaymentMeanDTO> purchases = bankerService.getPaymentMeans();
         String json = AbstractDTO.toJson(purchases);
         return new ResponseEntity(json, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "banker/upgrade-purchase", method = RequestMethod.POST)
-    protected ResponseEntity<?> upgradePurchase(@RequestBody String string) 
-            throws IOException {
-        JsonNode data = (new ObjectMapper()).readTree(string);
-        String id = data.get("id").asText();
+    @RequestMapping(value = "banker/upgrade-order", method = RequestMethod.POST)
+    public ResponseEntity<?> upgradeOrder(@RequestBody String string) {
         try {
+            JsonNode data = (new ObjectMapper()).readTree(string);
+            String id = data.get("id").asText();
             PaymentMeanDTO purchase = bankerService.upgradePaymentMean(id);
             String json = purchase.toJson();
             return new ResponseEntity(json, HttpStatus.OK);
-        } catch (FakePaymentMeanException e) {}
-        return new ResponseEntity("Bad arguments", HttpStatus.BAD_REQUEST);
+        } catch (FakePaymentMeanException e) {} 
+        catch (IOException ex) {}
+        return new ResponseEntity("", HttpStatus.BAD_REQUEST);
     }
 
 }

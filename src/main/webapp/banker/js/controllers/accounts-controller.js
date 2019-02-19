@@ -8,15 +8,27 @@
     AccountsController.$inject = ['AccountsService'];
     function AccountsController(AccountsService) {
         
-        var vm = this;
+        const vm = this;
+        
+        /***********************************************************************
+         * Attributs du controller. */
         
         vm.accounts = new Array();
-        getAccounts();
+        
+        /***********************************************************************
+         * Constructeur du controller. */
+        
+        (function() {
+            getAccounts();
+        })();
+
+        /***********************************************************************
+         * Methodes privees du controller. */
         
         function getAccounts() {
-            AccountsService.getAll().then(
-                function(accounts) {
-                    vm.accounts = accounts;
+            AccountsService.getAccounts().then(
+                function(response) {
+                    vm.accounts = response;
                 }
             );            
         }

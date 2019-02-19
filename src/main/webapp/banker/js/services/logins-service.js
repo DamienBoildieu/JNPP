@@ -5,27 +5,24 @@
         .module('app')
         .factory('LoginsService', LoginsService);
 
-    LoginsService.$inject = ['$http', '$q'];
-    function LoginsService($http, $q) {
+    LoginsService.$inject = ['RequestsService'];
+    function LoginsService(RequestsService) {
+
+        /***********************************************************************
+         * Construction du service. */
 
         const service = {};
 
-        service.getAll = getAll;
+        service.getLogins = getLogins;
 
         return service;
 
-        function getAll() {
-            const url = 'http://localhost:8084/JNPP/banker/logins.htm';
-            const deferred = $q.defer();
-            $http.get(url).then(
-                function (response) {
-                    deferred.resolve(response.data);
-                },
-                function () {
-                    deferred.reject("> Server error.");
-                }
-            );
-            return deferred.promise;
+        /***********************************************************************
+         * Methodes du services. */
+
+        function getLogins() {
+            const url = RequestsService.url() + 'get-logins.htm';
+            return RequestsService.get(url);
         }
 
     }

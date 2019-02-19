@@ -8,10 +8,10 @@
     HeaderController.$inject = ['$location'];
     function HeaderController($location) {
         
-        var vm = this;
+        const vm = this;
         
-        vm.isActive = function (viewLocation) {
-            return viewLocation === $location.path();
+        vm.isActive = function (path) {
+            return $location.path() === path;
         };
         
     }

@@ -5,7 +5,8 @@
                 <div>
                     <input ng-model="vm.arguments" 
                            ng-keydown="$event.keyCode === 13 && vm.clearArguments()"
-                           type="text" class="full-width" placeholder="Search">  
+                           type="text" class="full-width mb-3" 
+                           placeholder="Search">  
                 </div>
             </div>
             <table class="table">
@@ -58,7 +59,7 @@
                     </div>
                 </div>
             </div>
-            <div id="message-input">
+            <div>
                 <input ng-model="vm.message.content" 
                        ng-keydown="$event.keyCode === 13 && vm.sendMessage()"
                        type="text" placeholder="Type a message"

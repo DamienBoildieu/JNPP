@@ -5,8 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jnpp.service.dto.AbstractDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,9 +36,8 @@ public class MessagesController {
     BankerService bankerService;
 
     @RequestMapping(value = "banker/get-discusion", method = RequestMethod.GET)
-    protected ResponseEntity<?> getDiscusion(
-            @RequestParam(value = "login") String login)
-            throws IOException {
+    public ResponseEntity<?> getDiscusion(
+            @RequestParam(value = "login") String login) {
         try {
             AdvisorDTO advisor = advisorService.getAdvisor(login);
             LoginDTO client = bankerService.getLogin(login);
@@ -50,27 +47,25 @@ public class MessagesController {
                     + ",\"messages\":" + AbstractDTO.toJson(messages) + "}";
             return new ResponseEntity(json, HttpStatus.OK);
         } catch (FakeClientException e) {}
-        return new ResponseEntity("Bad arguments", HttpStatus.NOT_FOUND);
+        return new ResponseEntity("", HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "banker/get-messages", method = RequestMethod.GET)
-    protected ResponseEntity<?> getMessages(
-            @RequestParam(value = "login") String login)
-            throws IOException {
+    public ResponseEntity<?> getMessages(
+            @RequestParam(value = "login") String login) {
         try {
             List<MessageDTO> messages = advisorService.receiveMessages(login);
             String json = AbstractDTO.toJson(messages);
             return new ResponseEntity(json, HttpStatus.OK);
         } catch (FakeClientException e) {}
-        return new ResponseEntity("Bad arguments", HttpStatus.NOT_FOUND);
+        return new ResponseEntity("", HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "banker/get-messages-since", 
             method = RequestMethod.GET)
-    protected ResponseEntity<?> getMessagesSince(
+    public ResponseEntity<?> getMessagesSince(
             @RequestParam(value = "login") String login,
-            @RequestParam(value = "timestamp") String timestamp)
-            throws IOException {
+            @RequestParam(value = "timestamp") String timestamp) {
         try {
             Date date = DATE_FORMAT.parse(timestamp);
             List<MessageDTO> messages
@@ -79,22 +74,22 @@ public class MessagesController {
             return new ResponseEntity(json, HttpStatus.OK);
         } catch (FakeClientException e) {
         } catch (ParseException e) {}
-        return new ResponseEntity("Bad arguments", HttpStatus.NOT_FOUND);
+        return new ResponseEntity("", HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "banker/send-message", method = RequestMethod.POST)
-    protected ResponseEntity<?> sendMessage(@RequestBody String string) 
-            throws IOException {
-        JsonNode data = (new ObjectMapper()).readTree(string);
-        String login = data.get("login").asText();
-        String content = data.get("content").asText();
+    public ResponseEntity<?> sendMessage(@RequestBody String string) {
         try {
+            JsonNode data = (new ObjectMapper()).readTree(string);
+            String login = data.get("login").asText();
+            String content = data.get("content").asText();
             MessageDTO message = bankerService.sendMessage(login, content);
             String json = message.toJson();
             return new ResponseEntity(json, HttpStatus.OK);
         } catch (NoAdvisorException e) {} 
-        catch (FakeClientException e) {}
-        return new ResponseEntity("Bad arguments", HttpStatus.BAD_REQUEST);
+        catch (FakeClientException e) {} 
+        catch (IOException ex) {}
+        return new ResponseEntity("", HttpStatus.BAD_REQUEST);
     }
 
 }

@@ -9,28 +9,28 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="book in vm.books">
+            <tr ng-repeat="savingbook in vm.savingbooks">
                 <th scope="row">{{$index + 1}}</th>
-                <td>{{book.name}}</td>
-                <td>{{book.moneyRate}}</td>
-                <td>{{book.timeRate}}</td>
+                <td>{{savingbook.name}}</td>
+                <td>{{savingbook.moneyRate}}</td>
+                <td>{{savingbook.timeRate}}</td>
             </tr>
         </tbody>
     </table>
 </div>
 <div class="container">
-    <form name="form" ng-submit="vm.addBooks()" class="form-inline justify-content-center">
+    <form name="form" ng-submit="vm.addSavingbook()" class="form-inline justify-content-center">
         <div class="form-group mx-sm-3 mb-2">
             <label for="shares-name" class="sr-only">Name</label>
-            <input ng-model="vm.data.name" type="text" required class="form-control" id="shares-name" placeholder="Name">
+            <input ng-model="vm.savingbook.name" type="text" required class="form-control" id="shares-name" placeholder="Name">
         </div>
         <div class="form-group mx-sm-3 mb-2">
             <label for="shares-value" class="sr-only">Rate</label>
-            <input ng-model="vm.data.moneyRate" type="number" required min="0" step=any class="form-control" id="shares-value" placeholder="rate">
+            <input ng-model="vm.savingbook.moneyRate" type="number" required min="0" step=any class="form-control" id="shares-value" placeholder="rate">
         </div>
         <div class="form-group mx-sm-3 mb-2">
             <label for="shares-value" class="sr-only">Evaluations per year</label>
-            <input ng-model="vm.data.timeRate" type="number" required min="0" step=any class="form-control" id="shares-value" placeholder="evaluations per year">
+            <input ng-model="vm.savingbook.timeRate" type="number" required min="0" step=any class="form-control" id="shares-value" placeholder="evaluations per year">
         </div>
         <button ng-disabled="form.$invalid" type="submit" class="btn btn-primary mb-2">Add</button>
     </form>
