@@ -79,7 +79,7 @@
                             vm.discusion.client = response.client;
                             vm.discusion.advisor = response.advisor;
                             vm.discusion.messages = response.messages;
-                            timestamp = DateService.now();
+                            timestamp = DateService.nextSecond();
                         },
                         clearDiscusion);
             } else {
@@ -103,7 +103,7 @@
                 MessagesService.getMessages(current).then(
                         function (response) {
                             vm.discusion.messages = response;
-                            timestamp = DateService.now();
+                            timestamp = DateService.nextSecond();
                         });
             } else {
                 /* Le timestamp n'est pas null, seul les messages depuis le 
@@ -112,7 +112,7 @@
                     function(response) {
                         vm.discusion.messages.push
                                 .apply(vm.discusion.messages, response);
-                        timestamp = DateService.now();
+                        timestamp = DateService.nextSecond();
                     });
             }
         }
@@ -132,7 +132,7 @@
         /* Ajoute les messages a la discution courante et envoit le message. */
         function addMessagesAndSend(messages) {
             vm.discusion.messages.push.apply(vm.discusion.messages, messages);
-            timestamp = DateService.now();
+            timestamp = DateService.nextSecond();
             MessagesService.sendMessage(current, vm.message.content).then(
                 function(response) {
                     vm.discusion.messages.push(response);
