@@ -58,6 +58,7 @@ public class AdvisorsController {
     public ResponseEntity<?> post(@RequestBody String string) {
         try {
             JsonNode data = (new ObjectMapper()).readTree(string);
+            data = data.get("advisor");
             String firstname = data.get("firstname").asText();
             String lastname = data.get("lastname").asText();
             AdvisorDTO advisor = bankerService.addAdvisor(DEFAULT_GENDER, 
@@ -68,6 +69,7 @@ public class AdvisorsController {
             return new ResponseEntity(json, HttpStatus.OK);
         } catch (IOException e) {} 
         catch (DuplicateAdvisorException e) {}
+        catch (NullPointerException e) {}
         return new ResponseEntity("", HttpStatus.BAD_REQUEST);
     }
 

@@ -39,6 +39,7 @@ public class OrdersController {
             return new ResponseEntity(json, HttpStatus.OK);
         } catch (FakePaymentMeanException e) {} 
         catch (IOException ex) {}
+        catch (NullPointerException e) {}
         return new ResponseEntity("", HttpStatus.BAD_REQUEST);
     }
 

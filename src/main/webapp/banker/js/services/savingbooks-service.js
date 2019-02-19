@@ -28,7 +28,7 @@
         
         function addSavingbook(savingbook) {
             const url = RequestsService.url() + 'add-savingbook.htm';
-            return RequestsService.post(url, savingbook);
+            return RequestsService.post(url, {savingbook: savingbook});
         }
 
     }

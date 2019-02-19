@@ -28,7 +28,7 @@
         
         function addShare(share) {
             const url = RequestsService.url() + 'add-share.htm';
-            return RequestsService.post(url, share);
+            return RequestsService.post(url, {share: share});
         }
 
     }

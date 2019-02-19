@@ -40,6 +40,7 @@ public class SharesController {
     public ResponseEntity<?> addShare(@RequestBody String string) {
         try {
             JsonNode data = (new ObjectMapper()).readTree(string);
+            data = data.get("share");
             String name = data.get("name").asText();
             Double value = data.get("value").asDouble();
             ShareDTO share = bankerService.addShare(name, value, 
@@ -48,6 +49,7 @@ public class SharesController {
             return new ResponseEntity(json, HttpStatus.OK);
         } catch (IOException e) {} 
         catch (DuplicateShareException e) {}
+        catch (NullPointerException e) {}
         return new ResponseEntity("", HttpStatus.BAD_REQUEST);
     }
 

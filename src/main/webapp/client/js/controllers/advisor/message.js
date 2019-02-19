@@ -41,6 +41,7 @@
         function sendMessage() {
             AdvisorService.sendMessage($scope.messageData).then(
                function (response) {
+                    $scope.messageData = {};
                     $scope.messages.push(response);
                 },
                 function (response) {

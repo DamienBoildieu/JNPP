@@ -35,7 +35,7 @@
         
         function addAdvisor(advisor) {
             const url = RequestsService.url() + 'add-advisor.htm';
-            return RequestsService.post(url, advisor);
+            return RequestsService.post(url, {advisor: advisor});
         }
 
     }

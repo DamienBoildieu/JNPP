@@ -12,16 +12,16 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="purchase in vm.purchases">
+            <tr ng-repeat="order in vm.orders">
                 <th scope="row">{{$index + 1}}</th>
-                <td>{{purchase.id}}</td>
-                <td>{{purchase.login}}</td>
-                <td>{{purchase.rib}}</td>
-                <td>{{purchase.type}}</td>
-                <td>{{purchase.status}}</td>
+                <td>{{order.id}}</td>
+                <td>{{order.login}}</td>
+                <td>{{order.rib}}</td>
+                <td>{{order.type}}</td>
+                <td>{{order.status}}</td>
                 <td>
-                    <button ng-if="vm.canUpgrade(purchase)"
-                            ng-click="vm.upgradePurchase($index)"
+                    <button ng-if="vm.canUpgrade(order)"
+                            ng-click="vm.upgradeOrder($index)"
                             type="button" class="btn btn-secondary">Upgrade</button>
                 </td>
             </tr>

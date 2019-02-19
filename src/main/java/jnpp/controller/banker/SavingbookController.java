@@ -36,6 +36,7 @@ public class SavingbookController {
     public ResponseEntity<?> addSavingbook(@RequestBody String string) {
         try {
             JsonNode data = (new ObjectMapper()).readTree(string);
+            data = data.get("savingbook");
             String name = data.get("name").asText();
             Double moneyRate = data.get("moneyRate").asDouble();
             Double timeRate = data.get("timeRate").asDouble();
@@ -45,6 +46,7 @@ public class SavingbookController {
             return new ResponseEntity(json, HttpStatus.OK);
         } catch (IOException e) {}
         catch (DuplicateSavingbookException e) {}
+        catch (NullPointerException e) {}
         return new ResponseEntity("", HttpStatus.BAD_REQUEST);
     }
 

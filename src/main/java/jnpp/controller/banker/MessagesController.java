@@ -89,6 +89,7 @@ public class MessagesController {
         } catch (NoAdvisorException e) {} 
         catch (FakeClientException e) {} 
         catch (IOException ex) {}
+        catch (NullPointerException e) {}
         return new ResponseEntity("", HttpStatus.BAD_REQUEST);
     }
 

@@ -30,7 +30,7 @@
         /* Fait avancer la commande identifiee par id. */
         function upgradeOrder(id) {
             const url = RequestsService.url() + 'upgrade-order.htm';
-            return RequestsService.post(url, id);
+            return RequestsService.post(url, {id: id});
         }
 
     }
