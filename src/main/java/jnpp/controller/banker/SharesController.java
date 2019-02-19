@@ -67,7 +67,7 @@ public class SharesController {
      */
     @RequestMapping(value = "banker/shares", method = RequestMethod.POST)
     protected ResponseEntity<?> post(@RequestBody String string) 
-            throws Exception {
+            throws IOException {
         JsonNode data = (new ObjectMapper()).readTree(string);
         String name = data.get("name").asText();
         Double value = data.get("value").asDouble();

@@ -11,8 +11,8 @@
         var vm = this;
         var defaultForm = {lastname: null, firstname: null};
         
-        $scope.advisors = new Array();
-        $scope.data = angular.copy(defaultForm);
+        vm.advisors = new Array();
+        vm.data = angular.copy(defaultForm);
         
         vm.addAdvisor = addAdvisor;
         
@@ -21,16 +21,16 @@
         function getAdvisors() {
             AdvisorsService.getAll().then(
                 function(advisors) {
-                    $scope.advisors = advisors;
+                    vm.advisors = advisors;
                 }
             );            
         }
         
         function addAdvisor() {         
-            AdvisorsService.add($scope.data).then(
+            AdvisorsService.add(vm.data).then(
                 function(advisor) {
-                    $scope.advisors.push(advisor);
-                    $scope.data = angular.copy(defaultForm);
+                    vm.advisors.push(advisor);
+                    vm.data = angular.copy(defaultForm);
                     $scope.form.$setPristine();
                     $scope.form.$setUntouched();
                 }

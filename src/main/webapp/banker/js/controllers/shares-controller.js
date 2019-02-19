@@ -11,8 +11,8 @@
         var vm = this;
         var defaultForm = {name: null, value: null};
         
-        $scope.shares = new Array();
-        $scope.data = angular.copy(defaultForm);
+        vm.shares = new Array();
+        vm.data = angular.copy(defaultForm);
         
         vm.addShare = addShare;
         
@@ -21,16 +21,16 @@
         function getShares() {
             SharesService.getAll().then(
                 function(shares) {
-                    $scope.shares = shares;
+                    vm.shares = shares;
                 }
             );            
         }
         
         function addShare() {         
-            SharesService.add($scope.data).then(
+            SharesService.add(vm.data).then(
                 function(share) {
-                    $scope.shares.push(share);
-                    $scope.data = angular.copy(defaultForm);
+                    vm.shares.push(share);
+                    vm.data = angular.copy(defaultForm);
                     $scope.form.$setPristine();
                     $scope.form.$setUntouched();
                 }

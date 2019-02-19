@@ -1,0 +1,27 @@
+<div class="container">
+    <h3 align="center">{{vm.advisor.firstname}} {{vm.advisor.lastname}}</h3>
+</div>
+<div class="container">
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Messages</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="client in vm.clients">
+                <th scope="row">{{$index + 1}}</th>
+                <td>{{client.name}}</td>
+                <td>{{client.email}}</td>
+                <td>
+                    <a href="#!/messages?login={{client.login}}" class="btn btn-secondary">
+                        Messages
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

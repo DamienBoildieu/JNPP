@@ -9,13 +9,16 @@
     config.$inject = ['$routeProvider'];
     function config($routeProvider) {
         $routeProvider
-            .when('/overview', {
-                templateUrl: 'html/overview.html'
-            })
             .when('/logins', {
             	controller: 'LoginsController',
             	templateUrl: 'html/logins.html',
             	controllerAs: 'vm'
+            })
+            .when('/messages', {
+            	controller: 'MessagesController',
+            	templateUrl: 'html/messages.html',
+            	controllerAs: 'vm',
+                reloadOnSearch: false
             })
             .when('/accounts', {
             	controller: 'AccountsController',
@@ -27,9 +30,14 @@
             	templateUrl: 'html/advisors.html',
             	controllerAs: 'vm'
             })
-            .when('/advisor/clients', {
-            	controller: 'AdvisorClientsController',
-            	templateUrl: 'html/advisor-clients.html',
+            .when('/advisor', {
+            	controller: 'AdvisorController',
+            	templateUrl: 'html/advisor.html',
+            	controllerAs: 'vm'
+            })
+            .when('/purchases', {
+            	controller: 'PurchasesController',
+            	templateUrl: 'html/purchases.html',
             	controllerAs: 'vm'
             })
             .when('/shares', {
@@ -42,7 +50,7 @@
             	templateUrl: 'html/books.html',
             	controllerAs: 'vm'
             })
-            .otherwise({redirectTo: '/overview'});
+            .otherwise({redirectTo: '/logins'});
     }
 
     run.$inject = [];

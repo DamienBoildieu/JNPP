@@ -1,0 +1,69 @@
+<div class="container-fluid row">
+    <div class="col-4 border-right">
+        <div>       
+            <div>
+                <div>
+                    <input ng-model="vm.arguments" 
+                           ng-keydown="$event.keyCode === 13 && vm.clearArguments()"
+                           type="text" class="full-width" placeholder="Search">  
+                </div>
+            </div>
+            <table class="table">
+                <tbody>
+                    <tr ng-repeat="client in vm.clients"
+                        ng-if="vm.matchArguments(client)"
+                        ng-class="{'table-active': vm.isCurrent(client.login)}"
+                        ng-click="vm.setCurrent(client.login)">
+                        <td>
+                            <div ng-switch="client.type" class="chat_img">
+                                <i ng-switch-when="PRIVATE" class="fas fa-user fa-2x mt-2 mr-2"></i>
+                                <i ng-switch-when="PROFESSIONAL" class="fas fa-briefcase fa-2x mt-2 mr-2"></i>
+                                <i ng-switch-default class="fas fa-cat fa-2x mt-2 mr-2"></i>
+                            </div>  
+                        </td>
+                        <td>
+                            {{client.name}}
+                            <br/>
+                            {{client.email}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>        
+    </div>
+    <div class="col-8">
+        <div ng-if="vm.isDicusionActive()">
+            <div class="v-scroll">
+                <div ng-repeat="message in vm.discusion.messages"
+                     ng-switch="message.direction">
+                    <div ng-switch-when="CLIENT_TO_ADVISOR">
+                        <div class="col-10 card no-border">
+                            <div class="float-left">
+                                <strong class="primary-font">{{vm.discusion.client.name}}</strong>
+                                <small class="text-muted">{{vm.formatDate(message.date)}}</small>
+                            </div>
+                            <p>{{message.content}}</p>
+                        </div>
+                    </div>
+                    <div ng-switch-when="ADVISOR_TO_CLIENT">
+                        <div class="offset-2 col-10 card no-border">
+                            <div class="text-right">
+                                <small class="text-muted">{{vm.formatDate(message.date)}}</small>
+                                <strong class="primary-font">
+                                    {{vm.discusion.advisor.identity.firstname}} {{vm.discusion.advisor.identity.lastname}}
+                                </strong>
+                            </div>
+                            <p class="text-right">{{message.content}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="message-input">
+                <input ng-model="vm.message.content" 
+                       ng-keydown="$event.keyCode === 13 && vm.sendMessage()"
+                       type="text" placeholder="Type a message"
+                       class="full-width">  
+            </div>
+        </div>
+    </div>
+</div>

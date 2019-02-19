@@ -3,10 +3,10 @@
 
     angular
         .module('app')
-        .factory('AdvisorClientsService', AdvisorClientsService);
+        .factory('AdvisorService', AdvisorService);
 
-    AdvisorClientsService.$inject = ['$http', '$q'];
-    function AdvisorClientsService($http, $q) {
+    AdvisorService.$inject = ['$http', '$q'];
+    function AdvisorService($http, $q) {
 
         const service = {};
 
