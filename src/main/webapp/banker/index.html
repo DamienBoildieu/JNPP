@@ -6,13 +6,15 @@
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" crossorigin="anonymous">
         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/messages.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" crossorigin="anonymous">
         
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
 
-        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular-route.min.js"></script>
         
         <script src="app.js"></script>
         
@@ -20,20 +22,26 @@
         <script src="js/controllers/logins-controller.js"></script>
         <script src="js/controllers/accounts-controller.js"></script>
         <script src="js/controllers/advisors-controller.js"></script>
-        <script src="js/controllers/advisor-clients-controller.js"></script>
+        <script src="js/controllers/advisor-controller.js"></script>
+        <script src="js/controllers/messages-controller.js"></script>
         <script src="js/controllers/shares-controller.js"></script>
         <script src="js/controllers/books-controller.js"></script>
+        <script src="js/controllers/purchases-controller.js"></script>
         
         <script src="js/services/logins-service.js"></script>
         <script src="js/services/accounts-service.js"></script>
         <script src="js/services/advisors-service.js"></script>
-        <script src="js/services/advisor-clients-service.js"></script>
+        <script src="js/services/advisor-service.js"></script>
+        <script src="js/services/messages-service.js"></script>
         <script src="js/services/shares-service.js"></script>
         <script src="js/services/books-service.js"></script>
+        <script src="js/services/date-service.js"></script>
+        <script src="js/services/purchases-service.js"></script>
+        <script src="js/services/requests-service.js"></script>
     </head>
     <body>
-        <div ng-include="'html/header.html'"></div>
-        <div ng-view=""></div>
-        <div ng-include="'html/footer.html'"></div>
+        <div class="sticky-header" ng-include="'html/header.html'"></div>
+        <div class="sticky-content" ng-view=""></div>
+        <div class="sticky-footer" ng-include="'html/footer.html'"></div>
     </body>
 </html>

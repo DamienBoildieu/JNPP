@@ -5,10 +5,12 @@
         .module('app')
         .controller('HeaderController', HeaderController);
  
-    HeaderController.$inject = ['$scope', '$location'];
-    function HeaderController($scope, $location) {
+    HeaderController.$inject = ['$location'];
+    function HeaderController($location) {
         
-        $scope.isActive = function (viewLocation) {
+        var vm = this;
+        
+        vm.isActive = function (viewLocation) {
             return viewLocation === $location.path();
         };
         

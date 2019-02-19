@@ -62,7 +62,7 @@ public class SavingBookController {
      */   
     @RequestMapping(value = "banker/books", method = RequestMethod.POST)
     protected ResponseEntity<?> post(@RequestBody String string) 
-            throws Exception {
+            throws IOException {
         JsonNode data = (new ObjectMapper()).readTree(string);
         String name = data.get("name").asText();
         Double moneyRate = data.get("moneyRate").asDouble();

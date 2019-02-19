@@ -3,11 +3,10 @@
  
     angular
         .module('app')
-        .controller('AdvisorClientsController', AdvisorClientsController);
+        .controller('AdvisorController', AdvisorController);
  
-    AdvisorClientsController.$inject = ['$scope', '$location', 
-        'AdvisorClientsService'];
-    function AdvisorClientsController($scope, $location, AdvisorClientsService) 
+    AdvisorController.$inject = ['$location', 'AdvisorService'];
+    function AdvisorController($location, AdvisorService) 
     {
         
         var vm = this;
@@ -17,14 +16,15 @@
         
         if (!firstname || !lastname) $location.path('/advisors');
 
-        $scope.clients = new Array();
+        vm.advisor = {firstname: firstname, lastname: lastname};
+        vm.clients = new Array();
         
         getClients(firstname, lastname);
         
         function getClients(firstname, lastname) {
-            AdvisorClientsService.getAll(firstname, lastname).then(
+            AdvisorService.getAll(firstname, lastname).then(
                 function(clients) {
-                    $scope.clients = clients;
+                    vm.clients = clients;
                 },
                 function() {
                     $location.path('/advisors');

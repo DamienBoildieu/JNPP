@@ -71,7 +71,7 @@ public class AdvisorsController {
      */    
     @RequestMapping(value = "banker/advisors", method = RequestMethod.POST)
     protected ResponseEntity<?> post(@RequestBody String string) 
-            throws Exception {
+            throws IOException {
         JsonNode data = (new ObjectMapper()).readTree(string);
         String firstname = data.get("firstname").asText();
         String lastname = data.get("lastname").asText();

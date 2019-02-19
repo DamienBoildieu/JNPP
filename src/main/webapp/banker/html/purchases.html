@@ -1,0 +1,30 @@
+<div class="container">
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Identifiant</th>
+                <th scope="col">Client</th>
+                <th scope="col">Account</th>
+                <th scope="col">Type</th>
+                <th scope="col">Status</th>
+                <th scope="col">Upgrade</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="purchase in vm.purchases">
+                <th scope="row">{{$index + 1}}</th>
+                <td>{{purchase.id}}</td>
+                <td>{{purchase.login}}</td>
+                <td>{{purchase.rib}}</td>
+                <td>{{purchase.type}}</td>
+                <td>{{purchase.status}}</td>
+                <td>
+                    <button ng-if="vm.canUpgrade(purchase)"
+                            ng-click="vm.upgradePurchase($index)"
+                            type="button" class="btn btn-secondary">Upgrade</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
