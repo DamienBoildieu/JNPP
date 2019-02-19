@@ -257,7 +257,7 @@ public class UserController {
         String password = SessionController.decodePassword(autho);
         try {
             clientService.close(login, password);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity("",HttpStatus.OK);
         } catch (ClosureException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.add("Content-Type", "application/text; charset=UTF-8");

@@ -128,7 +128,7 @@ public class AdvisorController {
         long id = data.get("id").asLong();
         try {
             advisorService.cancelAppoint(login, id);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity("",HttpStatus.OK);
         } catch (DateException dateException) {
             return new ResponseEntity("Il est trop tard pour annuler ce rendez-vous",
                 HttpStatus.BAD_REQUEST);

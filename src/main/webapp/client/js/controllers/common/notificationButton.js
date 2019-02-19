@@ -21,6 +21,7 @@
                 $scope.isLogged = AuthentificationService.isLogged;
             });
             NotifyService.subscribe($scope, 'checkNotifsEvent', function() {
+                console.log($scope.isLogged);
                 if ($scope.isLogged) {
                     NotificationService.hasNotifs().then(
                         function (response) {

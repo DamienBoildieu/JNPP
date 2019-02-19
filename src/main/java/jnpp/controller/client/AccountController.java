@@ -102,6 +102,42 @@ public class AccountController {
         return new ResponseEntity(AbstractDTO.toJson(accountService.getShares()), HttpStatus.OK);
     }
     
+    @RequestMapping(value = "account/{accountRib}", method = RequestMethod.GET)
+    public ResponseEntity<?> getAccount(@RequestHeader("authorization") String autho,
+            @PathVariable String accountRib) throws IOException {
+        try {
+            String login = SessionController.decodeLogin(autho);
+            List<AccountDTO> accounts = accountService.getAccounts(login);
+            Iterator<AccountDTO> ite = accounts.iterator();
+            
+            while (ite.hasNext()) {
+                AccountDTO account = ite.next();
+                if (account.getRib().equals(accountRib)) {
+                    List<MovementDTO> movements = accountService.getMovements(login,
+                            accountRib);
+                    if (account.getType().equals(AccountDTO.Type.SHARE))
+                        account = accountService.getShareAccount(login);
+                    String responseBody = "{ \"account\" : " + account.toJson() +
+                            ", \"movements\" : " + AbstractDTO.toJson(movements) + "}";
+                    return new ResponseEntity(responseBody, HttpStatus.OK);
+
+                }
+            }
+        } catch (FakeClientException ex) {
+            return new ResponseEntity("Il semble y avoir une erreur dans votre session", 
+                HttpStatus.CONFLICT);
+        } catch (AccountOwnerException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Vous n'êtes pas le propriétaire de ce compte", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
+        }
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+        return new ResponseEntity("Ce compte ne correspond pas à un de vos comptes", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
+    }
+    
     @RequestMapping(value = "openCurrentAccount", method = RequestMethod.POST)
     public ResponseEntity<?> openCurrentAccount(@RequestHeader("authorization") String autho)
         throws IOException {
@@ -207,42 +243,6 @@ public class AccountController {
                 HttpStatus.CONFLICT);
         }
     }
-
-    @RequestMapping(value = "account/{accountRib}", method = RequestMethod.GET)
-    public ResponseEntity<?> getAccount(@RequestHeader("authorization") String autho,
-            @PathVariable String accountRib) throws IOException {
-        try {
-            String login = SessionController.decodeLogin(autho);
-            List<AccountDTO> accounts = accountService.getAccounts(login);
-            Iterator<AccountDTO> ite = accounts.iterator();
-            
-            while (ite.hasNext()) {
-                AccountDTO account = ite.next();
-                if (account.getRib().equals(accountRib)) {
-                    List<MovementDTO> movements = accountService.getMovements(login,
-                            accountRib);
-                    if (account.getType().equals(AccountDTO.Type.SHARE))
-                        account = accountService.getShareAccount(login);
-                    String responseBody = "{ \"account\" : " + account.toJson() +
-                            ", \"movements\" : " + AbstractDTO.toJson(movements) + "}";
-                    return new ResponseEntity(responseBody, HttpStatus.OK);
-
-                }
-            }
-        } catch (FakeClientException ex) {
-            return new ResponseEntity("Il semble y avoir une erreur dans votre session", 
-                HttpStatus.CONFLICT);
-        } catch (AccountOwnerException ex) {
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
-            return new ResponseEntity("Vous n'êtes pas le propriétaire de ce compte", responseHeaders, 
-                HttpStatus.BAD_REQUEST);
-        }
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
-        return new ResponseEntity("Ce compte ne correspond pas à un de vos comptes", responseHeaders, 
-                HttpStatus.BAD_REQUEST);
-    }
     
     @RequestMapping(value = "closeAccount", method = RequestMethod.DELETE)
     public ResponseEntity<?> closeAccount(@RequestHeader("authorization") String autho,
@@ -253,7 +253,7 @@ public class AccountController {
         String rib = data.get("rib").asText();
         try {
             accountService.closeAccount(login, rib);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity("",HttpStatus.OK);
         } catch (AccountOwnerException ownerException) {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
@@ -271,158 +271,4 @@ public class AccountController {
                 HttpStatus.CONFLICT);
         }
     }
-
-    
-    
-    /**
-     * Commande de carte bancaire
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return La vue du compte qui a commande la carte
-     * @throws Exception Exception non controllees.
-     */
-    @RequestMapping(value = "commandcard", method = RequestMethod.POST)
-    private ModelAndView commandCard(Model model, HttpServletRequest request,
-            RedirectAttributes rm) throws Exception {
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (!SessionController.isConnected(session)) {
-            return new ModelAndView("redirect:/index.htm");
-        }
-        String rib = request.getParameter("rib");
-        // Call service
-        try {
-            paymentMeanService.commandBankCard(
-                    SessionController.getClient(session).getLogin(), rib);
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                        "Votre carte est commandé"));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                        "Votre carte est commandé"));
-                rm.addFlashAttribute("alerts", alerts);
-            }
-        } catch (AccountTypeException accountException) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Ce compte ne peut pas être lié à une carte"));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Ce compte ne peut pas être lié à une carte"));
-                rm.addFlashAttribute("alerts", alerts);
-            }
-        } catch (AccountOwnerException ownerException) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Vous n'avez pas les droits nécessaires pour cette action"));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Vous n'avez pas les droits nécessaires pour cette action"));
-                rm.addFlashAttribute("alerts", alerts);
-            }
-        } catch (FakeClientException clientException) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Il semble y avoir une erreur dans votre session"));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Il semble y avoir une erreur dans votre session"));
-                rm.addFlashAttribute("alerts", alerts);
-            }
-            return new ModelAndView("redirect:/disconnect.htm");
-        }
-        return new ModelAndView("redirect:/account.htm?id=" + rib);
-
-    }
-
-    /**
-     * Commande de chéquier
-     *
-     * @param model   le model contient les alertes si il y a eu un redirect
-     * @param request la requête
-     * @param rm      objet dans lequel on ajoute les informations que l'on veut
-     *                voir transiter lors des redirections
-     * @return La vue du compte qui a commande la carte
-     * @throws Exception Exception non controllees.
-     */
-    @RequestMapping(value = "commandcheckbook", method = RequestMethod.POST)
-    private ModelAndView commandCheckBook(Model model,
-            HttpServletRequest request, RedirectAttributes rm)
-            throws Exception {
-        HttpSession session = request.getSession();
-        List<AlertMessage> alerts = (List<AlertMessage>) model.asMap()
-                .get("alerts");
-        if (session == null) {
-            session = request.getSession(true);
-        }
-        if (SessionController.getLanguage(session) != Translator.Language.FR) {
-            SessionController.setLanguage(session, Translator.Language.FR);
-        }
-        if (!SessionController.isConnected(session)) {
-            return new ModelAndView("redirect:/index.htm");
-        }
-        String rib = request.getParameter("rib");
-        // Call service
-        try {
-            paymentMeanService.commandCheckbook(
-                    SessionController.getClient(session).getLogin(), rib);
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                        "Votre carte est commandé"));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.SUCCESS,
-                        "Votre carte est commandé"));
-                rm.addFlashAttribute("alerts", alerts);
-            }
-        } catch (AccountTypeException accountException) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Ce compte ne peut pas être lié à une carte"));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Ce compte ne peut pas être lié à une carte"));
-                rm.addFlashAttribute("alerts", alerts);
-            }
-        } catch (AccountOwnerException ownerException) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Vous n'avez pas les droits nécessaires pour cette action"));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Vous n'avez pas les droits nécessaires pour cette action"));
-                rm.addFlashAttribute("alerts", alerts);
-            }
-        } catch (FakeClientException clientException) {
-            if (alerts != null) {
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Il semble y avoir une erreur dans votre session"));
-            } else {
-                alerts = new ArrayList<AlertMessage>();
-                alerts.add(new AlertMessage(AlertEnum.ERROR,
-                        "Il semble y avoir une erreur dans votre session"));
-                rm.addFlashAttribute("alerts", alerts);
-            }
-            return new ModelAndView("redirect:/disconnect.htm");
-        } finally {
-            return new ModelAndView("redirect:/account.htm?id=" + rib);
-        }
-    }
-
 }

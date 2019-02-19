@@ -6,10 +6,10 @@
         .controller('AccountController', AccountController);
  
     AccountController.$inject = ['$scope', '$location', '$routeParams','AuthentificationService',
-        'AccountService', 'TranslatorService', 'FlashService'];
+        'AccountService', 'PaymentMeanService', 'TranslatorService', 'FlashService'];
     
     function AccountController($scope, $location, $routeParams, AuthentificationService,
-        AccountService, TranslatorService, FlashService) {
+        AccountService, PaymentMeanService, TranslatorService, FlashService) {
         AuthentificationService.connectedPage('/welcome');
         
         let vm = this;
@@ -18,6 +18,8 @@
         $scope.templateUrl = '';
         
         vm.closeAccount = closeAccount;
+        vm.commandCard = commandCard;
+        vm.commandCheckBook = commandCheckBook;
         
         init();
         
@@ -49,6 +51,29 @@
                     FlashService.Error(response);
                 }
             );
+            PaymentMeanService.getCardsByRib($routeParams.accountRib).then(
+                function (response) {
+                    $scope.cards = response;
+                    console.log($scope.cards);
+                    for (let card of $scope.cards) {
+                        card.status = TranslatorService.translatePaymentMeanStatus(card.status);
+                    }
+                },
+                function (response) {
+                    FlashService.Error(response);
+                }
+            );
+            PaymentMeanService.getCheckBooksByRib($routeParams.accountRib).then(
+                function (response) {
+                    $scope.checkBooks = response;
+                    for (let checkBook of $scope.checkBooks) {
+                        checkBook.status = TranslatorService.translatePaymentMeanStatus(checkBook.status);
+                    }
+                },
+                function (response) {
+                    FlashService.Error(response);
+                }
+            );
         }
         
         function closeAccount() {
@@ -68,6 +93,30 @@
                 }
             );
             
+        }
+        
+        function commandCard() {
+            PaymentMeanService.commandCard({rib: $scope.account.rib}).then(
+                function (card) {
+                    card.status = TranslatorService.translatePaymentMeanStatus(card.status);
+                    $scope.cards.push(card);                    ;
+                },
+                function (response) {
+                    FlashService.Error(response);
+                }
+            );
+        }
+        
+        function commandCheckBook() {
+            PaymentMeanService.commandCheckBook({rib: $scope.account.rib}).then(
+                function (checkBook) {
+                    checkBook.status = TranslatorService.translatePaymentMeanStatus(checkBook.status);
+                    $scope.checkBooks.push(checkBook);                    ;
+                },
+                function (response) {
+                    FlashService.Error(response);
+                }
+            );
         }
     }
 })();

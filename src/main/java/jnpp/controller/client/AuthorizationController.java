@@ -96,7 +96,7 @@ public class AuthorizationController {
 
         try {
             authorizationService.deleteDebitAuthorization(login, ribFrom, ribTo);
-            return new ResponseEntity(HttpStatus.OK);       
+            return new ResponseEntity("",HttpStatus.OK);       
         } catch (FakeClientException ex) {
             return new ResponseEntity("Il semble y avoir une erreur dans votre session",
                 HttpStatus.FORBIDDEN);

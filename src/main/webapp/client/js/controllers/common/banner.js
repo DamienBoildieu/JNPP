@@ -19,6 +19,7 @@
         
         function logout() {
             AuthentificationService.logout();
+            NotifyService.notify('logInOutEvent');
             $scope.templateUrl = "client/html/common/unconnectedbanner.html";
             FlashService.Success('Deconnexion reussie', true);
             $location.path('/welcome');
