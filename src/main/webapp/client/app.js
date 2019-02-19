@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app', ['ngRoute', 'ngCookies'])
+        .module('app', ['ngRoute', 'ngCookies', 'ngAnimate'])
         .config(config)
         .run(run);
 
@@ -107,7 +107,9 @@
                 templateUrl: 'client/html/advisor/message.html',
                 controllerAs: 'vm'         
             })
-            .otherwise({ redirectTo: '/welcome' });
+            .otherwise({
+                templateUrl: 'client/html/common/notfound.html'
+            });
     }
 
     run.$inject = ['$rootScope', '$cookies', 'AuthentificationService', 'NotifyService'];
