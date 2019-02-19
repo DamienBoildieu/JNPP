@@ -114,7 +114,6 @@
         function purchase() {
             if ($scope.purchaseData.amount && $scope.purchaseData.label && 
                 $scope.purchaseData.share) {
-            console.log($scope.purchaseData);
                 MovementService.purchase($scope.purchaseData).then(
                     function() {
                         FlashService.Success('Votre demande de titres a été acceptée', true);

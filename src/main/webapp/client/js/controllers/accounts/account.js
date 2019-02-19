@@ -37,7 +37,6 @@
                         $scope.templateUrl = 'client/html/accounts/savingaccount.html';
                         $scope.account.currency = TranslatorService.translateCurrency($scope.account.currency);
                     } else if ($scope.account.type==='SHARE') {
-                        console.log($scope.account);
                         $scope.templateUrl = 'client/html/accounts/shareaccount.html';
                     } else {
                         FlashService.Error('Une erreurest présente dans le compte que vous souhaitez voir');
@@ -54,7 +53,6 @@
             PaymentMeanService.getCardsByRib($routeParams.accountRib).then(
                 function (response) {
                     $scope.cards = response;
-                    console.log($scope.cards);
                     for (let card of $scope.cards) {
                         card.status = TranslatorService.translatePaymentMeanStatus(card.status);
                     }
