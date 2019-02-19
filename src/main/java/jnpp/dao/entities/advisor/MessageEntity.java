@@ -62,7 +62,7 @@ public class MessageEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private Direction direction;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     private String content;
 
