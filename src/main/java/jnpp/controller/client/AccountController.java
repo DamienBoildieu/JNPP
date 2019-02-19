@@ -91,7 +91,9 @@ public class AccountController {
         throws IOException {
         return new ResponseEntity(AbstractDTO.toJson(accountService.getShares()), HttpStatus.OK);
     }
-    
+    /**
+     * Recupere les informations d'un compte ainsi que les mouvements qui y sont associes
+     */
     @RequestMapping(value = "account/{accountRib}", method = RequestMethod.GET)
     public ResponseEntity<?> getAccount(@RequestHeader("authorization") String autho,
             @PathVariable String accountRib) throws IOException {
