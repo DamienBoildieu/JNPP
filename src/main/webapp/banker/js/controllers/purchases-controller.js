@@ -37,7 +37,7 @@
 
         /* Fait avancer une commande et modifie la liste des commandes. */
         vm.upgradePurchase = function(index) {
-            PurchasesService.upgradePurchase(vm.puchases[index].id).then(
+            PurchasesService.upgradePurchase(vm.purchases[index].id).then(
                 function(response) {
                     vm.purchases[index] = response;
                 });

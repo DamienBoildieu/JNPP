@@ -69,7 +69,7 @@ public abstract class NotificationEntity implements Serializable {
     @JoinColumn(name = "client_fk")
     private ClientEntity client;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     private Boolean seen;
 

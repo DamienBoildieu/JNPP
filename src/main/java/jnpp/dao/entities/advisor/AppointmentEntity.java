@@ -38,7 +38,7 @@ public class AppointmentEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     @ManyToOne
     @JoinColumn(name = "client_fk")
