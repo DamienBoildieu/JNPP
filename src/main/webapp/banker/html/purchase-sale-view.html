@@ -1,28 +1,28 @@
-    <form>
-        <div class="form-row">
-            <div class="form-group col">
-                <input type="text" required class="form-control mr-sm-2" placeholder="RIB destination">
-            </div>
-            <div class="form-group col">
-                <select class="form-control" id="exampleFormControlSelect1">
-                    <option value="" selected disabled>Share title</option>
-                    <option ng-repeat="share in vm.shares"
-                            value="{{share.name}}">{{share.name}}</option>
-                </select>
-            </div>
-            <div class="form-group col">
-                <input type="number" required min="0" step=any class="form-control mr-sm-2" placeholder="Amount">
-            </div>
+<form ng-submit="vm.makePurchaseSale()">
+    <div class="form-row">
+        <div class="form-group col">
+            <input ng-model="vm.purchaseSale.rib" type="text" required class="form-control mr-sm-2" placeholder="RIB destination">
         </div>
-        <div class="form-row">
-            <div class="form-group col">
-                <input type="text" class="form-control" placeholder="Label">
-            </div>
-            <div class="form-group col-push">
-                <button type="submit" class="btn btn-primary">Purchase</button>
-            </div>
-            <div class="form-group col-push">
-                <button type="submit" class="btn btn-primary">Sale</button>
-            </div>
+        <div class="form-group col">
+            <select ng-model="vm.purchaseSale.share" class="form-control" id="exampleFormControlSelect1">
+                <option value="" selected disabled>Share title</option>
+                <option ng-repeat="share in vm.shares"
+                        ng-value="share.name">{{share.name}}</option>
+            </select>
         </div>
-    </form>
+        <div class="form-group col">
+            <input ng-model="vm.purchaseSale.amount" type="number" required min="0" step=any class="form-control mr-sm-2" placeholder="Amount">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <input ng-model="vm.purchaseSale.label" type="text" class="form-control" placeholder="Label">
+        </div>
+        <div class="form-group col-push">
+            <button ng-click="vm.choosePurchase()" type="submit" class="btn btn-primary">Purchase</button>
+        </div>
+        <div class="form-group col-push">
+            <button ng-click="vm.chooseSale()" type="submit" class="btn btn-primary">Sale</button>
+        </div>
+    </div>
+</form>

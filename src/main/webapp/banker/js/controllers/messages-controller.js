@@ -178,17 +178,13 @@
             
             if (!timestamp)
                 /* Le timestamp vaut null, tous les messages sont pull. */
-                MessagesService.getMessages(current).then(
-                    function(response) {
-                        addMessagesAndSend(response);
-                    });
+                MessagesService.getMessages(current)
+                    .then(addMessagesAndSend);
             else
                 /* Le timestamp n'est pas null, seul les messages depuis le 
                  * dernier timestamp sont pull. */
-                MessagesService.getMessagesSince(current, timestamp).then(
-                    function(response) {
-                        addMessagesAndSend(response);
-                    });
+                MessagesService.getMessagesSince(current, timestamp)
+                    .then(addMessagesAndSend);
         };
 
         /* Test si la discution courante est active. */

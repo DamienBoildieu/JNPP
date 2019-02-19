@@ -38,7 +38,7 @@ public class OrdersController {
             String json = purchase.toJson();
             return new ResponseEntity(json, HttpStatus.OK);
         } catch (FakePaymentMeanException e) {} 
-        catch (IOException ex) {}
+        catch (IOException e) {}
         catch (NullPointerException e) {}
         return new ResponseEntity("", HttpStatus.BAD_REQUEST);
     }
