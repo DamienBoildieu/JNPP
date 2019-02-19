@@ -5,6 +5,9 @@
         .module('app')
         .controller('NotifViewController', NotifViewController);
     
+    /**
+     * Controleur de la vue des notifications
+     */
     NotifViewController.$inject = ['$scope', 'NotificationService', 
         'FlashService', 'AuthentificationService', 'TranslatorService', 'NotifyService'];
     function NotifViewController($scope, NotificationService, FlashService,
@@ -19,7 +22,7 @@
         vm.see = see;
         
         init();
-                
+        //Recupere les notifications
         function init() {
             NotificationService.getNotifs().then(
                 function (response) {

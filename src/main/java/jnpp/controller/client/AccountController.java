@@ -6,20 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import jnpp.controller.client.views.Translator;
-import jnpp.controller.client.views.alerts.AlertEnum;
-import jnpp.controller.client.views.alerts.AlertMessage;
 import jnpp.service.dto.AbstractDTO;
 import jnpp.service.dto.IdentityDTO;
 import jnpp.service.dto.accounts.AccountDTO;
@@ -31,7 +22,6 @@ import jnpp.service.exceptions.accounts.UnknownIdentityException;
 import jnpp.service.exceptions.duplicates.DuplicateAccountException;
 import jnpp.service.exceptions.entities.FakeClientException;
 import jnpp.service.exceptions.entities.FakeSavingBookException;
-import jnpp.service.exceptions.movements.AccountTypeException;
 import jnpp.service.exceptions.owners.AccountOwnerException;
 import jnpp.service.services.AccountService;
 import jnpp.service.services.DebitAuthorizationService;

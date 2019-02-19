@@ -7,8 +7,6 @@ package jnpp.controller.client;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jnpp.service.dto.AbstractDTO;
 
 import jnpp.service.dto.notifications.NotificationDTO;

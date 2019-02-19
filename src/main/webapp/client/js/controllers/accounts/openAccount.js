@@ -5,9 +5,11 @@
         .module('app')
         .controller('OpenAccountController', OpenAccountController);
  
+    /**
+     * Controleur de la vue d'ouverture de compte
+     */
     OpenAccountController.$inject = ['$rootScope', '$scope', '$location', 'AuthentificationService',
-        'AccountService', 'UserService', 'TranslatorService', 'FlashService'];
-    
+        'AccountService', 'UserService', 'TranslatorService', 'FlashService'];   
     function OpenAccountController($rootScope, $scope, $location, AuthentificationService,
         AccountService, UserService, TranslatorService, FlashService) {
         AuthentificationService.connectedPage('/welcome');
@@ -25,17 +27,24 @@
         vm.openShareAccount = openShareAccount;
         
         init();
-        
+        /**
+         * Recupere les sexes pour l'ajout de personnes dans un compte joint
+         * ainsi que les livrets
+         */
         function init() {
-            UserService.getGenders().then(
-                function(genders) {
-                    $scope.genders = TranslatorService.translateGenders(genders);                  
-                },
-                function(errMsg) {
-                    FlashService.Error(errMsg);
-                }
-            );
             if ($rootScope.globals.currentUser.type==='PRIVATE') {
+                UserService.getGenders().then(
+                    function(genders) {
+                        $scope.genders = TranslatorService.translateGenders(genders);
+                        $scope.jointAccountDatas[0] = {gender: $scope.genders[0].key};
+                        setTimeout(function () {
+                                $('select').formSelect();
+                        }, 200);
+                    },
+                    function(errMsg) {
+                        FlashService.Error(errMsg);
+                    }
+                );
                 AccountService.getSavingBooks().then(
                     function (books) {
                         $scope.books = books;
@@ -108,7 +117,14 @@
         }
         
         function addNbClients() {
-            $scope.jointAccountDatas.push({});
+            if ($scope.genders.length>0) {
+                $scope.jointAccountDatas.push({gender: $scope.genders[0].key});
+                setTimeout(function () {
+                    $('select').formSelect();
+                }, 200);
+            }
+            else
+                $scope.jointAccountDatas.push({});
         }
     }
 })();

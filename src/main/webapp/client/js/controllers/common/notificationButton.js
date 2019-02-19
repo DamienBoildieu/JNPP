@@ -5,6 +5,9 @@
         .module('app')
         .controller('NotifButtonController', NotifButtonController);
     
+    /**
+     * Controleur du boutton pour acceder aux notifications
+     */
     NotifButtonController.$inject = ['$scope', 'NotificationService', 
         'NotifyService', 'AuthentificationService'];
     function NotifButtonController($scope, NotificationService, NotifyService,
@@ -17,11 +20,13 @@
         init();
                 
         function init() {
+            /*
+             * Le controleur s'inscrit aux evenemnts dont il a besoin
+             */
             NotifyService.subscribe($scope, 'logInOutEvent', function() {
                 $scope.isLogged = AuthentificationService.isLogged;
             });
             NotifyService.subscribe($scope, 'checkNotifsEvent', function() {
-                console.log($scope.isLogged);
                 if ($scope.isLogged) {
                     NotificationService.hasNotifs().then(
                         function (response) {

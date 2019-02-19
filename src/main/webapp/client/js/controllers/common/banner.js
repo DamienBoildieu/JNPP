@@ -5,6 +5,9 @@
         .module('app')
         .controller('BannerController', BannerController);
     
+    /**
+     * Controleur de la banniere
+     */
     BannerController.$inject = ['$scope', '$location', 
         'NotifyService', 'AuthentificationService', 'FlashService'];
     function BannerController($scope, $location, NotifyService,
@@ -30,9 +33,6 @@
         	$scope.templateUrl = "client/html/common/connectedbanner.html";
             else
         	$scope.templateUrl = "client/html/common/unconnectedbanner.html";
-            $(document).ready(function(){
-                $('.sidenav').sidenav();
-              });
             setTimeout(function () {
                 $('.sidenav').sidenav();
             }, 200);

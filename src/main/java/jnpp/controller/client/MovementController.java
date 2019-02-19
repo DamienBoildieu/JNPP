@@ -38,7 +38,7 @@ public class MovementController {
     /**
      * La monnaie par défaut
      */
-    private static CurrencyDTO DEFAULT_CURRENCY = CurrencyDTO.EURO;
+    private static final CurrencyDTO DEFAULT_CURRENCY = CurrencyDTO.EURO;
     /**
      * Le service des transactions
      */

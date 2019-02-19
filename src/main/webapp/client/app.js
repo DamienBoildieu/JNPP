@@ -103,9 +103,12 @@
                 controllerAs: 'vm'         
             })
             .when('/message', {
-                controller: 'AdvisorController',
+                controller: 'MessageController',
                 templateUrl: 'client/html/advisor/message.html',
                 controllerAs: 'vm'         
+            })
+            .when('/', {
+                redirectTo: '/welcome'
             })
             .otherwise({
                 templateUrl: 'client/html/common/notfound.html'

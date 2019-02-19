@@ -4,10 +4,12 @@
     angular
         .module('app')
         .controller('ResumeController', ResumeController);
- 
+    
+    /**
+     * Controleur de la vue de la globalite des comptes ouverts
+     */
     ResumeController.$inject = ['$scope', 'AuthentificationService', 'AccountService',
        'TranslatorService', 'FlashService'];
-    
     function ResumeController($scope, AuthentificationService, AccountService,
         TranslatorService, FlashService) {
         AuthentificationService.connectedPage('/welcome');
@@ -15,7 +17,9 @@
         let vm = this;
         
         init();
-        
+        /**
+         * Recupere les comptes d'un client
+         */
         function init() {
             AccountService.getClientAccounts(
                 function (response) {

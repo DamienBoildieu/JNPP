@@ -4,10 +4,12 @@
     angular
         .module('app')
         .controller('AccountController', AccountController);
- 
+    
+    /**
+     * Controleur de la vue d'un compte en détail
+     */
     AccountController.$inject = ['$scope', '$location', '$routeParams','AuthentificationService',
         'AccountService', 'PaymentMeanService', 'TranslatorService', 'FlashService'];
-    
     function AccountController($scope, $location, $routeParams, AuthentificationService,
         AccountService, PaymentMeanService, TranslatorService, FlashService) {
         AuthentificationService.connectedPage('/welcome');
@@ -23,6 +25,10 @@
         
         init();
         
+        /**
+         * recupere le compte et adapte la vue selon le type de compte 
+         * recupere aussi les cartes et chequiers selon le type de comptes
+         */
         function init() {
             AccountService.getAccount($routeParams.accountRib).then(
                 function(response) {

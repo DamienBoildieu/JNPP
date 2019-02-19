@@ -5,9 +5,11 @@
         .module('app')
         .controller('AdvisorController', AdvisorController);
  
+    /**
+     * Controleur des vue du conseiller et des rendez-vous
+     */
     AdvisorController.$inject = ['$scope', '$filter', 'AdvisorService',
-        'AuthentificationService', 'FlashService'];
-    
+        'AuthentificationService', 'FlashService'];   
     function AdvisorController($scope, $filter, AdvisorService,
         AuthentificationService, FlashService) {
         AuthentificationService.connectedPage('/welcome');
@@ -16,17 +18,17 @@
         
         $scope.advisor = {};
         $scope.appoints = [];
-        $scope.messages = [];
         
         $scope.appointData = {};
-        $scope.messageData = {};
         
         vm.makeAppoint = makeAppoint;
         vm.cancelAppoint = cancelAppoint;
-        vm.sendMessage = sendMessage;
         
         init();
         
+        /**
+         * Recupere toutes les informations du conseiller, les rendez-vous et les messages
+         */
         function init() {
             AdvisorService.getAdvisor().then(
                 function (response) {
@@ -44,18 +46,10 @@
                     FlashService.Error(response);
                 }
             );
-            AdvisorService.getMessages().then(
-                function (response) {
-                    $scope.messages = response;
-                },
-                function (response) {
-                    FlashService.Error(response);
-                }
-            );
         }
         
         function makeAppoint() {
-            
+            //On met en forme la date
             let date = $filter('date')($scope.appointData.date, 'dd/MM/yyyy') + ' ' +
                     $filter('date')($scope.appointData.time, 'HH:mm');
             AdvisorService.makeAppoint({date : date}).then(
@@ -76,17 +70,6 @@
                 function (response) {
                     FlashService.Error(response);
                 }
-            );
-        }
-        
-        function sendMessage() {
-            AdvisorService.sendMessage($scope.messageData).then(
-               function (response) {
-                   $scope.messages.push(response);
-                },
-                function (response) {
-                    FlashService.Error(response);
-                }     
             );
         }
     }
