@@ -47,18 +47,15 @@ public class MovementController {
     
     @RequestMapping(value = "transfert", method = RequestMethod.POST)
     private ResponseEntity<?> transfert(@RequestHeader("authorization") String autho,
-        @RequestBody String body) throws IOException {
+        @RequestBody String body) {
         String login = SessionController.decodeLogin(autho);   
-  
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = mapper.readTree(body);
-        
-        String ribFrom = data.get("ribFrom").asText();
-        String ribTo = data.get("ribTo").asText();
-        Double amount = data.get("amount").asDouble();
-        String label = data.get("label").asText();
-
         try {
+            JsonNode data = mapper.readTree(body);
+            String ribFrom = data.get("ribFrom").asText();
+            String ribTo = data.get("ribTo").asText();
+            Double amount = data.get("amount").asDouble();
+            String label = data.get("label").asText();
             movementService.transfertMoney(login, ribFrom, ribTo, amount, DEFAULT_CURRENCY, label);
             return new ResponseEntity(HttpStatus.CREATED);
         } catch (FakeClientException ex) {
@@ -89,23 +86,25 @@ public class MovementController {
             responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
             return new ResponseEntity("Les dépassements ne sont pas autorisés sur ce compte",
                 responseHeaders, HttpStatus.BAD_REQUEST);
+        } catch (IOException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
         }
     }
 
     @RequestMapping(value = "debit", method = RequestMethod.POST)
     private ResponseEntity<?> debit(@RequestHeader("authorization") String autho,
-        @RequestBody String body) throws IOException {
+        @RequestBody String body) {
         String login = SessionController.decodeLogin(autho);   
-  
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = mapper.readTree(body);
-        
-        String ribFrom = data.get("ribFrom").asText();
-        String ribTo = data.get("ribTo").asText();
-        Double amount = data.get("amount").asDouble();
-        String label = data.get("label").asText();
-
-        try {
+        try {    
+            JsonNode data = mapper.readTree(body);
+            String ribFrom = data.get("ribFrom").asText();
+            String ribTo = data.get("ribTo").asText();
+            Double amount = data.get("amount").asDouble();
+            String label = data.get("label").asText();
             movementService.debitMoney(login, ribFrom, ribTo, amount, DEFAULT_CURRENCY, label);
             return new ResponseEntity(HttpStatus.CREATED);
         } catch (FakeClientException ex) {
@@ -141,20 +140,24 @@ public class MovementController {
             responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
             return new ResponseEntity("Vous n'etes pas autorise a debiter ce compte",
                 responseHeaders, HttpStatus.BAD_REQUEST);
+        } catch (IOException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
         }
     }
 
     @RequestMapping(value = "purchase", method = RequestMethod.POST)
     private ResponseEntity<?> purchase(@RequestHeader("authorization") String autho,
-        @RequestBody String body) throws IOException {
+        @RequestBody String body) {
         String login = SessionController.decodeLogin(autho);   
-  
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = mapper.readTree(body);
-        int amount = data.get("amount").asInt();
-        String share = data.get("share").asText();
-        String label = data.get("label").asText();
+        ObjectMapper mapper = new ObjectMapper();      
         try {
+            JsonNode data = mapper.readTree(body);
+            int amount = data.get("amount").asInt();
+            String share = data.get("share").asText();
+            String label = data.get("label").asText();
             movementService.purchaseShareTitles(login, share, amount, label);
             return new ResponseEntity(HttpStatus.CREATED);
         } catch (FakeClientException ex) {
@@ -175,21 +178,25 @@ public class MovementController {
             responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
             return new ResponseEntity("Cette action de bourse n'existe pas",
                 responseHeaders, HttpStatus.BAD_REQUEST);
+        } catch (IOException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
         }
     }
 
     @RequestMapping(value = "sale", method = RequestMethod.POST)
     private ResponseEntity<?> sale(@RequestHeader("authorization") String autho,
-        @RequestBody String body) throws IOException {
+        @RequestBody String body) {
         String login = SessionController.decodeLogin(autho);   
-  
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = mapper.readTree(body);
-        
-        int amount = data.get("amount").asInt();
-        String share = data.get("share").asText();
-        String label = data.get("label").asText();
-        try {
+        try {    
+            JsonNode data = mapper.readTree(body);
+
+            int amount = data.get("amount").asInt();
+            String share = data.get("share").asText();
+            String label = data.get("label").asText();
             movementService.saleShareTitles(login, share, amount, label);
             return new ResponseEntity(HttpStatus.CREATED);
         } catch (FakeClientException ex) {
@@ -215,6 +222,11 @@ public class MovementController {
             responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
             return new ResponseEntity("Vous ne possédez pas assez d'actions",
                 responseHeaders, HttpStatus.BAD_REQUEST);
+        } catch (IOException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
         }
     }
 }

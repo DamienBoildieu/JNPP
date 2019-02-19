@@ -31,8 +31,7 @@ public class AuthorizationController {
     private DebitAuthorizationService authorizationService;
     
     @RequestMapping(value = "clientAuthorizations", method = RequestMethod.GET)
-    public ResponseEntity<?> getClientAuthorizations(@RequestHeader("authorization") String autho) 
-        throws IOException {
+    public ResponseEntity<?> getClientAuthorizations(@RequestHeader("authorization") String autho) {
         String login = SessionController.decodeLogin(autho);
         try {
             return new ResponseEntity(AbstractDTO.toJson(authorizationService.getDebitAuthorizations(login)), HttpStatus.OK);
@@ -44,16 +43,13 @@ public class AuthorizationController {
     
     @RequestMapping(value = "addAuthorization", method = RequestMethod.POST)
     public ResponseEntity<?> addAuthorization(@RequestHeader("authorization") String autho,
-            @RequestBody String body)
-            throws IOException {
+            @RequestBody String body) {
         String login = SessionController.decodeLogin(autho);
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = mapper.readTree(body);
-
-        String ribFrom = data.get("ribFrom").asText();
-        String ribTo = data.get("ribTo").asText();
-
         try {
+            JsonNode data = mapper.readTree(body);
+            String ribFrom = data.get("ribFrom").asText();
+            String ribTo = data.get("ribTo").asText();
             return new ResponseEntity(authorizationService.createDebitAuthorization(login, ribFrom, ribTo).toJson(),
                 HttpStatus.CREATED);
 
@@ -75,21 +71,23 @@ public class AuthorizationController {
             responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
             return new ResponseEntity("Votre compte n'est pas débitable ou le compte cible ne peut être débiteur",
                 responseHeaders, HttpStatus.BAD_REQUEST);
+        } catch (IOException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
         }
     }
     
     @RequestMapping(value = "deleteAuthorization", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteAuthorization(@RequestHeader("authorization") String autho,
-            @RequestBody String body)
-            throws IOException {
+            @RequestBody String body) {
         String login = SessionController.decodeLogin(autho);
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = mapper.readTree(body);
-
-        String ribFrom = data.get("ribFrom").asText();
-        String ribTo = data.get("ribTo").asText();
-
-        try {
+        try {    
+            JsonNode data = mapper.readTree(body);
+            String ribFrom = data.get("ribFrom").asText();
+            String ribTo = data.get("ribTo").asText();
             authorizationService.deleteDebitAuthorization(login, ribFrom, ribTo);
             return new ResponseEntity("",HttpStatus.OK);       
         } catch (FakeClientException ex) {
@@ -103,6 +101,11 @@ public class AuthorizationController {
             responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
             return new ResponseEntity("Vous devez être proprietaire du compte autorisé à être debiter",
                 responseHeaders, HttpStatus.BAD_REQUEST);
+        } catch (IOException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
         }
     }
 }

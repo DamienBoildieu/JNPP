@@ -33,8 +33,7 @@ public class PaymentMeanController {
     private PaymentMeanService paymentMeanService;
       
     @RequestMapping(value = "clientCards", method = RequestMethod.GET)
-    public ResponseEntity<?> getCards(@RequestHeader("authorization") String autho)
-        throws IOException {
+    public ResponseEntity<?> getCards(@RequestHeader("authorization") String autho) {
         String login = SessionController.decodeLogin(autho);
         try {
             List<BankCardDTO> cards = paymentMeanService.getBankCards(login);
@@ -47,7 +46,7 @@ public class PaymentMeanController {
     
     @RequestMapping(value = "cards/{accountRib}", method = RequestMethod.GET)
     public ResponseEntity<?> getCardsByRib(@RequestHeader("authorization") String autho,
-            @PathVariable String accountRib) throws IOException {
+            @PathVariable String accountRib) {
         String login = SessionController.decodeLogin(autho);
         try {
             List<BankCardDTO> cards = paymentMeanService.getBankCards(login, accountRib);
@@ -64,8 +63,7 @@ public class PaymentMeanController {
     }
     
     @RequestMapping(value = "clientCheckBooks", method = RequestMethod.GET)
-    public ResponseEntity<?> getCheckBooks(@RequestHeader("authorization") String autho)
-        throws IOException {
+    public ResponseEntity<?> getCheckBooks(@RequestHeader("authorization") String autho) {
         String login = SessionController.decodeLogin(autho);
         try {
             List<CheckbookDTO> cards = paymentMeanService.getCheckBooks(login);
@@ -78,7 +76,7 @@ public class PaymentMeanController {
     
     @RequestMapping(value = "checkBooks/{accountRib}", method = RequestMethod.GET)
     public ResponseEntity<?> getCheckBooks(@RequestHeader("authorization") String autho,
-            @PathVariable String accountRib) throws IOException {
+            @PathVariable String accountRib) {
         String login = SessionController.decodeLogin(autho);
         try {
             List<CheckbookDTO> cards = paymentMeanService.getCheckBooks(login, accountRib);
@@ -98,12 +96,12 @@ public class PaymentMeanController {
     
     @RequestMapping(value = "commandCard", method = RequestMethod.POST)
     public ResponseEntity<?> commandCard(@RequestHeader("authorization") String autho,
-        @RequestBody String body) throws IOException {
+        @RequestBody String body) {
         String login = SessionController.decodeLogin(autho);
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = mapper.readTree(body);
-        String rib = data.get("rib").asText();
         try {
+            JsonNode data = mapper.readTree(body);
+            String rib = data.get("rib").asText();
             return new ResponseEntity(paymentMeanService.commandBankCard(login, rib).toJson(),
                 HttpStatus.CREATED);
         } catch (FakeClientException ex) {
@@ -119,17 +117,22 @@ public class PaymentMeanController {
             responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
             return new ResponseEntity("Vous n'êtes pas le propriétaire de ce compte", responseHeaders, 
                 HttpStatus.BAD_REQUEST);
+        } catch (IOException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
         }
     }
     
     @RequestMapping(value = "commandCheckBook", method = RequestMethod.POST)
     public ResponseEntity<?> commandCheckBook(@RequestHeader("authorization") String autho,
-        @RequestBody String body) throws IOException {
+        @RequestBody String body) {
         String login = SessionController.decodeLogin(autho);
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = mapper.readTree(body);
-        String rib = data.get("rib").asText();
-        try {
+        try {   
+            JsonNode data = mapper.readTree(body);
+            String rib = data.get("rib").asText();
             return new ResponseEntity(paymentMeanService.commandCheckbook(login, rib).toJson(),
                 HttpStatus.CREATED);
         } catch (FakeClientException ex) {
@@ -144,6 +147,11 @@ public class PaymentMeanController {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
             return new ResponseEntity("Vous n'êtes pas le propriétaire de ce compte", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
+        } catch (IOException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire", responseHeaders, 
                 HttpStatus.BAD_REQUEST);
         }
     }

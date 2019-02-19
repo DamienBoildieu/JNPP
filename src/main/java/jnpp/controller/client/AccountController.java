@@ -59,8 +59,7 @@ public class AccountController {
 
     
     @RequestMapping(value = "clientAccounts", method = RequestMethod.GET)
-    public ResponseEntity<?> getClientAccounts(@RequestHeader("authorization") String autho) 
-        throws IOException {
+    public ResponseEntity<?> getClientAccounts(@RequestHeader("authorization") String autho) {
         String login = SessionController.decodeLogin(autho);       
         try {
             List<AccountDTO> accounts = accountService.getAccounts(login);
@@ -82,21 +81,20 @@ public class AccountController {
     }
     
     @RequestMapping(value = "savingBooks", method = RequestMethod.GET)
-    public ResponseEntity<?> getSavingBooks() throws IOException {
+    public ResponseEntity<?> getSavingBooks() {
         return new ResponseEntity(AbstractDTO.toJson(accountService.getSavingBooks()), HttpStatus.OK);
     }
     
     @RequestMapping(value = "shares", method = RequestMethod.GET)
-    public ResponseEntity<?> getShares() 
-        throws IOException {
+    public ResponseEntity<?> getShares() {
         return new ResponseEntity(AbstractDTO.toJson(accountService.getShares()), HttpStatus.OK);
     }
-    /**
+    /*
      * Recupere les informations d'un compte ainsi que les mouvements qui y sont associes
      */
     @RequestMapping(value = "account/{accountRib}", method = RequestMethod.GET)
     public ResponseEntity<?> getAccount(@RequestHeader("authorization") String autho,
-            @PathVariable String accountRib) throws IOException {
+            @PathVariable String accountRib) {
         try {
             String login = SessionController.decodeLogin(autho);
             List<AccountDTO> accounts = accountService.getAccounts(login);
@@ -131,8 +129,7 @@ public class AccountController {
     }
     
     @RequestMapping(value = "openCurrentAccount", method = RequestMethod.POST)
-    public ResponseEntity<?> openCurrentAccount(@RequestHeader("authorization") String autho)
-        throws IOException {
+    public ResponseEntity<?> openCurrentAccount(@RequestHeader("authorization") String autho) {
         String login = SessionController.decodeLogin(autho); 
         try {
             accountService.openCurrentAccount(login);
@@ -149,15 +146,20 @@ public class AccountController {
 
     @RequestMapping(value = "openSavingAccount", method = RequestMethod.POST)
     public ResponseEntity<?> openSavingAccount(@RequestHeader("authorization") String autho,
-        @RequestBody String body) throws IOException {
+        @RequestBody String body) {
         String login = SessionController.decodeLogin(autho); 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = mapper.readTree(body);
-        String bookName = data.get("bookName").asText();
-        // Call service
+        JsonNode data;
         try {
+            data = mapper.readTree(body);
+            String bookName = data.get("bookName").asText();
             accountService.openSavingAccount(login, bookName);
             return new ResponseEntity(HttpStatus.CREATED);
+        } catch (IOException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire", responseHeaders, 
+                HttpStatus.BAD_REQUEST);        
         } catch (DuplicateAccountException duplicate) {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
@@ -178,26 +180,26 @@ public class AccountController {
 
     @RequestMapping(value = "openJointAccount", method = RequestMethod.POST)
     public ResponseEntity<?> openJointAccount(@RequestHeader("authorization") String autho,
-        @RequestBody String body) throws IOException {
+        @RequestBody String body) {
         String login = SessionController.decodeLogin(autho);
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = mapper.readTree(body);
-        List<IdentityDTO> identities = new ArrayList<IdentityDTO>();
-        if (data.isArray()) {
-            for (final JsonNode elem : data) {
-                String firstName = elem.get("firstname").asText();
-                String lastName = elem.get("lastname").asText();
-                String genderStr = elem.get("gender").asText();
-                IdentityDTO.Gender gender = IdentityDTO.Gender.valueOf(genderStr);
-                if (null==gender)
-                    return new ResponseEntity("Sexe invalide", HttpStatus.BAD_REQUEST);
-                identities.add(new IdentityDTO(gender, firstName, lastName));
-            }
-        }
-        if (identities.size()<2)
-            return new ResponseEntity("Il faut au moins deux personnes pour ouvrir un compte joint", HttpStatus.BAD_REQUEST);
         // Call service
         try {
+            JsonNode data = mapper.readTree(body);
+            List<IdentityDTO> identities = new ArrayList<IdentityDTO>();
+            if (data.isArray()) {
+                for (final JsonNode elem : data) {
+                    String firstName = elem.get("firstname").asText();
+                    String lastName = elem.get("lastname").asText();
+                    String genderStr = elem.get("gender").asText();
+                    IdentityDTO.Gender gender = IdentityDTO.Gender.valueOf(genderStr);
+                    if (null==gender)
+                        return new ResponseEntity("Sexe invalide", HttpStatus.BAD_REQUEST);
+                    identities.add(new IdentityDTO(gender, firstName, lastName));
+                }
+            }
+            if (identities.size()<2)
+                return new ResponseEntity("Il faut au moins deux personnes pour ouvrir un compte joint", HttpStatus.BAD_REQUEST);
             accountService.openJointAccount(login, identities);
             return new ResponseEntity(HttpStatus.CREATED);
         } catch (FakeClientException clientException) {
@@ -214,12 +216,16 @@ public class AccountController {
             return new ResponseEntity("Une des personnes que vous avez indiquées "
                 + "n'est pas inscrite chez nous en tant que particulier", responseHeaders, 
                 HttpStatus.BAD_REQUEST);
+        } catch (IOException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire", responseHeaders, 
+                HttpStatus.BAD_REQUEST);        
         }
     }
 
     @RequestMapping(value = "openShareAccount", method = RequestMethod.POST)
-    public ResponseEntity<?> openShareAccount(@RequestHeader("authorization") String autho)
-        throws IOException {
+    public ResponseEntity<?> openShareAccount(@RequestHeader("authorization") String autho) {
         String login = SessionController.decodeLogin(autho);
         // Call service
         try {
@@ -238,12 +244,12 @@ public class AccountController {
     
     @RequestMapping(value = "closeAccount", method = RequestMethod.DELETE)
     public ResponseEntity<?> closeAccount(@RequestHeader("authorization") String autho,
-        @RequestBody String body) throws IOException {
+        @RequestBody String body) {
         String login = SessionController.decodeLogin(autho);
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = mapper.readTree(body);
-        String rib = data.get("rib").asText();
         try {
+            JsonNode data = mapper.readTree(body);
+            String rib = data.get("rib").asText();
             accountService.closeAccount(login, rib);
             return new ResponseEntity("",HttpStatus.OK);
         } catch (AccountOwnerException ownerException) {
@@ -261,6 +267,11 @@ public class AccountController {
         } catch (FakeClientException clientException) {
             return new ResponseEntity("Il semble y avoir une erreur dans votre session", 
                 HttpStatus.CONFLICT);
+        } catch (IOException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire", responseHeaders, 
+                HttpStatus.BAD_REQUEST);    
         }
     }
 }

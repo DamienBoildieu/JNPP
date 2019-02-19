@@ -41,8 +41,7 @@ public class AdvisorController {
 
     
     @RequestMapping(value = "clientAdvisor", method = RequestMethod.GET)
-    public ResponseEntity<?> getClientAdvisor(@RequestHeader("authorization") String autho) 
-        throws IOException {
+    public ResponseEntity<?> getClientAdvisor(@RequestHeader("authorization") String autho) {
         String login = SessionController.decodeLogin(autho);       
         try {
             AdvisorDTO advisor = advisorService.getAdvisor(login);
@@ -58,8 +57,7 @@ public class AdvisorController {
     }
     
     @RequestMapping(value = "clientAppoints", method = RequestMethod.GET)
-    public ResponseEntity<?> getClientAppoints(@RequestHeader("authorization") String autho) 
-        throws IOException {
+    public ResponseEntity<?> getClientAppoints(@RequestHeader("authorization") String autho) {
         String login = SessionController.decodeLogin(autho);       
         try {
             return new ResponseEntity(AbstractDTO.toJson(advisorService.getAppoinments(login)), HttpStatus.OK);
@@ -70,8 +68,7 @@ public class AdvisorController {
     }
     
     @RequestMapping(value = "clientMessages", method = RequestMethod.GET)
-    public ResponseEntity<?> getClientMessages(@RequestHeader("authorization") String autho) 
-        throws IOException {
+    public ResponseEntity<?> getClientMessages(@RequestHeader("authorization") String autho) {
         String login = SessionController.decodeLogin(autho);       
         try {
             return new ResponseEntity(AbstractDTO.toJson(advisorService.receiveMessages(login)), HttpStatus.OK);
@@ -83,13 +80,12 @@ public class AdvisorController {
     
     @RequestMapping(value = "makeAppoint", method = RequestMethod.POST)
     public ResponseEntity<?> makeAppoint(@RequestHeader("authorization") String autho,
-        @RequestBody String body) throws IOException {
+        @RequestBody String body) {
         String login = SessionController.decodeLogin(autho); 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = mapper.readTree(body);
-                
-        String date = data.get("date").asText();
         try {
+            JsonNode data = mapper.readTree(body);                
+            String date = data.get("date").asText();
             Date appointDate = new SimpleDateFormat("dd/MM/yyyy HH:mm")
                     .parse(date);
             return new ResponseEntity(advisorService.makeAppointment(login, appointDate).toJson(),
@@ -114,19 +110,23 @@ public class AdvisorController {
                 HttpStatus.CONFLICT);
         } catch (NoAdvisorException e) {
             return new ResponseEntity("Vous n'avez pas de conseiller", HttpStatus.BAD_REQUEST);
+        } catch (IOException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         }      
     }
     
     
     @RequestMapping(value = "cancelAppoint", method = RequestMethod.DELETE)
     public ResponseEntity<?> cancelAppoint(@RequestHeader("authorization") String autho,
-        @RequestBody String body) throws IOException {
+        @RequestBody String body) {
         String login = SessionController.decodeLogin(autho); 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = mapper.readTree(body);
-        
-        long id = data.get("id").asLong();
         try {
+            JsonNode data = mapper.readTree(body);        
+            long id = data.get("id").asLong();
             advisorService.cancelAppoint(login, id);
             return new ResponseEntity("",HttpStatus.OK);
         } catch (DateException dateException) {
@@ -138,18 +138,22 @@ public class AdvisorController {
         } catch (FakeClientException clientException) {
             return new ResponseEntity("Il semble y avoir une erreur dans votre session",
                 HttpStatus.CONFLICT);
+        } catch (IOException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         }
     }
     
     @RequestMapping(value = "sendMessage", method = RequestMethod.POST)
     protected ResponseEntity<?> sendMessage(@RequestHeader("authorization") String autho,
-        @RequestBody String body) throws IOException {
+        @RequestBody String body) {
         String login = SessionController.decodeLogin(autho); 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = mapper.readTree(body);
-        
-        String message = data.get("content").asText();
-        try {
+        try {    
+            JsonNode data = mapper.readTree(body);
+            String message = data.get("content").asText();
             return new ResponseEntity(advisorService.sendMessage(login, message).toJson(),
                 HttpStatus.CREATED);
         } catch (FakeClientException clientException) {
@@ -157,6 +161,11 @@ public class AdvisorController {
                 HttpStatus.CONFLICT);
         } catch (NoAdvisorException e) {
             return new ResponseEntity("Vous n'avez pas de conseiller", HttpStatus.BAD_REQUEST);
+        } catch (IOException ex) {
+           HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire",
+                responseHeaders, HttpStatus.BAD_REQUEST);
         }
     }  
 }

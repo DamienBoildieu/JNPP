@@ -17,6 +17,7 @@ import jnpp.service.services.NotificationService;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,8 +33,7 @@ public class NotificationController {
     NotificationService notifService;
     
     @RequestMapping(value = "hasNotifs", method = RequestMethod.GET)
-    public ResponseEntity<?> hasNotifs(@RequestHeader("authorization") String autho) 
-        throws IOException {
+    public ResponseEntity<?> hasNotifs(@RequestHeader("authorization") String autho) {
         String login = SessionController.decodeLogin(autho);
         try {
             List<NotificationDTO> notifs = notifService.receiveUnseenNotifications(login);
@@ -46,8 +46,7 @@ public class NotificationController {
     }
     
     @RequestMapping(value = "notifs", method = RequestMethod.GET)
-    public ResponseEntity<?> getNotifs(@RequestHeader("authorization") String autho) 
-        throws IOException {
+    public ResponseEntity<?> getNotifs(@RequestHeader("authorization") String autho) {
         String login = SessionController.decodeLogin(autho);
         try {
             return new ResponseEntity(
@@ -60,14 +59,12 @@ public class NotificationController {
     
     @RequestMapping(value = "seeNotif", method = RequestMethod.PUT)
     public ResponseEntity<?> seeNotif(@RequestHeader("authorization") String autho,
-            @RequestBody String body) 
-        throws IOException {
+        @RequestBody String body) {
         String login = SessionController.decodeLogin(autho);
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode data = mapper.readTree(body);
-        
-        long id =  data.get("id").asLong();
         try {
+            JsonNode data = mapper.readTree(body);
+            long id =  data.get("id").asLong();
             notifService.seeNotification(login, id);
             return new ResponseEntity(notifService.getNotification(login, id).toJson(), HttpStatus.OK);
         } catch (FakeClientException ex) {
@@ -79,12 +76,16 @@ public class NotificationController {
         } catch (NotificationOwnerException ex) {
             return new ResponseEntity("Cette notification ne vous appartient pas",
                 HttpStatus.BAD_REQUEST);
+        } catch (IOException ex) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "application/text; charset=UTF-8");
+            return new ResponseEntity("Une erreur est présente dans le formulaire", responseHeaders, 
+                HttpStatus.BAD_REQUEST);
         }    
     }  
     
     @RequestMapping(value = "seeAllNotifs", method = RequestMethod.PUT)
-    public ResponseEntity<?> seeAllNotifs(@RequestHeader("authorization") String autho) 
-        throws IOException {
+    public ResponseEntity<?> seeAllNotifs(@RequestHeader("authorization") String autho) {
         String login = SessionController.decodeLogin(autho);
         try {
             notifService.seeAllNotications(login);
