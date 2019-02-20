@@ -40,3 +40,13 @@ img {
 .fade-element-in.ng-leave.ng-leave-active {
   opacity: 0;
 }
+
+.v-scroll {
+    height: 70vh;
+    overflow-y: scroll;
+}
+
+.v-scroll::-webkit-scrollbar {
+    
+    display: none; 
+}

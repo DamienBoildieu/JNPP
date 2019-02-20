@@ -1,8 +1,8 @@
-<div class="container card-overflow" style="max-height: 60vh;">
+<div class="container v-scroll">
     <table class="table striped card">
         <tbody>
             <tr ng-repeat="message in messages">
-                <td ng-class="{'left-align light-grey' : message.direction === 'ADVISOR_TO_CLIENT',
+                <td ng-class="{'left-align grey' : message.direction === 'ADVISOR_TO_CLIENT',
                     'right-align white' : message.direction === 'CLIENT_TO_ADVISOR'}">
                     {{message.content}}
                 </td>

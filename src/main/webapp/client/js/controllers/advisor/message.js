@@ -29,13 +29,16 @@
          */
         function init() {
             getMessages();
-            setInterval(getMessages, 5000); 
+            let id = setInterval(getMessages, 5000);
+            $scope.$on('$destroy', id);
         }
         
         function getMessages() {
             AdvisorService.getMessages().then(
                 function (response) {
-                    $scope.messages = response;
+                    $scope.messages = response.sort(function (a,b) {
+                        return new Date(a.date) - new Date(b.date);
+                    });
                 },
                 function (response) {
                     FlashService.Error(response);
@@ -47,7 +50,7 @@
             AdvisorService.sendMessage($scope.messageData).then(
                function (response) {
                     $scope.messageData = {};
-                    //getMessages();
+                    getMessages();
                 },
                 function (response) {
                     FlashService.Error(response);
