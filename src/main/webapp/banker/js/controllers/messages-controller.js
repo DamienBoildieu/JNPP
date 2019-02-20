@@ -1,11 +1,27 @@
 (function () {
     'use strict';
 
-    angular.module('app').controller('MessagesController', MessagesController);
+    /* Ajout d'une directive pour que la scrollbar soit a la fin de la 
+     * discusion. */
+    angular
+        .module('app')        
+        .directive('scroll', function($timeout) {
+            return {
+                restrict: 'A',
+                link: function(scope, element, attr) {
+                    scope.$watchCollection(attr.scroll, function() {
+                        $timeout(function() {
+                            element[0].scrollTop = element[0].scrollHeight;
+                        });
+                    });
+                }
+            };
+        })
+        .controller('MessagesController', MessagesController);
 
-    MessagesController.$inject = ['$location', '$timeout', 'LoginsService', 
-        'MessagesService', 'DateService'];
-    function MessagesController($location, $timeout, LoginsService,
+    MessagesController.$inject = ['$location', '$interval', '$scope', 
+        'LoginsService', 'MessagesService', 'DateService'];
+    function MessagesController($location, $interval, $scope, LoginsService,
             MessagesService, DateService) {
 
         const vm = this;
@@ -15,7 +31,9 @@
         
         /* Valeurs par defaut du formulaire rempli par l'utilisateur. */
         const DEFAULT_MESSAGE = {content: null};
-
+        /* Intervale de mise a jour de la discusion courante en milliseconde. */
+        const REFRESH_INTERVAL = 4000;
+        
         /* Liste des clients. */
         vm.clients = new Array();
         /* Arguments pour la recherche de clients. */
@@ -36,6 +54,9 @@
         /* Timestamp du dernier get des messages. */
         let timestamp = null;
 
+        /* Timer pour le refresh de la discusion. */
+        let timer = null;
+
         /***********************************************************************
          * Constructeur du controller. */
         
@@ -47,6 +68,8 @@
             
             getClients();
             getDiscusion();
+            
+            $scope.$on('$destroy', stopTimer);
         })();
 
         /***********************************************************************
@@ -80,6 +103,7 @@
                             vm.discusion.advisor = response.advisor;
                             vm.discusion.messages = response.messages;
                             timestamp = DateService.nextSecond();
+                            restartTimer();
                         },
                         clearDiscusion);
             } else {
@@ -108,7 +132,7 @@
             } else {
                 /* Le timestamp n'est pas null, seul les messages depuis le 
                  * timestamp sont pull. */
-                MessagesService.getMessagesFrom(current, timestamp).then(
+                MessagesService.getMessagesSince(current, timestamp).then(
                     function(response) {
                         vm.discusion.messages.push
                                 .apply(vm.discusion.messages, response);
@@ -129,7 +153,8 @@
             vm.message = angular.copy(DEFAULT_MESSAGE);
         }
         
-        /* Ajoute les messages a la discution courante et envoit le message. */
+        /* Ajoute les messages a la discution courante et envoit le message.
+         * Si le message a etait envoye, le timer est relance. */
         function addMessagesAndSend(messages) {
             vm.discusion.messages.push.apply(vm.discusion.messages, messages);
             timestamp = DateService.nextSecond();
@@ -137,7 +162,33 @@
                 function(response) {
                     vm.discusion.messages.push(response);
                     vm.message = angular.copy(DEFAULT_MESSAGE);
+                    restartTimer();
                  });
+        }
+        
+        /* Lancer le timer. */
+        function startTimer() {
+            if (!timer) {
+                timer = $interval(
+                    function() {
+                        getMessages();
+                    }, REFRESH_INTERVAL);
+            }
+        }
+
+        /* Arrete le timer. */
+        function stopTimer() {
+            if (timer !== null) {
+                $interval.cancel(timer);
+                timer = null;
+            }
+        }
+
+        /* Relance le timer. 
+         * Arrete le timer si il etait lance puis le relance. */
+        function restartTimer() {
+            stopTimer();
+            startTimer();
         }
 
         /***********************************************************************
@@ -156,6 +207,7 @@
             if (current === login) return;
             current = login;
             timestamp = null;
+            stopTimer();
             clearMessage();
             getDiscusion();
         };
@@ -175,6 +227,10 @@
             
             /* Pas de discution courrante. */
             if (!current) return;
+            
+            /* Arret du timer avant de recuperer les messages avant d'envoyer.
+             * Il sera relance apres l'envoi. */
+            stopTimer();
             
             if (!timestamp)
                 /* Le timestamp vaut null, tous les messages sont pull. */

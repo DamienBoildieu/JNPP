@@ -30,11 +30,11 @@
                     </tr>
                 </tbody>
             </table>
-        </div>        
+        </div>       
     </div>
     <div class="col-8">
         <div ng-if="vm.isDicusionActive()">
-            <div class="v-scroll">
+            <div class="v-scroll" scroll="vm.discusion.messages">
                 <div ng-repeat="message in vm.discusion.messages"
                      ng-switch="message.direction">
                     <div ng-switch-when="CLIENT_TO_ADVISOR">
