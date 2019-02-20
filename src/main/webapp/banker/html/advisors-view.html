@@ -3,8 +3,8 @@
         <thead class="thead-light">
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Lastname</th>
                 <th scope="col">Firstname</th>
+                <th scope="col">Lastname</th>
                 <th scope="col">Email</th>
                 <th scope="col">Phone</th>
                 <th scope="col">Office</th>
@@ -14,8 +14,8 @@
         <tbody>
             <tr ng-repeat="advisor in vm.advisors">
                 <th scope="row">{{$index + 1}}</th>
-                <td>{{advisor.identity.lastname}}</td>
                 <td>{{advisor.identity.firstname}}</td>
+                <td>{{advisor.identity.lastname}}</td>
                 <td>{{advisor.email}}</td>
                 <td>{{advisor.phone}}</td>
                 <td>{{advisor.officeAddress.number}} {{advisor.officeAddress.street}}, {{advisor.officeAddress.city}}, {{advisor.officeAddress.state}}</td>
