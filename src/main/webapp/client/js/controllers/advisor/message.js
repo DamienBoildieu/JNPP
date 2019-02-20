@@ -28,6 +28,11 @@
          * Recupere  les messages
          */
         function init() {
+            getMessages();
+            setInterval(getMessages, 5000); 
+        }
+        
+        function getMessages() {
             AdvisorService.getMessages().then(
                 function (response) {
                     $scope.messages = response;
@@ -42,7 +47,7 @@
             AdvisorService.sendMessage($scope.messageData).then(
                function (response) {
                     $scope.messageData = {};
-                    $scope.messages.push(response);
+                    //getMessages();
                 },
                 function (response) {
                     FlashService.Error(response);
